@@ -117,7 +117,9 @@ Para más detalles, consulta la [Especificación Técnica](./docs/ESPECIFICACION
 
 ## Contribución
 
-Este proyecto es desarrollado por un equipo de 2 personas como parte del proyecto final de DAM.
+Este proyecto ha sido desarrollado como parte del proyecto final de DAM del IES El Rincón:
+
+[![riordi80](https://img.shields.io/badge/GitHub-riordi80-181717?style=plastic&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/GitHub-Enrique36247-181717?style=plastic&logo=github&logoColor=white)](https://github.com/Enrique36247)
 
 ### Flujo de Trabajo Git
 
@@ -156,7 +158,7 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 
 ## Documentación
 
-- [Especificación Técnica](./docs/ESPECIFICACION_TECNICA.md)
+- [Especificación Técnica](./docs/ESPECIFICACION_TECNICA.md) (ignorado en .gitignore).
 - [Diagrama E/R](./docs/DIAGRAMA_ER.md) _(pendiente)_
 - [Diagrama UML](./docs/DIAGRAMA_UML.md) _(pendiente)_
 - [Modelo Relacional](./docs/MODELO_RELACIONAL.md) _(pendiente)_
@@ -167,13 +169,7 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 
 ---
 
-## Miembros
-
-[![riordi80](https://img.shields.io/badge/GitHub-riordi80-181717?style=plastic&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/GitHub-Enrique36247-181717?style=plastic&logo=github&logoColor=white)](https://github.com/Enrique36247)
-
-
 **Proyecto**: Proyecto Árboles
-
 
 
 **Estado del Proyecto**: En desarrollo
