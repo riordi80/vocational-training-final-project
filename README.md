@@ -62,6 +62,7 @@ Documentación completa del proyecto
 ```
 proyecto-arboles/
 ├── docs/                                  # Documentación
+│   ├── 00.GIT_WORKFLOW.md                # Flujo de trabajo Git (feature branches)
 │   ├── 01.HOJA_DE_RUTA.md                # Planificación por fases
 │   ├── 02.ESPECIFICACION_TECNICA.md      # Arquitectura y requisitos
 │   ├── 03. PROYECTO_BACKEND.md           # Documentación backend
@@ -180,22 +181,15 @@ Este proyecto ha sido desarrollado como parte del proyecto final de DAM del IES 
 
 ### Flujo de Trabajo Git
 
-1. Trabajar siempre en una rama feature:
-   ```bash
-   git checkout -b feature/nombre-funcionalidad
-   ```
+📖 **[Ver guía completa de Git Workflow](./docs/00.GIT_WORKFLOW.md)**
 
-2. Hacer commits siguiendo convenciones:
-   ```bash
-   git commit -m "feat(backend): añadir endpoint de árboles"
-   ```
-
-3. Push y crear Pull Request:
-   ```bash
-   git push origin feature/nombre-funcionalidad
-   ```
-
-4. Revisión de código antes de merge a `develop`
+Resumen rápido:
+1. Actualizar `develop`: `git checkout develop && git pull origin develop`
+2. Crear feature branch: `git checkout -b feature/nombre-funcionalidad`
+3. Hacer commits: `git commit -m "feat(backend): descripción"`
+4. Push: `git push origin feature/nombre-funcionalidad`
+5. Crear Pull Request en GitHub: `feature/xxx` → `develop`
+6. Merge y actualizar local: `git checkout develop && git pull origin develop`
 
 ### Convenciones de Commits
 
@@ -217,6 +211,7 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 
 ### 📚 Documentos Principales
 
+- [Git Workflow](./docs/00.GIT_WORKFLOW.md) - Guía completa de flujo de trabajo con feature branches
 - [Hoja de Ruta](./docs/01.HOJA_DE_RUTA.md) - Planificación completa del proyecto por fases
 - [Especificación Técnica](./docs/02.ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura del sistema
 - [Proyecto Backend](./docs/03.%20PROYECTO_BACKEND.md) - Documentación del API REST
