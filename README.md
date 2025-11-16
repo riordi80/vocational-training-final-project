@@ -62,9 +62,10 @@ Documentación completa del proyecto
 ```
 proyecto-arboles/
 ├── docs/                                 # Documentación
-│   ├── 00.GIT_WORKFLOW.md                # Flujo de trabajo Git (feature branches)
-│   ├── 01.HOJA_DE_RUTA.md                # Planificación por fases
-│   ├── 02.ESPECIFICACION_TECNICA.md      # Arquitectura y requisitos
+│   ├── 00. INDICE.md                     # Índice de toda la documentación
+│   ├── 01. GIT_WORKFLOW.md               # Flujo de trabajo Git (feature branches)
+│   ├── 02. HOJA_DE_RUTA.md               # Planificación por fases
+│   ├── 03. ESPECIFICACION_TECNICA.md     # Arquitectura y requisitos
 │   ├── 04. MODELO_DATOS.md               # Diagramas E/R, UML, Relacional
 │   ├── 04b. CONFIGURACION_POSTGRESQL.md  # Instalación PostgreSQL
 │   ├── Aplicaciones/                     # Documentación de aplicaciones
@@ -73,9 +74,7 @@ proyecto-arboles/
 │   │   ├── ANDROID.md                    # Documentación Android
 │   │   └── ESP32.md                      # Documentación ESP32
 │   ├── Componentes para ESP32/           # Especificaciones hardware
-│   ├── ClaudeInit.txt                    # Contexto para nuevas sesiones
 │   ├── install-timescaledb.sh            # Script instalación TimescaleDB
-│   └── por_hacer.txt                     # Tareas pendientes
 ├── backend/                              # API REST (Spring Boot)
 │   ├── src/
 │   │   └── main/
@@ -178,7 +177,7 @@ Este proyecto cumple con los requisitos de los siguientes módulos:
 - **[AED]** Acceso a Datos
 - **[PGL]** Programación Multimedia y Dispositivos Móviles
 
-Para más detalles, consulta la [Especificación Técnica](./docs/ESPECIFICACION_TECNICA.md).
+Para más detalles, consulta la [Especificación Técnica](./docs/03.%20ESPECIFICACION_TECNICA.md).
 
 ## Contribución
 
@@ -188,7 +187,7 @@ Este proyecto ha sido desarrollado como parte del proyecto final de DAM del IES 
 
 ### Flujo de Trabajo Git
 
-📖 **[Ver guía completa de Git Workflow](./docs/00.GIT_WORKFLOW.md)**
+📖 **[Ver guía completa de Git Workflow](./docs/01.%20GIT_WORKFLOW.md)**
 
 Resumen rápido:
 1. Actualizar `develop`: `git checkout develop && git pull origin develop`
@@ -218,9 +217,10 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 
 ### 📚 Documentos Principales
 
-- [Git Workflow](./docs/00.GIT_WORKFLOW.md) - Guía completa de flujo de trabajo con feature branches
-- [Hoja de Ruta](./docs/01.HOJA_DE_RUTA.md) - Planificación completa del proyecto por fases
-- [Especificación Técnica](./docs/02.ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura del sistema
+- [Índice de Documentación](./docs/00.%20INDICE.md) - Índice completo de toda la documentación del proyecto
+- [Git Workflow](./docs/01.%20GIT_WORKFLOW.md) - Guía completa de flujo de trabajo con feature branches
+- [Hoja de Ruta](./docs/02.%20HOJA_DE_RUTA.md) - Planificación completa del proyecto por fases
+- [Especificación Técnica](./docs/03.%20ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura del sistema
 - [Modelo de Datos](./docs/04.%20MODELO_DATOS.md) - Diagramas E/R, UML y Relacional completos
 - [Configuración PostgreSQL](./docs/04b.%20CONFIGURACION_POSTGRESQL.md) - Guía de instalación de BD
 
