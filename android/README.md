@@ -70,7 +70,7 @@ android/
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <url-repositorio>
+git clone https://github.com/riordi80/vocational-training-final-project
 cd android
 ```
 
