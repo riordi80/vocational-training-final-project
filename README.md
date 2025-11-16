@@ -61,20 +61,22 @@ Documentación completa del proyecto
 
 ```
 proyecto-arboles/
-├── docs/                                  # Documentación
+├── docs/                                 # Documentación
 │   ├── 00.GIT_WORKFLOW.md                # Flujo de trabajo Git (feature branches)
 │   ├── 01.HOJA_DE_RUTA.md                # Planificación por fases
 │   ├── 02.ESPECIFICACION_TECNICA.md      # Arquitectura y requisitos
-│   ├── 03. PROYECTO_BACKEND.md           # Documentación backend
-│   ├── 03. PROYECTO_FRONTEND.md          # Documentación frontend
-│   ├── 03. PROYECTO_ANDROID.md           # Documentación Android
-│   ├── 03. PROYECTO_ESP32.md             # Documentación ESP32
 │   ├── 04. MODELO_DATOS.md               # Diagramas E/R, UML, Relacional
 │   ├── 04b. CONFIGURACION_POSTGRESQL.md  # Instalación PostgreSQL
+│   ├── Aplicaciones/                     # Documentación de aplicaciones
+│   │   ├── BACKEND.md                    # Documentación backend
+│   │   ├── FRONTEND.md                   # Documentación frontend
+│   │   ├── ANDROID.md                    # Documentación Android
+│   │   └── ESP32.md                      # Documentación ESP32
 │   ├── Componentes para ESP32/           # Especificaciones hardware
+│   ├── ClaudeInit.txt                    # Contexto para nuevas sesiones
 │   ├── install-timescaledb.sh            # Script instalación TimescaleDB
 │   └── por_hacer.txt                     # Tareas pendientes
-├── backend/                               # API REST (Spring Boot)
+├── backend/                              # API REST (Spring Boot)
 │   ├── src/
 │   │   └── main/
 │   │       └── resources/
@@ -219,12 +221,14 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 - [Git Workflow](./docs/00.GIT_WORKFLOW.md) - Guía completa de flujo de trabajo con feature branches
 - [Hoja de Ruta](./docs/01.HOJA_DE_RUTA.md) - Planificación completa del proyecto por fases
 - [Especificación Técnica](./docs/02.ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura del sistema
-- [Proyecto Backend](./docs/03.%20PROYECTO_BACKEND.md) - Documentación del API REST
-- [Proyecto Frontend](./docs/03.%20PROYECTO_FRONTEND.md) - Documentación de la aplicación web
-- [Proyecto Android](./docs/03.%20PROYECTO_ANDROID.md) - Documentación de la app móvil
-- [Proyecto ESP32](./docs/03.%20PROYECTO_ESP32.md) - Documentación del firmware IoT
 - [Modelo de Datos](./docs/04.%20MODELO_DATOS.md) - Diagramas E/R, UML y Relacional completos
 - [Configuración PostgreSQL](./docs/04b.%20CONFIGURACION_POSTGRESQL.md) - Guía de instalación de BD
+
+**Documentación de Aplicaciones:**
+- [Proyecto Backend](./docs/Aplicaciones/BACKEND.md) - Documentación del API REST
+- [Proyecto Frontend](./docs/Aplicaciones/FRONTEND.md) - Documentación de la aplicación web
+- [Proyecto Android](./docs/Aplicaciones/ANDROID.md) - Documentación de la app móvil
+- [Proyecto ESP32](./docs/Aplicaciones/ESP32.md) - Documentación del firmware IoT
 - [Manual de Instalación](./docs/MANUAL_INSTALACION.md) _(pendiente)_
 - [Manual de Usuario](./docs/MANUAL_USUARIO.md) _(pendiente)_
 

@@ -280,7 +280,7 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 
 - [Hoja de Ruta Completa](../docs/01.HOJA_DE_RUTA.md)
 - [Especificación Técnica](../docs/02.ESPECIFICACION_TECNICA.md)
-- [Documentación Backend](../docs/03.%20PROYECTO_BACKEND.md)
+- [Documentación Backend](../docs/Aplicaciones/BACKEND.md)
 - [Modelo de Datos](../docs/04.%20MODELO_DATOS.md) - Diagramas E/R, UML y Relacional
 - [Configuración PostgreSQL](../docs/04b.%20CONFIGURACION_POSTGRESQL.md)
 
