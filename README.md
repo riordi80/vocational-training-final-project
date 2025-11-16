@@ -153,9 +153,9 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - Configuración de Spring Boot funcional
 - Estructura de proyecto Git establecida
 
-### ⏳ En Desarrollo (Fase 1 - 40%)
-- ✅ Entidades JPA: Usuario y Rol completadas con Javadoc
-- ⏳ Entidades JPA pendientes: CentroEducativo, Arbol, DispositivoEsp32
+### ⏳ En Desarrollo (Fase 1 - 50%)
+- ✅ Entidades JPA completadas con Javadoc: Usuario, Rol, CentroEducativo
+- ⏳ Entidades JPA pendientes: Arbol, DispositivoEsp32
 - ⏳ Repositorios JPA
 - ⏳ Relaciones 1:N (CentroEducativo → Arbol)
 - ⏳ Verificar arranque de aplicación Spring Boot
