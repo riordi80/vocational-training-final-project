@@ -152,11 +152,16 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - Configuración de Spring Boot funcional
 - Estructura de proyecto Git establecida
 
-### ⏳ En Desarrollo
-- Fase 1: Creación de entidades JPA y repositorios
-- Fase 2: Sistema de autenticación JWT
+### ⏳ En Desarrollo (Fase 1 - 40%)
+- ✅ Entidades JPA: Usuario y Rol completadas con Javadoc
+- ⏳ Entidades JPA pendientes: CentroEducativo, Arbol, DispositivoEsp32
+- ⏳ Repositorios JPA
+- ⏳ Relaciones 1:N (CentroEducativo → Arbol)
+- ⏳ Verificar arranque de aplicación Spring Boot
 
 ### 📅 Próximos Hitos
+- **Fase 1**: Completar entidades JPA restantes
+- **Fase 2**: Sistema de autenticación JWT
 - **Noviembre**: Fase 3 - Relaciones 1:N (Requisito PGV)
 - **Diciembre**: Fase 6 - Relaciones N:M (Requisito PGV)
 - **Q1 2026**: Fases 4-7 - Frontend completo (Requisito DAD)
