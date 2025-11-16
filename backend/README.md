@@ -1,12 +1,12 @@
-# Backend - Proyecto Árboles
+# Backend - Garden Monitor (Proyecto Árboles)
 
 API REST desarrollada con Spring Boot para el sistema de monitorización de árboles.
 
 ## Tecnologías
 
-- **Framework**: Spring Boot 3.x
+- **Framework**: Spring Boot 3.5.7
 - **Lenguaje**: Java 21
-- **Build**: Maven
+- **Build**: Maven (con Maven Wrapper incluido)
 - **Base de Datos**: PostgreSQL 15+ con TimescaleDB
 - **ORM**: Spring Data JPA
 - **Seguridad**: Spring Security + JWT
@@ -19,7 +19,8 @@ backend/
 ├── src/
 │   ├── main/
 │   │   ├── java/
-│   │   │   └── com/arboles/
+│   │   │   └── com/example/gardenmonitor/
+│   │   │       ├── GardenmonitorApplication.java  # Clase principal
 │   │   │       ├── config/         # Configuración (Security, CORS, etc.)
 │   │   │       ├── controller/     # Controladores REST
 │   │   │       ├── service/        # Lógica de negocio
@@ -31,9 +32,12 @@ backend/
 │   │   │       └── util/           # Utilidades
 │   │   └── resources/
 │   │       ├── application.properties
-│   │       ├── application-dev.properties
-│   │       └── application-prod.properties
+│   │       ├── application-dev.properties (a crear)
+│   │       └── application-prod.properties (a crear)
 │   └── test/
+├── .mvn/                   # Maven Wrapper
+├── mvnw                    # Maven Wrapper (Linux/Mac)
+├── mvnw.cmd                # Maven Wrapper (Windows)
 ├── pom.xml
 ├── .gitignore
 └── README.md
@@ -41,10 +45,11 @@ backend/
 
 ## Requisitos Previos
 
-- Java 21
-- Maven 3.8+
-- PostgreSQL 15+
-- TimescaleDB (extensión de PostgreSQL)
+- Java 21 ✅
+- PostgreSQL 15+ (a instalar)
+- TimescaleDB (extensión de PostgreSQL, a instalar)
+
+**Nota**: No necesitas instalar Maven manualmente, el proyecto incluye Maven Wrapper (`mvnw`).
 
 ## Instalación y Configuración
 
@@ -57,7 +62,21 @@ cd backend
 
 ### 2. Configurar la Base de Datos
 
-Crear base de datos en PostgreSQL:
+#### Opción 1: Usar el script SQL completo (Recomendado)
+
+```bash
+# Ejecutar script de creación completo
+psql -U postgres -f create_database.sql
+```
+
+El archivo [`create_database.sql`](./create_database.sql) contiene:
+- Creación de base de datos
+- Habilitación de extensión TimescaleDB
+- Creación de todas las tablas (8 entidades)
+- Configuración de hypertable para series temporales
+- Todos los índices y constraints
+
+#### Opción 2: Manual
 
 ```sql
 CREATE DATABASE proyecto_arboles;
@@ -65,34 +84,59 @@ CREATE DATABASE proyecto_arboles;
 CREATE EXTENSION IF NOT EXISTS timescaledb;
 ```
 
+⚠️ **Para resetear la base de datos**, usar el script [`drop_tables.sql`](./drop_tables.sql):
+```bash
+psql -U arboles_user -d proyecto_arboles -f drop_tables.sql
+```
+
 ### 3. Configurar `application.properties`
 
-Editar `src/main/resources/application.properties`:
+⚠️ **IMPORTANTE**: Lee primero [`src/main/resources/README_CONFIG.md`](./src/main/resources/README_CONFIG.md) para configuración segura.
+
+El proyecto usa un patrón de configuración de 2 capas:
+
+1. **`application.properties`** (commiteado): Configuración base sin credenciales
+2. **`application-local.properties`** (NO commiteado): Credenciales reales
+
+#### Crear `application-local.properties`:
 
 ```properties
+# Copiar desde application.properties y completar con valores reales
 spring.datasource.url=jdbc:postgresql://localhost:5432/proyecto_arboles
-spring.datasource.username=tu_usuario
-spring.datasource.password=tu_contraseña
+spring.datasource.username=arboles_user
+spring.datasource.password=TU_PASSWORD_REAL_AQUI
 
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 
-jwt.secret=tu_jwt_secret_key
+jwt.secret=TU_JWT_SECRET_MUY_SEGURO_AQUI
 jwt.expiration=86400000
 ```
 
-**IMPORTANTE**: No commitear credenciales. Usar variables de entorno o `application-local.properties` (ignorado en .gitignore).
+**Alternativa**: Usar variables de entorno (recomendado para producción).
 
 ### 4. Compilar el proyecto
 
+**Linux/Mac**:
 ```bash
-mvn clean install
+./mvnw clean install
+```
+
+**Windows**:
+```cmd
+mvnw.cmd clean install
 ```
 
 ### 5. Ejecutar la aplicación
 
+**Linux/Mac**:
 ```bash
-mvn spring-boot:run
+./mvnw spring-boot:run
+```
+
+**Windows**:
+```cmd
+mvnw.cmd spring-boot:run
 ```
 
 El servidor estará disponible en: `http://localhost:8080`
@@ -142,24 +186,38 @@ El servidor estará disponible en: `http://localhost:8080`
 
 ## Testing
 
+**Linux/Mac**:
 ```bash
 # Ejecutar tests unitarios
-mvn test
+./mvnw test
 
 # Ejecutar tests de integración
-mvn verify
+./mvnw verify
 
 # Generar reporte de cobertura
-mvn jacoco:report
+./mvnw jacoco:report
+```
+
+**Windows**:
+```cmd
+mvnw.cmd test
+mvnw.cmd verify
+mvnw.cmd jacoco:report
 ```
 
 ## Build para Producción
 
+**Linux/Mac**:
 ```bash
-mvn clean package -DskipTests
+./mvnw clean package -DskipTests
 ```
 
-El archivo `.jar` se generará en `target/proyecto-arboles-backend-{version}.jar`
+**Windows**:
+```cmd
+mvnw.cmd clean package -DskipTests
+```
+
+El archivo `.jar` se generará en `target/gardenmonitor-0.0.1-SNAPSHOT.jar`
 
 ## Variables de Entorno (Producción)
 
@@ -172,15 +230,52 @@ export DB_PASSWORD=tu_password
 export JWT_SECRET=tu_jwt_secret_muy_seguro
 ```
 
-## Requisitos Académicos Cumplidos
+## Requisitos Académicos
 
-- **[PGV] Noviembre**: Endpoints con relación 1:N (Centro → Árboles) con GET, POST, PUT, DELETE
-- **[PGV] Diciembre**: Endpoints con relación N:M (Usuario ↔ Centro) con validaciones
-- **[AED]**: Mapeo ORM con JPA, mínimo 2 entidades (Centro, Arbol), relaciones mapeadas
+- **[PGV] Noviembre**: ⏳ Endpoints con relación 1:N (Centro → Árboles) con GET, POST, PUT, DELETE
+- **[PGV] Diciembre**: ⏳ Endpoints con relación N:M (Usuario ↔ Centro) con validaciones
+- **[AED]**: ✅ Modelo de datos documentado | ⏳ Mapeo ORM con JPA (mínimo 2 entidades, 1 relación)
 
-## Estado
+## Estado del Proyecto
 
-En desarrollo
+**Fase actual**: Fase 1 - Backend (Base de Datos y Modelo)
+
+### ✅ Completado (Fase 0)
+- ✅ Configuración de PostgreSQL + TimescaleDB
+- ✅ Modelo de datos diseñado (8 entidades)
+- ✅ Scripts SQL de creación (`create_database.sql`)
+- ✅ Scripts SQL de eliminación (`drop_tables.sql`)
+- ✅ Configuración de Spring Boot (`application.properties`)
+- ✅ Estructura del proyecto establecida
+
+### ⏳ En Desarrollo (Fase 1)
+- ⏳ Crear entidades JPA (Usuario, CentroEducativo, Arbol, etc.)
+- ⏳ Crear repositorios JPA
+- ⏳ Configurar relaciones 1:N
+
+### 📅 Próximos Hitos
+- **Fase 2**: Sistema de autenticación JWT
+- **Fase 3** (Requisito PGV Noviembre): Endpoints 1:N (Centro → Árboles)
+- **Fase 6** (Requisito PGV Diciembre): Endpoints N:M (Usuario ↔ Centro)
+
+## Archivos Importantes del Backend
+
+### Scripts SQL
+- [`create_database.sql`](./create_database.sql) - Script completo de creación de base de datos (8 tablas)
+- [`drop_tables.sql`](./drop_tables.sql) - Script para eliminar todas las tablas (resetear BD)
+
+### Configuración
+- [`src/main/resources/README_CONFIG.md`](./src/main/resources/README_CONFIG.md) - **LEER PRIMERO**: Guía de configuración segura
+- `src/main/resources/application.properties` - Configuración base (commiteada)
+- `src/main/resources/application-local.properties` - Credenciales locales (NO commitear)
+
+### Documentación Relacionada
+
+- [Hoja de Ruta Completa](../docs/01.HOJA_DE_RUTA.md)
+- [Especificación Técnica](../docs/02.ESPECIFICACION_TECNICA.md)
+- [Documentación Backend](../docs/03.%20PROYECTO_BACKEND.md)
+- [Modelo de Datos](../docs/04.%20MODELO_DATOS.md) - Diagramas E/R, UML y Relacional
+- [Configuración PostgreSQL](../docs/04b.%20CONFIGURACION_POSTGRESQL.md)
 
 ## Contacto
 

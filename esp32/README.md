@@ -86,7 +86,7 @@ Descargar desde: [https://code.visualstudio.com/](https://code.visualstudio.com/
 #### 3. Clonar e inicializar proyecto
 
 ```bash
-git clone <url-repositorio>
+git clone https://github.com/riordi80/vocational-training-final-project
 cd esp32
 pio init --board esp32dev
 ```

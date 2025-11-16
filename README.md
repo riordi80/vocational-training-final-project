@@ -61,19 +61,34 @@ Documentación completa del proyecto
 
 ```
 proyecto-arboles/
-├── .github/
-│   └── workflows/          # GitHub Actions CI/CD
-├── docs/                   # Documentación
-│   ├── ESPECIFICACION_TECNICA.md
-│   ├── DIAGRAMA_ER.md
-│   ├── DIAGRAMA_UML.md
-│   ├── MODELO_RELACIONAL.md
-│   ├── MANUAL_INSTALACION.md
-│   └── MANUAL_USUARIO.md
-├── backend/                # API REST (Spring Boot)
-├── frontend/               # Web App (React)
-├── android/                # Mobile App (Android)
-├── esp32/                  # Firmware ESP32
+├── docs/                                  # Documentación
+│   ├── 01.HOJA_DE_RUTA.md                # Planificación por fases
+│   ├── 02.ESPECIFICACION_TECNICA.md      # Arquitectura y requisitos
+│   ├── 03. PROYECTO_BACKEND.md           # Documentación backend
+│   ├── 03. PROYECTO_FRONTEND.md          # Documentación frontend
+│   ├── 03. PROYECTO_ANDROID.md           # Documentación Android
+│   ├── 03. PROYECTO_ESP32.md             # Documentación ESP32
+│   ├── 04. MODELO_DATOS.md               # Diagramas E/R, UML, Relacional
+│   ├── 04b. CONFIGURACION_POSTGRESQL.md  # Instalación PostgreSQL
+│   ├── Componentes para ESP32/           # Especificaciones hardware
+│   ├── install-timescaledb.sh            # Script instalación TimescaleDB
+│   └── por_hacer.txt                     # Tareas pendientes
+├── backend/                               # API REST (Spring Boot)
+│   ├── src/
+│   │   └── main/
+│   │       └── resources/
+│   │           ├── application.properties          # Configuración base
+│   │           └── README_CONFIG.md                # Guía de configuración
+│   ├── create_database.sql               # Script creación de BD
+│   ├── drop_tables.sql                   # Script eliminación de tablas
+│   ├── pom.xml
+│   └── README.md
+├── frontend/                              # Web App (React)
+│   └── README.md
+├── android/                               # Mobile App (Android)
+│   └── README.md
+├── esp32/                                 # Firmware ESP32
+│   └── README.md
 ├── .gitignore
 └── README.md
 ```
@@ -86,23 +101,65 @@ proyecto-arboles/
 - **Frontend**: Node.js 18+, npm
 - **Android**: Android Studio, JDK 21
 - **ESP32**: Arduino IDE o PlatformIO
-- **Base de Datos**: PostgreSQL 15+
+- **Base de Datos**: PostgreSQL 15+ con TimescaleDB
 
 ### Instalación y Configuración
 
-Cada componente tiene su propio README con instrucciones detalladas de instalación y configuración en su respectiva carpeta.
+#### 1. Base de Datos
+```bash
+# Ver scripts de creación en:
+./backend/create_database.sql          # Crear todas las tablas
+./backend/drop_tables.sql              # Eliminar todas las tablas (si necesario)
+```
 
-Para instrucciones detalladas de instalación completa, consulta el [Manual de Instalación](./docs/MANUAL_INSTALACION.md).
+Consulta [`docs/04b. CONFIGURACION_POSTGRESQL.md`](./docs/04b.%20CONFIGURACION_POSTGRESQL.md) para instalación detallada de PostgreSQL y TimescaleDB.
+
+#### 2. Backend
+```bash
+cd backend
+./mvnw clean install
+./mvnw spring-boot:run
+```
+
+⚠️ **Importante**: Antes de ejecutar, configura las credenciales de la base de datos. Ver [`backend/src/main/resources/README_CONFIG.md`](./backend/src/main/resources/README_CONFIG.md) para detalles sobre configuración segura.
+
+#### 3. Frontend y Android
+Cada componente tiene su propio README con instrucciones detalladas en su respectiva carpeta.
+
+Para instrucciones completas de instalación, consulta el [Manual de Instalación](./docs/MANUAL_INSTALACION.md) _(pendiente)_.
 
 ## Características Principales
 
-- Monitorización en tiempo real de parámetros ambientales
-- Gestión multi-centro (varios centros educativos)
-- Sistema de roles y permisos (Admin, Profesor, Estudiante, Invitado)
-- Alertas configurables por umbrales
-- Visualización histórica con gráficas
-- Aplicaciones web y móvil sincronizadas
-- Arquitectura escalable y segura (JWT, HTTPS)
+- ✅ Monitorización en tiempo real de parámetros ambientales
+- ✅ Gestión multi-centro (varios centros educativos)
+- ✅ Sistema de roles y permisos (Admin, Profesor, Estudiante, Invitado)
+- ✅ Alertas configurables por umbrales
+- ✅ Visualización histórica con gráficas (series temporales con TimescaleDB)
+- ⏳ Aplicaciones web y móvil sincronizadas
+- ✅ Arquitectura escalable y segura (JWT, HTTPS)
+- ✅ Base de datos optimizada para series temporales (PostgreSQL + TimescaleDB)
+
+## Estado del Proyecto
+
+**Fase actual**: Fase 1 - Backend (Base de Datos y Modelo)
+
+### ✅ Completado (Fase 0)
+- Configuración de entornos de desarrollo
+- Base de datos PostgreSQL + TimescaleDB instalada y configurada
+- Modelo de datos completo con diagramas E/R, UML y Relacional
+- Scripts SQL de creación y eliminación de tablas
+- Configuración de Spring Boot funcional
+- Estructura de proyecto Git establecida
+
+### ⏳ En Desarrollo
+- Fase 1: Creación de entidades JPA y repositorios
+- Fase 2: Sistema de autenticación JWT
+
+### 📅 Próximos Hitos
+- **Noviembre**: Fase 3 - Relaciones 1:N (Requisito PGV)
+- **Diciembre**: Fase 6 - Relaciones N:M (Requisito PGV)
+- **Q1 2026**: Fases 4-7 - Frontend completo (Requisito DAD)
+- **Q1 2026**: Fases 9-10 - App Android (Requisito PGL)
 
 ## Requisitos Académicos
 
@@ -158,12 +215,26 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 
 ## Documentación
 
-- [Especificación Técnica](./docs/ESPECIFICACION_TECNICA.md) (ignorado en .gitignore).
-- [Diagrama E/R](./docs/DIAGRAMA_ER.md) _(pendiente)_
-- [Diagrama UML](./docs/DIAGRAMA_UML.md) _(pendiente)_
-- [Modelo Relacional](./docs/MODELO_RELACIONAL.md) _(pendiente)_
+### 📚 Documentos Principales
+
+- [Hoja de Ruta](./docs/01.HOJA_DE_RUTA.md) - Planificación completa del proyecto por fases
+- [Especificación Técnica](./docs/02.ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura del sistema
+- [Proyecto Backend](./docs/03.%20PROYECTO_BACKEND.md) - Documentación del API REST
+- [Proyecto Frontend](./docs/03.%20PROYECTO_FRONTEND.md) - Documentación de la aplicación web
+- [Proyecto Android](./docs/03.%20PROYECTO_ANDROID.md) - Documentación de la app móvil
+- [Proyecto ESP32](./docs/03.%20PROYECTO_ESP32.md) - Documentación del firmware IoT
+- [Modelo de Datos](./docs/04.%20MODELO_DATOS.md) - Diagramas E/R, UML y Relacional completos
+- [Configuración PostgreSQL](./docs/04b.%20CONFIGURACION_POSTGRESQL.md) - Guía de instalación de BD
 - [Manual de Instalación](./docs/MANUAL_INSTALACION.md) _(pendiente)_
 - [Manual de Usuario](./docs/MANUAL_USUARIO.md) _(pendiente)_
+
+### 🛠️ Scripts y Archivos de Configuración
+
+- [`backend/create_database.sql`](./backend/create_database.sql) - Script SQL para crear todas las tablas del proyecto
+- [`backend/drop_tables.sql`](./backend/drop_tables.sql) - Script SQL para eliminar todas las tablas (útil para resetear BD)
+- [`backend/src/main/resources/README_CONFIG.md`](./backend/src/main/resources/README_CONFIG.md) - Guía de configuración segura de Spring Boot
+- [`docs/install-timescaledb.sh`](./docs/install-timescaledb.sh) - Script para instalar TimescaleDB en Linux
+- [`docs/Componentes para ESP32/Componentes.png`](./docs/Componentes%20para%20ESP32/Componentes.png) - Lista de componentes hardware y precios
 
 
 
