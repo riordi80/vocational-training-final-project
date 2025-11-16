@@ -248,12 +248,19 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 - ✅ Configuración de Spring Boot (`application.properties`)
 - ✅ Estructura del proyecto establecida
 
-### ⏳ En Desarrollo (Fase 1)
-- ⏳ Crear entidades JPA (Usuario, CentroEducativo, Arbol, etc.)
-- ⏳ Crear repositorios JPA
-- ⏳ Configurar relaciones 1:N
+### ⏳ En Desarrollo (Fase 1 - 40% completada)
+- ✅ Entidades JPA creadas:
+  - `Usuario` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado para JPA
+  - `Rol` (enum: ADMIN, PROFESOR, ESTUDIANTE, INVITADO)
+- ⏳ Entidades JPA pendientes:
+  - `CentroEducativo`, `Arbol`, `DispositivoEsp32`
+  - `Lectura`, `Alerta`, `Notificacion`, `UsuarioCentro`
+- ⏳ Crear repositorios JPA (UsuarioRepository, etc.)
+- ⏳ Configurar relaciones 1:N (CentroEducativo → Arbol)
+- ⏳ Verificar que la aplicación arranca correctamente
 
 ### 📅 Próximos Hitos
+- **Fase 1**: Completar entidades JPA restantes
 - **Fase 2**: Sistema de autenticación JWT
 - **Fase 3** (Requisito PGV Noviembre): Endpoints 1:N (Centro → Árboles)
 - **Fase 6** (Requisito PGV Diciembre): Endpoints N:M (Usuario ↔ Centro)
