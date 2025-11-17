@@ -234,7 +234,7 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 
 - **[PGV] Noviembre**: ⏳ Endpoints con relación 1:N (Centro → Árboles) con GET, POST, PUT, DELETE
 - **[PGV] Diciembre**: ⏳ Endpoints con relación N:M (Usuario ↔ Centro) con validaciones
-- **[AED]**: ✅ Modelo de datos documentado | ⏳ Mapeo ORM con JPA (mínimo 2 entidades, 1 relación)
+- **[AED]**: ✅ Modelo de datos documentado | 🔄 Mapeo ORM con JPA - 3/8 entidades creadas (Usuario, Rol, CentroEducativo) + 2 repositorios (UsuarioRepository, CentroEducativoRepository)
 
 ## Estado del Proyecto
 
@@ -248,15 +248,19 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 - ✅ Configuración de Spring Boot (`application.properties`)
 - ✅ Estructura del proyecto establecida
 
-### ⏳ En Desarrollo (Fase 1 - 50% completada)
+### ⏳ En Desarrollo (Fase 1 - 65% completada)
 - ✅ Entidades JPA creadas:
   - `Usuario` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado para JPA
   - `Rol` (enum: ADMIN, PROFESOR, ESTUDIANTE, INVITADO)
   - `CentroEducativo` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado para JPA
+- ✅ Repositorios JPA creados:
+  - `UsuarioRepository` con queries derivadas (findByEmail, existsByEmail, findByActivo, findByRol)
+  - `CentroEducativoRepository` con queries derivadas (findByNombre, existsByNombre, findByNombreContainingIgnoreCase, findByResponsable, findAllByOrderByNombreAsc)
 - ⏳ Entidades JPA pendientes:
   - `Arbol`, `DispositivoEsp32`
   - `Lectura`, `Alerta`, `Notificacion`, `UsuarioCentro`
-- ⏳ Crear repositorios JPA (UsuarioRepository, CentroEducativoRepository, etc.)
+- ⏳ Repositorios JPA pendientes:
+  - `ArbolRepository`, `DispositivoEsp32Repository`
 - ⏳ Configurar relaciones 1:N (CentroEducativo → Arbol)
 - ⏳ Verificar que la aplicación arranca correctamente
 
