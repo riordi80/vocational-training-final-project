@@ -16,7 +16,10 @@ import java.time.LocalDateTime;
  */
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuario", indexes = {
+        @Index(name = "idx_usuario_rol", columnList = "rol"),
+        @Index(name = "idx_usuario_activo", columnList = "activo")
+})
 public class Usuario {
 
     @Id
@@ -48,7 +51,7 @@ public class Usuario {
      * Se establece automáticamente al crear el usuario mediante @PrePersist.
      * </p>
      */
-    @Column(name = "fecha_creacion", nullable = false, updatable = false)
+    @Column(name = "fecha_creacion", nullable = false, updatable = false, columnDefinition = "TIMESTAMPTZ")
     private LocalDateTime fechaCreacion;
 
     @Column(name = "activo", nullable = false)
