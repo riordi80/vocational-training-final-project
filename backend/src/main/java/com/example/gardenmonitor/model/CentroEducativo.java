@@ -17,7 +17,9 @@ import java.time.LocalDateTime;
  */
 
 @Entity
-@Table(name = "centro_educativo")
+@Table(name = "centro_educativo", indexes = {
+        @Index(name = "idx_centro_educativo_nombre", columnList = "nombre")
+})
 public class CentroEducativo {
 
     @Id
@@ -60,7 +62,7 @@ public class CentroEducativo {
      * Se establece automáticamente al crear el centro mediante @PrePersist.
      * </p>
      */
-    @Column(name = "fecha_creacion", nullable = false, updatable = false)
+    @Column(name = "fecha_creacion", nullable = false, updatable = false, columnDefinition = "TIMESTAMPTZ")
     private LocalDateTime fechaCreacion;
 
 
