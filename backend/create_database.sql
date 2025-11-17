@@ -40,7 +40,7 @@ CREATE TABLE centro_educativo (
     CONSTRAINT pk_centro_educativo PRIMARY KEY (id)
 );
 
-CREATE INDEX idx_centro_nombre ON centro_educativo(nombre);
+CREATE INDEX idx_centro_educativo_nombre ON centro_educativo(nombre);
 
 -- ============================================
 -- 3. TABLA: dispositivo_esp32
