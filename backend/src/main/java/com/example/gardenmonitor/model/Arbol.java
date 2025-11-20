@@ -3,6 +3,9 @@ package com.example.gardenmonitor.model;
 import java.math.BigDecimal;
 import java.sql.Date;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -20,6 +23,7 @@ public class Arbol {
 
     @ManyToOne
     @JoinColumn(name = "centro_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private CentroEducativo centroEducativo;
 
     @Column(name = "nombre", nullable = false, length = 100)

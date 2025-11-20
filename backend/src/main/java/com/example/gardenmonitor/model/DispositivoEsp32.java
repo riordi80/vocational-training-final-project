@@ -16,6 +16,7 @@ public class DispositivoEsp32 {
     @Column(name = "id")
     private long id;
 
+    @Column(name="mac_address", unique = true, nullable = false)
     @Pattern(regexp = "^[A-Za-z0-9]+$", message = "Solo se permiten letras y números")
     private String macAddress;
 
