@@ -13,9 +13,10 @@ import com.example.gardenmonitor.model.DispositivoEsp32;
 @Repository
 public interface ArbolRepository extends JpaRepository<Arbol, Long>{
     Optional<Arbol> findByEspecie(String especie);
-    boolean existByEspecie(String especie);
-    List<Arbol> findByCentro(CentroEducativo centroEducativo);
-    Arbol findByDispositivoEsp32(DispositivoEsp32 dispositivoEsp32);
-
-    
+    boolean existsByEspecie(String especie);
+    List<Arbol> findByCentroEducativo(CentroEducativo centroEducativo);
+    Optional<Arbol> findByDispositivoEsp32(DispositivoEsp32 dispositivoEsp32);
+    List<Arbol> findByNombreContainingIgnoreCase(String nombre);
+    List<Arbol> findAllByOrderByNombreAsc();
+    boolean existsByNombreAndCentroEducativo(String nombre, CentroEducativo centroEducacion);
 }

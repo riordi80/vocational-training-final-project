@@ -13,7 +13,7 @@ import com.example.gardenmonitor.model.Arbol;
 @Repository
 public interface DispositivoEsp32Repository extends JpaRepository<DispositivoEsp32, Long>{
     Optional<DispositivoEsp32> findByMacAddress(String macAddress);
-    boolean existByMacAddress(String macAddress);
-    DispositivoEsp32 findByArbol(Arbol arbol);
+    boolean existsByMacAddress(String macAddress);
+    Optional<DispositivoEsp32> findByArbol(Arbol arbol);
     List<DispositivoEsp32> findByActivo(boolean activo);
 }

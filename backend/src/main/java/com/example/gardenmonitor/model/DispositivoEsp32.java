@@ -14,10 +14,10 @@ public class DispositivoEsp32 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @Column(name="mac_address", unique = true, nullable = false)
-    @Pattern(regexp = "^[A-Za-z0-9]+$", message = "Solo se permiten letras y números")
+    @Pattern(regexp = "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$")
     private String macAddress;
 
     /*
@@ -25,7 +25,7 @@ public class DispositivoEsp32 {
      * por lo tanto arbol es el 'owner' de la relacion por eso ponemos mappedby dispositivo_esp32
      * 
      */
-    @OneToOne(mappedBy = "dispositivo_esp32")
+    @OneToOne(mappedBy = "dispositivoEsp32")
     private Arbol arbol;
 
     @Column(name = "activo", nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
@@ -33,10 +33,11 @@ public class DispositivoEsp32 {
 
     @Column(name = "ultima_conexion", columnDefinition = "TIMESTAMPTZ")
     private LocalDateTime ultimaConexion;
+
+    @Column(name = "frecuencia_lectura_min", columnDefinition = "INTEGER DEFAULT 15")
     private int frecuenciaLecturaMin;
 
-    public DispositivoEsp32() {
-    }
+    public DispositivoEsp32() {}
 
     public DispositivoEsp32(String macAddress, Arbol arbol, boolean activo, int frecuenciaLecturaMin) {
         this.macAddress = macAddress;
@@ -47,17 +48,19 @@ public class DispositivoEsp32 {
 
     public long getId() {return id;}
     public String getMacAddress() {return macAddress;}
-    public Arbol getArbolId() {return arbol;}
+    public Arbol getArbol() {return arbol;}
     public boolean isActivo() {return activo;}
     public LocalDateTime getUltimaConexion() {return ultimaConexion;}
     public int getFrecuenciaLecturaMin() {return frecuenciaLecturaMin;}
 
     public void setMacAddress(String macAddress) {this.macAddress = macAddress;}
-    public void setArbolId(Arbol arbol) {this.arbol = arbol;}
+    public void setArbol(Arbol arbol) {this.arbol = arbol;}
     public void setActivo(boolean activo) {this.activo = activo;}
     public void setUltimaConexion(LocalDateTime ultimaConexion) {this.ultimaConexion = ultimaConexion;}
     public void setFrecuenciaLecturaMin(int frecuenciaLecturaMin) {this.frecuenciaLecturaMin = frecuenciaLecturaMin;}
 
+
+    @PrePersist
     protected void onCreate(){
         if (ultimaConexion == null) {
             ultimaConexion = LocalDateTime.now();

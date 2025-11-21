@@ -1,16 +1,21 @@
 package com.example.gardenmonitor.model;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDate;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 
 @Entity
 @Table(name = "arbol", indexes = {
-    @Index(name = "idx_arvol_centro_educativo", columnList = "centro_educativo_id", unique = true),
+    @Index(name = "idx_arbol_centro_educativo", columnList = "centro_educativo_id"),
     @Index(name = "idx_arbol_dispositivo_esp32", columnList = "dispositivo_esp32_id"),
     @Index(name = "idx_arbol_especie", columnList = "especie" )
 })
@@ -19,49 +24,58 @@ public class Arbol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "centro_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private CentroEducativo centroEducativo;
 
+    @NotBlank
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
+    @NotBlank
     @Column(name = "especie", nullable = false, length = 150)
     private String especie;
 
+    @Past
+    @NotNull
     @Column(name = "fecha_plantacion", nullable = false)
-    private Date fechaPlantacion;
+    private LocalDate fechaPlantacion;
 
     @Column(name = "ubicacion_especifica", length = 200)
     private String ubicacionEspecifica;
 
     @OneToOne
-    @JoinColumn(name = "dispositivo_esp32_id", 
+    @JoinColumn(name = "dispositivo_id", 
         foreignKey = @ForeignKey(
         name = "fk_dispositivo_esp32", 
         foreignKeyDefinition = "FOREIGN KEY (dispositivo_esp32_id) REFERENCES dispositivo_esp32(id) ON DELETE SET NULL"
         ))
     private DispositivoEsp32 dispositivoEsp32;
 
-    @Column(name = "umbral_temp_min", columnDefinition = "DECIMAL DEFAULT 5.00")
+    @Column(name = "umbral_temp_min", columnDefinition = "DECIMAL(5,2) DEFAULT 5.00")
+    @DecimalMin(value = "-15")
     private BigDecimal umbralTempMin;
 
-    @Column(name = "umbral_temp_max", columnDefinition = "DECIMAL DEFAULT 40.00")
+    @Column(name = "umbral_temp_max", columnDefinition = "DECIMAL(5,2) DEFAULT 40.00")
+    @DecimalMax(value = "45")
     private BigDecimal umbralTempMax;
 
-    @Column(name = "umbral_humedad_ambiente_min", columnDefinition = "DECIMAL DEFAULT 30.00")
+    @Column(name = "umbral_humedad_ambiente_min", columnDefinition = "DECIMAL(5,2) DEFAULT 30.00")
+    @DecimalMin(value = "0.01")
     private BigDecimal umbralHumedadAmbienteMin;
 
-    @Column(name = "umbral_humedad_ambiente_max", columnDefinition = "DECIMAL DEFAULT 90.00")
+    @Column(name = "umbral_humedad_ambiente_max", columnDefinition = "DECIMAL(5,2) DEFAULT 90.00")
+    @DecimalMax(value = "100")
     private BigDecimal umbralHumedadAmbienteMax;
 
-    @Column(name = "umbral_humedad_ambiente_suelo_min", columnDefinition = "DECIMAL DEFAULT 30.00")
+    @Column(name = "umbral_humedad_suelo_min", columnDefinition = "DECIMAL(5,2) DEFAULT 30.00")
+    @DecimalMin(value = "0.01")
     private BigDecimal umbralHumedadSueloMin;
 
-    @Column(name = "umbral_co2_max", columnDefinition = "DECIMAL DEFAULT 1000.00")
+    @Column(name = "umbral_co2_max", columnDefinition = "DECIMAL(5,2) DEFAULT 1000.00")
     private BigDecimal umbralCO2Max;
 
     public Arbol(){}
@@ -70,7 +84,7 @@ public class Arbol {
         CentroEducativo centroEducativo, 
         String nombre, 
         String especie, 
-        Date fechaPlantacion, 
+        LocalDate fechaPlantacion, 
         String ubicacionEspecifica, 
         DispositivoEsp32 dispositivoEsp32, 
         BigDecimal umbralTempMin, 
@@ -98,7 +112,7 @@ public class Arbol {
     public CentroEducativo getCentroEducativo() {return centroEducativo;}
     public String getNombre() {return nombre;}
     public String getEspecie() {return especie;}
-    public Date getFechaPlantacion() {return fechaPlantacion;}
+    public LocalDate getFechaPlantacion() {return fechaPlantacion;}
     public String getUbicacionEspecifica() {return ubicacionEspecifica;}
     public DispositivoEsp32 getDispositivoEsp32() {return dispositivoEsp32;}
     public BigDecimal getUmbralTempMin() {return umbralTempMin;}
@@ -111,7 +125,7 @@ public class Arbol {
     public void setCentroEducativo(CentroEducativo centroEducativo) {this.centroEducativo = centroEducativo;}
     public void setNombre(String nombre) {this.nombre = nombre;}
     public void setEspecie(String especie) {this.especie = especie;}
-    public void setFechaPlantacion(Date fechaPlantacion) {this.fechaPlantacion = fechaPlantacion;}
+    public void setFechaPlantacion(LocalDate fechaPlantacion) {this.fechaPlantacion = fechaPlantacion;}
     public void setUbicacionEspecifica(String ubicacionEspecifica) {this.ubicacionEspecifica = ubicacionEspecifica;}
     public void setDispositivoEsp32(DispositivoEsp32 dispositivoEsp32) {this.dispositivoEsp32 = dispositivoEsp32;}
     public void setUmbralTempMin(BigDecimal umbralTempMin) {this.umbralTempMin = umbralTempMin;}
