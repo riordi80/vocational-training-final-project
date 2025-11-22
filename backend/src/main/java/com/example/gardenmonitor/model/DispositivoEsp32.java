@@ -20,11 +20,6 @@ public class DispositivoEsp32 {
     @Pattern(regexp = "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$")
     private String macAddress;
 
-    /*
-     * En la relacion OneToOne dispositivo esp32 deberia borrarse si se borra un arbol
-     * por lo tanto arbol es el 'owner' de la relacion por eso ponemos mappedby dispositivo_esp32
-     * 
-     */
     @OneToOne(mappedBy = "dispositivoEsp32")
     private Arbol arbol;
 
