@@ -48,7 +48,7 @@ public class Arbol {
     private String ubicacionEspecifica;
 
     @OneToOne
-    @JoinColumn(name = "dispositivo_id", foreignKey = @ForeignKey(name = "fk_dispositivo_esp32", foreignKeyDefinition = "FOREIGN KEY (dispositivo_esp32_id) REFERENCES dispositivo_esp32(id) ON DELETE SET NULL"))
+    @JoinColumn(name = "dispositivo_id", foreignKey = @ForeignKey(name = "fk_dispositivo_esp32", foreignKeyDefinition = "FOREIGN KEY (dispositivo_id) REFERENCES dispositivo_esp32(id) ON DELETE SET NULL"))
     private DispositivoEsp32 dispositivoEsp32;
 
     @Column(name = "umbral_temp_min", columnDefinition = "DECIMAL(5,2) DEFAULT 5.00")
@@ -61,8 +61,7 @@ public class Arbol {
 
     @Column(name = "umbral_humedad_ambiente_min", columnDefinition = "DECIMAL(5,2) DEFAULT 30.00")
     @DecimalMin(value = "0.01")
-    @DecimalMax(value = "45")
-
+    @DecimalMax(value = "100")
     private BigDecimal umbralHumedadAmbienteMin;
 
     @Column(name = "umbral_humedad_ambiente_max", columnDefinition = "DECIMAL(5,2) DEFAULT 90.00")
