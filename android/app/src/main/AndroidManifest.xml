@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoArboles">
         <activity
+            android:name=".activities.ListarArbolesActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
