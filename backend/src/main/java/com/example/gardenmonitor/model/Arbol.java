@@ -13,6 +13,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 
+/**
+ * Entidad JPA que representa un árbol en el sistema Garden Monitor.
+ * <p>
+ * Esta clase mapea la tabla 'arbol' de la base de datos PostgreSQL
+ * y almacena información de los árboles monitorizados en los centros educativos,
+ * incluyendo datos de plantación, umbrales de alertas y asociación con dispositivos ESP32.
+ * </p>
+ *
+ * @author Richard Ortiz y Enrique Pérez
+ * @version 1.0
+ */
+
 @Entity
 @Table(name = "arbol", indexes = {
         @Index(name = "idx_arbol_centro", columnList = "centro_id"),
@@ -26,6 +38,13 @@ public class Arbol {
     @Column(name = "id")
     private Long id;
 
+    /**
+     * Centro educativo al que pertenece el árbol.
+     * <p>
+     * Relación Many-to-One: muchos árboles pueden pertenecer a un centro.
+     * Si se elimina el centro, se eliminan en cascada todos sus árboles.
+     * </p>
+     */
     @ManyToOne
     @JoinColumn(name = "centro_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -39,6 +58,12 @@ public class Arbol {
     @Column(name = "especie", nullable = false, length = 150)
     private String especie;
 
+    /**
+     * Fecha de plantación del árbol.
+     * <p>
+     * Debe ser una fecha en el pasado. Se valida con @Past.
+     * </p>
+     */
     @Past
     @NotNull
     @Column(name = "fecha_plantacion", nullable = false)
@@ -47,6 +72,13 @@ public class Arbol {
     @Column(name = "ubicacion_especifica", length = 200)
     private String ubicacionEspecifica;
 
+    /**
+     * Dispositivo ESP32 asociado al árbol para monitorización.
+     * <p>
+     * Relación One-to-One: un árbol tiene un único dispositivo.
+     * Si se elimina el dispositivo, se establece a NULL (ON DELETE SET NULL).
+     * </p>
+     */
     @OneToOne
     @JoinColumn(name = "dispositivo_id", foreignKey = @ForeignKey(name = "fk_dispositivo_esp32", foreignKeyDefinition = "FOREIGN KEY (dispositivo_id) REFERENCES dispositivo_esp32(id) ON DELETE SET NULL"))
     private DispositivoEsp32 dispositivoEsp32;
@@ -77,9 +109,31 @@ public class Arbol {
     @Column(name = "umbral_co2_max", columnDefinition = "DECIMAL(5,2) DEFAULT 1000.00")
     private BigDecimal umbralCO2Max;
 
+    /**
+     * Constructor vacío requerido por JPA.
+     */
     public Arbol() {
     }
 
+    /**
+     * Constructor para crear un nuevo árbol con todos sus datos.
+     * <p>
+     * El campo id se establece automáticamente.
+     * </p>
+     *
+     * @param centroEducativo centro educativo al que pertenece el árbol
+     * @param nombre nombre del árbol (máx 100 caracteres)
+     * @param especie especie del árbol (máx 150 caracteres)
+     * @param fechaPlantacion fecha de plantación (debe ser en el pasado)
+     * @param ubicacionEspecifica ubicación específica dentro del centro (máx 200 caracteres)
+     * @param dispositivoEsp32 dispositivo ESP32 asociado (puede ser null)
+     * @param umbralTempMin temperatura mínima de alerta (rango: -15 a 45°C)
+     * @param umbralTempMax temperatura máxima de alerta (rango: -15 a 45°C)
+     * @param umbralHumedadAmbienteMin humedad ambiente mínima de alerta (rango: 0.01 a 100%)
+     * @param umbralHumedadAmbienteMax humedad ambiente máxima de alerta (rango: 0.01 a 100%)
+     * @param umbralHumedadSueloMin humedad de suelo mínima de alerta (rango: 0.01 a 100%)
+     * @param umbralCO2Max nivel máximo de CO2 de alerta (ppm)
+     */
     public Arbol(
             CentroEducativo centroEducativo,
             String nombre,
