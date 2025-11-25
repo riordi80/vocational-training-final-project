@@ -100,6 +100,7 @@ public class DispositivoEsp32 {
     public LocalDateTime getUltimaConexion() {return ultimaConexion;}
     public int getFrecuenciaLecturaMin() {return frecuenciaLecturaMin;}
 
+     public void setId(Long id) {this.id = id;}
     public void setMacAddress(String macAddress) {this.macAddress = macAddress;}
     public void setArbol(Arbol arbol) {this.arbol = arbol;}
     public void setActivo(boolean activo) {this.activo = activo;}
