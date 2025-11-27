@@ -1,16 +1,22 @@
 package com.example.proyectoarboles.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.proyectoarboles.R;
 
 public class Login extends AppCompatActivity {
+
+    EditText inputUsuario;
+    EditText inputPassword;
+    Button loginButton;
+    Button registrerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,5 +24,28 @@ public class Login extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
+        inputUsuario.findViewById(R.id.editTextUsuario);
+        inputPassword.findViewById(R.id.editTextPassword);
+
+        loginButton.findViewById(R.id.buttonLogin);
+        registrerButton.findViewById(R.id.buttonRegistrer);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Intent intent = new Intent(Login.this, Registrer.class);
+                startActivity(intent);
+            }
+        });
+
+        registrerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, Registrer.class);
+                startActivity(intent);
+            }
+        });
     }
 }
