@@ -93,14 +93,14 @@ public class DispositivoEsp32 {
         this.frecuenciaLecturaMin = frecuenciaLecturaMin;
     }
 
-    public long getId() {return id;}
+    public Long getId() {return id;}
     public String getMacAddress() {return macAddress;}
     public Arbol getArbol() {return arbol;}
     public boolean isActivo() {return activo;}
     public LocalDateTime getUltimaConexion() {return ultimaConexion;}
     public int getFrecuenciaLecturaMin() {return frecuenciaLecturaMin;}
 
-     public void setId(Long id) {this.id = id;}
+    public void setId(Long id) {this.id = id;}
     public void setMacAddress(String macAddress) {this.macAddress = macAddress;}
     public void setArbol(Arbol arbol) {this.arbol = arbol;}
     public void setActivo(boolean activo) {this.activo = activo;}
