@@ -2,7 +2,6 @@ package com.example.proyectoarboles.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +14,9 @@ import java.util.List;
 
 public class ArbolAdapter extends RecyclerView.Adapter<ArbolAdapter.ArbolViewHolder>{
     private List<Arbol> arboles;
-    private AdapterView.OnItemClickListener listener;
+    private OnItemClickListener listener;
 
-    public ArbolAdapter(List<Arbol> arboles, AdapterView.OnItemClickListener listener){
+    public ArbolAdapter(List<Arbol> arboles, OnItemClickListener listener){
         this.arboles = arboles;
         this.listener = listener;
     }
@@ -37,7 +36,7 @@ public class ArbolAdapter extends RecyclerView.Adapter<ArbolAdapter.ArbolViewHol
         holder.textViewNombre.setText(arbol.getNombre());
         holder.textViewEspecieFecha.setText(arbol.getEspecie() + " - " + arbol.getFechaPlantacion());
 
-        holder.itemView.setOnClickListener(v -> listener.onItemClick(arbol));
+        holder.itemView.setOnClickListener(v -> listener.OnItemClick(arbol));
     }
 
     @Override

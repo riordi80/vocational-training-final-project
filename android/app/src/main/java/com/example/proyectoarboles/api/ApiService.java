@@ -1,4 +1,4 @@
-package com.example.proyectoarboles.api;
+/*package com.example.proyectoarboles.api;
 
 import com.example.proyectoarboles.model.Arbol;
 
@@ -40,3 +40,4 @@ public interface ApiService {
     @GET("arboles/centro/{centroId}")
     Call<List<Arbol>> getArbolesPorCentro(@Path("centroId") long centroId);
 }
+*/

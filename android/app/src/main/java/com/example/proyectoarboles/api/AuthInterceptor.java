@@ -1,4 +1,4 @@
-package com.example.proyectoarboles.api;
+/*package com.example.proyectoarboles.api;
 
 import java.io.IOException;
 
@@ -30,3 +30,4 @@ public class AuthInterceptor implements Interceptor {
         return null; // Placeholder
     }
 }
+*/

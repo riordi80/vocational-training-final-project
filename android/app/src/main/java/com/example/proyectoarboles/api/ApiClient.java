@@ -1,4 +1,4 @@
-package com.example.proyectoarboles.api;
+/*package com.example.proyectoarboles.api;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -27,3 +27,4 @@ public class ApiClient {
         return retrofit;
     }
 }
+*/
