@@ -162,7 +162,7 @@ public class Arbol {
         this.umbralCO2Max = umbralCO2Max;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
