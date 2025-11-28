@@ -24,18 +24,18 @@ public class Login extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        inputUsuario.findViewById(R.id.editTextUsuario);
-        inputPassword.findViewById(R.id.editTextPassword);
+        inputUsuario = findViewById(R.id.editTextUsuario);
+        inputPassword = findViewById(R.id.editTextPassword);
 
-        loginButton.findViewById(R.id.buttonLogin);
-        registrerButton.findViewById(R.id.buttonRegistrer);
+        loginButton = findViewById(R.id.buttonLogin);
+        registrerButton = findViewById(R.id.buttonRegistrer);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(Login.this, Registrer.class);
+                Intent intent = new Intent(Login.this, ListarArboles.class);
                 startActivity(intent);
             }
         });

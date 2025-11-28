@@ -25,7 +25,7 @@ public class ListarArboles extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_listar_arboles);
 
-        recyclerViewArboles.findViewById(R.id.RecyclerViewArboles);
+        recyclerViewArboles = findViewById(R.id.RecyclerViewArboles);
 
         List<Arbol> listaArboles = getArbolesXML();
 
@@ -51,7 +51,8 @@ public class ListarArboles extends AppCompatActivity {
         List<Arbol> listaArboles = new ArrayList<>();
 
         for(int i = 0; i < nombres.length; i++){
-            listaArboles.add(new Arbol(i+1, nombres[i], especies[i], fechas[i]));
+            int c = i;
+            listaArboles.add(new Arbol(c+1, nombres[i], especies[i], fechas[i]));
         }
 
         return listaArboles;

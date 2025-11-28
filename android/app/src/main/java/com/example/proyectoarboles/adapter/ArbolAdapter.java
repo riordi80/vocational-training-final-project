@@ -1,5 +1,6 @@
 package com.example.proyectoarboles.adapter;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -24,7 +25,9 @@ public class ArbolAdapter extends RecyclerView.Adapter<ArbolAdapter.ArbolViewHol
     @NonNull
     @Override
     public ArbolViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_arbol, parent, false);
+        return new ArbolViewHolder(view);
     }
 
 
