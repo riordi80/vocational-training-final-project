@@ -7,4 +7,84 @@
     android:layout_height="match_parent"
     tools:context=".activities.ArbolDetalles">
 
+    <TextView
+        android:id="@+id/textViewNombreDetalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="133dp"
+        android:layout_marginTop="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewFechaDetalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="76dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/textViewEspecieDetalle"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEspecieDetalle" />
+
+    <TextView
+        android:id="@+id/textViewEspecieDetalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="50dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/textViewNombreDetalle"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNombreDetalle" />
+
+    <TextView
+        android:id="@+id/textViewUbicacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="3dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/textViewEspecieDetalle"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEspecieDetalle" />
+
+    <TextView
+        android:id="@+id/textViewTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="100dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/textViewUbicacion"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUbicacion" />
+
+    <TextView
+        android:id="@+id/textViewHumedad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        android:layout_marginEnd="2dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/textViewTemp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTemp" />
+
+    <TextView
+        android:id="@+id/textViewCO2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="75dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/textViewHumedad"
+        app:layout_constraintTop_toBottomOf="@+id/textViewHumedad" />
+
+    <TextView
+        android:id="@+id/textViewHumedadSuelo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="45dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/textViewCO2"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCO2" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
