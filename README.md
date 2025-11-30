@@ -54,7 +54,7 @@ Documentación completa del proyecto
 | Frontend | React | 18+ |
 | Mobile | Android (Java) | SDK 24+ |
 | ESP32 | C/C++ (Arduino/PlatformIO) | - |
-| Base de Datos | PostgreSQL + TimescaleDB | 15+ |
+| Base de Datos | PostgreSQL + TimescaleDB | 16+ |
 | Control de Versiones | Git / GitHub | - |
 
 ## Estructura del Repositorio
@@ -103,7 +103,7 @@ proyecto-arboles/
 - **Frontend**: Node.js 18+, npm
 - **Android**: Android Studio, JDK 21
 - **ESP32**: Arduino IDE o PlatformIO
-- **Base de Datos**: PostgreSQL 15+ con TimescaleDB
+- **Base de Datos**: PostgreSQL 16+ con TimescaleDB
 
 ### Instalación y Configuración
 
@@ -132,41 +132,46 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 
 ## Características Principales
 
-- ✅ Monitorización en tiempo real de parámetros ambientales
-- ✅ Gestión multi-centro (varios centros educativos)
-- ✅ Sistema de roles y permisos (Admin, Profesor, Estudiante, Invitado)
-- ✅ Alertas configurables por umbrales
-- ✅ Visualización histórica con gráficas (series temporales con TimescaleDB)
-- ⏳ Aplicaciones web y móvil sincronizadas
-- ✅ Arquitectura escalable y segura (JWT, HTTPS)
-- ✅ Base de datos optimizada para series temporales (PostgreSQL + TimescaleDB)
+- ✅ Modelo de datos completo (E/R, UML, Relacional)
+- ✅ Base de datos optimizada para series temporales (PostgreSQL 16 + TimescaleDB 2.23.1)
+- ✅ Entidades JPA completas con validaciones y Javadoc
+- ✅ Repositorios JPA con queries derivadas
+- ✅ Sistema de roles (Admin, Profesor, Estudiante, Invitado)
+- ⏳ API REST con relaciones 1:N (Fase 2)
+- ⏳ Frontend React con CRUD (Fases 3-4)
+- ⏳ App Android (Fases 5-6)
+- ⏸️ Sistema de autenticación JWT completa (Fase 8 - pospuesta)
+- ⏳ Monitorización en tiempo real con ESP32 (Fase 14 - Opcional)
 
 ## Estado del Proyecto
 
-**Fase actual**: Fase 1 - Backend (Base de Datos y Modelo)
+**Fase actual**: ✅ Fase 1 COMPLETADA | Iniciando Fase 2 (API REST 1:N)
 
 ### ✅ Completado (Fase 0)
 - Configuración de entornos de desarrollo
-- Base de datos PostgreSQL + TimescaleDB instalada y configurada
+- Base de datos PostgreSQL 16.10 + TimescaleDB 2.23.1 instalada y configurada
 - Modelo de datos completo con diagramas E/R, UML y Relacional
 - Scripts SQL de creación y eliminación de tablas
 - Configuración de Spring Boot funcional
 - Estructura de proyecto Git establecida
 
-### ⏳ En Desarrollo (Fase 1 - 50%)
-- ✅ Entidades JPA completadas con Javadoc: Usuario, Rol, CentroEducativo
-- ⏳ Entidades JPA pendientes: Arbol, DispositivoEsp32
-- ⏳ Repositorios JPA
-- ⏳ Relaciones 1:N (CentroEducativo → Arbol)
-- ⏳ Verificar arranque de aplicación Spring Boot
+### ✅ Completado (Fase 1 - Backend: Base de Datos y Modelo)
+- ✅ **Entidades JPA completadas con Javadoc y equals/hashCode**: Usuario, Rol, CentroEducativo, Arbol, DispositivoEsp32
+- ✅ **Repositorios JPA completados con queries derivadas**: UsuarioRepository, CentroEducativoRepository, ArbolRepository, DispositivoEsp32Repository
+- ✅ **Relaciones bidireccionales implementadas**:
+  - CentroEducativo ↔ Arbol (OneToMany/ManyToOne con métodos helper)
+  - Arbol ↔ DispositivoEsp32 (OneToOne bidireccional)
+- ✅ **Aplicación Spring Boot arranca correctamente**
+- ✅ **Compilación exitosa con Maven**
+- ⏳ Pendiente (pospuesto):
+  - Crear application-dev.properties y application-prod.properties
 
 ### 📅 Próximos Hitos
-- **Fase 1**: Completar entidades JPA restantes
-- **Fase 2**: Sistema de autenticación JWT
-- **Noviembre**: Fase 3 - Relaciones 1:N (Requisito PGV)
-- **Diciembre**: Fase 6 - Relaciones N:M (Requisito PGV)
-- **Q1 2026**: Fases 4-7 - Frontend completo (Requisito DAD)
-- **Q1 2026**: Fases 9-10 - App Android (Requisito PGL)
+- **Fase 2**: API REST con relaciones 1:N - CRUD Centros y Árboles ← **SIGUIENTE**
+- **Fase 3**: Frontend React - Estructura y navegación
+- **Fase 4**: Frontend React - CRUD Árboles completo
+- **Fases 5-6**: App Android - CRUD Árboles
+- **Fase 7**: Documentación y manuales
 
 ## Requisitos Académicos
 
@@ -247,5 +252,5 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 **Proyecto**: Proyecto Árboles
 
 
-**Estado del Proyecto**: En desarrollo
-**Última actualización**: 2025-11-15
+**Estado del Proyecto**: ✅ Fase 1 Completada | Iniciando Fase 2
+**Última actualización**: 2025-11-30
