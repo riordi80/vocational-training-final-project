@@ -261,4 +261,49 @@ public class Arbol {
     public void setUmbralCO2Max(BigDecimal umbralCO2Max) {
         this.umbralCO2Max = umbralCO2Max;
     }
+
+    /**
+     * Compara este árbol con otro objeto para determinar igualdad.
+     * <p>
+     * Dos árboles se consideran iguales si tienen el mismo ID (clave primaria).
+     * Esto es consistente con la lógica de base de datos relacional.
+     * </p>
+     * <p>
+     * Implementación optimizada para entidades JPA:
+     * </p>
+     * <ul>
+     *   <li>Solo compara IDs (no todos los campos)</li>
+     *   <li>Verifica que el ID no sea null antes de comparar</li>
+     *   <li>Funciona correctamente antes y después de persistir</li>
+     * </ul>
+     *
+     * @param o objeto a comparar con este árbol
+     * @return true si los objetos son iguales (mismo ID), false en caso contrario
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Arbol)) return false;
+        Arbol arbol = (Arbol) o;
+        return id != null && id.equals(arbol.getId());
+    }
+
+    /**
+     * Genera un código hash para este árbol.
+     * <p>
+     * Implementación optimizada para entidades JPA que garantiza que el hashCode
+     * permanece constante durante toda la vida del objeto, incluso cuando cambian
+     * los campos (incluido el ID al ser persistido).
+     * </p>
+     * <p>
+     * Esto es crucial para que los objetos funcionen correctamente en colecciones
+     * como HashSet o HashMap.
+     * </p>
+     *
+     * @return código hash basado en la clase (constante para todos los árboles)
+     */
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

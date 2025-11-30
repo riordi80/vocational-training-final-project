@@ -145,7 +145,7 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 
 ## Estado del Proyecto
 
-**Fase actual**: Fase 1 - Backend (Base de Datos y Modelo) - 95% completada
+**Fase actual**: ✅ Fase 1 COMPLETADA | Iniciando Fase 2 (Autenticación JWT)
 
 ### ✅ Completado (Fase 0)
 - Configuración de entornos de desarrollo
@@ -155,20 +155,19 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - Configuración de Spring Boot funcional
 - Estructura de proyecto Git establecida
 
-### 🔄 En Desarrollo (Fase 1 - 95%)
-- ✅ **Entidades JPA completadas con Javadoc**: Usuario, Rol, CentroEducativo, Arbol, DispositivoEsp32
-- ✅ **Repositorios JPA completados**: UsuarioRepository, CentroEducativoRepository, ArbolRepository, DispositivoEsp32Repository
-- ✅ Relaciones básicas configuradas:
-  - CentroEducativo → Arbol (ManyToOne)
+### ✅ Completado (Fase 1 - Backend: Base de Datos y Modelo)
+- ✅ **Entidades JPA completadas con Javadoc y equals/hashCode**: Usuario, Rol, CentroEducativo, Arbol, DispositivoEsp32
+- ✅ **Repositorios JPA completados con queries derivadas**: UsuarioRepository, CentroEducativoRepository, ArbolRepository, DispositivoEsp32Repository
+- ✅ **Relaciones bidireccionales implementadas**:
+  - CentroEducativo ↔ Arbol (OneToMany/ManyToOne con métodos helper)
   - Arbol ↔ DispositivoEsp32 (OneToOne bidireccional)
-- ⏳ Pendiente:
-  - Añadir @OneToMany en CentroEducativo apuntando a List<Arbol>
+- ✅ **Aplicación Spring Boot arranca correctamente**
+- ✅ **Compilación exitosa con Maven**
+- ⏳ Pendiente (pospuesto):
   - Crear application-dev.properties y application-prod.properties
-  - Verificar arranque de aplicación Spring Boot
 
 ### 📅 Próximos Hitos
-- **Fase 1**: Completar detalles finales (relación bidireccional, archivos de configuración)
-- **Fase 2**: Sistema de autenticación JWT + endpoints usuarios
+- **Fase 2**: Sistema de autenticación JWT + endpoints usuarios ← **SIGUIENTE**
 - **Fase 3**: API REST con relaciones 1:N - CRUD Centros y Árboles (Requisito PGV)
 - **Fase 4**: Frontend React - Autenticación y estructura
 - **Fase 5**: Frontend React - CRUD Árboles (Requisito DAD)
@@ -254,5 +253,5 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 **Proyecto**: Proyecto Árboles
 
 
-**Estado del Proyecto**: En desarrollo (Fase 1 - 95%)
-**Última actualización**: 2025-11-24
+**Estado del Proyecto**: ✅ Fase 1 Completada | Iniciando Fase 2
+**Última actualización**: 2025-11-30
