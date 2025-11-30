@@ -137,15 +137,15 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - ✅ Entidades JPA completas con validaciones y Javadoc
 - ✅ Repositorios JPA con queries derivadas
 - ✅ Sistema de roles (Admin, Profesor, Estudiante, Invitado)
-- ⏳ Autenticación JWT (Fase 2)
-- ⏳ API REST con relaciones 1:N (Fase 3)
-- ⏳ Frontend React con CRUD (Fases 4-5)
-- ⏳ App Android (Fases 9-10)
+- ⏳ API REST con relaciones 1:N (Fase 2)
+- ⏳ Frontend React con CRUD (Fases 3-4)
+- ⏳ App Android (Fases 5-6)
+- ⏸️ Sistema de autenticación JWT completa (Fase 8 - pospuesta)
 - ⏳ Monitorización en tiempo real con ESP32 (Fase 14 - Opcional)
 
 ## Estado del Proyecto
 
-**Fase actual**: ✅ Fase 1 COMPLETADA | Iniciando Fase 2 (Autenticación JWT)
+**Fase actual**: ✅ Fase 1 COMPLETADA | Iniciando Fase 2 (API REST 1:N)
 
 ### ✅ Completado (Fase 0)
 - Configuración de entornos de desarrollo
@@ -167,12 +167,11 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
   - Crear application-dev.properties y application-prod.properties
 
 ### 📅 Próximos Hitos
-- **Fase 2**: Sistema de autenticación JWT + endpoints usuarios ← **SIGUIENTE**
-- **Fase 3**: API REST con relaciones 1:N - CRUD Centros y Árboles (Requisito PGV)
-- **Fase 4**: Frontend React - Autenticación y estructura
-- **Fase 5**: Frontend React - CRUD Árboles (Requisito DAD)
-- **Fase 6**: API REST con relaciones N:M - Usuario ↔ Centro (Requisito PGV)
-- **Fases 9-10**: App Android - CRUD Árboles (Requisito PGL)
+- **Fase 2**: API REST con relaciones 1:N - CRUD Centros y Árboles ← **SIGUIENTE**
+- **Fase 3**: Frontend React - Estructura y navegación
+- **Fase 4**: Frontend React - CRUD Árboles completo
+- **Fases 5-6**: App Android - CRUD Árboles
+- **Fase 7**: Documentación y manuales
 
 ## Requisitos Académicos
 
