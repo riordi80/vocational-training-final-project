@@ -238,7 +238,7 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 
 ## Estado del Proyecto
 
-**Fase actual**: ✅ Fase 1 COMPLETADA | Iniciando Fase 2 (Autenticación JWT)
+**Fase actual**: ✅ Fase 1 COMPLETADA | Iniciando Fase 2 (API REST 1:N)
 
 ### ✅ Completado (Fase 0)
 - ✅ Configuración de PostgreSQL + TimescaleDB
@@ -269,9 +269,9 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
   - `Lectura`, `Alerta`, `Notificacion`, `UsuarioCentro`
 
 ### 📅 Próximos Hitos
-- **Fase 2**: Sistema de autenticación JWT + endpoints usuarios ← **SIGUIENTE**
-- **Fase 3** (Requisito PGV Noviembre): Endpoints 1:N (Centro → Árboles)
-- **Fase 6** (Requisito PGV Diciembre): Endpoints N:M (Usuario ↔ Centro)
+- **Fase 2**: Endpoints 1:N (Centro → Árboles) ← **SIGUIENTE**
+- **Fase 10**: Endpoints N:M (Usuario ↔ Centro) - pospuesto
+- **Fase 8**: Sistema de autenticación JWT completa - pospuesto
 
 ## Archivos Importantes del Backend
 
