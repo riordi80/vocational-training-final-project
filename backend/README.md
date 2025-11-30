@@ -234,11 +234,11 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 
 - **[PGV] Noviembre**: ⏳ Endpoints con relación 1:N (Centro → Árboles) con GET, POST, PUT, DELETE
 - **[PGV] Diciembre**: ⏳ Endpoints con relación N:M (Usuario ↔ Centro) con validaciones
-- **[AED]**: ✅ Modelo de datos documentado | 🔄 Mapeo ORM con JPA - 3/8 entidades creadas (Usuario, Rol, CentroEducativo) + 2 repositorios (UsuarioRepository, CentroEducativoRepository)
+- **[AED]**: ✅ Modelo de datos documentado | ✅ Mapeo ORM con JPA completado - 4 entidades JPA (Usuario, Rol, CentroEducativo, Arbol, DispositivoEsp32) + 4 repositorios con queries derivadas + relaciones bidireccionales
 
 ## Estado del Proyecto
 
-**Fase actual**: Fase 1 - Backend (Base de Datos y Modelo)
+**Fase actual**: ✅ Fase 1 COMPLETADA | Iniciando Fase 2 (Autenticación JWT)
 
 ### ✅ Completado (Fase 0)
 - ✅ Configuración de PostgreSQL + TimescaleDB
@@ -248,25 +248,28 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 - ✅ Configuración de Spring Boot (`application.properties`)
 - ✅ Estructura del proyecto establecida
 
-### ⏳ En Desarrollo (Fase 1 - 65% completada)
-- ✅ Entidades JPA creadas:
+### ✅ Completado (Fase 1 - Backend: Base de Datos y Modelo)
+- ✅ **Entidades JPA completadas con Javadoc y equals/hashCode**:
   - `Usuario` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado para JPA
   - `Rol` (enum: ADMIN, PROFESOR, ESTUDIANTE, INVITADO)
-  - `CentroEducativo` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado para JPA
-- ✅ Repositorios JPA creados:
-  - `UsuarioRepository` con queries derivadas (findByEmail, existsByEmail, findByActivo, findByRol)
-  - `CentroEducativoRepository` con queries derivadas (findByNombre, existsByNombre, findByNombreContainingIgnoreCase, findByResponsable, findAllByOrderByNombreAsc)
-- ⏳ Entidades JPA pendientes:
-  - `Arbol`, `DispositivoEsp32`
+  - `CentroEducativo` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado, relación bidireccional @OneToMany
+  - `Arbol` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado
+  - `DispositivoEsp32` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado
+- ✅ **Repositorios JPA completados con queries derivadas**:
+  - `UsuarioRepository` (findByEmail, existsByEmail, findByActivo, findByRol)
+  - `CentroEducativoRepository` (findByNombre, existsByNombre, findByNombreContainingIgnoreCase, findByResponsable, findAllByOrderByNombreAsc)
+  - `ArbolRepository` (findByEspecie, findByCentroEducativo, findByDispositivoEsp32, findByNombreContainingIgnoreCase, findAllByOrderByNombreAsc, existsByNombreAndCentroEducativo)
+  - `DispositivoEsp32Repository` (findByMacAddress, existsByMacAddress, findByArbol)
+- ✅ **Relaciones bidireccionales implementadas**:
+  - CentroEducativo ↔ Arbol (OneToMany/ManyToOne con métodos helper addArbol/removeArbol)
+  - Arbol ↔ DispositivoEsp32 (OneToOne bidireccional)
+- ✅ **Aplicación Spring Boot arranca correctamente**
+- ✅ **Compilación exitosa con Maven**
+- ⏳ **Entidades JPA pendientes** (Fases futuras):
   - `Lectura`, `Alerta`, `Notificacion`, `UsuarioCentro`
-- ⏳ Repositorios JPA pendientes:
-  - `ArbolRepository`, `DispositivoEsp32Repository`
-- ⏳ Configurar relaciones 1:N (CentroEducativo → Arbol)
-- ⏳ Verificar que la aplicación arranca correctamente
 
 ### 📅 Próximos Hitos
-- **Fase 1**: Completar entidades JPA restantes
-- **Fase 2**: Sistema de autenticación JWT
+- **Fase 2**: Sistema de autenticación JWT + endpoints usuarios ← **SIGUIENTE**
 - **Fase 3** (Requisito PGV Noviembre): Endpoints 1:N (Centro → Árboles)
 - **Fase 6** (Requisito PGV Diciembre): Endpoints N:M (Usuario ↔ Centro)
 
