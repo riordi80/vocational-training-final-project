@@ -44,7 +44,13 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Login.this, Registrer.class);
-                startActivity(intent);
+                if (inputUsuario.getText().toString().isBlank()){
+                    inputUsuario.setError("Este campo no puede quedar en blanco");
+                }else if (inputPassword.getText().toString().isBlank()){
+                    inputPassword.setError("Este campo no puede quedar en blanco");
+                }else{
+                    startActivity(intent);
+                }
             }
         });
     }
