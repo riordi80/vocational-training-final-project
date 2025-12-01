@@ -11,8 +11,9 @@
         android:id="@+id/textViewNombreDetalle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="133dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="38dp"
+        android:text="Nombre"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,19 +21,19 @@
         android:id="@+id/textViewFechaDetalle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="76dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/textViewEspecieDetalle"
-        app:layout_constraintTop_toBottomOf="@+id/textViewEspecieDetalle" />
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="29dp"
+        android:text="Fecha de plantacion"
+        app:layout_constraintStart_toStartOf="@+id/textViewUbicacion"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUbicacion" />
 
     <TextView
         android:id="@+id/textViewEspecieDetalle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="50dp"
-        android:text="TextView"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="26dp"
+        android:text="Especie"
         app:layout_constraintStart_toStartOf="@+id/textViewNombreDetalle"
         app:layout_constraintTop_toBottomOf="@+id/textViewNombreDetalle" />
 
@@ -40,51 +41,51 @@
         android:id="@+id/textViewUbicacion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="3dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/textViewEspecieDetalle"
+        android:layout_marginTop="20dp"
+        android:text="Ubicaion dentro del centro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewEspecieDetalle" />
 
     <TextView
         android:id="@+id/textViewTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="100dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/textViewUbicacion"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUbicacion" />
+        android:layout_marginStart="7dp"
+        android:text="Temperatura actual"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewHumedad"
+        app:layout_constraintEnd_toStartOf="@+id/textViewHumedad"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textViewHumedad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="51dp"
-        android:layout_marginEnd="2dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/textViewTemp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTemp" />
+        android:layout_marginTop="101dp"
+        android:layout_marginEnd="27dp"
+        android:text="Humedad actual"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewTemp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFechaDetalle" />
 
     <TextView
         android:id="@+id/textViewCO2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="75dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/textViewHumedad"
-        app:layout_constraintTop_toBottomOf="@+id/textViewHumedad" />
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="37dp"
+        android:text="CO2"
+        app:layout_constraintEnd_toEndOf="@+id/textViewTemp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTemp" />
 
     <TextView
         android:id="@+id/textViewHumedadSuelo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="45dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/textViewCO2"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCO2" />
+        android:layout_marginEnd="59dp"
+        android:text="Humedad del suelo"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewCO2"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

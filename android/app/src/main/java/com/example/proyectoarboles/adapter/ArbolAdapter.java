@@ -3,6 +3,7 @@ package com.example.proyectoarboles.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,14 @@ import com.example.proyectoarboles.model.Arbol;
 import java.util.List;
 
 public class ArbolAdapter extends RecyclerView.Adapter<ArbolAdapter.ArbolViewHolder>{
-    private List<Arbol> arboles;
+    private List<Arbol> listaArboles;
     private OnItemClickListener listener;
 
-    public ArbolAdapter(List<Arbol> arboles, OnItemClickListener listener){
-        this.arboles = arboles;
+    private onArbolDeleteListener deleteListener;
+
+    public ArbolAdapter(List<Arbol> listaArboles, onArbolDeleteListener deleteListener,OnItemClickListener listener){
+        this.listaArboles = listaArboles;
+        this.deleteListener = deleteListener;
         this.listener = listener;
     }
 
@@ -34,29 +38,49 @@ public class ArbolAdapter extends RecyclerView.Adapter<ArbolAdapter.ArbolViewHol
     //El metodo onBindViewHolder es como un while, muestra todos los arboles que tengamos en el xml
     @Override
     public void onBindViewHolder(@NonNull ArbolViewHolder holder, int position) {
-        Arbol arbol = arboles.get(position);
+        Arbol arbol = listaArboles.get(position);
 
         holder.textViewNombre.setText(arbol.getNombre());
         holder.textViewEspecieFecha.setText(arbol.getEspecie() + " - " + arbol.getFechaPlantacion());
 
+        holder.buttonDelete.setOnClickListener(v -> {
+            int pos = holder.getBindingAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION && deleteListener != null){
+                deleteListener.onArbolDelete(pos);
+            }
+        });
+
         holder.itemView.setOnClickListener(v -> listener.OnItemClick(arbol));
+
     }
 
     @Override
     public int getItemCount() {
-        return arboles.size();
+        return listaArboles.size();
     }
 
     public static class ArbolViewHolder extends RecyclerView.ViewHolder{
         TextView textViewNombre, textViewEspecieFecha;
+        Button buttonDelete;
         public ArbolViewHolder(@NonNull View itemView){
             super(itemView);
             textViewNombre = itemView.findViewById(R.id.textViewNombre);
             textViewEspecieFecha = itemView.findViewById(R.id.textViewEspecieFecha);
+            buttonDelete = itemView.findViewById(R.id.buttonDelete);
         }
     }
 
     public interface OnItemClickListener{
         void OnItemClick(Arbol arbol);
+    }
+
+    public interface onArbolDeleteListener{
+        void onArbolDelete(int position);
+    }
+
+    public void eliminarArbol(int position) {
+        listaArboles.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, listaArboles.size());
     }
 }

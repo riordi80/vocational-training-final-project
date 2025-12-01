@@ -1,7 +1,9 @@
 package com.example.proyectoarboles.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import java.util.List;
 public class ListarArboles extends AppCompatActivity {
 
     RecyclerView recyclerViewArboles;
+    ArbolAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +32,19 @@ public class ListarArboles extends AppCompatActivity {
 
         List<Arbol> listaArboles = getArbolesXML();
 
-        ArbolAdapter adapter = new ArbolAdapter(listaArboles, arbol ->{
-           Intent intent = new Intent(ListarArboles.this, ArbolDetalles.class);
-           intent.putExtra("arbol_id", arbol.getId());
-           intent.putExtra("arbol_nombre", arbol.getNombre());
-           intent.putExtra("arbol_especie", arbol.getEspecie());
-           intent.putExtra("arbol_fecha", arbol.getFechaPlantacion());
-           startActivity(intent);
+         adapter = new ArbolAdapter(listaArboles,
+                 new ArbolAdapter.onArbolDeleteListener() {
+                    @Override
+                    public void onArbolDelete(int position) {
+                        mostrarDialogoConfirmacion(position);
+                    }
+                }, arbol -> {
+            Intent intent = new Intent(ListarArboles.this, ArbolDetalles.class);
+            intent.putExtra("arbol_id", arbol.getId());
+            intent.putExtra("arbol_nombre", arbol.getNombre());
+            intent.putExtra("arbol_especie", arbol.getEspecie());
+            intent.putExtra("arbol_fecha", arbol.getFechaPlantacion());
+            startActivity(intent);
         });
 
         recyclerViewArboles.setLayoutManager(new LinearLayoutManager(this));
@@ -56,5 +65,17 @@ public class ListarArboles extends AppCompatActivity {
         }
 
         return listaArboles;
+    }
+
+    private void mostrarDialogoConfirmacion(int position){
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar árbol")
+                .setMessage("¿Seguro que quieres eliminar este arbol?")
+                .setPositiveButton("Eliminar", (dialog,which) ->{
+                    adapter.eliminarArbol(position);
+                    Toast.makeText(this, "Arbol eliminado", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 }

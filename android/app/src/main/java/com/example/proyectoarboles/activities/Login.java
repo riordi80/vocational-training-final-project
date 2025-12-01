@@ -33,17 +33,8 @@ public class Login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Intent intent = new Intent(Login.this, ListarArboles.class);
-                startActivity(intent);
-            }
-        });
 
-        registrerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Login.this, Registrer.class);
                 if (inputUsuario.getText().toString().isBlank()){
                     inputUsuario.setError("Este campo no puede quedar en blanco");
                 }else if (inputPassword.getText().toString().isBlank()){
@@ -51,6 +42,14 @@ public class Login extends AppCompatActivity {
                 }else{
                     startActivity(intent);
                 }
+            }
+        });
+
+        registrerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, Registrer.class);
+                startActivity(intent);
             }
         });
     }
