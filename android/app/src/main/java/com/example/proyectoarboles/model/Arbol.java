@@ -11,6 +11,12 @@ public class Arbol {
     private String humedadSuelo;
     private String co2;
 
+    public Arbol(int id, String nombre, String especie, String fechaPlantacion){
+        this.id = id;
+        this.nombre = nombre;
+        this.especie = especie;
+        this.fechaPlantacion = fechaPlantacion;
+    }
     public Arbol(int id, String nombre, String especie, String fechaPlantacion, String ubicacion, String temperatura, String humedad, String humedadSuelo,String co2){
         this.id = id;
         this.nombre = nombre;
