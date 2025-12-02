@@ -12,6 +12,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.proyectoarboles.R;
 
+import java.util.Random;
+
 public class ArbolDetalles extends AppCompatActivity {
 
     @Override
@@ -19,6 +21,8 @@ public class ArbolDetalles extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_arbol_detalles);
+
+        Random random = new Random();
 
         TextView tvNombre = findViewById(R.id.textViewNombreDetalle);
         TextView tvEspecie = findViewById(R.id.textViewEspecieDetalle);
@@ -29,9 +33,9 @@ public class ArbolDetalles extends AppCompatActivity {
         TextView tvCO2 = findViewById(R.id.textViewCO2);
         TextView tvHumedadSuelo = findViewById(R.id.textViewHumedadSuelo);
 
-        Intent intent = getIntent();
-
-        if (intent != null){
-        }
+        tvTemp.setText(String.valueOf(random.nextInt(30 )));
+        tvHumedad.setText(String.valueOf(random.nextInt(100)));
+        tvHumedadSuelo.setText(String.valueOf(random.nextInt(100)));
+        tvCO2.setText(String.valueOf(random.nextInt(500) + 1000));
     }
 }
