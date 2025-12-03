@@ -108,72 +108,79 @@ npm run preview          # Preview del build de producción
 npm run lint             # Ejecuta ESLint para verificar código
 ```
 
-## Páginas/Vistas Principales (Requisito DAD)
+## Páginas/Vistas (Requisito DAD Mínimo)
 
 ### 1. Login (`/login`)
-- Formulario de autenticación
-- Validación de email y contraseña
-- Mensaje de error en caso de credenciales incorrectas
-- Link a registro
+- Formulario con email y contraseña
+- Mock: guarda en localStorage, redirige a Dashboard
+- Validación básica
 
 ### 2. Register (`/register`)
-- Formulario de registro de usuario
-- Validación de campos (email, contraseña, confirmación, etc.)
-- Selección de rol (si aplicable)
-- Registro exitoso redirige a login
+- Formulario de registro
+- Validación (email válido, contraseñas coinciden)
+- Redirige a Login
 
-### 3. Dashboard Principal (`/dashboard`)
-- Resumen general del sistema
-- Tarjetas con estadísticas: total de árboles, alertas activas, centros
-- Gráfica de resumen de lecturas recientes
-- Acceso rápido a secciones principales
-- Navegación clara con menú lateral o superior
+### 3. Dashboard (`/dashboard`)
+- Mensaje de bienvenida
+- Links a gestión de árboles
+- Navegación (menú/cabecera)
 
 ### 4. Listado de Árboles (`/arboles`)
-- Tabla/Grid con todos los árboles (filtrable por centro)
-- Búsqueda y filtros
-- Indicador visual de estado (alertas activas)
-- Botón para añadir nuevo árbol (Admin/Profesor)
-- Click en árbol lleva a vista de detalle
-- **CRUD completo** (requisito DAD)
+- Tabla con árboles
+- Botón "Añadir Árbol"
+- Click en fila → Detalle
+- Filtro por centro (opcional)
 
 ### 5. Detalle de Árbol (`/arboles/:id`)
-- Información del árbol (especie, fecha plantación, ubicación)
-- Datos en tiempo real: temperatura, humedad, pH, nivel agua
-- Gráficas históricas (últimas 24h, 7 días, 30 días)
-- Historial de alertas
-- Botones de edición y eliminación (según permisos)
+- Información del árbol
+- Botones: Editar, Eliminar
+- Confirmación antes de eliminar
 
-### 6. Gestión de Centros Educativos (`/centros`)
-- Listado de centros (Admin/Profesor)
-- CRUD de centros
-- Asignación de usuarios a centros
-- Vista de árboles por centro
+### 6. Formulario Árbol (`/arboles/nuevo` y `/arboles/:id/editar`)
+- Crear/editar árbol
+- Campos: nombre, especie, fecha plantación, centro
+- Validaciones
 
-### 7. Gestión de Usuarios (`/usuarios`)
-- Listado de usuarios (Admin)
-- Creación, edición y eliminación de usuarios
-- Asignación de roles
-- Asignación de centros a usuarios (relación N:M)
+## Requisitos Funcionales Adicionales
 
-### 8. Configuración de Alertas (`/alertas`)
-- Configuración de umbrales por árbol
-- Histórico de alertas
-- Marcar alertas como resueltas
-- Configuración de notificaciones
+### Responsive Design
+- Diseño adaptable a móvil, tablet y desktop
+- Mobile-first approach con Tailwind CSS
+- Menú hamburguesa en móvil
 
-## Autenticación
+### Persistencia de Datos
+- Login/Register guardan en localStorage
+- Sesión persiste al recargar página
+- Logout limpia localStorage
 
-El token JWT se almacena en `localStorage` tras login exitoso:
+### Sistema de Roles
+- Roles: Admin, Profesor, Estudiante (mock)
+- Rutas protegidas según rol
+- Funcionalidades restringidas por rol
+
+### Feedback al Usuario
+- Mensajes de éxito (toast/alert verde)
+- Mensajes de error (toast/alert rojo)
+- Loading spinners durante peticiones
+- Confirmaciones antes de acciones destructivas
+
+### Navegación Dinámica
+- Menú cambia según rol
+- Breadcrumbs para ubicación
+- Transiciones suaves entre páginas
+
+### Despliegue
+- Configurado para Vercel
+- Variables de entorno para API
+- Build optimizado
+
+## Autenticación (Mock)
+
+Login mock con localStorage:
 
 ```javascript
-localStorage.setItem('token', token);
-```
-
-Se incluye en todas las peticiones mediante interceptor de axios:
-
-```javascript
-axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+// Login.jsx
+localStorage.setItem('user', JSON.stringify({ email, name: 'Usuario' }));
 ```
 
 ## Consumo de API REST
@@ -241,53 +248,75 @@ npm install -g serve
 serve -s dist -p 3000
 ```
 
-## Despliegue
+## Despliegue en Vercel (Requisito DAD)
 
-### Opción 1: VPS con Nginx
+### 1. Preparar proyecto
 
-```nginx
-server {
-    listen 80;
-    server_name tu-dominio.com;
+Crear archivo `vercel.json` en la raíz de `frontend/`:
 
-    root /var/www/proyecto-arboles/frontend/dist;
-    index index.html;
-
-    location / {
-        try_files $uri $uri/ /index.html;
+```json
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-
-    location /api {
-        proxy_pass http://localhost:8080;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
+  ]
 }
 ```
 
-### Opción 2: Netlify / Vercel
+### 2. Variables de entorno
 
-Configurar `netlify.toml` o `vercel.json` para SPA:
+En Vercel Dashboard → Settings → Environment Variables:
 
-```toml
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+```
+VITE_API_BASE_URL=https://tu-backend-url.com/api
 ```
 
-## Requisitos Académicos Cumplidos
+### 3. Desplegar
+
+**Opción A: Desde CLI**
+```bash
+npm install -g vercel
+vercel --prod
+```
+
+**Opción B: Desde GitHub**
+1. Push a GitHub
+2. Conectar repo en Vercel Dashboard
+3. Auto-deploy en cada push
+
+### 4. Verificar
+- URL: `https://tu-proyecto.vercel.app`
+- Build command: `npm run build`
+- Output directory: `dist`
+
+## Requisitos Académicos
 
 - **[DAD]**:
-  - ✅ Componentes organizados y reutilizables
-  - ✅ React Router DOM implementado
-  - ✅ Login y Register creados
-  - ✅ Mínimo 6 ventanas (Dashboard, Árboles, Detalle, Centros, Usuarios, Alertas)
-  - ✅ CRUD completo de Árboles
-  - ✅ Consumo de API REST
-  - ✅ Formularios con validaciones
-  - ✅ Navegación clara (menú, cabecera)
-  - ✅ Estilización coherente con Tailwind CSS
+
+  **Estructura:**
+  - ⏳ Componentes organizados y reutilizables
+  - ⏳ React Router DOM
+  - ⏳ Login + Register (aunque no funcionales)
+  - ⏳ Mínimo 4 ventanas (Dashboard, Listado, Detalle, Formulario)
+
+  **Consumo API:**
+  - ⏳ Tantos CRUD como sean necesarios
+
+  **Diseño:**
+  - ⏳ Estilización con Tailwind CSS
+  - ⏳ Formularios funcionales con validaciones
+  - ⏳ Navegación clara (menú, cabecera)
+
+  **Requisitos funcionales/no funcionales:**
+  - ⏳ Responsive
+  - ⏳ Login/Register con persistencia (LocalStorage)
+  - ⏳ Desplegar en Vercel
+  - ⏳ Navegación dinámica
+  - ⏳ Gestión de CRUD establecidos
+  - ⏳ Establecer roles
+  - ⏳ Feedback al usuario (mensajes éxito/error)
 
 ## Plugins de Vite
 

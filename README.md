@@ -11,34 +11,31 @@ Este proyecto permite recopilar datos ambientales (temperatura, humedad del suel
 Este es un **monorepo** que contiene todos los componentes del sistema:
 
 ### 📁 `/backend`
-API REST desarrollada con **Spring Boot (Java)**
-- Autenticación y autorización (JWT)
-- Gestión de usuarios, centros, árboles y dispositivos
-- Ingesta de datos de sensores
-- Sistema de alertas
-- Base de datos: PostgreSQL + TimescaleDB
+API REST con **Spring Boot (Java)**
+- CRUD de centros educativos y árboles
+- Relaciones 1:N con validaciones
+- PostgreSQL + TimescaleDB
 
 ### 📁 `/frontend`
-Aplicación web desarrollada con **React**
-- Dashboard interactivo
-- Visualización de datos en tiempo real
-- Gráficas históricas
-- Gestión completa (CRUD)
-- Configuración de alertas
+Aplicación web con **React**
+- Login/Register con persistencia (localStorage)
+- Dashboard + CRUD Árboles
+- React Router + navegación dinámica
+- Responsive (Tailwind CSS)
+- Sistema de roles (mock)
+- Feedback usuario (mensajes éxito/error)
+- Desplegable en Vercel
 
 ### 📁 `/android`
-Aplicación móvil desarrollada con **Android (Java)**
-- Visualización de datos en tiempo real
-- Gestión de árboles
-- Notificaciones push
-- Filtrado por centros educativos
+Aplicación móvil con **Android (Java)**
+- Listado de árboles por centro
+- Visualización de detalles
+- Modificar y eliminar árboles
 
 ### 📁 `/esp32`
-Firmware para dispositivos **ESP32 (C/C++)**
-- Lectura de sensores (temperatura, humedad, pH, nivel de agua)
-- Conectividad WiFi
-- Envío de datos al backend
-- Modo ahorro de energía
+Firmware **ESP32 (C/C++)** - Opcional
+- Lectura de sensores
+- WiFi + envío de datos
 
 ### 📁 `/docs`
 Documentación completa del proyecto
@@ -130,22 +127,23 @@ Cada componente tiene su propio README con instrucciones detalladas en su respec
 
 Para instrucciones completas de instalación, consulta el [Manual de Instalación](./docs/MANUAL_INSTALACION.md) _(pendiente)_.
 
-## Características Principales
+## Estado Actual
 
-- ✅ Modelo de datos completo (E/R, UML, Relacional)
-- ✅ Base de datos optimizada para series temporales (PostgreSQL 16 + TimescaleDB 2.23.1)
-- ✅ Entidades JPA completas con validaciones y Javadoc
+- ✅ Modelo de datos (E/R, UML, Relacional)
+- ✅ PostgreSQL 16 + TimescaleDB 2.23.1
+- ✅ 4 Entidades JPA con validaciones completas
 - ✅ Repositorios JPA con queries derivadas
-- ✅ Sistema de roles (Admin, Profesor, Estudiante, Invitado)
-- ⏳ Autenticación JWT (Fase 2)
-- ⏳ API REST con relaciones 1:N (Fase 3)
-- ⏳ Frontend React con CRUD (Fases 4-5)
-- ⏳ App Android (Fases 9-10)
-- ⏳ Monitorización en tiempo real con ESP32 (Fase 14 - Opcional)
+- ✅ ArbolController (GET, POST, PUT, DELETE con @Valid)
+- ✅ CentroEducativoController (GET, POST, PUT, DELETE con @Valid)
+- ✅ Relación 1:N implementada (GET /api/centros/{id}/arboles)
+- ✅ API REST con relaciones 1:N (Fase 2 - 95% completada)
+- ⏳ Frontend React con CRUD (Fases 3-4)
+- ⏳ App Android (Fase 5)
+- ⏸️ ESP32 (Opcional - después del 8 dic)
 
 ## Estado del Proyecto
 
-**Fase actual**: Fase 1 - Backend (Base de Datos y Modelo) - 95% completada
+**Fase actual**: ✅ Fase 2 CASI COMPLETADA (95%) - API REST 1:N
 
 ### ✅ Completado (Fase 0)
 - Configuración de entornos de desarrollo
@@ -155,25 +153,33 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - Configuración de Spring Boot funcional
 - Estructura de proyecto Git establecida
 
-### 🔄 En Desarrollo (Fase 1 - 95%)
-- ✅ **Entidades JPA completadas con Javadoc**: Usuario, Rol, CentroEducativo, Arbol, DispositivoEsp32
-- ✅ **Repositorios JPA completados**: UsuarioRepository, CentroEducativoRepository, ArbolRepository, DispositivoEsp32Repository
-- ✅ Relaciones básicas configuradas:
-  - CentroEducativo → Arbol (ManyToOne)
+### ✅ Completado (Fase 1 - Backend: Base de Datos y Modelo)
+- ✅ **Entidades JPA completadas con Javadoc y equals/hashCode**: Usuario, Rol, CentroEducativo, Arbol (con validaciones), DispositivoEsp32
+- ✅ **Repositorios JPA completados con queries derivadas**: UsuarioRepository, CentroEducativoRepository, ArbolRepository, DispositivoEsp32Repository
+- ✅ **Relaciones bidireccionales implementadas**:
+  - CentroEducativo ↔ Arbol (OneToMany/ManyToOne)
   - Arbol ↔ DispositivoEsp32 (OneToOne bidireccional)
-- ⏳ Pendiente:
-  - Añadir @OneToMany en CentroEducativo apuntando a List<Arbol>
-  - Crear application-dev.properties y application-prod.properties
-  - Verificar arranque de aplicación Spring Boot
+- ✅ **Aplicación Spring Boot arranca correctamente**
+- ✅ **Compilación exitosa con Maven**
 
-### 📅 Próximos Hitos
-- **Fase 1**: Completar detalles finales (relación bidireccional, archivos de configuración)
-- **Fase 2**: Sistema de autenticación JWT + endpoints usuarios
-- **Fase 3**: API REST con relaciones 1:N - CRUD Centros y Árboles (Requisito PGV)
-- **Fase 4**: Frontend React - Autenticación y estructura
-- **Fase 5**: Frontend React - CRUD Árboles (Requisito DAD)
-- **Fase 6**: API REST con relaciones N:M - Usuario ↔ Centro (Requisito PGV)
-- **Fases 9-10**: App Android - CRUD Árboles (Requisito PGL)
+### ✅ Completado (Fase 2 - Endpoints 1:N) - 95% completado
+- ✅ **Validaciones completas**:
+  - @Valid en ArbolController y CentroEducativoController (POST y PUT)
+  - @NotBlank/@NotNull en CentroEducativo
+  - @JsonIgnore en List<Arbol> para evitar loops
+- ✅ **ArbolController completo**: GET, POST, PUT, DELETE /api/arboles (con @Valid)
+- ✅ **CentroEducativoController completo**:
+  - GET, POST, PUT, DELETE /api/centros (con @Valid)
+  - GET /api/centros/{id}/arboles (demuestra relación 1:N) ⭐
+- ⏳ **Pendiente**:
+  - Testing con Postman (5%)
+
+### 📅 Próximos Hitos (Deadline: 8 dic)
+- **Fase 2**: Testing con Postman ← **SIGUIENTE**
+- **Fase 3**: Frontend React - Estructura básica
+- **Fase 4**: Frontend React - CRUD Árboles
+- **Fase 5**: App Android - CRUD Árboles
+- **Fase 6**: Documentación (manuales)
 
 ## Requisitos Académicos
 
@@ -254,5 +260,5 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 **Proyecto**: Proyecto Árboles
 
 
-**Estado del Proyecto**: En desarrollo (Fase 1 - 95%)
-**Última actualización**: 2025-11-24
+**Estado del Proyecto**: ✅ Fase 1 Completada | Iniciando Fase 2
+**Última actualización**: 2025-11-30

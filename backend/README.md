@@ -7,10 +7,8 @@ API REST desarrollada con Spring Boot para el sistema de monitorización de árb
 - **Framework**: Spring Boot 3.5.7
 - **Lenguaje**: Java 21
 - **Build**: Maven (con Maven Wrapper incluido)
-- **Base de Datos**: PostgreSQL 15+ con TimescaleDB
+- **Base de Datos**: PostgreSQL 16+ con TimescaleDB
 - **ORM**: Spring Data JPA
-- **Seguridad**: Spring Security + JWT
-- **Documentación API**: Swagger/OpenAPI (a implementar)
 
 ## Estructura del Proyecto
 
@@ -21,24 +19,20 @@ backend/
 │   │   ├── java/
 │   │   │   └── com/example/gardenmonitor/
 │   │   │       ├── GardenmonitorApplication.java  # Clase principal
-│   │   │       ├── config/         # Configuración (Security, CORS, etc.)
 │   │   │       ├── controller/     # Controladores REST
 │   │   │       ├── service/        # Lógica de negocio
 │   │   │       ├── repository/     # Repositorios JPA
-│   │   │       ├── model/          # Entidades JPA
-│   │   │       ├── dto/            # DTOs para requests/responses
-│   │   │       ├── security/       # JWT, UserDetails, etc.
-│   │   │       ├── exception/      # Excepciones personalizadas
-│   │   │       └── util/           # Utilidades
+│   │   │       └── model/          # Entidades JPA
 │   │   └── resources/
 │   │       ├── application.properties
-│   │       ├── application-dev.properties (a crear)
-│   │       └── application-prod.properties (a crear)
+│   │       └── application-local.properties (NO commitear)
 │   └── test/
 ├── .mvn/                   # Maven Wrapper
 ├── mvnw                    # Maven Wrapper (Linux/Mac)
 ├── mvnw.cmd                # Maven Wrapper (Windows)
 ├── pom.xml
+├── create_database.sql
+├── drop_tables.sql
 ├── .gitignore
 └── README.md
 ```
@@ -141,48 +135,22 @@ mvnw.cmd spring-boot:run
 
 El servidor estará disponible en: `http://localhost:8080`
 
-## Endpoints Principales
-
-### Autenticación
-- `POST /api/auth/login` - Login de usuario
-- `POST /api/auth/register` - Registro (si aplicable)
-- `POST /api/auth/logout` - Logout
-- `GET /api/auth/me` - Obtener usuario actual
-
-### Usuarios
-- `GET /api/users` - Listar usuarios
-- `GET /api/users/{id}` - Obtener usuario
-- `POST /api/users` - Crear usuario
-- `PUT /api/users/{id}` - Actualizar usuario
-- `DELETE /api/users/{id}` - Eliminar usuario
+## Endpoints (Requisito PGV Noviembre)
 
 ### Centros Educativos
 - `GET /api/centros` - Listar centros
+- `GET /api/centros/{id}` - Obtener centro
 - `POST /api/centros` - Crear centro
 - `PUT /api/centros/{id}` - Actualizar centro
 - `DELETE /api/centros/{id}` - Eliminar centro
 
-### Árboles (Relación 1:N - Requisito PGV Noviembre)
+### Árboles (Relación 1:N)
 - `GET /api/centros/{id}/arboles` - Listar árboles de un centro
-- `POST /api/centros/{id}/arboles` - Crear árbol en un centro
+- `GET /api/arboles` - Listar todos los árboles
+- `GET /api/arboles/{id}` - Obtener árbol
+- `POST /api/arboles` - Crear árbol
 - `PUT /api/arboles/{id}` - Actualizar árbol
 - `DELETE /api/arboles/{id}` - Eliminar árbol
-
-### Usuario-Centro (Relación N:M - Requisito PGV Diciembre)
-- `GET /api/usuarios/{userId}/centros` - Centros de un usuario
-- `POST /api/usuarios/{userId}/centros/{centroId}` - Asignar usuario a centro
-- `PUT /api/usuarios/{userId}/centros/{centroId}` - Actualizar asignación
-- `DELETE /api/usuarios/{userId}/centros/{centroId}` - Eliminar asignación
-
-### Lecturas de Sensores
-- `POST /api/arboles/{id}/lecturas` - Crear lectura (desde ESP32)
-- `GET /api/arboles/{id}/lecturas` - Obtener lecturas de un árbol
-- `GET /api/lecturas/ultimas/{arbolId}` - Última lectura
-
-### Alertas
-- `GET /api/alertas` - Listar alertas
-- `GET /api/alertas/activas` - Alertas activas
-- `PUT /api/alertas/{id}/resolver` - Marcar alerta como resuelta
 
 ## Testing
 
@@ -232,13 +200,12 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 
 ## Requisitos Académicos
 
-- **[PGV] Noviembre**: ⏳ Endpoints con relación 1:N (Centro → Árboles) con GET, POST, PUT, DELETE
-- **[PGV] Diciembre**: ⏳ Endpoints con relación N:M (Usuario ↔ Centro) con validaciones
-- **[AED]**: ✅ Modelo de datos documentado | 🔄 Mapeo ORM con JPA - 3/8 entidades creadas (Usuario, Rol, CentroEducativo) + 2 repositorios (UsuarioRepository, CentroEducativoRepository)
+- **[PGV] Noviembre**: ⏳ 2 endpoints con relación 1:N (CentroEducativo → Arbol) con GET, POST, PUT, DELETE y validaciones
+- **[AED]**: ✅ Modelo de datos documentado | ✅ Mapeo ORM con JPA completado (4 entidades JPA + repositorios + relaciones bidireccionales)
 
 ## Estado del Proyecto
 
-**Fase actual**: Fase 1 - Backend (Base de Datos y Modelo)
+**Fase actual**: ✅ Fase 2 CASI COMPLETADA (95%) - API REST 1:N
 
 ### ✅ Completado (Fase 0)
 - ✅ Configuración de PostgreSQL + TimescaleDB
@@ -248,27 +215,51 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 - ✅ Configuración de Spring Boot (`application.properties`)
 - ✅ Estructura del proyecto establecida
 
-### ⏳ En Desarrollo (Fase 1 - 65% completada)
-- ✅ Entidades JPA creadas:
+### ✅ Completado (Fase 1 - Backend: Base de Datos y Modelo)
+- ✅ **Entidades JPA completadas con Javadoc y equals/hashCode**:
   - `Usuario` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado para JPA
   - `Rol` (enum: ADMIN, PROFESOR, ESTUDIANTE, INVITADO)
-  - `CentroEducativo` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado para JPA
-- ✅ Repositorios JPA creados:
-  - `UsuarioRepository` con queries derivadas (findByEmail, existsByEmail, findByActivo, findByRol)
-  - `CentroEducativoRepository` con queries derivadas (findByNombre, existsByNombre, findByNombreContainingIgnoreCase, findByResponsable, findAllByOrderByNombreAsc)
-- ⏳ Entidades JPA pendientes:
-  - `Arbol`, `DispositivoEsp32`
-  - `Lectura`, `Alerta`, `Notificacion`, `UsuarioCentro`
-- ⏳ Repositorios JPA pendientes:
-  - `ArbolRepository`, `DispositivoEsp32Repository`
-- ⏳ Configurar relaciones 1:N (CentroEducativo → Arbol)
-- ⏳ Verificar que la aplicación arranca correctamente
+  - `CentroEducativo` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado, relación bidireccional @OneToMany, **validaciones @NotBlank/@NotNull**
+  - `Arbol` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado, **validaciones @NotBlank, @Past, @DecimalMin/@Max**
+  - `DispositivoEsp32` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado
+- ✅ **Repositorios JPA completados con queries derivadas**:
+  - `UsuarioRepository` (findByEmail, existsByEmail, findByActivo, findByRol)
+  - `CentroEducativoRepository` (findByNombre, existsByNombre, findByNombreContainingIgnoreCase, findByResponsable, findAllByOrderByNombreAsc)
+  - `ArbolRepository` (findByEspecie, findByCentroEducativo, findByDispositivoEsp32, findByNombreContainingIgnoreCase, findAllByOrderByNombreAsc, existsByNombreAndCentroEducativo)
+  - `DispositivoEsp32Repository` (findByMacAddress, existsByMacAddress, findByArbol)
+- ✅ **Relaciones bidireccionales implementadas**:
+  - CentroEducativo ↔ Arbol (OneToMany/ManyToOne)
+  - Arbol ↔ DispositivoEsp32 (OneToOne bidireccional)
+- ✅ **Aplicación Spring Boot arranca correctamente**
+- ✅ **Compilación exitosa con Maven**
+
+### ✅ Completado (Fase 2 - Endpoints 1:N) - 95% completado
+- ✅ **Validaciones completas**:
+  - @Valid en ArbolController (POST y PUT)
+  - @NotBlank/@NotNull en CentroEducativo
+  - @JsonIgnore en List<Arbol> para evitar loops
+- ✅ **ArbolController completo**:
+  - GET /api/arboles
+  - GET /api/arboles/{id}
+  - POST /api/arboles (con @Valid)
+  - PUT /api/arboles/{id} (con @Valid)
+  - DELETE /api/arboles/{id}
+  - Endpoints adicionales (por centro, especie, búsqueda)
+- ✅ **CentroEducativoController completo**:
+  - GET /api/centros
+  - GET /api/centros/{id}
+  - POST /api/centros (con @Valid)
+  - PUT /api/centros/{id} (con @Valid)
+  - DELETE /api/centros/{id}
+  - GET /api/centros/{id}/arboles (relación 1:N) ⭐
+- ⏳ **Pendiente**:
+  - Testing con Postman (5%)
 
 ### 📅 Próximos Hitos
-- **Fase 1**: Completar entidades JPA restantes
-- **Fase 2**: Sistema de autenticación JWT
-- **Fase 3** (Requisito PGV Noviembre): Endpoints 1:N (Centro → Árboles)
-- **Fase 6** (Requisito PGV Diciembre): Endpoints N:M (Usuario ↔ Centro)
+- **Fase 2**: Testing con Postman ← **SIGUIENTE**
+- **Fase 3**: Frontend React - Estructura básica
+- **Fase 4**: Frontend React - CRUD Árboles
+- **Fase 5**: Android App
 
 ## Archivos Importantes del Backend
 

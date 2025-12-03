@@ -1,8 +1,14 @@
 package com.example.gardenmonitor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entidad JPA que representa un centro educativo en el sistema Garden Monitor.
@@ -27,9 +33,11 @@ public class CentroEducativo {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank
     @Column(name = "nombre", nullable = false, length = 200)
     private String nombre;
 
+    @NotBlank
     @Column(name = "direccion", nullable = false, length = 300)
     private String direccion;
 
@@ -40,6 +48,7 @@ public class CentroEducativo {
      * Rango válido: -90.00000000 a 90.00000000
      * </p>
      */
+    @NotNull
     @Column(name = "latitud", precision = 10, scale = 8)
     private BigDecimal latitud;
 
@@ -50,9 +59,11 @@ public class CentroEducativo {
      * Rango válido: -180.00000000 a 180.00000000
      * </p>
      */
+    @NotNull
     @Column(name = "longitud", precision = 11, scale = 8)
     private BigDecimal longitud;
 
+    @NotBlank
     @Column(name = "responsable", length = 100)
     private String responsable;
 
@@ -65,6 +76,16 @@ public class CentroEducativo {
     @Column(name = "fecha_creacion", nullable = false, updatable = false, columnDefinition = "TIMESTAMPTZ")
     private LocalDateTime fechaCreacion;
 
+    /**
+     * Lista de árboles asociados a este centro educativo.
+     * <p>
+     * Relación One-to-Many bidireccional: un centro puede tener múltiples árboles.
+     * El lado "propietario" de la relación está en la entidad Arbol (campo centroEducativo).
+     * </p>
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy = "centroEducativo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Arbol> arboles = new ArrayList<>();
 
     /**
      * Constructor vacío requerido por JPA.
@@ -125,6 +146,21 @@ public class CentroEducativo {
     public LocalDateTime getFechaCreacion() { return fechaCreacion; }
     public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
 
+    public List<Arbol> getArboles() {
+        return arboles;
+    }
+
+    // Métodos helper para mantener la sincronización bidireccional
+    public void addArbol(Arbol arbol) {
+        arboles.add(arbol);
+        arbol.setCentroEducativo(this);
+    }
+
+    public void removeArbol(Arbol arbol) {
+        arboles.remove(arbol);
+        arbol.setCentroEducativo(null);
+    }
+
     /**
      * Callback ejecutado antes de persistir un nuevo centro educativo en la base de datos.
      * <p>
@@ -141,6 +177,7 @@ public class CentroEducativo {
         }
     }
 
+
     /**
      * @return representación en String del centro educativo
      */
@@ -154,6 +191,7 @@ public class CentroEducativo {
                 ", longitud=" + longitud +
                 ", responsable='" + responsable + '\'' +
                 ", fechaCreacion=" + fechaCreacion +
+                ", numeroArboles=" + (arboles != null ? arboles.size() : 0) +
                 '}';
     }
 
