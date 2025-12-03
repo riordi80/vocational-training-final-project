@@ -1,5 +1,6 @@
 package com.example.gardenmonitor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -74,6 +75,7 @@ public class CentroEducativo {
      * El lado "propietario" de la relación está en la entidad Arbol (campo centroEducativo).
      * </p>
      */
+    @JsonIgnore
     @OneToMany(mappedBy = "centroEducativo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Arbol> arboles = new ArrayList<>();
 
