@@ -131,17 +131,19 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 
 - ✅ Modelo de datos (E/R, UML, Relacional)
 - ✅ PostgreSQL 16 + TimescaleDB 2.23.1
-- ✅ 4 Entidades JPA con validaciones
+- ✅ 4 Entidades JPA con validaciones completas
 - ✅ Repositorios JPA con queries derivadas
-- ✅ ArbolController (GET, POST, PUT, DELETE)
-- ⏳ API REST con relaciones 1:N (Fase 2 - 40% completada)
+- ✅ ArbolController (GET, POST, PUT, DELETE con @Valid)
+- ✅ CentroEducativoController (GET, POST, PUT, DELETE con @Valid)
+- ✅ Relación 1:N implementada (GET /api/centros/{id}/arboles)
+- ✅ API REST con relaciones 1:N (Fase 2 - 95% completada)
 - ⏳ Frontend React con CRUD (Fases 3-4)
 - ⏳ App Android (Fase 5)
 - ⏸️ ESP32 (Opcional - después del 8 dic)
 
 ## Estado del Proyecto
 
-**Fase actual**: ⏳ Fase 2 EN CURSO (40% completada) - API REST 1:N
+**Fase actual**: ✅ Fase 2 CASI COMPLETADA (95%) - API REST 1:N
 
 ### ✅ Completado (Fase 0)
 - Configuración de entornos de desarrollo
@@ -160,15 +162,20 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - ✅ **Aplicación Spring Boot arranca correctamente**
 - ✅ **Compilación exitosa con Maven**
 
-### ⏳ En Curso (Fase 2 - Endpoints 1:N) - 40% completado
-- ✅ **ArbolController completo**: GET, POST, PUT, DELETE /api/arboles
+### ✅ Completado (Fase 2 - Endpoints 1:N) - 95% completado
+- ✅ **Validaciones completas**:
+  - @Valid en ArbolController y CentroEducativoController (POST y PUT)
+  - @NotBlank/@NotNull en CentroEducativo
+  - @JsonIgnore en List<Arbol> para evitar loops
+- ✅ **ArbolController completo**: GET, POST, PUT, DELETE /api/arboles (con @Valid)
+- ✅ **CentroEducativoController completo**:
+  - GET, POST, PUT, DELETE /api/centros (con @Valid)
+  - GET /api/centros/{id}/arboles (demuestra relación 1:N) ⭐
 - ⏳ **Pendiente**:
-  - CentroEducativoController (GET, POST, PUT, DELETE /api/centros)
-  - @JsonIgnore para evitar loops de serialización
-  - Validaciones completas (@Valid, @NotBlank en CentroEducativo)
+  - Testing con Postman (5%)
 
 ### 📅 Próximos Hitos (Deadline: 8 dic)
-- **Fase 2**: API REST 1:N - Centros y Árboles ← **SIGUIENTE**
+- **Fase 2**: Testing con Postman ← **SIGUIENTE**
 - **Fase 3**: Frontend React - Estructura básica
 - **Fase 4**: Frontend React - CRUD Árboles
 - **Fase 5**: App Android - CRUD Árboles
