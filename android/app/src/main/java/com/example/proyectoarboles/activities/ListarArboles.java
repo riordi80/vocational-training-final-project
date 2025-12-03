@@ -60,7 +60,7 @@ public class ListarArboles extends AppCompatActivity {
         List<Arbol> listaArboles = new ArrayList<>();
 
         for(int i = 0; i < nombres.length; i++){
-            int c = i;
+            Long c = Long.valueOf(i);
             listaArboles.add(new Arbol(c+1, nombres[i], especies[i], fechas[i]));
         }
 

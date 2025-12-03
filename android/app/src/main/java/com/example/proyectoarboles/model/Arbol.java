@@ -1,7 +1,7 @@
 package com.example.proyectoarboles.model;
 
 public class Arbol {
-    private int id;
+    private Long id;
     private String nombre;
     private String especie;
     private String fechaPlantacion;
@@ -11,13 +11,13 @@ public class Arbol {
     private String humedadSuelo;
     private String co2;
 
-    public Arbol(int id, String nombre, String especie, String fechaPlantacion){
+    public Arbol(Long id, String nombre, String especie, String fechaPlantacion){
         this.id = id;
         this.nombre = nombre;
         this.especie = especie;
         this.fechaPlantacion = fechaPlantacion;
     }
-    public Arbol(int id, String nombre, String especie, String fechaPlantacion, String ubicacion, String temperatura, String humedad, String humedadSuelo,String co2){
+    public Arbol(Long id, String nombre, String especie, String fechaPlantacion, String ubicacion, String temperatura, String humedad, String humedadSuelo,String co2){
         this.id = id;
         this.nombre = nombre;
         this.especie = especie;
@@ -29,7 +29,7 @@ public class Arbol {
         this.co2 = co2;
     }
 
-    public int getId() {return id;}
+    public Long getId() {return id;}
     public String getNombre() {return nombre;}
     public String getEspecie() {return especie;}
     public String getFechaPlantacion() {return fechaPlantacion;}
@@ -43,7 +43,7 @@ public class Arbol {
 
     public String getCo2() {return co2;}
 
-    public void setId(int id) {this.id = id;}
+    public void setId(Long id) {this.id = id;}
     public void setNombre(String nombre) {this.nombre = nombre;}
     public void setEspecie(String especie) {this.especie = especie;}
     public void setFechaPlantacion(String fechaPlantacion) {this.fechaPlantacion = fechaPlantacion;}
