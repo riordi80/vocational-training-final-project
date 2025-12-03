@@ -4,6 +4,7 @@ import com.example.gardenmonitor.model.Arbol;
 import com.example.gardenmonitor.model.CentroEducativo;
 import com.example.gardenmonitor.model.DispositivoEsp32;
 import com.example.gardenmonitor.repository.ArbolRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +64,7 @@ public class ArbolController {
     }
 
     @PostMapping
-    public Arbol crearArbol(@RequestBody Arbol arbol) {
+    public Arbol crearArbol(@Valid @RequestBody Arbol arbol) {
         if (arbolRepository.existsByNombreAndCentroEducativo(
                 arbol.getNombre(), arbol.getCentroEducativo())) {
             throw new ResponseStatusException(
@@ -74,7 +75,7 @@ public class ArbolController {
 
     @PutMapping("/{id}")
     public Arbol actualizarArbol(@PathVariable("id") Long id, 
-                                  @RequestBody Arbol detallesArbol) {
+                                  @Valid @RequestBody Arbol detallesArbol) {
         Arbol arbol = arbolRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Árbol no encontrado"));
