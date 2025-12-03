@@ -205,7 +205,7 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 
 ## Estado del Proyecto
 
-**Fase actual**: ⏳ Fase 2 EN CURSO (40% completada) - API REST 1:N
+**Fase actual**: ✅ Fase 2 CASI COMPLETADA (95%) - API REST 1:N
 
 ### ✅ Completado (Fase 0)
 - ✅ Configuración de PostgreSQL + TimescaleDB
@@ -219,7 +219,7 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 - ✅ **Entidades JPA completadas con Javadoc y equals/hashCode**:
   - `Usuario` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado para JPA
   - `Rol` (enum: ADMIN, PROFESOR, ESTUDIANTE, INVITADO)
-  - `CentroEducativo` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado, relación bidireccional @OneToMany
+  - `CentroEducativo` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado, relación bidireccional @OneToMany, **validaciones @NotBlank/@NotNull**
   - `Arbol` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado, **validaciones @NotBlank, @Past, @DecimalMin/@Max**
   - `DispositivoEsp32` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado
 - ✅ **Repositorios JPA completados con queries derivadas**:
@@ -233,22 +233,30 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 - ✅ **Aplicación Spring Boot arranca correctamente**
 - ✅ **Compilación exitosa con Maven**
 
-### ⏳ En Curso (Fase 2 - Endpoints 1:N) - 40% completado
+### ✅ Completado (Fase 2 - Endpoints 1:N) - 95% completado
+- ✅ **Validaciones completas**:
+  - @Valid en ArbolController (POST y PUT)
+  - @NotBlank/@NotNull en CentroEducativo
+  - @JsonIgnore en List<Arbol> para evitar loops
 - ✅ **ArbolController completo**:
   - GET /api/arboles
   - GET /api/arboles/{id}
-  - POST /api/arboles
-  - PUT /api/arboles/{id}
+  - POST /api/arboles (con @Valid)
+  - PUT /api/arboles/{id} (con @Valid)
   - DELETE /api/arboles/{id}
   - Endpoints adicionales (por centro, especie, búsqueda)
+- ✅ **CentroEducativoController completo**:
+  - GET /api/centros
+  - GET /api/centros/{id}
+  - POST /api/centros (con @Valid)
+  - PUT /api/centros/{id} (con @Valid)
+  - DELETE /api/centros/{id}
+  - GET /api/centros/{id}/arboles (relación 1:N) ⭐
 - ⏳ **Pendiente**:
-  - CentroEducativoController (todos los endpoints)
-  - @JsonIgnore en List<Arbol> para evitar loops
-  - Validaciones @NotBlank/@NotNull en CentroEducativo
-  - @Valid en controllers POST/PUT
+  - Testing con Postman (5%)
 
 ### 📅 Próximos Hitos
-- **Fase 2**: Completar CentroEducativoController y validaciones ← **SIGUIENTE**
+- **Fase 2**: Testing con Postman ← **SIGUIENTE**
 - **Fase 3**: Frontend React - Estructura básica
 - **Fase 4**: Frontend React - CRUD Árboles
 - **Fase 5**: Android App
