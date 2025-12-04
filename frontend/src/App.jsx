@@ -1,25 +1,46 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import './App.css';
+  import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+  import { useAuth } from './context/AuthContext';
+  import ProtectedRoute from './components/common/ProtectedRoute';
+  import MainLayout from './components/layout/MainLayout';
+  import Login from './pages/login/Login';
+  import Register from './pages/register/Register';
+  import Dashboard from './pages/dashboard/Dashboard';
+  import './App.css';
 
-function App() {
-  return (
-    <Router>
-      <div className="min-h-screen bg-gray-100">
+  function App() {
+    const { user } = useAuth();
+
+    return (
+      <Router>
         <Routes>
-          {/* Ruta por defecto - redirige a /login */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          {/* Redirección raíz */}
+          <Route 
+            path="/" 
+            element={user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
+          />
 
-          {/* Ruta de las páginas */}
-          <Route path="/login" element={<div className="p-8 text-center"><h1 className="text-2xl font-bold">Login Page</h1></div>} />
-          <Route path="/dashboard" element={<div className="p-8 text-center"><h1 className="text-2xl font-bold">Dashboard</h1></div>} />
+          {/* Rutas públicas */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-          {/* Ruta 404 */}
+          {/* Rutas protegidas con layout */}
+          <Route
+            element={
+              <ProtectedRoute>
+                <MainLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/arboles" element={<div className="text-center"><h1 className="text-2xl font-bold">Listado de Árboles (próximamente)</h1></div>} />
+            <Route path="/centros" element={<div className="text-center"><h1 className="text-2xl font-bold">Listado de Centros (próximamente)</h1></div>} />
+          </Route>
+
+          {/* 404 */}
           <Route path="*" element={<div className="p-8 text-center"><h1 className="text-2xl font-bold text-red-500">404 - Página no encontrada</h1></div>} />
-          
         </Routes>
-      </div>
-    </Router>
-  );
-}
+      </Router>
+    );
+  }
 
-export default App;
+  export default App;
