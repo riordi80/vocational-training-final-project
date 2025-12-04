@@ -39,7 +39,7 @@ backend/
 
 ## Requisitos Previos
 
-- Java 21 ✅
+- Java 21 [x]
 - PostgreSQL 15+ (a instalar)
 - TimescaleDB (extensión de PostgreSQL, a instalar)
 
@@ -200,66 +200,75 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 
 ## Requisitos Académicos
 
-- **[PGV] Noviembre**: ⏳ 2 endpoints con relación 1:N (CentroEducativo → Arbol) con GET, POST, PUT, DELETE y validaciones
-- **[AED]**: ✅ Modelo de datos documentado | ✅ Mapeo ORM con JPA completado (4 entidades JPA + repositorios + relaciones bidireccionales)
+### [PGV] Programación de Servicios y Procesos - Noviembre
+- [x] 2 endpoints con relación 1:N (CentroEducativo → Arbol)
+- [x] GET, POST, PUT, DELETE implementados
+- [x] Validaciones de datos
+
+### [AED] Acceso a Datos
+- [x] Modelo de datos documentado
+- [x] Mapeo ORM con JPA completado (4 entidades JPA)
+- [x] Repositorios JPA con queries derivadas
+- [x] Relaciones bidireccionales implementadas
 
 ## Estado del Proyecto
 
-**Fase actual**: ✅ Fase 2 CASI COMPLETADA (95%) - API REST 1:N
+**Fase actual**: Fase 2 COMPLETADA - API REST 1:N
 
-### ✅ Completado (Fase 0)
-- ✅ Configuración de PostgreSQL + TimescaleDB
-- ✅ Modelo de datos diseñado (8 entidades)
-- ✅ Scripts SQL de creación (`create_database.sql`)
-- ✅ Scripts SQL de eliminación (`drop_tables.sql`)
-- ✅ Configuración de Spring Boot (`application.properties`)
-- ✅ Estructura del proyecto establecida
+### Completado (Fase 0)
+- [x] Configuración de PostgreSQL + TimescaleDB
+- [x] Modelo de datos diseñado (8 entidades)
+- [x] Scripts SQL de creación (`create_database.sql`)
+- [x] Scripts SQL de eliminación (`drop_tables.sql`)
+- [x] Configuración de Spring Boot (`application.properties`)
+- [x] Estructura del proyecto establecida
 
-### ✅ Completado (Fase 1 - Backend: Base de Datos y Modelo)
-- ✅ **Entidades JPA completadas con Javadoc y equals/hashCode**:
+### Completado (Fase 1 - Backend: Base de Datos y Modelo)
+- [x] **Entidades JPA completadas con Javadoc y equals/hashCode**:
   - `Usuario` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado para JPA
   - `Rol` (enum: ADMIN, PROFESOR, ESTUDIANTE, INVITADO)
   - `CentroEducativo` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado, relación bidireccional @OneToMany, **validaciones @NotBlank/@NotNull**
   - `Arbol` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado, **validaciones @NotBlank, @Past, @DecimalMin/@Max**
   - `DispositivoEsp32` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado
-- ✅ **Repositorios JPA completados con queries derivadas**:
+- [x] **Repositorios JPA completados con queries derivadas**:
   - `UsuarioRepository` (findByEmail, existsByEmail, findByActivo, findByRol)
   - `CentroEducativoRepository` (findByNombre, existsByNombre, findByNombreContainingIgnoreCase, findByResponsable, findAllByOrderByNombreAsc)
   - `ArbolRepository` (findByEspecie, findByCentroEducativo, findByDispositivoEsp32, findByNombreContainingIgnoreCase, findAllByOrderByNombreAsc, existsByNombreAndCentroEducativo)
   - `DispositivoEsp32Repository` (findByMacAddress, existsByMacAddress, findByArbol)
-- ✅ **Relaciones bidireccionales implementadas**:
+- [x] **Relaciones bidireccionales implementadas**:
   - CentroEducativo ↔ Arbol (OneToMany/ManyToOne)
   - Arbol ↔ DispositivoEsp32 (OneToOne bidireccional)
-- ✅ **Aplicación Spring Boot arranca correctamente**
-- ✅ **Compilación exitosa con Maven**
+- [x] **Aplicación Spring Boot arranca correctamente**
+- [x] **Compilación exitosa con Maven**
 
-### ✅ Completado (Fase 2 - Endpoints 1:N) - 95% completado
-- ✅ **Validaciones completas**:
-  - @Valid en ArbolController (POST y PUT)
+### Completado (Fase 2 - Endpoints 1:N)
+- [x] **Validaciones completas**:
+  - @Valid en ArbolController y CentroEducativoController (POST y PUT)
   - @NotBlank/@NotNull en CentroEducativo
   - @JsonIgnore en List<Arbol> para evitar loops
-- ✅ **ArbolController completo**:
+- [x] **ArbolController completo**:
   - GET /api/arboles
   - GET /api/arboles/{id}
   - POST /api/arboles (con @Valid)
   - PUT /api/arboles/{id} (con @Valid)
   - DELETE /api/arboles/{id}
   - Endpoints adicionales (por centro, especie, búsqueda)
-- ✅ **CentroEducativoController completo**:
+- [x] **CentroEducativoController completo**:
   - GET /api/centros
   - GET /api/centros/{id}
   - POST /api/centros (con @Valid)
   - PUT /api/centros/{id} (con @Valid)
   - DELETE /api/centros/{id}
-  - GET /api/centros/{id}/arboles (relación 1:N) ⭐
-- ⏳ **Pendiente**:
-  - Testing con Postman (5%)
+  - GET /api/centros/{id}/arboles (relación 1:N)
+- [x] **Testing Postman completo**:
+  - CRUD de Árboles y Centros probado
+  - Validaciones verificadas (400, 409)
+  - Relación 1:N funcionando correctamente
 
-### 📅 Próximos Hitos
-- **Fase 2**: Testing con Postman ← **SIGUIENTE**
-- **Fase 3**: Frontend React - Estructura básica
-- **Fase 4**: Frontend React - CRUD Árboles
-- **Fase 5**: Android App
+### Próximos Hitos
+- **Fase 3**: Frontend React - CRUD Árboles
+- **Fase 4**: Android App
+- **Fase 5**: Despliegue
 
 ## Archivos Importantes del Backend
 
@@ -274,11 +283,12 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 
 ### Documentación Relacionada
 
-- [Hoja de Ruta Completa](../docs/02.%20HOJA_DE_RUTA.md)
-- [Especificación Técnica](../docs/03.%20ESPECIFICACION_TECNICA.md)
-- [Documentación Backend](../docs/Aplicaciones/BACKEND.md)
+- [Índice de Documentación](../docs/00.%20INDICE.md) - Índice completo de la documentación
+- [Hoja de Ruta Completa](../docs/02.%20HOJA_DE_RUTA.md) - Planificación del proyecto
+- [Especificación Técnica](../docs/03.%20ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura
 - [Modelo de Datos](../docs/04.%20MODELO_DATOS.md) - Diagramas E/R, UML y Relacional
-- [Configuración PostgreSQL](../docs/04b.%20CONFIGURACION_POSTGRESQL.md)
+- [Configuración PostgreSQL](../docs/04b.%20CONFIGURACION_POSTGRESQL.md) - Guía de instalación de BD
+- [Testing Postman](../docs/TESTING_POSTMAN_RESULTS.md) - Resultados de pruebas de endpoints
 
 ## Contacto
 

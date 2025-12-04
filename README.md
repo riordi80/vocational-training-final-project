@@ -10,13 +10,13 @@ Este proyecto permite recopilar datos ambientales (temperatura, humedad del suel
 
 Este es un **monorepo** que contiene todos los componentes del sistema:
 
-### 📁 `/backend`
+### `/backend`
 API REST con **Spring Boot (Java)**
 - CRUD de centros educativos y árboles
 - Relaciones 1:N con validaciones
 - PostgreSQL + TimescaleDB
 
-### 📁 `/frontend`
+### `/frontend`
 Aplicación web con **React**
 - Login/Register con persistencia (localStorage)
 - Dashboard + CRUD Árboles
@@ -26,18 +26,18 @@ Aplicación web con **React**
 - Feedback usuario (mensajes éxito/error)
 - Desplegable en Vercel
 
-### 📁 `/android`
+### `/android`
 Aplicación móvil con **Android (Java)**
 - Listado de árboles por centro
 - Visualización de detalles
 - Modificar y eliminar árboles
 
-### 📁 `/esp32`
+### `/esp32`
 Firmware **ESP32 (C/C++)** - Opcional
 - Lectura de sensores
 - WiFi + envío de datos
 
-### 📁 `/docs`
+### `/docs`
 Documentación completa del proyecto
 - Especificación técnica
 - Diagramas (E/R, UML, Relacional)
@@ -129,23 +129,30 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 
 ## Estado Actual
 
-- ✅ Modelo de datos (E/R, UML, Relacional)
-- ✅ PostgreSQL 16 + TimescaleDB 2.23.1
-- ✅ 4 Entidades JPA con validaciones completas
-- ✅ Repositorios JPA con queries derivadas
-- ✅ ArbolController (GET, POST, PUT, DELETE con @Valid)
-- ✅ CentroEducativoController (GET, POST, PUT, DELETE con @Valid)
-- ✅ Relación 1:N implementada (GET /api/centros/{id}/arboles)
-- ✅ API REST con relaciones 1:N (Fase 2 - 95% completada)
-- ⏳ Frontend React con CRUD (Fases 3-4)
-- ⏳ App Android (Fase 5)
-- ⏸️ ESP32 (Opcional - después del 8 dic)
+- [x] Modelo de datos (E/R, UML, Relacional)
+- [x] PostgreSQL 16 + TimescaleDB 2.23.1
+- [x] 4 Entidades JPA con validaciones completas
+- [x] Repositorios JPA con queries derivadas
+- [x] ArbolController (GET, POST, PUT, DELETE con @Valid)
+- [x] CentroEducativoController (GET, POST, PUT, DELETE con @Valid)
+- [x] Relación 1:N implementada (GET /api/centros/{id}/arboles)
+- [x] API REST con relaciones 1:N (Fase 2 - 100% completada)
+- [x] Testing Postman completo (CRUD + validaciones)
+- [x] Frontend React - Estructura completa (Fase 3 - 100% completada)
+- [x] AuthContext + Login/Register con localStorage
+- [x] Header, MainLayout, ProtectedRoute
+- [x] Dashboard con navegación
+- [x] Componentes comunes reutilizables (Button, Input, Alert, Spinner)
+- [x] Biblioteca de componentes con documentación
+- [ ] Frontend React - CRUD Árboles (Fase 4)
+- [ ] App Android (Fase 5)
+- [ ] ESP32 (Opcional - después del 8 dic)
 
 ## Estado del Proyecto
 
-**Fase actual**: ✅ Fase 2 CASI COMPLETADA (95%) - API REST 1:N
+**Fase actual**: Fase 3 COMPLETADA - Frontend React Estructura y Autenticación
 
-### ✅ Completado (Fase 0)
+### Completado (Fase 0)
 - Configuración de entornos de desarrollo
 - Base de datos PostgreSQL 16.10 + TimescaleDB 2.23.1 instalada y configurada
 - Modelo de datos completo con diagramas E/R, UML y Relacional
@@ -153,33 +160,50 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - Configuración de Spring Boot funcional
 - Estructura de proyecto Git establecida
 
-### ✅ Completado (Fase 1 - Backend: Base de Datos y Modelo)
-- ✅ **Entidades JPA completadas con Javadoc y equals/hashCode**: Usuario, Rol, CentroEducativo, Arbol (con validaciones), DispositivoEsp32
-- ✅ **Repositorios JPA completados con queries derivadas**: UsuarioRepository, CentroEducativoRepository, ArbolRepository, DispositivoEsp32Repository
-- ✅ **Relaciones bidireccionales implementadas**:
+### Completado (Fase 1 - Backend: Base de Datos y Modelo)
+- [x] **Entidades JPA completadas con Javadoc y equals/hashCode**: Usuario, Rol, CentroEducativo, Arbol (con validaciones), DispositivoEsp32
+- [x] **Repositorios JPA completados con queries derivadas**: UsuarioRepository, CentroEducativoRepository, ArbolRepository, DispositivoEsp32Repository
+- [x] **Relaciones bidireccionales implementadas**:
   - CentroEducativo ↔ Arbol (OneToMany/ManyToOne)
   - Arbol ↔ DispositivoEsp32 (OneToOne bidireccional)
-- ✅ **Aplicación Spring Boot arranca correctamente**
-- ✅ **Compilación exitosa con Maven**
+- [x] **Aplicación Spring Boot arranca correctamente**
+- [x] **Compilación exitosa con Maven**
 
-### ✅ Completado (Fase 2 - Endpoints 1:N) - 95% completado
-- ✅ **Validaciones completas**:
+### Completado (Fase 2 - Endpoints 1:N) - 100% completado
+- [x] **Validaciones completas**:
   - @Valid en ArbolController y CentroEducativoController (POST y PUT)
   - @NotBlank/@NotNull en CentroEducativo
   - @JsonIgnore en List<Arbol> para evitar loops
-- ✅ **ArbolController completo**: GET, POST, PUT, DELETE /api/arboles (con @Valid)
-- ✅ **CentroEducativoController completo**:
+- [x] **ArbolController completo**: GET, POST, PUT, DELETE /api/arboles (con @Valid)
+- [x] **CentroEducativoController completo**:
   - GET, POST, PUT, DELETE /api/centros (con @Valid)
   - GET /api/centros/{id}/arboles (demuestra relación 1:N) ⭐
-- ⏳ **Pendiente**:
-  - Testing con Postman (5%)
+- [x] **Testing Postman completo**:
+  - CRUD de Árboles y Centros probado
+  - Validaciones verificadas (400, 409)
+  - Relación 1:N funcionando correctamente
 
-### 📅 Próximos Hitos (Deadline: 8 dic)
-- **Fase 2**: Testing con Postman ← **SIGUIENTE**
-- **Fase 3**: Frontend React - Estructura básica
-- **Fase 4**: Frontend React - CRUD Árboles
+### Completado (Fase 3 - Frontend Estructura) - 100% completado
+- [x] **React + Vite + Tailwind CSS v3**
+- [x] **Estructura de carpetas**: components, pages, context, services
+- [x] **React Router configurado** con rutas públicas y protegidas
+- [x] **AuthContext** con login, register, logout y localStorage
+- [x] **Componentes de layout**: Header, MainLayout, ProtectedRoute
+- [x] **Componentes comunes reutilizables**:
+  - Button (variantes: primary, secondary, danger, outline)
+  - Input (con label, validaciones y mensajes de error)
+  - Alert (success, error, warning, info)
+  - Spinner (loading con diferentes tamaños)
+- [x] **Biblioteca de componentes**: Documentación visual con ejemplos de código
+- [x] **Páginas de autenticación**: Login y Register con validaciones
+- [x] **Dashboard** con tarjetas de acceso rápido
+- [x] **Navegación dinámica** y responsive
+
+### Próximos Hitos (Deadline: 8 dic)
+- **Fase 4**: Frontend React - CRUD Árboles ← **SIGUIENTE**
 - **Fase 5**: App Android - CRUD Árboles
 - **Fase 6**: Documentación (manuales)
+- **Despliegue**: Vercel (Frontend)
 
 ## Requisitos Académicos
 
@@ -228,7 +252,7 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 
 ## Documentación
 
-### 📚 Documentos Principales
+### Documentos Principales
 
 - [Índice de Documentación](./docs/00.%20INDICE.md) - Índice completo de toda la documentación del proyecto
 - [Git Workflow](./docs/01.%20GIT_WORKFLOW.md) - Guía completa de flujo de trabajo con feature branches
@@ -236,16 +260,20 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 - [Especificación Técnica](./docs/03.%20ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura del sistema
 - [Modelo de Datos](./docs/04.%20MODELO_DATOS.md) - Diagramas E/R, UML y Relacional completos
 - [Configuración PostgreSQL](./docs/04b.%20CONFIGURACION_POSTGRESQL.md) - Guía de instalación de BD
+- [Requisitos Académicos](./docs/REQUISITOS.md) - Requisitos por módulo (PGV, DAD, AED, PGL)
+- [Testing Postman](./docs/TESTING_POSTMAN_RESULTS.md) - Resultados de pruebas de endpoints REST
 
-**Documentación de Aplicaciones:**
-- [Proyecto Backend](./docs/Aplicaciones/BACKEND.md) - Documentación del API REST
-- [Proyecto Frontend](./docs/Aplicaciones/FRONTEND.md) - Documentación de la aplicación web
-- [Proyecto Android](./docs/Aplicaciones/ANDROID.md) - Documentación de la app móvil
-- [Proyecto ESP32](./docs/Aplicaciones/ESP32.md) - Documentación del firmware IoT
-- [Manual de Instalación](./docs/MANUAL_INSTALACION.md) _(pendiente)_
-- [Manual de Usuario](./docs/MANUAL_USUARIO.md) _(pendiente)_
+**README por Componente:**
+- [Backend README](./backend/README.md) - API REST con Spring Boot
+- [Frontend README](./frontend/README.md) - Aplicación web con React
+- [Android README](./android/README.md) - Aplicación móvil Android
+- [ESP32 README](./esp32/README.md) - Firmware para dispositivos IoT
 
-### 🛠️ Scripts y Archivos de Configuración
+**Manuales (Pendientes):**
+- [ ] Manual de Instalación - Guía completa para instalar todos los componentes
+- [ ] Manual de Usuario - Guía de uso de las aplicaciones web y móvil
+
+### Scripts y Archivos de Configuración
 
 - [`backend/create_database.sql`](./backend/create_database.sql) - Script SQL para crear todas las tablas del proyecto
 - [`backend/drop_tables.sql`](./backend/drop_tables.sql) - Script SQL para eliminar todas las tablas (útil para resetear BD)
@@ -260,5 +288,5 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 **Proyecto**: Proyecto Árboles
 
 
-**Estado del Proyecto**: ✅ Fase 1 Completada | Iniciando Fase 2
-**Última actualización**: 2025-11-30
+**Estado del Proyecto**: - [x] Fase 1, 2 y 3 Completadas | Iniciando Fase 4 (CRUD Árboles)
+**Última actualización**: 2025-12-04

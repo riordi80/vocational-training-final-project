@@ -4,22 +4,22 @@
 
 Este proyecto usa múltiples archivos de properties para gestionar la configuración:
 
-### 1. `application.properties` ✅ SE COMMITEA
+### 1. `application.properties` - SE COMMITEA
 - Configuración base compartida por todos
 - Valores de ejemplo/placeholder (sin credenciales reales)
 - Este archivo SÍ se sube a Git
 
-### 2. `application-local.properties` ❌ NO SE COMMITEA
+### 2. `application-local.properties` - NO SE COMMITEA
 - Configuración local de desarrollo
 - **Contiene tus credenciales reales**
 - Este archivo NO se sube a Git (está en `.gitignore`)
 - **Debes crearlo en tu máquina local**
 
-### 3. `application-dev.properties` ❌ NO SE COMMITEA (futuro)
+### 3. `application-dev.properties` - NO SE COMMITEA (futuro)
 - Configuración para entorno de desarrollo compartido
 - Para cuando tengas un servidor de desarrollo
 
-### 4. `application-prod.properties` ❌ NO SE COMMITEA (futuro)
+### 4. `application-prod.properties` - NO SE COMMITEA (futuro)
 - Configuración para producción
 - Usará variables de entorno
 
@@ -33,7 +33,7 @@ Spring Boot carga los archivos en este orden (el último sobrescribe al anterior
 Por lo tanto:
 - La contraseña en `application.properties` es `your_password_here` (placeholder)
 - La contraseña en `application-local.properties` es tu contraseña real
-- Spring Boot usa la de `application-local.properties` ✅
+- Spring Boot usa la de `application-local.properties`
 
 ## Configuración inicial
 
