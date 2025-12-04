@@ -5,6 +5,7 @@
   import Login from './pages/login/Login';
   import Register from './pages/register/Register';
   import Dashboard from './pages/dashboard/Dashboard';
+  import ComponentLibrary from './pages/component-library/ComponentLibrary';
   import './App.css';
 
   function App() {
@@ -22,6 +23,9 @@
           {/* Rutas públicas */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Biblioteca de componentes - Documentación */}
+          <Route path="/component-library" element={<ComponentLibrary />} />
 
           {/* Rutas protegidas con layout */}
           <Route
