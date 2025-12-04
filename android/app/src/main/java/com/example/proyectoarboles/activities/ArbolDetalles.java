@@ -2,6 +2,7 @@ package com.example.proyectoarboles.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,8 +13,14 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectoarboles.R;
+import com.example.proyectoarboles.api.RetrofitClient;  // ⚠️ AÑADIR import
+import com.example.proyectoarboles.model.Arbol;
 
 import java.util.Random;
+
+import retrofit2.Call;  // ⚠️ AÑADIR imports de Retrofit
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ArbolDetalles extends AppCompatActivity {
 
@@ -25,6 +32,7 @@ public class ArbolDetalles extends AppCompatActivity {
     // Variables para guardar los valores originales
     private String nombreOriginal, especieOriginal, fechaOriginal, ubicacionOriginal;
     private String tempOriginal, humedadOriginal, co2Original, humedadSueloOriginal;
+    private Long arbolId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,7 @@ public class ArbolDetalles extends AppCompatActivity {
 
         // Obtener los datos del Intent
         Intent intent = getIntent();
+        arbolId = intent.getLongExtra("arbol_id", -1);
         String nombre = intent.getStringExtra("arbol_nombre");
         String especie = intent.getStringExtra("arbol_especie");
         String fecha = intent.getStringExtra("arbol_fecha");
@@ -64,7 +73,92 @@ public class ArbolDetalles extends AppCompatActivity {
         btnGuardar = findViewById(R.id.buttonGuardar);
         btnCancelar = findViewById(R.id.buttonCancelar);
 
-        // Establecer los datos recibidos del Intent
+        // Cargar datos desde la API si hay un ID válido
+        if (arbolId != -1) {
+            cargarDetallesDesdeAPI(arbolId);
+        } else {
+            // Fallback: mostrar datos del Intent
+            mostrarDatosDelIntent(nombre, especie, fecha, ubicacion);
+        }
+
+        // Configurar listeners de botones
+        btnEditar.setOnClickListener(v -> activarModoEdicion());
+        btnGuardar.setOnClickListener(v -> guardarCambios());
+        btnCancelar.setOnClickListener(v -> cancelarEdicion());
+
+        // Inicialmente mostrar solo TextViews
+        mostrarTextViews();
+    }
+
+    // ️ Metodo para cargar los detalles del arbol desde la API
+    private void cargarDetallesDesdeAPI(Long id) {
+        Call<Arbol> call = RetrofitClient.getArbolApi().obtenerArbolPorId(id);
+
+        call.enqueue(new Callback<Arbol>() {
+            @Override
+            public void onResponse(Call<Arbol> call, Response<Arbol> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Arbol arbol = response.body();
+                    mostrarDatosDelArbol(arbol);
+                } else {
+                    Toast.makeText(ArbolDetalles.this,
+                            "Error al cargar detalles",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Arbol> call, Throwable t) {
+                Log.e("ArbolDetalles", "Error: " + t.getMessage());
+                Toast.makeText(ArbolDetalles.this,
+                        "Error de conexión: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    // Metodo para mostrar datos del árbol obtenido de la API
+    private void mostrarDatosDelArbol(Arbol arbol) {
+        tvNombre.setText(arbol.getNombre());
+        tvEspecie.setText(arbol.getEspecie());
+        tvFecha.setText(arbol.getFechaPlantacion());
+
+        if (arbol.getUbicacion() != null && !arbol.getUbicacion().isEmpty()) {
+            tvUbicacion.setText(arbol.getUbicacion());
+        } else {
+            tvUbicacion.setText("Ubicación no disponible");
+        }
+
+        // Mostrar datos de sensores si existen, sino generar aleatorios
+        if (arbol.getTemperatura() != null) {
+            tvTemp.setText(arbol.getTemperatura() + "°C");
+        } else {
+            tvTemp.setText(new Random().nextInt(30) + "°C");
+        }
+
+        if (arbol.getHumedad() != null) {
+            tvHumedad.setText(arbol.getHumedad() + "%");
+        } else {
+            tvHumedad.setText(new Random().nextInt(100) + "%");
+        }
+
+        if (arbol.getHumedadSuelo() != null) {
+            tvHumedadSuelo.setText(arbol.getHumedadSuelo() + "%");
+        } else {
+            tvHumedadSuelo.setText(new Random().nextInt(100) + "%");
+        }
+
+        if (arbol.getCo2() != null) {
+            tvCO2.setText(arbol.getCo2() + " ppm");
+        } else {
+            tvCO2.setText((new Random().nextInt(500) + 1000) + " ppm");
+        }
+
+        guardarValoresOriginales();
+    }
+
+    // Metodo que sirve para mostrar datos del Intent en caso de que la coneccion con la api falle
+    private void mostrarDatosDelIntent(String nombre, String especie, String fecha, String ubicacion) {
         tvNombre.setText(nombre);
         tvEspecie.setText(especie);
         tvFecha.setText(fecha);
@@ -87,16 +181,7 @@ public class ArbolDetalles extends AppCompatActivity {
         tvHumedadSuelo.setText(humedadSuelo);
         tvCO2.setText(co2);
 
-        // Guardar valores originales
         guardarValoresOriginales();
-
-        // Configurar listeners de botones
-        btnEditar.setOnClickListener(v -> activarModoEdicion());
-        btnGuardar.setOnClickListener(v -> guardarCambios());
-        btnCancelar.setOnClickListener(v -> cancelarEdicion());
-
-        // Inicialmente mostrar solo TextViews
-        mostrarTextViews();
     }
 
     private void guardarValoresOriginales() {
@@ -127,7 +212,60 @@ public class ArbolDetalles extends AppCompatActivity {
         mostrarEditTexts();
     }
 
+    // Metodo para guardar los cambios en la API
     private void guardarCambios() {
+        // Crear objeto Arbol con los nuevos valores
+        Arbol arbolActualizado = new Arbol(
+                arbolId,
+                etNombre.getText().toString(),
+                etEspecie.getText().toString(),
+                etFecha.getText().toString(),
+                etUbicacion.getText().toString(),
+                etTemp.getText().toString().replace("°C", "").trim(),
+                etHumedad.getText().toString().replace("%", "").trim(),
+                etHumedadSuelo.getText().toString().replace("%", "").trim(),
+                etCO2.getText().toString().replace(" ppm", "").trim()
+        );
+
+        // ️ Si hay un ID válido, actualizar en la API
+        if (arbolId != -1) {
+            actualizarArbolAPI(arbolActualizado);
+        } else {
+            // Fallback: solo actualizar localmente
+            actualizarLocalmente();
+        }
+    }
+
+    // ️ Metodo que sirve para actualizar árbol en la API
+    private void actualizarArbolAPI(Arbol arbol) {
+        Call<Arbol> call = RetrofitClient.getArbolApi().actualizarArbol(arbolId, arbol);
+
+        call.enqueue(new Callback<Arbol>() {
+            @Override
+            public void onResponse(Call<Arbol> call, Response<Arbol> response) {
+                if (response.isSuccessful()) {
+                    actualizarLocalmente();
+                    Toast.makeText(ArbolDetalles.this,
+                            "Cambios guardados en el servidor",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ArbolDetalles.this,
+                            "Error al guardar en el servidor",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Arbol> call, Throwable t) {
+                Toast.makeText(ArbolDetalles.this,
+                        "Error de conexión: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    // Metodo que sirve para actualizar los datos que muestra localmente
+    private void actualizarLocalmente() {
         // Copiar valores de EditTexts a TextViews
         tvNombre.setText(etNombre.getText().toString());
         tvEspecie.setText(etEspecie.getText().toString());
@@ -206,6 +344,7 @@ public class ArbolDetalles extends AppCompatActivity {
         etNombre.setVisibility(View.VISIBLE);
         etEspecie.setVisibility(View.VISIBLE);
         etFecha.setVisibility(View.VISIBLE);
+        etUbicacion.setVisibility(View.VISIBLE);
         etUbicacion.setVisibility(View.VISIBLE);
         etTemp.setVisibility(View.VISIBLE);
         etHumedad.setVisibility(View.VISIBLE);
