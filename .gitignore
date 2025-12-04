@@ -43,5 +43,5 @@ config.local.*
 # Dependencias (se gestionan en cada subcarpeta)
 node_modules/
 
-# Documentación interna (no subir a GitHub)
-docs/
+# Documentación privada (no subir a GitHub)
+docs/private/
