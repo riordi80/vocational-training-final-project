@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+  import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+  import { useAuth } from './context/AuthContext';
+  import ProtectedRoute from './components/common/ProtectedRoute';
+  import MainLayout from './components/layout/MainLayout';
+  import Login from './pages/login/Login';
+  import Register from './pages/register/Register';
+  import Dashboard from './pages/dashboard/Dashboard';
+  import ComponentLibrary from './pages/component-library/ComponentLibrary';
+  import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+  function App() {
+    const { user } = useAuth();
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    return (
+      <Router>
+        <Routes>
+          {/* Redirección raíz */}
+          <Route 
+            path="/" 
+            element={user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
+          />
 
-export default App
+          {/* Rutas públicas */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Biblioteca de componentes - Documentación */}
+          <Route path="/component-library" element={<ComponentLibrary />} />
+
+          {/* Rutas protegidas con layout */}
+          <Route
+            element={
+              <ProtectedRoute>
+                <MainLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/arboles" element={<div className="text-center"><h1 className="text-2xl font-bold">Listado de Árboles (próximamente)</h1></div>} />
+            <Route path="/centros" element={<div className="text-center"><h1 className="text-2xl font-bold">Listado de Centros (próximamente)</h1></div>} />
+          </Route>
+
+          {/* 404 */}
+          <Route path="*" element={<div className="p-8 text-center"><h1 className="text-2xl font-bold text-red-500">404 - Página no encontrada</h1></div>} />
+        </Routes>
+      </Router>
+    );
+  }
+
+  export default App;
