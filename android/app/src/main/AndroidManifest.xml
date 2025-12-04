@@ -12,16 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoArboles">
         <activity
-            android:name=".activities.Registrer"
+            android:name=".activities.ListarArbolesActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ArbolDetalles"
-            android:exported="false" />
-        <activity
-            android:name=".activities.ListarArboles"
-            android:exported="false" />
-        <activity
-            android:name=".activities.Login"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
