@@ -20,14 +20,14 @@ Firmware para ESP32 que recopila datos de sensores ambientales y de suelo, trans
 
 ## Características
 
-- 📡 Conectividad WiFi para transmisión de datos
-- 📊 Lectura multi-sensor (temperatura, humedad, pH, nivel de agua)
-- ⚡ Modo Deep Sleep para ahorro energético
-- 🔄 Reintentos automáticos en caso de fallo de conexión
-- 🔐 Autenticación con token API
-- ⏱️ Intervalos de lectura configurables (15-30 minutos)
-- 💾 Buffer local para lecturas offline (opcional)
-- 🔋 Optimización de batería con despertar programado
+- Conectividad WiFi para transmisión de datos
+- Lectura multi-sensor (temperatura, humedad, pH, nivel de agua)
+- Modo Deep Sleep para ahorro energético
+- Reintentos automáticos en caso de fallo de conexión
+- Autenticación con token API
+- Intervalos de lectura configurables (15-30 minutos)
+- Buffer local para lecturas offline (opcional)
+- Optimización de batería con despertar programado
 
 ## Estructura del Proyecto
 
@@ -654,7 +654,15 @@ pio device monitor
 
 ## Estado
 
-En desarrollo
+En desarrollo (opcional - después del 8 de diciembre)
+
+## Documentación Relacionada
+
+- [Índice de Documentación](../docs/00.%20INDICE.md) - Índice completo de la documentación
+- [Hoja de Ruta Completa](../docs/02.%20HOJA_DE_RUTA.md) - Planificación del proyecto
+- [Especificación Técnica](../docs/03.%20ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura
+- [Backend README](../backend/README.md) - API REST con Spring Boot
+- [Componentes Hardware](../docs/Componentes%20para%20ESP32/Componentes.png) - Lista de componentes y precios
 
 ## Contacto
 

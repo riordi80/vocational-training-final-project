@@ -20,17 +20,21 @@ frontend/
 │   └── assets/              # Recursos estáticos
 ├── src/
 │   ├── components/          # Componentes reutilizables
-│   │   ├── common/          # Componentes comunes (Button, Input, etc.)
-│   │   ├── layout/          # Layout (Header, Sidebar, Footer)
+│   │   ├── common/          # Button, Input, Alert, Spinner, ProtectedRoute
+│   │   ├── layout/          # Header, MainLayout
 │   │   └── ...
 │   ├── pages/               # Páginas/Vistas principales
-│   │   ├── Login.jsx
-│   │   ├── Register.jsx
-│   │   ├── Dashboard.jsx
-│   │   ├── Arboles/
-│   │   ├── Centros/
-│   │   ├── Usuarios/
-│   │   └── Alertas/
+│   │   ├── login/
+│   │   │   └── Login.jsx
+│   │   ├── register/
+│   │   │   └── Register.jsx
+│   │   ├── dashboard/
+│   │   │   └── Dashboard.jsx
+│   │   ├── component-library/
+│   │   │   └── ComponentLibrary.jsx
+│   │   ├── arboles/
+│   │   ├── centros/
+│   │   └── ...
 │   ├── services/            # Llamadas a API
 │   │   ├── api.js           # Configuración axios
 │   │   ├── authService.js
@@ -296,27 +300,27 @@ vercel --prod
 - **[DAD]**:
 
   **Estructura:**
-  - ⏳ Componentes organizados y reutilizables
-  - ⏳ React Router DOM
-  - ⏳ Login + Register (aunque no funcionales)
-  - ⏳ Mínimo 4 ventanas (Dashboard, Listado, Detalle, Formulario)
+  - [x] Componentes organizados y reutilizables
+  - [x] React Router DOM
+  - [x] Login + Register (mock funcionales)
+  - [ ] Mínimo 4 ventanas (Dashboard listo, faltan Listado, Detalle, Formulario)
 
   **Consumo API:**
-  - ⏳ Tantos CRUD como sean necesarios
+  - [ ] Tantos CRUD como sean necesarios
 
   **Diseño:**
-  - ⏳ Estilización con Tailwind CSS
-  - ⏳ Formularios funcionales con validaciones
-  - ⏳ Navegación clara (menú, cabecera)
+  - [x] Estilización con Tailwind CSS
+  - [ ] Formularios funcionales con validaciones (Login/Register listos)
+  - [x] Navegación clara (Header implementado)
 
   **Requisitos funcionales/no funcionales:**
-  - ⏳ Responsive
-  - ⏳ Login/Register con persistencia (LocalStorage)
-  - ⏳ Desplegar en Vercel
-  - ⏳ Navegación dinámica
-  - ⏳ Gestión de CRUD establecidos
-  - ⏳ Establecer roles
-  - ⏳ Feedback al usuario (mensajes éxito/error)
+  - [ ] Responsive (parcial - Header y páginas auth responsive)
+  - [x] Login/Register con persistencia (LocalStorage)
+  - [ ] Desplegar en Vercel
+  - [x] Navegación dinámica
+  - [ ] Gestión de CRUD establecidos
+  - [ ] Establecer roles (mock básico implementado)
+  - [ ] Feedback al usuario (mensajes error en forms)
 
 ## Plugins de Vite
 
@@ -326,7 +330,14 @@ Este proyecto usa:
 
 ## Estado
 
-En desarrollo
+Fase 3 completada. Autenticación y layout implementados.
+
+## Documentación Relacionada
+
+- [Índice de Documentación](../docs/00.%20INDICE.md) - Índice completo de la documentación
+- [Hoja de Ruta Completa](../docs/02.%20HOJA_DE_RUTA.md) - Planificación del proyecto
+- [Especificación Técnica](../docs/03.%20ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura
+- [Backend README](../backend/README.md) - API REST con Spring Boot
 
 ## Contacto
 
