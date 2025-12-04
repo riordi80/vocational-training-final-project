@@ -1,11 +1,24 @@
 package com.example.proyectoarboles.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Arbol {
+
+    @SerializedName("id")
     private Long id;
+
+    @SerializedName("nombre")
     private String nombre;
+
+    @SerializedName("especie")
     private String especie;
+
+    @SerializedName("fechaPlantacion")
     private String fechaPlantacion;
+
+    @SerializedName("ubicacionEspecifica")
     private String ubicacion;
+
     private String temperatura;
     private String humedad;
     private String humedadSuelo;
