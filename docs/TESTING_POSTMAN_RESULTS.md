@@ -6,7 +6,7 @@
 
 ---
 
-## Resumen Ejecutivo
+## Resumen
 
 Se ha realizado un testing exhaustivo de los endpoints REST del backend Spring Boot, validando:
 - [x] Operaciones CRUD completas (Create, Read, Update, Delete)
