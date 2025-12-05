@@ -37,8 +37,8 @@ frontend/
 │   │   └── ...
 │   ├── services/            # Llamadas a API
 │   │   ├── api.js           # Configuración axios
-│   │   ├── authService.js
-│   │   ├── arbolesService.js
+│   │   ├── arbolesService.js # CRUD completo de árboles
+│   │   ├── centrosService.js # CRUD completo de centros
 │   │   └── ...
 │   ├── context/             # Context API para estado global
 │   │   ├── AuthContext.jsx
@@ -306,7 +306,8 @@ vercel --prod
   - [ ] Mínimo 4 ventanas (Dashboard listo, faltan Listado, Detalle, Formulario)
 
   **Consumo API:**
-  - [ ] Tantos CRUD como sean necesarios
+  - [x] Servicios API implementados (arbolesService.js y centrosService.js)
+  - [ ] Integración en páginas (en progreso)
 
   **Diseño:**
   - [x] Estilización con Tailwind CSS
@@ -330,7 +331,7 @@ Este proyecto usa:
 
 ## Estado
 
-Fase 3 completada. Autenticación y layout implementados.
+Fase 3 completada. Fase 4 en progreso (servicios API implementados, faltan páginas CRUD).
 
 ## Documentación Relacionada
 
