@@ -6,6 +6,7 @@
   import Register from './pages/register/Register';
   import Dashboard from './pages/dashboard/Dashboard';
   import ComponentLibrary from './pages/component-library/ComponentLibrary';
+  import ListadoArboles from './pages/arboles/ListadoArboles';
   import './App.css';
 
   function App() {
@@ -36,7 +37,7 @@
             }
           >
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/arboles" element={<div className="text-center"><h1 className="text-2xl font-bold">Listado de Árboles (próximamente)</h1></div>} />
+            <Route path="/arboles" element={<ListadoArboles />} />
             <Route path="/centros" element={<div className="text-center"><h1 className="text-2xl font-bold">Listado de Centros (próximamente)</h1></div>} />
           </Route>
 
