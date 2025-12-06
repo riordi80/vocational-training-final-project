@@ -129,11 +129,13 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Links a gestión de árboles
 - Navegación (menú/cabecera)
 
-### 4. Listado de Árboles (`/arboles`)
-- Tabla con árboles
-- Botón "Añadir Árbol"
-- Click en fila → Detalle
-- Filtro por centro (opcional)
+### 4. Listado de Árboles (`/arboles`) - IMPLEMENTADO
+- Tabla responsive con árboles (desktop: tabla, mobile: cards)
+- Botón "Añadir Árbol" que navega a `/arboles/nuevo`
+- Click en fila para ir al detalle
+- Filtro por centro educativo (dropdown funcional)
+- Estados de loading (Spinner) y errores (Alert)
+- Integración con arbolesService y centrosService
 
 ### 5. Detalle de Árbol (`/arboles/:id`)
 - Información del árbol
@@ -303,11 +305,12 @@ vercel --prod
   - [x] Componentes organizados y reutilizables
   - [x] React Router DOM
   - [x] Login + Register (mock funcionales)
-  - [ ] Mínimo 4 ventanas (Dashboard listo, faltan Listado, Detalle, Formulario)
+  - [ ] Mínimo 4 ventanas (Dashboard, Login, Register, ListadoArboles listos - faltan Detalle y Formulario)
 
   **Consumo API:**
   - [x] Servicios API implementados (arbolesService.js y centrosService.js)
-  - [ ] Integración en páginas (en progreso)
+  - [x] Integración en ListadoArboles (consumiendo getArboles, getCentros, getArbolesByCentro)
+  - [ ] Integración en resto de páginas (pendiente)
 
   **Diseño:**
   - [x] Estilización con Tailwind CSS
@@ -315,11 +318,11 @@ vercel --prod
   - [x] Navegación clara (Header implementado)
 
   **Requisitos funcionales/no funcionales:**
-  - [ ] Responsive (parcial - Header y páginas auth responsive)
+  - [x] Responsive (Header, auth, Dashboard, ListadoArboles responsive)
   - [x] Login/Register con persistencia (LocalStorage)
   - [ ] Desplegar en Vercel
   - [x] Navegación dinámica
-  - [ ] Gestión de CRUD establecidos
+  - [ ] Gestión de CRUD establecidos (parcial - falta crear, editar, eliminar)
   - [ ] Establecer roles (mock básico implementado)
   - [ ] Feedback al usuario (mensajes error en forms)
 
@@ -331,7 +334,11 @@ Este proyecto usa:
 
 ## Estado
 
-Fase 3 completada. Fase 4 en progreso (servicios API implementados, faltan páginas CRUD).
+Fase 3 completada. Fase 4 en progreso:
+- Servicios API implementados (4.1)
+- Componentes comunes listos (4.2)
+- ListadoArboles implementado (4.3)
+- Faltan: DetalleArbol, FormularioArbol, integración de rutas
 
 ## Documentación Relacionada
 
