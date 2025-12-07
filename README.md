@@ -19,12 +19,13 @@ API REST con **Spring Boot (Java)**
 ### `/frontend`
 Aplicación web con **React**
 - Login/Register con persistencia (localStorage)
-- Dashboard + CRUD Árboles
+- Dashboard + CRUD Árboles completo (listar, crear, editar, eliminar, detalle)
 - React Router + navegación dinámica
-- Responsive (Tailwind CSS)
+- Responsive con menú hamburguesa (Tailwind CSS)
 - Sistema de roles (mock)
-- Feedback usuario (mensajes éxito/error)
-- Desplegable en Vercel
+- Componentes reutilizables (Button, Input, Alert, Spinner)
+- Feedback usuario (mensajes éxito/error, validaciones)
+- Configurado para despliegue en Vercel
 
 ### `/android`
 Aplicación móvil con **Android (Java)**
@@ -140,17 +141,24 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - [x] Testing Postman completo (CRUD + validaciones)
 - [x] Frontend React - Estructura completa (Fase 3 - 100% completada)
 - [x] AuthContext + Login/Register con localStorage
-- [x] Header, MainLayout, ProtectedRoute
+- [x] Header responsive con menú hamburguesa, MainLayout, ProtectedRoute
 - [x] Dashboard con navegación
 - [x] Componentes comunes reutilizables (Button, Input, Alert, Spinner)
 - [x] Biblioteca de componentes con documentación
-- [ ] Frontend React - CRUD Árboles (Fase 4)
+- [x] Frontend React - CRUD Árboles (Fase 4 - 100% completada)
+  - [x] Servicios API (arbolesService, centrosService)
+  - [x] ListadoArboles (tabla responsive, filtros, cards móvil)
+  - [x] DetalleArbol (vista completa, eliminar con confirmación)
+  - [x] FormularioArbol (crear/editar, validaciones completas)
+  - [x] Rutas configuradas y funcionando
+  - [x] Refactorización Login/Register con componentes comunes
+  - [x] Configuración Vercel (vercel.json, documentación)
 - [ ] App Android (Fase 5)
 - [ ] ESP32 (Opcional - después del 8 dic)
 
 ## Estado del Proyecto
 
-**Fase actual**: Fase 3 COMPLETADA - Frontend React Estructura y Autenticación
+**Fase actual**: Fase 4 COMPLETADA - Frontend React CRUD Árboles
 
 ### Completado (Fase 0)
 - Configuración de entornos de desarrollo
@@ -188,22 +196,31 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - [x] **Estructura de carpetas**: components, pages, context, services
 - [x] **React Router configurado** con rutas públicas y protegidas
 - [x] **AuthContext** con login, register, logout y localStorage
-- [x] **Componentes de layout**: Header, MainLayout, ProtectedRoute
+- [x] **Componentes de layout**: Header con menú hamburguesa responsive, MainLayout, ProtectedRoute
 - [x] **Componentes comunes reutilizables**:
   - Button (variantes: primary, secondary, danger, outline)
   - Input (con label, validaciones y mensajes de error)
   - Alert (success, error, warning, info)
   - Spinner (loading con diferentes tamaños)
 - [x] **Biblioteca de componentes**: Documentación visual con ejemplos de código
-- [x] **Páginas de autenticación**: Login y Register con validaciones
+- [x] **Páginas de autenticación**: Login y Register con validaciones y componentes comunes
 - [x] **Dashboard** con tarjetas de acceso rápido
-- [x] **Navegación dinámica** y responsive
+- [x] **Navegación dinámica** y responsive con menú hamburguesa
+
+### Completado (Fase 4 - Frontend CRUD Árboles) - 100% completado
+- [x] **Servicios API**: arbolesService.js y centrosService.js con CRUD completo
+- [x] **ListadoArboles**: Tabla responsive (desktop), cards (móvil), filtros por centro
+- [x] **DetalleArbol**: Vista completa, botón eliminar con confirmación modal
+- [x] **FormularioArbol**: Dual-mode (crear/editar), validaciones client-side completas
+- [x] **Rutas configuradas**: /arboles, /arboles/:id, /arboles/nuevo, /arboles/:id/editar
+- [x] **Testing manual**: CRUD completo verificado y funcionando
+- [x] **Responsive verificado**: Todas las páginas funcionan en móvil/tablet/desktop
+- [x] **Configuración Vercel**: vercel.json, documentación de despliegue lista
 
 ### Próximos Hitos (Deadline: 8 dic)
-- **Fase 4**: Frontend React - CRUD Árboles ← **SIGUIENTE**
-- **Fase 5**: App Android - CRUD Árboles
-- **Fase 6**: Documentación (manuales)
-- **Despliegue**: Vercel (Frontend)
+- **Despliegue**: Vercel (Frontend) + Railway (Backend) ← **SIGUIENTE**
+- **Fase 5**: App Android - CRUD Árboles (opcional)
+- **Fase 6**: Documentación (manuales finales)
 
 ## Requisitos Académicos
 
@@ -288,5 +305,5 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 **Proyecto**: Proyecto Árboles
 
 
-**Estado del Proyecto**: - [x] Fase 1, 2 y 3 Completadas | Iniciando Fase 4 (CRUD Árboles)
-**Última actualización**: 2025-12-04
+**Estado del Proyecto**: - [x] Fases 1, 2, 3 y 4 Completadas | Preparando despliegue (Vercel + Railway)
+**Última actualización**: 2025-12-07
