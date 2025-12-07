@@ -35,9 +35,12 @@ Aplicación web con **React**
 
 ### `/android`
 Aplicación móvil con **Android (Java)**
-- Listado de árboles por centro
-- Visualización de detalles
-- Modificar y eliminar árboles
+- 4 Activities (Login, Register, Listar, Detalles)
+- RecyclerView con listado completo de árboles
+- Visualización de detalles con datos de sensores
+- Modo edición para modificar árboles
+- Eliminar árboles con confirmación
+- Conectado a backend en Render
 
 ### `/esp32`
 Firmware **ESP32 (C/C++)** - Opcional
@@ -159,7 +162,7 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
   - [x] Rutas configuradas y funcionando
   - [x] Refactorización Login/Register con componentes comunes
   - [x] Configuración Vercel (vercel.json, documentación)
-- [ ] App Android (Fase 5)
+- [x] App Android (Fase 5 - 100% completada)
 - [ ] ESP32 (Opcional - después del 8 dic)
 
 ## Estado del Proyecto
@@ -223,6 +226,19 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - [x] **Responsive verificado**: Todas las páginas funcionan en móvil/tablet/desktop
 - [x] **Configuración Vercel**: vercel.json, documentación de despliegue lista
 
+### Completado (Fase 5 - App Android) - 100% completado
+- [x] **4 Activities implementadas**: Login, Register, ListarArboles, ArbolDetalles
+- [x] **Retrofit configurado**: Conectado a backend en Render
+- [x] **RecyclerView**: Listado de árboles con adapter optimizado
+- [x] **CRUD funcional**:
+  - Listar todos los árboles desde API
+  - Ver detalles de árbol con sensores
+  - Editar árbol (modo edición en ArbolDetalles)
+  - Eliminar árbol con confirmación
+- [x] **Modelos**: Arbol.java, CentroEducativo.java
+- [x] **Permisos configurados**: INTERNET, ACCESS_NETWORK_STATE
+- [x] **Manejo de errores**: Toast, Logs, fallback a datos locales
+
 ### Despliegue Completado
 - [x] **Frontend**: Desplegado en Vercel → https://vocational-training-final-project.vercel.app/
 - [x] **Backend**: Desplegado en Render → https://proyecto-arboles-backend.onrender.com
@@ -230,8 +246,7 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - [x] **Configuración CORS**: Implementada y funcionando correctamente
 
 ### Próximos Hitos (Deadline: 8 dic)
-- **Fase 5**: App Android - CRUD Árboles (opcional)
-- **Fase 6**: Documentación (manuales finales)
+- **Fase 6**: Documentación final (manuales de instalación y usuario)
 
 ## Requisitos Académicos
 
@@ -316,5 +331,5 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 **Proyecto**: Proyecto Árboles
 
 
-**Estado del Proyecto**: - [x] Fases 1, 2, 3 y 4 Completadas | [x] Despliegue Completo (Vercel + Render)
+**Estado del Proyecto**: - [x] Fases 1, 2, 3, 4 y 5 Completadas | [x] Despliegue Completo (Vercel + Render)
 **Última actualización**: 2025-12-07

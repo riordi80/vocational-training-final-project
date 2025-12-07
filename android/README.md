@@ -2,6 +2,14 @@
 
 Aplicación móvil Android nativa para monitorización de árboles mediante sensores IoT.
 
+## Estado de Implementación
+
+**Fase 5 COMPLETADA** - Todos los requisitos académicos cumplidos
+
+- Backend conectado: https://proyecto-arboles-backend.onrender.com
+- 4 Activities implementadas
+- CRUD funcional (Listar, Detalles, Editar, Eliminar)
+
 ## Tecnologías
 
 - **Lenguaje**: Java
@@ -35,7 +43,19 @@ cd android
 
 ### 3. Configurar URL del Backend
 
-Editar la URL base en el cliente API para apuntar a tu backend local o servidor.
+La aplicación está configurada para conectarse al backend en producción:
+
+**RetrofitClient.java:**
+```java
+private static final String BASE_URL = "https://proyecto-arboles-backend.onrender.com/";
+```
+
+Para desarrollo local, cambiar a:
+```java
+private static final String BASE_URL = "http://10.0.2.2:8080/"; // Emulador Android
+// o
+private static final String BASE_URL = "http://TU_IP_LOCAL:8080/"; // Dispositivo físico
+```
 
 ### 4. Compilar y ejecutar
 
@@ -72,19 +92,74 @@ android/
 └── README.md
 ```
 
+## Funcionalidades Implementadas
+
+### Activities (4)
+
+1. **Login.java**
+   - Validación de usuario y contraseña
+   - Navegación a ListarArboles tras autenticación
+
+2. **Registrer.java**
+   - Formulario de registro de nuevos usuarios
+   - Validaciones de campos
+
+3. **ListarArboles.java**
+   - RecyclerView con todos los árboles del backend
+   - Botón eliminar por cada árbol con confirmación
+   - Click en árbol para ver detalles
+   - Carga desde API de Render con fallback local
+
+4. **ArbolDetalles.java**
+   - Visualización de todos los datos del árbol
+   - Modo edición con botón "Editar"
+   - Datos de sensores: temperatura, humedad, CO2, humedad del suelo
+   - Actualización en API con PUT
+   - Botón cancelar para descartar cambios
+
+### API Integration (Retrofit)
+
+**Endpoints implementados:**
+- GET `/api/arboles` - Listar todos los árboles
+- GET `/api/arboles/{id}` - Obtener árbol por ID
+- PUT `/api/arboles/{id}` - Actualizar árbol
+- DELETE `/api/arboles/{id}` - Eliminar árbol
+- Búsquedas por especie, centro, dispositivo, nombre
+
+**Configuración:**
+- Timeouts: 60 segundos (adecuado para Render free tier)
+- Conversor: Gson con BigDecimalStringAdapter
+- Manejo de errores con Toast y Logs
+
+### Modelos
+
+- **Arbol.java**: id, nombre, especie, fechaPlantacion, ubicacion, sensores
+- **CentroEducativo.java**: id, nombre
+
+### Características Adicionales
+
+- Permisos de Internet configurados
+- Manejo de errores robusto
+- Datos de fallback en XML
+- RecyclerView optimizado con ViewHolder
+- Diálogos de confirmación para acciones destructivas
+- Logging detallado para debugging
+
 ## Requisitos Académicos
 
 ### [PGL] Programación Multimedia y Dispositivos Móviles
 
 - [x] Mínimo 4 actividades (Login, Registrer, ListarArboles, ArbolDetalles)
 - [x] Listar árboles por centro educativo
-- [x] Visualizar detalles del árbol con datos en tiempo real
-- [ ] Modificar datos del árbol
-- [ ] Eliminar árbol
+- [x] Visualizar detalles del árbol con datos en tiempo real (sensores simulados)
+- [x] Modificar datos del árbol (modo edición en ArbolDetalles)
+- [x] Eliminar árbol (con confirmación)
+
+**Estado**: TODOS LOS REQUISITOS CUMPLIDOS
 
 ## Estado del Proyecto
 
-**Estado**: En desarrollo - Fase 5
+**Fase 5 COMPLETADA** - Lista para entrega 8 diciembre 2025
 
 ## Documentación Relacionada
 
