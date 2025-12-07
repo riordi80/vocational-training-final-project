@@ -174,7 +174,8 @@ app/src/main/java/com/example/proyectoarboles/
 Si la app no puede conectarse, verifica que el `AndroidManifest.xml` incluya:
 
 ```xml
-
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
 
 ## Compilar APK para Distribución
