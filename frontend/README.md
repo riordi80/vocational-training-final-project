@@ -269,7 +269,7 @@ serve -s dist -p 3000
 
 ### 1. Preparar proyecto
 
-Crear archivo `vercel.json` en la raíz de `frontend/`:
+El archivo `vercel.json` ya está configurado en la raíz de `frontend/`:
 
 ```json
 {
@@ -282,31 +282,48 @@ Crear archivo `vercel.json` en la raíz de `frontend/`:
 }
 ```
 
-### 2. Variables de entorno
+Este archivo es necesario para que React Router funcione correctamente.
+
+### 2. Configuración en Vercel Dashboard
+
+1. Ve a [vercel.com](https://vercel.com) y crea una cuenta con GitHub
+2. Click en "Add New Project"
+3. Importa el repositorio: `vocational-training-final-project`
+4. Configuración del proyecto:
+   - **Framework Preset**: Vite
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+
+### 3. Variables de entorno
 
 En Vercel Dashboard → Settings → Environment Variables:
 
 ```
-VITE_API_BASE_URL=https://tu-backend-url.com/api
+VITE_API_BASE_URL=https://tu-backend.railway.app/api
 ```
 
-### 3. Desplegar
+Actualiza la URL cuando despliegues el backend en Railway.
 
-**Opción A: Desde CLI**
+### 4. Desplegar
+
+**Opción A: Desde GitHub (Recomendada)**
+1. Configuración automática desde paso 2
+2. Cada push despliega automáticamente
+3. Vercel crea URLs de preview para PRs
+
+**Opción B: Desde CLI**
 ```bash
 npm install -g vercel
+cd frontend
 vercel --prod
 ```
 
-**Opción B: Desde GitHub**
-1. Push a GitHub
-2. Conectar repo en Vercel Dashboard
-3. Auto-deploy en cada push
+### 5. Verificar
 
-### 4. Verificar
-- URL: `https://tu-proyecto.vercel.app`
 - Build command: `npm run build`
 - Output directory: `dist`
+- Framework: Vite
 
 ## Requisitos Académicos
 
