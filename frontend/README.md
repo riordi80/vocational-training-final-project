@@ -2,6 +2,12 @@
 
 Aplicación web desarrollada con React para el sistema de monitorización de árboles.
 
+## Aplicación Desplegada
+
+**URL en producción**: [https://vocational-training-final-project.vercel.app/](https://vocational-training-final-project.vercel.app/)
+
+**Plataforma**: Vercel (deployment automático desde GitHub)
+
 ## Tecnologías
 
 - **Framework**: React 18+
@@ -265,12 +271,31 @@ npm install -g serve
 serve -s dist -p 3000
 ```
 
-## Despliegue en Vercel (Requisito DAD)
+## Despliegue en Vercel (Requisito DAD) - COMPLETADO
 
-### 1. Preparar proyecto
+### Aplicación Desplegada
 
-El archivo `vercel.json` ya está configurado en la raíz de `frontend/`:
+- **URL**: https://vocational-training-final-project.vercel.app/
+- **Plataforma**: Vercel
+- **Deploy**: Automático desde rama `main`
+- **Backend**: https://proyecto-arboles-backend.onrender.com
 
+### Configuración Implementada
+
+#### 1. Archivo vercel.json
+
+Para monorepo con frontend en subcarpeta, se configuraron DOS archivos `vercel.json`:
+
+**Raíz del proyecto** (`vercel.json`):
+```json
+{
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "installCommand": "cd frontend && npm install"
+}
+```
+
+**Dentro de frontend** (`frontend/vercel.json`):
 ```json
 {
   "rewrites": [
@@ -282,48 +307,66 @@ El archivo `vercel.json` ya está configurado en la raíz de `frontend/`:
 }
 ```
 
-Este archivo es necesario para que React Router funcione correctamente.
+El segundo archivo es necesario para que React Router funcione correctamente (SPA routing).
 
-### 2. Configuración en Vercel Dashboard
+#### 2. Configuración en Vercel Dashboard
 
-1. Ve a [vercel.com](https://vercel.com) y crea una cuenta con GitHub
-2. Click en "Add New Project"
-3. Importa el repositorio: `vocational-training-final-project`
-4. Configuración del proyecto:
-   - **Framework Preset**: Vite
-   - **Root Directory**: `frontend`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
+**Settings → General:**
+- **Framework Preset**: Vite
+- **Root Directory**: (dejar vacío, se maneja con vercel.json)
+- **Build Command**: Configurado en vercel.json raíz
+- **Output Directory**: Configurado en vercel.json raíz
 
-### 3. Variables de entorno
+**Settings → Git:**
+- **Production Branch**: main
+- **Auto-Deploy**: Enabled
 
-En Vercel Dashboard → Settings → Environment Variables:
+#### 3. Variables de Entorno
+
+**Settings → Environment Variables:**
 
 ```
-VITE_API_BASE_URL=https://tu-backend.railway.app/api
+Name: VITE_API_BASE_URL
+Value: https://proyecto-arboles-backend.onrender.com/api
+Environments: Production, Preview, Development (todos marcados)
 ```
 
-Actualiza la URL cuando despliegues el backend en Railway.
+**IMPORTANTE**: Las variables de entorno de Vite (prefijo `VITE_`) se bake durante el build, no en runtime. Después de cambiar variables, hacer redeploy con "Clear cache & deploy".
 
-### 4. Desplegar
+#### 4. Deployment Automático
 
-**Opción A: Desde GitHub (Recomendada)**
-1. Configuración automática desde paso 2
-2. Cada push despliega automáticamente
-3. Vercel crea URLs de preview para PRs
+- **Push a main**: Deploy automático a producción
+- **Pull Requests**: Vercel crea URLs de preview únicas
+- **Rollbacks**: Disponibles desde Deployments tab
 
-**Opción B: Desde CLI**
+### Verificación del Despliegue
+
 ```bash
-npm install -g vercel
-cd frontend
-vercel --prod
+# Verificar que el frontend carga
+curl https://vocational-training-final-project.vercel.app/
+
+# Verificar que conecta con backend
+# (abrir DevTools → Network mientras navegas por la app)
 ```
 
-### 5. Verificar
+### Troubleshooting
 
-- Build command: `npm run build`
-- Output directory: `dist`
-- Framework: Vite
+**Error: "Page not found" en rutas**
+- Verificar que `frontend/vercel.json` tiene los rewrites configurados
+- El archivo debe estar en `frontend/vercel.json`, NO en la raíz
+
+**Error: "Cannot GET /api/..."**
+- Verificar variable `VITE_API_BASE_URL` en Vercel Dashboard
+- Hacer redeploy con "Clear cache & deploy"
+- Verificar que la variable está marcada para "Production"
+
+**Error: CORS al llamar backend**
+- Verificar que backend tiene configurado CORS para la URL de Vercel
+- Ver `backend/src/main/java/com/example/gardenmonitor/config/CorsConfig.java`
+
+**Build falla**
+- Verificar que `vercel.json` raíz apunta correctamente a `frontend/`
+- Revisar logs de build en Vercel Dashboard → Deployments
 
 ## Requisitos Académicos
 
@@ -348,7 +391,7 @@ vercel --prod
   **Requisitos funcionales/no funcionales:**
   - [x] Responsive (todas las páginas optimizadas, menú hamburguesa)
   - [x] Login/Register con persistencia (LocalStorage)
-  - [ ] Desplegar en Vercel (pendiente)
+  - [x] Desplegar en Vercel (COMPLETADO - https://vocational-training-final-project.vercel.app/)
   - [x] Navegación dinámica
   - [x] Gestión de CRUD establecidos (Árboles completo: crear, editar, eliminar, listar, detalle)
   - [x] Establecer roles (mock básico implementado)
