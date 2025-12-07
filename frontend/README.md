@@ -161,7 +161,8 @@ npm run lint             # Ejecuta ESLint para verificar código
 ### Responsive Design
 - Diseño adaptable a móvil, tablet y desktop
 - Mobile-first approach con Tailwind CSS
-- Menú hamburguesa en móvil
+- Menú hamburguesa en móvil (implementado con iconos SVG)
+- Todas las páginas optimizadas para móvil (Login, Register, Dashboard, CRUD Árboles)
 
 ### Persistencia de Datos
 - Login/Register guardan en localStorage
@@ -244,9 +245,10 @@ Todos los formularios incluyen validación client-side:
 ## Estilos y Componentes
 
 - **Tailwind CSS**: Para estilos utilitarios
-- **Componentes reutilizables**: Button, Input, Card, Modal, etc.
-- **Responsive Design**: Adaptable a móvil, tablet y desktop
-- **Feedback visual**: Loading states, toasts, confirmaciones
+- **Componentes reutilizables**: Button, Input, Alert, Spinner (usados en todas las páginas)
+- **Responsive Design**: Adaptable a móvil, tablet y desktop con menú hamburguesa
+- **Feedback visual**: Loading states (Spinner), mensajes de error/éxito (Alert), confirmaciones (modales)
+- **Consistencia**: Login, Register y Header refactorizados para usar componentes comunes
 
 ## Build para Producción
 
@@ -313,27 +315,27 @@ vercel --prod
   **Estructura:**
   - [x] Componentes organizados y reutilizables
   - [x] React Router DOM
-  - [x] Login + Register (mock funcionales)
-  - [ ] Mínimo 4 ventanas (Dashboard, Login, Register, ListadoArboles listos - faltan Detalle y Formulario)
+  - [x] Login + Register (refactorizados con componentes comunes)
+  - [x] Mínimo 4 ventanas (Dashboard, ListadoArboles, DetalleArbol, FormularioArbol)
 
   **Consumo API:**
   - [x] Servicios API implementados (arbolesService.js y centrosService.js)
-  - [x] Integración en ListadoArboles (consumiendo getArboles, getCentros, getArbolesByCentro)
-  - [ ] Integración en resto de páginas (pendiente)
+  - [x] Integración completa en todas las páginas de árboles
+  - [x] CRUD completo funcional
 
   **Diseño:**
   - [x] Estilización con Tailwind CSS
-  - [ ] Formularios funcionales con validaciones (Login/Register listos)
-  - [x] Navegación clara (Header implementado)
+  - [x] Formularios funcionales con validaciones (Login/Register/Árboles)
+  - [x] Navegación clara (Header con menú hamburguesa responsive)
 
   **Requisitos funcionales/no funcionales:**
-  - [x] Responsive (Header, auth, Dashboard, ListadoArboles responsive)
+  - [x] Responsive (todas las páginas optimizadas, menú hamburguesa)
   - [x] Login/Register con persistencia (LocalStorage)
-  - [ ] Desplegar en Vercel
+  - [ ] Desplegar en Vercel (pendiente)
   - [x] Navegación dinámica
-  - [ ] Gestión de CRUD establecidos (parcial - falta crear, editar, eliminar)
-  - [ ] Establecer roles (mock básico implementado)
-  - [ ] Feedback al usuario (mensajes error en forms)
+  - [x] Gestión de CRUD establecidos (Árboles completo: crear, editar, eliminar, listar, detalle)
+  - [x] Establecer roles (mock básico implementado)
+  - [x] Feedback al usuario (componentes Alert, Spinner, modales de confirmación)
 
 ## Plugins de Vite
 
@@ -350,7 +352,12 @@ Fase 3 completada. Fase 4 COMPLETADA:
 - DetalleArbol implementado (4.4)
 - FormularioArbol implementado (4.5)
 - Rutas configuradas (4.6)
-- CRUD completo de árboles funcional
+- Testing y mejoras responsive (4.7):
+  - CRUD completo de árboles funcional
+  - Menú hamburguesa implementado
+  - Login/Register refactorizados con componentes comunes
+  - Header usando componente Button
+  - Responsive verificado en todas las páginas
 
 ## Documentación Relacionada
 

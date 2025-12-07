@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import Button from "../../components/common/Button";
+import Input from "../../components/common/Input";
+import Alert from "../../components/common/Alert";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -51,48 +54,44 @@ const Login = () => {
 
         {/* Mensaje de error */}
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+          <div className="mb-4">
+            <Alert
+              type="error"
+              message={error}
+              dismissible
+              onClose={() => setError("")}
+            />
           </div>
         )}
 
         {/* Formulario */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="tu@email.com"
-            />
-          </div>
+          <Input
+            id="email"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="tu@email.com"
+          />
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Contraseña
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="••••••••"
-            />
-          </div>
+          <Input
+            id="password"
+            label="Contraseña"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+          />
 
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            fullWidth
             disabled={loading}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {loading ? "Iniciando sesión..." : "Iniciar sesión"}
-          </button>
+          </Button>
         </form>
 
         {/* Link a Register */}
