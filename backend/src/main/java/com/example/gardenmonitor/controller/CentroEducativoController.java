@@ -21,7 +21,6 @@ import java.util.List;
  * @author Richard Ortiz y Enrique Pérez
  * @version 1.0
  */
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/centros")
 public class CentroEducativoController {
