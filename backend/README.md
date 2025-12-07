@@ -108,9 +108,6 @@ spring.datasource.password=TU_PASSWORD_REAL_AQUI
 
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
-
-jwt.secret=TU_JWT_SECRET_MUY_SEGURO_AQUI
-jwt.expiration=86400000
 ```
 
 **Alternativa**: Usar variables de entorno (recomendado para producción).
@@ -195,14 +192,16 @@ El archivo `.jar` se generará en `target/gardenmonitor-0.0.1-SNAPSHOT.jar`
 
 ## Variables de Entorno (Producción)
 
+Para producción en Render, las variables de entorno se configuran en el dashboard:
+
 ```bash
-export DB_HOST=tu_host_db
-export DB_PORT=5432
-export DB_NAME=proyecto_arboles
-export DB_USER=tu_usuario
-export DB_PASSWORD=tu_password
-export JWT_SECRET=tu_jwt_secret_muy_seguro
+SPRING_DATASOURCE_URL=jdbc:postgresql://[HOST]:5432/[DATABASE]
+SPRING_DATASOURCE_USERNAME=[USER]
+SPRING_DATASOURCE_PASSWORD=[PASSWORD]
+SPRING_PROFILES_ACTIVE=prod
 ```
+
+Ver sección "Despliegue en Render" más abajo para detalles completos.
 
 ## Requisitos Académicos
 
