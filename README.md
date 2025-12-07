@@ -2,6 +2,12 @@
 
 Sistema de monitorización y gestión de árboles plantados en centros educativos mediante sensores IoT.
 
+## Aplicaciones Desplegadas
+
+- **Frontend (React)**: [https://vocational-training-final-project.vercel.app/](https://vocational-training-final-project.vercel.app/)
+- **Backend (Spring Boot)**: [https://proyecto-arboles-backend.onrender.com](https://proyecto-arboles-backend.onrender.com)
+- **Base de Datos**: PostgreSQL 16 en Render
+
 ## Descripción
 
 Este proyecto permite recopilar datos ambientales (temperatura, humedad del suelo, pH, nivel de agua) a través de dispositivos ESP32 con sensores, y visualizarlos en tiempo real mediante aplicaciones web y móvil. El sistema está diseñado para centros educativos que desean monitorizar el crecimiento y estado de sus árboles.
@@ -217,8 +223,13 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - [x] **Responsive verificado**: Todas las páginas funcionan en móvil/tablet/desktop
 - [x] **Configuración Vercel**: vercel.json, documentación de despliegue lista
 
+### Despliegue Completado
+- [x] **Frontend**: Desplegado en Vercel → https://vocational-training-final-project.vercel.app/
+- [x] **Backend**: Desplegado en Render → https://proyecto-arboles-backend.onrender.com
+- [x] **Base de Datos**: PostgreSQL en Render (Internal Database)
+- [x] **Configuración CORS**: Implementada y funcionando correctamente
+
 ### Próximos Hitos (Deadline: 8 dic)
-- **Despliegue**: Vercel (Frontend) + Railway (Backend) ← **SIGUIENTE**
 - **Fase 5**: App Android - CRUD Árboles (opcional)
 - **Fase 6**: Documentación (manuales finales)
 
@@ -305,5 +316,5 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 **Proyecto**: Proyecto Árboles
 
 
-**Estado del Proyecto**: - [x] Fases 1, 2, 3 y 4 Completadas | Preparando despliegue (Vercel + Railway)
+**Estado del Proyecto**: - [x] Fases 1, 2, 3 y 4 Completadas | [x] Despliegue Completo (Vercel + Render)
 **Última actualización**: 2025-12-07
