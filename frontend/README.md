@@ -137,10 +137,14 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Estados de loading (Spinner) y errores (Alert)
 - Integración con arbolesService y centrosService
 
-### 5. Detalle de Árbol (`/arboles/:id`)
-- Información del árbol
-- Botones: Editar, Eliminar
-- Confirmación antes de eliminar
+### 5. Detalle de Árbol (`/arboles/:id`) - IMPLEMENTADO
+- Vista completa con información general y umbrales de monitorización
+- Botones: Volver, Editar, Eliminar
+- Modal de confirmación antes de eliminar
+- Manejo de estados (loading, error, árbol no encontrado)
+- Formateo de fechas mejorado
+- Integración con getArbolById y deleteArbol
+- Navegación con state para feedback
 
 ### 6. Formulario Árbol (`/arboles/nuevo` y `/arboles/:id/editar`)
 - Crear/editar árbol
@@ -338,7 +342,8 @@ Fase 3 completada. Fase 4 en progreso:
 - Servicios API implementados (4.1)
 - Componentes comunes listos (4.2)
 - ListadoArboles implementado (4.3)
-- Faltan: DetalleArbol, FormularioArbol, integración de rutas
+- DetalleArbol implementado (4.4)
+- Falta: FormularioArbol (4.5), integración de rutas completas (4.6)
 
 ## Documentación Relacionada
 

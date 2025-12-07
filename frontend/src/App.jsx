@@ -7,6 +7,7 @@
   import Dashboard from './pages/dashboard/Dashboard';
   import ComponentLibrary from './pages/component-library/ComponentLibrary';
   import ListadoArboles from './pages/arboles/ListadoArboles';
+  import DetalleArbol from './pages/arboles/DetalleArbol';
   import './App.css';
 
   function App() {
@@ -38,6 +39,7 @@
           >
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/arboles" element={<ListadoArboles />} />
+            <Route path="/arboles/:id" element={<DetalleArbol />} />
             <Route path="/centros" element={<div className="text-center"><h1 className="text-2xl font-bold">Listado de Centros (próximamente)</h1></div>} />
           </Route>
 
