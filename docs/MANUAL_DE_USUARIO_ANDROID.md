@@ -251,8 +251,3 @@ Si experimentas problemas con la aplicación:
 2. Asegúrate de que el servidor esté funcionando
 3. Cierra y vuelve a abrir la aplicación
 4. Contacta al administrador del sistema si el problema persiste
-
----
-
-**Versión del Manual**: 1.0  
-**Última Actualización**: Diciembre 2024
