@@ -64,12 +64,12 @@ Thumbs.db
 *.trace.db
 
 ### Sensitive Configuration ###
+# Solo ignorar archivos con credenciales locales
+# application-prod.properties usa variables de entorno, NO tiene credenciales
 **/application-local.properties
 **/application-local.yml
 **/application-dev.properties
 **/application-dev.yml
-**/application-prod.properties
-**/application-prod.yml
 **/application-secret.properties
 **/application-secret.yml
 
