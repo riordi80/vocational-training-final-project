@@ -146,10 +146,15 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Integración con getArbolById y deleteArbol
 - Navegación con state para feedback
 
-### 6. Formulario Árbol (`/arboles/nuevo` y `/arboles/:id/editar`)
-- Crear/editar árbol
-- Campos: nombre, especie, fecha plantación, centro
-- Validaciones
+### 6. Formulario Árbol (`/arboles/nuevo` y `/arboles/:id/editar`) - IMPLEMENTADO
+- Componente dual: crear Y editar en uno solo
+- Campos obligatorios: nombre, especie, fecha plantación, centro educativo
+- Campos opcionales: ubicación, umbrales de monitorización
+- Validaciones client-side completas (campos requeridos, fecha no futura, rangos de umbrales)
+- Carga de centros desde API para select
+- Detección automática de modo (crear/editar) con useParams
+- Navegación con state para mensajes de éxito
+- Integración con createArbol y updateArbol
 
 ## Requisitos Funcionales Adicionales
 
@@ -338,12 +343,14 @@ Este proyecto usa:
 
 ## Estado
 
-Fase 3 completada. Fase 4 en progreso:
+Fase 3 completada. Fase 4 COMPLETADA:
 - Servicios API implementados (4.1)
 - Componentes comunes listos (4.2)
 - ListadoArboles implementado (4.3)
 - DetalleArbol implementado (4.4)
-- Falta: FormularioArbol (4.5), integración de rutas completas (4.6)
+- FormularioArbol implementado (4.5)
+- Rutas configuradas (4.6)
+- CRUD completo de árboles funcional
 
 ## Documentación Relacionada
 
