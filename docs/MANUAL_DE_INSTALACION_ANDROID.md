@@ -43,7 +43,7 @@ private static final String BASE_URL = "http://10.0.2.2:8080/";
 
 ```bash
 git clone 
-cd ProyectoArboles
+cd vocational-training-final-project
 ```
 
 O descarga el proyecto como ZIP y descomprímelo.
