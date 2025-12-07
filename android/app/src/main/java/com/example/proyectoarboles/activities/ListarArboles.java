@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,8 +28,12 @@ import retrofit2.Response;
 
 public class ListarArboles extends AppCompatActivity {
 
+    private static final String TAG = "ListarArboles";
+
     RecyclerView recyclerViewArboles;
     ArbolAdapter adapter;
+    ProgressBar progressBar;
+    TextView tvEstado;
     private List<Arbol> listaArboles = new ArrayList<>();
 
     @Override
@@ -35,10 +42,16 @@ public class ListarArboles extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_listar_arboles);
 
+        // Inicializar vistas
         recyclerViewArboles = findViewById(R.id.RecyclerViewArboles);
 
-         adapter = new ArbolAdapter(listaArboles,
-                 new ArbolAdapter.onArbolDeleteListener() {
+        // Opcional: Si tienes ProgressBar y TextView en el layout
+        // progressBar = findViewById(R.id.progressBar);
+        // tvEstado = findViewById(R.id.tvEstado);
+
+        // Configurar adapter
+        adapter = new ArbolAdapter(listaArboles,
+                new ArbolAdapter.onArbolDeleteListener() {
                     @Override
                     public void onArbolDelete(int position) {
                         mostrarDialogoConfirmacion(position);
@@ -56,99 +69,200 @@ public class ListarArboles extends AppCompatActivity {
         recyclerViewArboles.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewArboles.setAdapter(adapter);
 
+        // Cargar datos
         cargarArbolesDesdeAPI();
     }
 
-    // Este metodo se encarga de recoger los datos desde la api
     private void cargarArbolesDesdeAPI() {
+        Log.d(TAG, "Iniciando carga de árboles desde API...");
+
+        // Mostrar indicador de carga (si existe)
+        // if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+        // if (tvEstado != null) tvEstado.setText("Cargando árboles...");
+
         Call<List<Arbol>> call = RetrofitClient.getArbolApi().obtenerTodosLosArboles();
 
         call.enqueue(new Callback<List<Arbol>>() {
             @Override
             public void onResponse(Call<List<Arbol>> call, Response<List<Arbol>> response) {
+                // Ocultar indicador de carga
+                // if (progressBar != null) progressBar.setVisibility(View.GONE);
+
+                Log.d(TAG, "Respuesta recibida - Código: " + response.code());
+
                 if (response.isSuccessful() && response.body() != null) {
+                    List<Arbol> arbolesRecibidos = response.body();
+                    Log.d(TAG, "Árboles recibidos: " + arbolesRecibidos.size());
+
+                    // Limpiar lista y agregar nuevos datos
                     listaArboles.clear();
-                    listaArboles.addAll(response.body());
+                    listaArboles.addAll(arbolesRecibidos);
+
+                    // Notificar al adapter
                     adapter.notifyDataSetChanged();
-                    Toast.makeText(ListarArboles.this,
-                            "Árboles cargados: " + listaArboles.size(),
-                            Toast.LENGTH_SHORT).show();
+
+                    // Verificar si la lista está vacía
+                    if (listaArboles.isEmpty()) {
+                        Toast.makeText(ListarArboles.this,
+                                "No hay árboles registrados",
+                                Toast.LENGTH_SHORT).show();
+                        // if (tvEstado != null) tvEstado.setText("No hay árboles registrados");
+                    } else {
+                        Toast.makeText(ListarArboles.this,
+                                "Árboles cargados: " + listaArboles.size(),
+                                Toast.LENGTH_SHORT).show();
+                        // if (tvEstado != null) tvEstado.setText("");
+                    }
+
+                    // Log detallado de cada árbol
+                    for (Arbol arbol : listaArboles) {
+                        Log.d(TAG, "Árbol: " + arbol.getNombre() +
+                                " | Especie: " + arbol.getEspecie() +
+                                " | Fecha: " + arbol.getFechaPlantacion());
+                    }
+
                 } else {
+                    // Error en la respuesta
+                    Log.e(TAG, "Error en respuesta - Código: " + response.code());
+                    Log.e(TAG, "Mensaje: " + response.message());
+
                     Toast.makeText(ListarArboles.this,
-                            "Error al cargar árboles",
-                            Toast.LENGTH_SHORT).show();
-                    // ⚠️ OPCIONAL: Si falla, cargar datos de XML como fallback
-                    listaArboles.addAll(getArbolesXML());
-                    adapter.notifyDataSetChanged();
+                            "Error al cargar árboles (código " + response.code() + ")",
+                            Toast.LENGTH_LONG).show();
+
+                    // if (tvEstado != null) tvEstado.setText("Error al cargar datos");
+
+                    // Cargar datos de fallback
+                    cargarDatosFallback();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Arbol>> call, Throwable t) {
-                Log.e("ListarArboles", "Error: " + t.getMessage());
+                // Ocultar indicador de carga
+                // if (progressBar != null) progressBar.setVisibility(View.GONE);
+
+                Log.e(TAG, "Error de conexión: " + t.getClass().getSimpleName());
+                Log.e(TAG, "Mensaje: " + t.getMessage());
+                t.printStackTrace();
+
                 Toast.makeText(ListarArboles.this,
                         "Error de conexión: " + t.getMessage(),
                         Toast.LENGTH_LONG).show();
-                // Cargar datos de XML como fallback
-                listaArboles.addAll(getArbolesXML());
-                adapter.notifyDataSetChanged();
+
+                // if (tvEstado != null) tvEstado.setText("Error de conexión");
+
+                // Cargar datos de fallback
+                cargarDatosFallback();
             }
         });
     }
 
+    private void cargarDatosFallback() {
+        Log.d(TAG, "Cargando datos de fallback (XML)...");
 
-    //Metodo que sirve de fallback (respaldo por si no se consiguen cargar los datos desde la api)
-    public List<Arbol> getArbolesXML(){
-        String[] nombres = getResources().getStringArray(R.array.nombres_arboles);
-        String[] especies = getResources().getStringArray(R.array.especies_arboles);
-        String[] fechas = getResources().getStringArray(R.array.fecha_plantacion);
+        List<Arbol> arbolesXML = getArbolesXML();
 
-        List<Arbol> listaArboles = new ArrayList<>();
+        if (!arbolesXML.isEmpty()) {
+            listaArboles.clear();
+            listaArboles.addAll(arbolesXML);
+            adapter.notifyDataSetChanged();
 
-        for(int i = 0; i < nombres.length; i++){
-            Long c = Long.valueOf(i);
-            listaArboles.add(new Arbol(c+1, nombres[i], especies[i], fechas[i]));
+            Toast.makeText(this,
+                    "Mostrando datos de ejemplo (" + arbolesXML.size() + " árboles)",
+                    Toast.LENGTH_SHORT).show();
+
+            Log.d(TAG, "Datos de fallback cargados: " + arbolesXML.size() + " árboles");
+        } else {
+            Log.w(TAG, "No hay datos de fallback disponibles");
+            Toast.makeText(this,
+                    "No hay datos disponibles",
+                    Toast.LENGTH_SHORT).show();
         }
+    }
 
-        return listaArboles;
+    public List<Arbol> getArbolesXML(){
+        try {
+            String[] nombres = getResources().getStringArray(R.array.nombres_arboles);
+            String[] especies = getResources().getStringArray(R.array.especies_arboles);
+            String[] fechas = getResources().getStringArray(R.array.fecha_plantacion);
+
+            List<Arbol> listaArboles = new ArrayList<>();
+
+            for(int i = 0; i < nombres.length; i++){
+                Long id = Long.valueOf(i + 1);
+                listaArboles.add(new Arbol(id, nombres[i], especies[i], fechas[i]));
+            }
+
+            return listaArboles;
+        } catch (Exception e) {
+            Log.e(TAG, "Error al cargar datos XML: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     private void mostrarDialogoConfirmacion(int position){
+        if (position < 0 || position >= listaArboles.size()) {
+            Log.e(TAG, "Posición inválida para eliminar: " + position);
+            return;
+        }
+
         Arbol arbol = listaArboles.get(position);
 
         new AlertDialog.Builder(this)
                 .setTitle("Eliminar árbol")
-                .setMessage("¿Seguro que quieres eliminar este arbol?")
-                .setPositiveButton("Eliminar", (dialog,which) ->{
+                .setMessage("¿Seguro que quieres eliminar \"" + arbol.getNombre() + "\"?")
+                .setPositiveButton("Eliminar", (dialog, which) -> {
                     eliminarArbolAPI(arbol.getId(), position);
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
     }
+
     private void eliminarArbolAPI(Long id, int position) {
+        if (id == null) {
+            Toast.makeText(this, "Error: ID del árbol no válido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Log.d(TAG, "Eliminando árbol con ID: " + id);
+
         Call<Arbol> call = RetrofitClient.getArbolApi().eliminarArbol(id);
 
         call.enqueue(new Callback<Arbol>() {
             @Override
             public void onResponse(Call<Arbol> call, Response<Arbol> response) {
                 if (response.isSuccessful()) {
+                    // Eliminar del adapter
                     adapter.eliminarArbol(position);
+
                     Toast.makeText(ListarArboles.this,
-                            "Árbol eliminado",
+                            "Árbol eliminado correctamente",
                             Toast.LENGTH_SHORT).show();
+
+                    Log.d(TAG, "Árbol eliminado exitosamente");
                 } else {
+                    Log.e(TAG, "Error al eliminar - Código: " + response.code());
                     Toast.makeText(ListarArboles.this,
-                            "Error al eliminar árbol",
+                            "Error al eliminar árbol (código " + response.code() + ")",
                             Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Arbol> call, Throwable t) {
+                Log.e(TAG, "Error al eliminar árbol: " + t.getMessage());
                 Toast.makeText(ListarArboles.this,
-                        "Error de conexión: " + t.getMessage(),
+                        "Error de conexión al eliminar: " + t.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Opcional: Recargar datos al volver a la actividad
+        // cargarArbolesDesdeAPI();
     }
 }
