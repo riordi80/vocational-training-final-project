@@ -2,6 +2,12 @@
 
 API REST desarrollada con Spring Boot para el sistema de monitorización de árboles.
 
+## Aplicación Desplegada
+
+**URL en producción**: [https://proyecto-arboles-backend.onrender.com](https://proyecto-arboles-backend.onrender.com)
+
+**Plataforma**: Render (deployment con Docker)
+
 ## Tecnologías
 
 - **Framework**: Spring Boot 3.5.7
@@ -289,6 +295,105 @@ export JWT_SECRET=tu_jwt_secret_muy_seguro
 - [Modelo de Datos](../docs/04.%20MODELO_DATOS.md) - Diagramas E/R, UML y Relacional
 - [Configuración PostgreSQL](../docs/04b.%20CONFIGURACION_POSTGRESQL.md) - Guía de instalación de BD
 - [Testing Postman](../docs/TESTING_POSTMAN_RESULTS.md) - Resultados de pruebas de endpoints
+
+## Despliegue en Render
+
+### Aplicación Desplegada
+
+- **URL**: https://proyecto-arboles-backend.onrender.com
+- **Plataforma**: Render
+- **Tipo**: Web Service (Docker)
+- **Base de Datos**: PostgreSQL 16 (Internal Database en Render)
+
+### Configuración del Despliegue
+
+#### 1. Dockerfile
+
+El proyecto incluye un `Dockerfile` con build multi-stage optimizado:
+
+```dockerfile
+# Stage 1: Build
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Stage 2: Runtime
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+#### 2. Configuración en Render
+
+**Settings → Build & Deploy:**
+- **Environment**: Docker
+- **Branch**: main
+- **Dockerfile Path**: backend/Dockerfile (si está en monorepo) o ./Dockerfile
+- **Auto-Deploy**: Yes (deploy automático en cada push a main)
+
+**Environment Variables:**
+```
+SPRING_DATASOURCE_URL=jdbc:postgresql://[HOST]:5432/[DATABASE]
+SPRING_DATASOURCE_USERNAME=[USER]
+SPRING_DATASOURCE_PASSWORD=[PASSWORD]
+SPRING_PROFILES_ACTIVE=prod
+```
+
+#### 3. Configuración de CORS
+
+El backend está configurado para permitir requests desde:
+- `http://localhost:5173` (desarrollo local)
+- `https://vocational-training-final-project.vercel.app` (frontend en producción)
+
+Archivo: `backend/src/main/java/com/example/gardenmonitor/config/CorsConfig.java`
+
+#### 4. Perfiles de Spring Boot
+
+- **local**: Para desarrollo local (usa `application-local.properties`)
+- **prod**: Para producción en Render (usa `application-prod.properties` con variables de entorno)
+
+#### 5. Base de Datos
+
+**PostgreSQL en Render:**
+- Crear PostgreSQL database en Render
+- Copiar "Internal Database URL" y separar en componentes:
+  - URL: `jdbc:postgresql://[HOST]:5432/[DATABASE]`
+  - Username: [USER]
+  - Password: [PASSWORD]
+- Configurar como variables de entorno en el Web Service
+
+### Verificación del Despliegue
+
+```bash
+# Verificar que el backend responde
+curl https://proyecto-arboles-backend.onrender.com/api/centros
+
+# Verificar endpoint específico
+curl https://proyecto-arboles-backend.onrender.com/api/arboles
+```
+
+### Troubleshooting
+
+**Error: CORS**
+- Verificar que CorsConfig.java incluye la URL del frontend en producción
+- Verificar que no hay anotaciones `@CrossOrigin` en los controllers
+
+**Error: Base de datos**
+- Verificar que las variables de entorno están configuradas correctamente
+- Verificar que la URL de base de datos usa el formato JDBC correcto
+- Verificar que el usuario/contraseña son correctos
+
+**Error: Build**
+- Verificar que el Dockerfile está en la raíz correcta
+- Verificar que Java 21 está configurado en el Dockerfile
+- Revisar logs de build en Render Dashboard
 
 ## Contacto
 
