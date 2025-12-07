@@ -11,7 +11,7 @@ public class RetrofitClient {
     // ⚠️ CAMBIA ESTA URL POR LA IP DE TU BACKEND
     // Si usas emulador de Android: http://10.0.2.2:8080/
     // Si usas dispositivo físico: http://TU_IP_LOCAL:8080/
-    private static final String BASE_URL = "http://10.0.2.2:8080/";
+    private static final String BASE_URL = "https://proyecto-arboles-backend.onrender.com/";
 
     private static Retrofit retrofit = null;
     private static ArbolApi arbolApi = null;
