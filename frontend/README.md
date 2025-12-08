@@ -118,7 +118,7 @@ npm run preview          # Preview del build de producción
 npm run lint             # Ejecuta ESLint para verificar código
 ```
 
-## Páginas/Vistas (Requisito DAD Mínimo)
+## Páginas/Vistas (Requisito DAD)
 
 ### 1. Login (`/login`)
 - Formulario con email y contraseña
@@ -135,7 +135,7 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Links a gestión de árboles
 - Navegación (menú/cabecera)
 
-### 4. Listado de Árboles (`/arboles`) - IMPLEMENTADO
+### 4. Listado de Árboles (`/arboles`)
 - Tabla responsive con árboles (desktop: tabla, mobile: cards)
 - Botón "Añadir Árbol" que navega a `/arboles/nuevo`
 - Click en fila para ir al detalle
@@ -143,7 +143,7 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Estados de loading (Spinner) y errores (Alert)
 - Integración con arbolesService y centrosService
 
-### 5. Detalle de Árbol (`/arboles/:id`) - IMPLEMENTADO
+### 5. Detalle de Árbol (`/arboles/:id`)
 - Vista completa con información general y umbrales de monitorización
 - Botones: Volver, Editar, Eliminar
 - Modal de confirmación antes de eliminar
@@ -152,7 +152,7 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Integración con getArbolById y deleteArbol
 - Navegación con state para feedback
 
-### 6. Formulario Árbol (`/arboles/nuevo` y `/arboles/:id/editar`) - IMPLEMENTADO
+### 6. Formulario Árbol (`/arboles/nuevo` y `/arboles/:id/editar`)
 - Componente dual: crear Y editar en uno solo
 - Campos obligatorios: nombre, especie, fecha plantación, centro educativo
 - Campos opcionales: ubicación, umbrales de monitorización
@@ -271,7 +271,7 @@ npm install -g serve
 serve -s dist -p 3000
 ```
 
-## Despliegue en Vercel (Requisito DAD) - COMPLETADO
+## Despliegue en Vercel (Requisito DAD)
 
 ### Aplicación Desplegada
 
@@ -403,29 +403,52 @@ Este proyecto usa:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react) - Usa Babel para Fast Refresh
 
-## Estado
+## Estado de la Aplicación Frontend
 
-Fase 3 completada. Fase 4 COMPLETADA:
-- Servicios API implementados (4.1)
-- Componentes comunes listos (4.2)
-- ListadoArboles implementado (4.3)
-- DetalleArbol implementado (4.4)
-- FormularioArbol implementado (4.5)
-- Rutas configuradas (4.6)
-- Testing y mejoras responsive (4.7):
-  - CRUD completo de árboles funcional
-  - Menú hamburguesa implementado
-  - Login/Register refactorizados con componentes comunes
-  - Header usando componente Button
-  - Responsive verificado en todas las páginas
+**Aplicación completada y desplegada en producción**
+
+- [x] Servicios API implementados (arbolesService, centrosService)
+- [x] Componentes comunes reutilizables (Button, Input, Alert, Spinner)
+- [x] Sistema de autenticación mock con Context API
+- [x] CRUD completo de árboles:
+  - ListadoArboles (listar, filtrar, buscar)
+  - DetalleArbol (ver detalles completos)
+  - FormularioArbol (crear y editar)
+- [x] Diseño responsive con Tailwind CSS
+- [x] Menú hamburguesa para móvil
+- [x] React Router configurado
+- [x] Desplegado en Vercel
 
 ## Documentación Relacionada
 
-- [Índice de Documentación](../docs/00.%20INDICE.md) - Índice completo de la documentación
-- [Hoja de Ruta Completa](../docs/02.%20HOJA_DE_RUTA.md) - Planificación del proyecto
+### Manuales
+- [Manual de Instalación](../docs/MANUAL_DE_INSTALACION.md) - Guía completa de instalación
+- [Manual de Usuario](../docs/MANUAL_DE_USUARIO.md) - Guía de uso del sistema
+
+### Documentación Técnica
+- [Índice de Documentación](../docs/00.%20INDICE.md) - Índice completo
+- [Hoja de Ruta](../docs/02.%20HOJA_DE_RUTA.md) - Planificación del proyecto
 - [Especificación Técnica](../docs/03.%20ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura
 - [Backend README](../backend/README.md) - API REST con Spring Boot
 
-## Contacto
+---
 
-Proyecto Final DAM 2025-2026
+## Información del Proyecto
+
+**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+
+**Institución**: IES El Rincón
+
+**Curso**: Desarrollo de Aplicaciones Multiplataforma (DAM) 2025-2026
+
+**Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
+
+**Última actualización**: 2025-12-08
+
+### Colaboradores
+
+[![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
+
+---
+
+**Proyecto Final DAM 2025-2026** | Desarrollado con Spring Boot, React, Android y ESP32

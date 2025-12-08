@@ -94,68 +94,157 @@ git --version      # Debe mostrar Git 2.x
 
 **IMPORTANTE**: Sigue este orden para evitar problemas de dependencias:
 
-1. Base de Datos (PostgreSQL + TimescaleDB)
-2. Backend (Spring Boot)
-3. Frontend (React)
-4. Android (Opcional)
+1. Clonar Repositorio
+2. Instalar PostgreSQL + TimescaleDB
+3. Configurar Base de Datos
+4. Configurar y ejecutar Backend
+5. Configurar y ejecutar Frontend
+6. Configurar y ejecutar Android (Opcional)
 
 ---
 
-## 1. Instalación de la Base de Datos
+## 1. Clonar el Repositorio
 
-### 1.1 Instalar PostgreSQL 16
-
-Si no tienes PostgreSQL 16 instalado, consulta la [Guía de Configuración PostgreSQL](./04b.%20CONFIGURACION_POSTGRESQL.md).
-
-### 1.2 Clonar el Repositorio
+**IMPORTANTE**: Este debe ser el primer paso, ya que necesitarás los archivos del proyecto para los siguientes pasos.
 
 ```bash
 git clone https://github.com/riordi80/vocational-training-final-project
 cd vocational-training-final-project
 ```
 
-### 1.3 Crear la Base de Datos
+---
+
+## 2. Instalación de PostgreSQL + TimescaleDB
+
+### 2.1 Instalar PostgreSQL 16
+
+Si no tienes PostgreSQL 16 instalado, consulta la [Guía de Instalación de PostgreSQL](./04b.%20CONFIGURACION_POSTGRESQL.md) para instrucciones detalladas de instalación.
+
+**Resumen** (para sistemas basados en Debian/Ubuntu):
+
+```bash
+# Actualizar repositorios
+sudo apt update
+
+# Instalar PostgreSQL 16
+sudo apt install postgresql-16 postgresql-contrib-16
+
+# Verificar instalación
+psql --version  # Debe mostrar PostgreSQL 16.x
+
+# Verificar que el servicio está corriendo
+sudo systemctl status postgresql
+```
+
+### 2.2 Instalar TimescaleDB
+
+**Opción 1: Script automatizado (Recomendado para Linux/Ubuntu)**
+
+El proyecto incluye un script de instalación automatizada:
+
+```bash
+# Desde la raíz del proyecto
+cd docs/
+chmod +x install-timescaledb.sh
+sudo ./install-timescaledb.sh
+```
+
+**Opción 2: Instalación manual**
+
+```bash
+# Añadir repositorio de TimescaleDB
+sudo sh -c "echo 'deb https://packagecloud.io/timescale/timescaledb/ubuntu/ $(lsb_release -c -s) main' > /etc/apt/sources.list.d/timescaledb.list"
+
+# Importar clave GPG
+wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/timescaledb.gpg
+
+# Actualizar e instalar
+sudo apt update
+sudo apt install timescaledb-2-postgresql-16
+
+# Configurar TimescaleDB
+sudo timescaledb-tune --quiet --yes
+
+# Reiniciar PostgreSQL
+sudo systemctl restart postgresql
+```
+
+**Para otros sistemas operativos**, consulta la [Guía de Instalación de PostgreSQL](./04b.%20CONFIGURACION_POSTGRESQL.md).
+
+---
+
+## 3. Configuración de la Base de Datos
+
+### 3.1 Crear Usuario de PostgreSQL
+
+```bash
+# Acceder a PostgreSQL como superusuario
+sudo -i -u postgres
+psql
+```
+
+Dentro de la consola de PostgreSQL:
+
+```sql
+-- Crear usuario con contraseña
+CREATE USER arboles_user WITH PASSWORD 'TU_PASSWORD_SEGURA';
+
+-- Dar privilegios de creación de bases de datos
+ALTER USER arboles_user CREATEDB;
+
+-- Verificar que se creó
+\du
+```
+
+### 3.2 Crear la Base de Datos
+
+Continuando en la consola de PostgreSQL:
+
+```sql
+-- Crear la base de datos
+CREATE DATABASE proyecto_arboles;
+
+-- Dar permisos al usuario
+GRANT ALL PRIVILEGES ON DATABASE proyecto_arboles TO arboles_user;
+
+-- Conectar a la nueva base de datos
+\c proyecto_arboles
+
+-- Habilitar extensión TimescaleDB
+CREATE EXTENSION IF NOT EXISTS timescaledb;
+
+-- Dar permisos en el schema public
+GRANT ALL ON SCHEMA public TO arboles_user;
+
+-- Salir de PostgreSQL
+\q
+```
+
+```bash
+# Salir del usuario postgres
+exit
+```
+
+### 3.3 Ejecutar Scripts de Creación de Tablas
 
 **Opción 1: Usar el script completo (Recomendado)**
 
-```bash
-# Ejecutar desde la raíz del proyecto
-psql -U postgres -f backend/create_database.sql
-```
-
-El script `create_database.sql` crea:
-- Base de datos `proyecto_arboles`
-- Usuario `arboles_user`
-- Extensión TimescaleDB
-- Todas las tablas necesarias
-- Índices y constraints
-
-**Opción 2: Creación manual**
+Desde la raíz del proyecto:
 
 ```bash
-# Acceder a PostgreSQL
-sudo -i -u postgres
-psql
-
-# Crear usuario
-CREATE USER arboles_user WITH PASSWORD 'TU_PASSWORD_SEGURA';
-ALTER USER arboles_user CREATEDB;
-
-# Crear base de datos
-CREATE DATABASE proyecto_arboles;
-GRANT ALL PRIVILEGES ON DATABASE proyecto_arboles TO arboles_user;
-
-# Conectar a la BD
-\c proyecto_arboles
-
-# Habilitar TimescaleDB
-CREATE EXTENSION IF NOT EXISTS timescaledb;
-
-# Dar permisos
-GRANT ALL ON SCHEMA public TO arboles_user;
+# Ejecutar script de creación de tablas
+psql -U arboles_user -d proyecto_arboles -f backend/create_database.sql -h localhost
 ```
 
-### 1.4 Verificar la Instalación
+**NOTA**: El script puede pedir la contraseña que configuraste para `arboles_user`.
+
+**Opción 2: Dejar que Spring Boot cree las tablas**
+
+Si prefieres que Spring Boot cree automáticamente las tablas mediante JPA:
+- Asegúrate de que `spring.jpa.hibernate.ddl-auto=update` esté configurado (ya viene por defecto)
+- Las tablas se crearán la primera vez que ejecutes el backend
+
+### 3.4 Verificar la Configuración
 
 ```bash
 # Conectarse a la BD
@@ -168,38 +257,43 @@ psql -U arboles_user -d proyecto_arboles
 \q
 ```
 
-**Para más detalles**: Ver [backend/README.md - Sección "Configurar la Base de Datos"](../backend/README.md#2-configurar-la-base-de-datos)
-
 ---
 
-## 2. Instalación del Backend
+## 4. Configuración y Ejecución del Backend
 
-### 2.1 Navegar al directorio del backend
+### 4.1 Navegar al directorio del backend
 
 ```bash
+# Desde la raíz del proyecto
 cd backend
 ```
 
-### 2.2 Configurar `application-local.properties`
+### 4.2 Configurar `application-local.properties`
 
-Crear el archivo `src/main/resources/application-local.properties`:
+El proyecto usa un sistema de perfiles de Spring Boot para separar configuración local de producción:
+
+- `application.properties` (commiteado): Configuración base **SIN credenciales**
+- `application-local.properties` (NO commiteado): Credenciales locales **CON tu password**
+
+**Crear el archivo** `backend/src/main/resources/application-local.properties`:
 
 ```properties
-# Configuración de Base de Datos
+# Configuración de Base de Datos LOCAL
 spring.datasource.url=jdbc:postgresql://localhost:5432/proyecto_arboles
 spring.datasource.username=arboles_user
-spring.datasource.password=TU_PASSWORD_REAL_AQUI
+spring.datasource.password=TU_PASSWORD_AQUI
 
-# Configuración JPA
+# Configuración JPA (opcional, ya viene en application.properties)
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 ```
 
 **IMPORTANTE**:
-- Este archivo **NO debe commitearse** (ya está en `.gitignore`)
-- Lee [backend/src/main/resources/README_CONFIG.md](../backend/src/main/resources/README_CONFIG.md) para configuración segura
+- Reemplaza `TU_PASSWORD_AQUI` con la contraseña que configuraste en el Paso 3.1
+- Este archivo **ya está en `.gitignore`** y NO se debe commitear
+- Para más detalles de configuración segura: [backend/src/main/resources/README_CONFIG.md](../backend/src/main/resources/README_CONFIG.md)
 
-### 2.3 Compilar el Proyecto
+### 4.3 Compilar el Proyecto
 
 **Linux/Mac**:
 ```bash
@@ -211,7 +305,7 @@ spring.jpa.show-sql=true
 mvnw.cmd clean install
 ```
 
-### 2.4 Ejecutar el Backend
+### 4.4 Ejecutar el Backend
 
 **Linux/Mac**:
 ```bash
@@ -223,7 +317,7 @@ mvnw.cmd clean install
 mvnw.cmd spring-boot:run
 ```
 
-### 2.5 Verificar que Funciona
+### 4.5 Verificar que el Backend Funciona
 
 El backend estará disponible en: `http://localhost:8080`
 
@@ -234,26 +328,26 @@ curl http://localhost:8080/api/centros
 # Debería devolver un array JSON (puede estar vacío: [])
 ```
 
-**Para más detalles**: Ver [backend/README.md](../backend/README.md)
+**Para más detalles técnicos**: Ver [backend/README.md](../backend/README.md)
 
 ---
 
-## 3. Instalación del Frontend
+## 5. Configuración y Ejecución del Frontend
 
-### 3.1 Navegar al directorio del frontend
+### 5.1 Navegar al directorio del frontend
 
 ```bash
 # Desde la raíz del proyecto
 cd frontend
 ```
 
-### 3.2 Instalar Dependencias
+### 5.2 Instalar Dependencias
 
 ```bash
 npm install
 ```
 
-### 3.3 Configurar Variables de Entorno
+### 5.3 Configurar Variables de Entorno
 
 Crear archivo `.env` en la raíz de `frontend/`:
 
@@ -261,9 +355,11 @@ Crear archivo `.env` en la raíz de `frontend/`:
 VITE_API_BASE_URL=http://localhost:8080/api
 ```
 
-**IMPORTANTE**: Existe un archivo `.env.example` como referencia.
+**IMPORTANTE**:
+- Existe un archivo `.env.example` como referencia
+- Este archivo NO se commitea (ya está en `.gitignore`)
 
-### 3.4 Ejecutar el Frontend
+### 5.4 Ejecutar el Frontend
 
 ```bash
 npm run dev
@@ -271,28 +367,28 @@ npm run dev
 
 La aplicación estará disponible en: `http://localhost:5173`
 
-### 3.5 Verificar que Funciona
+### 5.5 Verificar que el Frontend Funciona
 
 1. Abre el navegador en `http://localhost:5173`
 2. Deberías ver la pantalla de Login
-3. Intenta registrarte y hacer login
+3. Intenta registrarte y hacer login (cualquier email/password funciona - auth mock)
 4. Navega a "Árboles" (debería mostrar lista vacía o con datos)
 
-**Para más detalles**: Ver [frontend/README.md](../frontend/README.md)
+**Para más detalles técnicos**: Ver [frontend/README.md](../frontend/README.md)
 
 ---
 
-## 4. Instalación de Android (Opcional)
+## 6. Instalación de Android (Opcional)
 
 La aplicación Android es opcional y requiere Android Studio.
 
-### 4.1 Requisitos Previos
+### 6.1 Requisitos Previos
 
 - Android Studio (Arctic Fox o superior)
 - JDK 21
 - Android SDK (API Level 24+)
 
-### 4.2 Proceso de Instalación
+### 6.2 Proceso de Instalación
 
 **Para instrucciones completas de instalación Android**, consulta:
 - [MANUAL_DE_INSTALACION_ANDROID.md](./MANUAL_DE_INSTALACION_ANDROID.md)
@@ -300,11 +396,11 @@ La aplicación Android es opcional y requiere Android Studio.
 **Pasos resumidos**:
 
 1. Abrir Android Studio
-2. File → Open → Seleccionar carpeta `android/`
+2. File → Open → Seleccionar carpeta `android/` del proyecto clonado
 3. Esperar sincronización de Gradle
 4. Configurar URL del backend en `RetrofitClient.java`:
    ```java
-   // Para emulador
+   // Para emulador Android
    private static final String BASE_URL = "http://10.0.2.2:8080/";
 
    // Para dispositivo físico (usar tu IP local)
@@ -316,9 +412,9 @@ La aplicación Android es opcional y requiere Android Studio.
 
 ---
 
-## 5. Verificación del Sistema Completo
+## 7. Verificación del Sistema Completo
 
-### 5.1 Verificar Integración Backend ↔ Base de Datos
+### 7.1 Verificar Integración Backend ↔ Base de Datos
 
 ```bash
 # Crear un centro educativo desde el backend
@@ -330,25 +426,25 @@ curl -X POST http://localhost:8080/api/centros \
 curl http://localhost:8080/api/centros
 ```
 
-### 5.2 Verificar Integración Frontend ↔ Backend
+### 7.2 Verificar Integración Frontend ↔ Backend
 
 1. Abrir navegador en `http://localhost:5173`
-2. Login/Register
+2. Login/Register (cualquier email/password funciona)
 3. Ir a sección "Árboles"
 4. Intentar crear un nuevo árbol
 5. Verificar que aparece en la lista
 
-### 5.3 Verificar Integración Android ↔ Backend (si aplica)
+### 7.3 Verificar Integración Android ↔ Backend (si aplica)
 
 1. Ejecutar app Android
-2. Login
+2. Login (cualquier email/password funciona)
 3. Ver lista de árboles (deberían aparecer los mismos que en web)
 4. Intentar editar o eliminar un árbol
 5. Verificar cambios en la web
 
 ---
 
-## 6. Solución de Problemas Comunes
+## 8. Solución de Problemas Comunes
 
 ### Problema: Backend no arranca
 
@@ -425,7 +521,7 @@ Build → Rebuild Project
 
 ---
 
-## 7. Configuración: Desarrollo Local vs Producción
+## 9. Configuración: Desarrollo Local vs Producción
 
 ### Introducción
 
@@ -488,7 +584,7 @@ Para información sobre configuración de la aplicación Android entre local y p
 
 ---
 
-## 8. Siguientes Pasos
+## 10. Siguientes Pasos
 
 Una vez instalado el sistema:
 
@@ -505,7 +601,7 @@ Una vez instalado el sistema:
 
 ---
 
-## 8. Despliegue en Producción (Opcional)
+## 11. Despliegue en Producción (Información)
 
 El sistema ya está desplegado en producción:
 
@@ -570,4 +666,22 @@ Para problemas o preguntas:
 
 ---
 
-**Proyecto Final DAM 2025-2026**
+## Información del Proyecto
+
+**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+
+**Institución**: IES El Rincón
+
+**Curso**: Desarrollo de Aplicaciones Multiplataforma (DAM) 2025-2026
+
+**Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
+
+**Última actualización**: 2025-12-08
+
+### Colaboradores
+
+[![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
+
+---
+
+**Proyecto Final DAM 2025-2026** | Desarrollado con Spring Boot, React, Android y ESP32

@@ -107,3 +107,25 @@ Haciendo uso de Android Studio, generar una app en lenguaje Java con al menos la
     • Modificar datos del árbol, pero no los recogidos por los sensores que serán en tiempo real.
     • Eliminar árbol.
 En esta intro del proyecto los datos en tiempo-real serán simulados.
+
+---
+
+## Información del Proyecto
+
+**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+
+**Institución**: IES El Rincón
+
+**Curso**: Desarrollo de Aplicaciones Multiplataforma (DAM) 2025-2026
+
+**Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
+
+**Última actualización**: 2025-12-08
+
+### Colaboradores
+
+[![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
+
+---
+
+**Proyecto Final DAM 2025-2026** | Desarrollado con Spring Boot, React, Android y ESP32
