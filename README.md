@@ -2,23 +2,15 @@
 
 Sistema de monitorización y gestión de árboles plantados en centros educativos mediante sensores IoT.
 
+## Tecnologías
+
+![Java](https://img.shields.io/badge/Java_21-ED8B00?style=flat&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot_3-6DB33F?style=flat&logo=spring-boot&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL_16-316192?style=flat&logo=postgresql&logoColor=white) ![TimescaleDB](https://img.shields.io/badge/TimescaleDB-FDB515?style=flat&logo=timescale&logoColor=black) ![React](https://img.shields.io/badge/React_18-20232A?style=flat&logo=react&logoColor=61DAFB) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white) ![Render](https://img.shields.io/badge/Render-46E3B7?style=flat&logo=render&logoColor=white)
+
 ## Aplicaciones Desplegadas
 
 - **Frontend (React)**: [https://vocational-training-final-project.vercel.app/](https://vocational-training-final-project.vercel.app/)
 - **Backend (Spring Boot)**: [https://proyecto-arboles-backend.onrender.com](https://proyecto-arboles-backend.onrender.com)
 - **Base de Datos**: PostgreSQL 16 en Render
-
-### Importante: Primera Carga (Cold Start)
-
-El backend está desplegado en Render (versión gratuita), que **entra en suspensión tras 15 minutos de inactividad**.
-
-**Al acceder por primera vez o después de un periodo de inactividad**:
-1. El backend puede tardar **30-60 segundos** en reactivarse
-2. Durante este tiempo, el frontend mostrará: "No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos."
-3. **Solución**: Espera 1 minuto y **recarga la página** (F5)
-4. El sistema funcionará normalmente una vez el backend esté activo
-
-**Esto es normal y esperado en el free tier de Render**. No significa que la aplicación esté rota.
 
 ## Descripción
 
@@ -274,11 +266,11 @@ Para más detalles, consulta la [Especificación Técnica](./docs/03.%20ESPECIFI
 
 Este proyecto ha sido desarrollado como parte del proyecto final de DAM del IES El Rincón:
 
-[![riordi80](https://img.shields.io/badge/GitHub-riordi80-181717?style=plastic&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/GitHub-Enrique36247-181717?style=plastic&logo=github&logoColor=white)](https://github.com/Enrique36247)
+[![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
 
 ### Flujo de Trabajo Git
 
-📖 **[Ver guía completa de Git Workflow](./docs/01.%20GIT_WORKFLOW.md)**
+[Ver guía completa de Git Workflow](./docs/01.%20GIT_WORKFLOW.md)
 
 Resumen rápido:
 1. Actualizar `develop`: `git checkout develop && git pull origin develop`
@@ -303,6 +295,19 @@ Componentes: `backend`, `frontend`, `android`, `esp32`, `docs`
 ## Licencia
 
 Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
+
+## Nota Importante: Cold Start (Render Free Tier)
+
+El backend está desplegado en Render (versión gratuita), que entra en suspensión tras 15 minutos de inactividad.
+
+**Al acceder por primera vez o tras inactividad**:
+- El backend tarda 30-60 segundos en reactivarse
+- El frontend mostrará: "No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos."
+- **Solución**: Espera 1 minuto y recarga la página (F5)
+
+Esto es comportamiento normal del free tier de Render. Más información en el [Manual de Instalación](./docs/MANUAL_DE_INSTALACION.md#11-despliegue-en-producción-información).
+
+---
 
 ## Documentación
 
@@ -341,9 +346,22 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 
 ---
 
-**Proyecto**: Proyecto Árboles
+## Información del Proyecto
 
+**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
 
-**Estado del Proyecto**: TODAS LAS FASES COMPLETADAS (1-6) | Despliegue Completo (Vercel + Render) | Documentación Completa
+**Institución**: IES El Rincón
 
-**Última actualización**: 2025-12-07
+**Curso**: Desarrollo de Aplicaciones Multiplataforma (DAM) 2025-2026
+
+**Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
+
+**Última actualización**: 2025-12-08
+
+### Colaboradores
+
+[![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
+
+---
+
+**Proyecto Final DAM 2025-2026** | Desarrollado con Spring Boot, React, Android y ESP32

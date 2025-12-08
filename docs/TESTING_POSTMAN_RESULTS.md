@@ -186,18 +186,32 @@ El backend Spring Boot está **completamente funcional** y cumple con todos los 
 1. [x] **2 endpoints con relación 1:N** (CentroEducativo ↔ Arbol)
 2. [x] **Validaciones de datos** (Bean Validation + lógica de negocio)
 
-**Próximos pasos:**
-- **Fase 3**: Configurar Frontend React
-- **Fase 4**: Implementar CRUD de árboles en React
-- **Fase 5**: Desarrollar app Android
-
-**Estado general del proyecto**:
-- Backend: [x] COMPLETO (Fases 1 y 2)
-- Frontend: [ ] PENDIENTE
-- Android: [ ] PENDIENTE
-- Documentación: [ ] EN CURSO
+Todos los endpoints probados funcionan correctamente y devuelven las respuestas esperadas.
 
 ---
 
-**Documento generado**: 2025-12-03 16:55
-**Última actualización**: 2025-12-03 16:55
+**Documento creado**: 2025-12-03 16:55
+
+**NOTA**: Este es un registro histórico de las pruebas realizadas en la Fase 2 del proyecto (Backend). El proyecto ha continuado su desarrollo y actualmente incluye Frontend, Android y despliegue en producción.
+
+---
+
+## Información del Proyecto
+
+**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+
+**Institución**: IES El Rincón
+
+**Curso**: Desarrollo de Aplicaciones Multiplataforma (DAM) 2025-2026
+
+**Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
+
+**Última actualización**: 2025-12-08
+
+### Colaboradores
+
+[![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
+
+---
+
+**Proyecto Final DAM 2025-2026** | Desarrollado con Spring Boot, React, Android y ESP32

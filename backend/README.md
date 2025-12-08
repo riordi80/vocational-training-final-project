@@ -89,28 +89,32 @@ CREATE EXTENSION IF NOT EXISTS timescaledb;
 psql -U arboles_user -d proyecto_arboles -f drop_tables.sql
 ```
 
-### 3. Configurar `application.properties`
+### 3. Configurar `application-local.properties`
 
 ⚠️ **IMPORTANTE**: Lee primero [`src/main/resources/README_CONFIG.md`](./src/main/resources/README_CONFIG.md) para configuración segura.
 
-El proyecto usa un patrón de configuración de 2 capas:
+El proyecto usa **Spring Profiles** para separar configuración local de producción:
 
-1. **`application.properties`** (commiteado): Configuración base sin credenciales
-2. **`application-local.properties`** (NO commiteado): Credenciales reales
+- **`application.properties`** (commiteado): Configuración base **SIN credenciales**
+- **`application-local.properties`** (NO commiteado): Credenciales locales **CON tu password**
 
-#### Crear `application-local.properties`:
+#### Crear el archivo `src/main/resources/application-local.properties`:
 
 ```properties
-# Copiar desde application.properties y completar con valores reales
+# Configuración de Base de Datos LOCAL
 spring.datasource.url=jdbc:postgresql://localhost:5432/proyecto_arboles
 spring.datasource.username=arboles_user
 spring.datasource.password=TU_PASSWORD_REAL_AQUI
 
+# Configuración JPA (opcional, ya viene en application.properties)
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 ```
 
-**Alternativa**: Usar variables de entorno (recomendado para producción).
+**IMPORTANTE**:
+- **NO modifiques** `application.properties` (ese archivo SÍ se commitea)
+- Este archivo ya está en `.gitignore` y NO se debe commitear
+- Para producción, se usan variables de entorno (ver sección "Despliegue en Render")
 
 ### 4. Compilar el proyecto
 
@@ -392,6 +396,24 @@ Render activa automáticamente el perfil de producción:
 
 Ver [Manual de Instalación](../docs/MANUAL_DE_INSTALACION.md) para más detalles sobre configuración de entornos.
 
-## Contacto
+---
 
-Proyecto Final DAM 2025-2026
+## Información del Proyecto
+
+**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+
+**Institución**: IES El Rincón
+
+**Curso**: Desarrollo de Aplicaciones Multiplataforma (DAM) 2025-2026
+
+**Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
+
+**Última actualización**: 2025-12-08
+
+### Colaboradores
+
+[![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
+
+---
+
+**Proyecto Final DAM 2025-2026** | Desarrollado con Spring Boot, React, Android y ESP32
