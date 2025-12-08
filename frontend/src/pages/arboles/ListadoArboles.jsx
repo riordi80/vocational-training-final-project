@@ -37,7 +37,7 @@
         setCentros(centrosData);
       } catch (err) {
         console.error('Error cargando datos:', err);
-        setError('Error al cargar los datos. Por favor, intenta de nuevo.');
+        setError('No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos.');
       } finally {
         setLoading(false);
       }

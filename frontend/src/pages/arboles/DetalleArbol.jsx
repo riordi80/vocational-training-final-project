@@ -27,7 +27,7 @@
         setArbol(data);
       } catch (err) {
         console.error('Error cargando árbol:', err);
-        setError('Error al cargar los datos del árbol.');
+        setError('No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos.');
       } finally {
         setLoading(false);
       }

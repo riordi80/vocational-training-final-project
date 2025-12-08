@@ -8,6 +8,18 @@ Sistema de monitorización y gestión de árboles plantados en centros educativo
 - **Backend (Spring Boot)**: [https://proyecto-arboles-backend.onrender.com](https://proyecto-arboles-backend.onrender.com)
 - **Base de Datos**: PostgreSQL 16 en Render
 
+### Importante: Primera Carga (Cold Start)
+
+El backend está desplegado en Render (versión gratuita), que **entra en suspensión tras 15 minutos de inactividad**.
+
+**Al acceder por primera vez o después de un periodo de inactividad**:
+1. El backend puede tardar **30-60 segundos** en reactivarse
+2. Durante este tiempo, el frontend mostrará: "No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos."
+3. **Solución**: Espera 1 minuto y **recarga la página** (F5)
+4. El sistema funcionará normalmente una vez el backend esté activo
+
+**Esto es normal y esperado en el free tier de Render**. No significa que la aplicación esté rota.
+
 ## Descripción
 
 Este proyecto permite recopilar datos ambientales (temperatura, humedad del suelo, pH, nivel de agua) a través de dispositivos ESP32 con sensores, y visualizarlos en tiempo real mediante aplicaciones web y móvil. El sistema está diseñado para centros educativos que desean monitorizar el crecimiento y estado de sus árboles.
@@ -75,11 +87,12 @@ proyecto-arboles/
 │   ├── 03. ESPECIFICACION_TECNICA.md     # Arquitectura y requisitos
 │   ├── 04. MODELO_DATOS.md               # Diagramas E/R, UML, Relacional
 │   ├── 04b. CONFIGURACION_POSTGRESQL.md  # Instalación PostgreSQL
-│   ├── Aplicaciones/                     # Documentación de aplicaciones
-│   │   ├── BACKEND.md                    # Documentación backend
-│   │   ├── FRONTEND.md                   # Documentación frontend
-│   │   ├── ANDROID.md                    # Documentación Android
-│   │   └── ESP32.md                      # Documentación ESP32
+│   ├── REQUISITOS.md                     # Requisitos académicos por módulo
+│   ├── TESTING_POSTMAN_RESULTS.md        # Resultados testing API REST
+│   ├── MANUAL_DE_INSTALACION.md          # Manual de instalación completo
+│   ├── MANUAL_DE_USUARIO.md              # Manual de usuario (Web + móvil)
+│   ├── MANUAL_DE_INSTALACION_ANDROID.md  # Manual instalación Android
+│   ├── MANUAL_DE_USUARIO_ANDROID.md      # Manual de usuario Android
 │   ├── Componentes para ESP32/           # Especificaciones hardware
 │   ├── install-timescaledb.sh            # Script instalación TimescaleDB
 ├── backend/                              # API REST (Spring Boot)
@@ -102,40 +115,29 @@ proyecto-arboles/
 └── README.md
 ```
 
-## Inicio Rápido
+## Instalación y Uso
 
 ### Requisitos Previos
 
-- **Backend**: Java 21, Maven
-- **Frontend**: Node.js 18+, npm
-- **Android**: Android Studio, JDK 21
-- **ESP32**: Arduino IDE o PlatformIO
-- **Base de Datos**: PostgreSQL 16+ con TimescaleDB
+- **Java 21** (Backend)
+- **Node.js 18+** (Frontend)
+- **PostgreSQL 16+** con TimescaleDB (Base de datos)
+- **Android Studio** (Opcional - para app móvil)
 
-### Instalación y Configuración
+### Guías de Instalación
 
-#### 1. Base de Datos
-```bash
-# Ver scripts de creación en:
-./backend/create_database.sql          # Crear todas las tablas
-./backend/drop_tables.sql              # Eliminar todas las tablas (si necesario)
-```
+Para instalar el sistema completo, consulta:
+- **[Manual de Instalación](./docs/MANUAL_DE_INSTALACION.md)** - Guía paso a paso para instalar todos los componentes
 
-Consulta [`docs/04b. CONFIGURACION_POSTGRESQL.md`](./docs/04b.%20CONFIGURACION_POSTGRESQL.md) para instalación detallada de PostgreSQL y TimescaleDB.
+Para usar el sistema ya instalado, consulta:
+- **[Manual de Usuario](./docs/MANUAL_DE_USUARIO.md)** - Guía de uso de las aplicaciones web y móvil
 
-#### 2. Backend
-```bash
-cd backend
-./mvnw clean install
-./mvnw spring-boot:run
-```
+### README por Componente
 
-⚠️ **Importante**: Antes de ejecutar, configura las credenciales de la base de datos. Ver [`backend/src/main/resources/README_CONFIG.md`](./backend/src/main/resources/README_CONFIG.md) para detalles sobre configuración segura.
-
-#### 3. Frontend y Android
-Cada componente tiene su propio README con instrucciones detalladas en su respectiva carpeta.
-
-Para instrucciones completas de instalación, consulta el [Manual de Instalación](./docs/MANUAL_INSTALACION.md) _(pendiente)_.
+Cada componente tiene documentación técnica detallada:
+- [Backend README](./backend/README.md) - Configuración y desarrollo del API REST
+- [Frontend README](./frontend/README.md) - Configuración y desarrollo de la app web
+- [Android README](./android/README.md) - Configuración y desarrollo de la app móvil
 
 ## Estado Actual
 
@@ -163,19 +165,24 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
   - [x] Refactorización Login/Register con componentes comunes
   - [x] Configuración Vercel (vercel.json, documentación)
 - [x] App Android (Fase 5 - 100% completada)
+- [x] Despliegue (Vercel + Render + PostgreSQL)
+- [x] Documentación (Fase 6 - 100% completada)
+  - [x] Manual de Instalación completo
+  - [x] Manual de Usuario (Web + móvil)
+  - [x] Manuales específicos de Android
 - [ ] ESP32 (Opcional - después del 8 dic)
 
 ## Estado del Proyecto
 
-**Fase actual**: Fase 4 COMPLETADA - Frontend React CRUD Árboles
+**Fase actual**: TODAS LAS FASES COMPLETADAS
 
-### Completado (Fase 0)
-- Configuración de entornos de desarrollo
-- Base de datos PostgreSQL 16.10 + TimescaleDB 2.23.1 instalada y configurada
-- Modelo de datos completo con diagramas E/R, UML y Relacional
-- Scripts SQL de creación y eliminación de tablas
-- Configuración de Spring Boot funcional
-- Estructura de proyecto Git establecida
+### Completado (Fase 0 - Configuración Inicial)
+- [x] Configuración de entornos de desarrollo
+- [x] Base de datos PostgreSQL 16.10 + TimescaleDB 2.23.1 instalada y configurada
+- [x] Modelo de datos completo con diagramas E/R, UML y Relacional
+- [x] Scripts SQL de creación y eliminación de tablas
+- [x] Configuración de Spring Boot funcional
+- [x] Estructura de proyecto Git establecida
 
 ### Completado (Fase 1 - Backend: Base de Datos y Modelo)
 - [x] **Entidades JPA completadas con Javadoc y equals/hashCode**: Usuario, Rol, CentroEducativo, Arbol (con validaciones), DispositivoEsp32
@@ -186,7 +193,7 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - [x] **Aplicación Spring Boot arranca correctamente**
 - [x] **Compilación exitosa con Maven**
 
-### Completado (Fase 2 - Endpoints 1:N) - 100% completado
+### Completado (Fase 2 - Endpoints 1:N)
 - [x] **Validaciones completas**:
   - @Valid en ArbolController y CentroEducativoController (POST y PUT)
   - @NotBlank/@NotNull en CentroEducativo
@@ -194,13 +201,13 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - [x] **ArbolController completo**: GET, POST, PUT, DELETE /api/arboles (con @Valid)
 - [x] **CentroEducativoController completo**:
   - GET, POST, PUT, DELETE /api/centros (con @Valid)
-  - GET /api/centros/{id}/arboles (demuestra relación 1:N) ⭐
+  - GET /api/centros/{id}/arboles (demuestra relación 1:N)
 - [x] **Testing Postman completo**:
   - CRUD de Árboles y Centros probado
   - Validaciones verificadas (400, 409)
   - Relación 1:N funcionando correctamente
 
-### Completado (Fase 3 - Frontend Estructura) - 100% completado
+### Completado (Fase 3 - Frontend Estructura)
 - [x] **React + Vite + Tailwind CSS v3**
 - [x] **Estructura de carpetas**: components, pages, context, services
 - [x] **React Router configurado** con rutas públicas y protegidas
@@ -216,7 +223,7 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - [x] **Dashboard** con tarjetas de acceso rápido
 - [x] **Navegación dinámica** y responsive con menú hamburguesa
 
-### Completado (Fase 4 - Frontend CRUD Árboles) - 100% completado
+### Completado (Fase 4 - Frontend CRUD Árboles)
 - [x] **Servicios API**: arbolesService.js y centrosService.js con CRUD completo
 - [x] **ListadoArboles**: Tabla responsive (desktop), cards (móvil), filtros por centro
 - [x] **DetalleArbol**: Vista completa, botón eliminar con confirmación modal
@@ -226,7 +233,7 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - [x] **Responsive verificado**: Todas las páginas funcionan en móvil/tablet/desktop
 - [x] **Configuración Vercel**: vercel.json, documentación de despliegue lista
 
-### Completado (Fase 5 - App Android) - 100% completado
+### Completado (Fase 5 - App Android)
 - [x] **4 Activities implementadas**: Login, Register, ListarArboles, ArbolDetalles
 - [x] **Retrofit configurado**: Conectado a backend en Render
 - [x] **RecyclerView**: Listado de árboles con adapter optimizado
@@ -239,14 +246,18 @@ Para instrucciones completas de instalación, consulta el [Manual de Instalació
 - [x] **Permisos configurados**: INTERNET, ACCESS_NETWORK_STATE
 - [x] **Manejo de errores**: Toast, Logs, fallback a datos locales
 
-### Despliegue Completado
+### Completado (Despliegue)
 - [x] **Frontend**: Desplegado en Vercel → https://vocational-training-final-project.vercel.app/
 - [x] **Backend**: Desplegado en Render → https://proyecto-arboles-backend.onrender.com
 - [x] **Base de Datos**: PostgreSQL en Render (Internal Database)
 - [x] **Configuración CORS**: Implementada y funcionando correctamente
 
-### Próximos Hitos (Deadline: 8 dic)
-- **Fase 6**: Documentación final (manuales de instalación y usuario)
+### Completado (Fase 6 - Documentación)
+- [x] **Manual de Instalación**: Guía completa para instalar BD, Backend, Frontend y Android
+- [x] **Manual de Usuario**: Guía de uso de aplicación web y móvil
+- [x] **Manual de Instalación Android**: Guía específica para Android con configuración
+- [x] **Manual de Usuario Android**: Guía detallada de uso de la app móvil
+- [x] **Índice actualizado**: Todos los documentos referenciados correctamente
 
 ## Requisitos Académicos
 
@@ -306,15 +317,17 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 - [Requisitos Académicos](./docs/REQUISITOS.md) - Requisitos por módulo (PGV, DAD, AED, PGL)
 - [Testing Postman](./docs/TESTING_POSTMAN_RESULTS.md) - Resultados de pruebas de endpoints REST
 
+**Manuales de Usuario e Instalación:**
+- [Manual de Instalación](./docs/MANUAL_DE_INSTALACION.md) - Guía completa para instalar todos los componentes del sistema
+- [Manual de Usuario](./docs/MANUAL_DE_USUARIO.md) - Guía de uso de las aplicaciones web y móvil
+- [Manual de Instalación Android](./docs/MANUAL_DE_INSTALACION_ANDROID.md) - Guía específica para la aplicación Android
+- [Manual de Usuario Android](./docs/MANUAL_DE_USUARIO_ANDROID.md) - Guía de uso de la aplicación móvil
+
 **README por Componente:**
 - [Backend README](./backend/README.md) - API REST con Spring Boot
 - [Frontend README](./frontend/README.md) - Aplicación web con React
 - [Android README](./android/README.md) - Aplicación móvil Android
 - [ESP32 README](./esp32/README.md) - Firmware para dispositivos IoT
-
-**Manuales (Pendientes):**
-- [ ] Manual de Instalación - Guía completa para instalar todos los componentes
-- [ ] Manual de Usuario - Guía de uso de las aplicaciones web y móvil
 
 ### Scripts y Archivos de Configuración
 
@@ -331,5 +344,6 @@ Proyecto educativo - DAM (Desarrollo de Aplicaciones Multiplataforma)
 **Proyecto**: Proyecto Árboles
 
 
-**Estado del Proyecto**: - [x] Fases 1, 2, 3, 4 y 5 Completadas | [x] Despliegue Completo (Vercel + Render)
+**Estado del Proyecto**: TODAS LAS FASES COMPLETADAS (1-6) | Despliegue Completo (Vercel + Render) | Documentación Completa
+
 **Última actualización**: 2025-12-07

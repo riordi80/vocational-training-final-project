@@ -31,9 +31,11 @@ Al abrir la aplicación por primera vez, verás la pantalla de inicio de sesión
 
 #### Cómo iniciar sesión:
 
-1. Ingresa tu **nombre de usuario** en el primer campo
-2. Ingresa tu **contraseña** en el segundo campo
+1. Ingresa cualquier **nombre de usuario** en el primer campo
+2. Ingresa cualquier **contraseña** en el segundo campo
 3. Presiona el botón **"Iniciar Sesión"**
+
+> **IMPORTANTE - Autenticación Mock**: La aplicación Android usa un sistema de autenticación simulado (mock). Puedes usar **cualquier usuario y contraseña** para acceder. Solo se valida que los campos no estén vacíos. No hay validación real de credenciales contra el backend.
 
 > **Nota**: Si dejas algún campo en blanco, aparecerá un mensaje de error indicando que el campo no puede estar vacío.
 
@@ -41,9 +43,11 @@ Al abrir la aplicación por primera vez, verás la pantalla de inicio de sesión
 
 1. Presiona el botón **"Registrarse"**
 2. Se abrirá la pantalla de registro
-3. Completa los campos de usuario y contraseña
+3. Completa los campos de usuario y contraseña (pueden ser cualquier valor)
 4. Presiona **"Registrarse"** para crear tu cuenta
 5. Serás redirigido automáticamente a la lista de árboles
+
+> **Nota**: El registro también es mock. No se guardan credenciales ni se validan contra el backend. Solo se requiere que los campos no estén vacíos.
 
 ---
 
@@ -204,6 +208,7 @@ La aplicación incluye validaciones para garantizar la integridad de los datos:
 #### En Login y Registro:
 - Los campos de usuario y contraseña **no pueden estar vacíos**
 - Si dejas un campo en blanco, aparecerá un mensaje de error en rojo
+- **IMPORTANTE**: Aparte de validar que no estén vacíos, NO hay validación de credenciales. Cualquier usuario/contraseña es aceptado (sistema mock)
 
 #### En Edición:
 - Aunque no hay restricciones estrictas, se recomienda:
