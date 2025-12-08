@@ -44,11 +44,13 @@ private static final String BASE_URL = "https://proyecto-arboles-backend.onrende
 ### 1. Clonar o Descargar el Proyecto
 
 ```bash
-git clone 
+git clone https://github.com/riordi80/vocational-training-final-project
 cd vocational-training-final-project
 ```
 
-O descarga el proyecto como ZIP y descomprímelo.
+O descarga el proyecto como ZIP desde GitHub y descomprímelo.
+
+**NOTA**: Si ya clonaste el proyecto siguiendo el [Manual de Instalación General](./MANUAL_DE_INSTALACION.md), puedes saltar este paso.
 
 ### 2. Abrir el Proyecto en Android Studio
 
@@ -283,3 +285,25 @@ Para problemas adicionales:
 - Revisa los logs en Android Studio
 - Verifica la documentación del backend
 - Asegúrate de que las versiones de las dependencias sean compatibles
+
+---
+
+## Información del Proyecto
+
+**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+
+**Institución**: IES El Rincón
+
+**Curso**: Desarrollo de Aplicaciones Multiplataforma (DAM) 2025-2026
+
+**Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
+
+**Última actualización**: 2025-12-08
+
+### Colaboradores
+
+[![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
+
+---
+
+**Proyecto Final DAM 2025-2026** | Desarrollado con Spring Boot, React, Android y ESP32
