@@ -4,11 +4,13 @@ Aplicación móvil Android nativa para monitorización de árboles mediante sens
 
 ## Estado de Implementación
 
-**Fase 5 COMPLETADA** - Todos los requisitos académicos cumplidos
+**COMPLETADA** - Integración con backend en producción
 
 - Backend conectado: https://proyecto-arboles-backend.onrender.com
 - 4 Activities implementadas
 - CRUD funcional (Listar, Detalles, Editar, Eliminar)
+- Timeouts configurados para cold start de Render (60 seg)
+- Documentación completa (manuales de instalación y usuario)
 
 ## Tecnologías
 
@@ -157,14 +159,23 @@ android/
 
 **Estado**: TODOS LOS REQUISITOS CUMPLIDOS
 
-## Estado del Proyecto
+## Estado de la Aplicación Android
 
-**Fase 5 COMPLETADA** - Lista para entrega 8 diciembre 2025
+**Aplicación completada e integrada con backend en producción**
+
+La app Android está completamente funcional, conectada al backend desplegado en Render, con CRUD completo de árboles y manejo de cold start.
 
 ## Documentación Relacionada
 
-- [Índice de Documentación](../docs/00.%20INDICE.md) - Índice completo de la documentación
-- [Hoja de Ruta Completa](../docs/02.%20HOJA_DE_RUTA.md) - Planificación del proyecto
+### Manuales
+- [Manual de Instalación Android](../docs/MANUAL_DE_INSTALACION_ANDROID.md) - Guía de instalación y configuración
+- [Manual de Usuario Android](../docs/MANUAL_DE_USUARIO_ANDROID.md) - Guía de uso de la aplicación
+- [Manual de Instalación General](../docs/MANUAL_DE_INSTALACION.md) - Instalación completa del sistema
+- [Manual de Usuario General](../docs/MANUAL_DE_USUARIO.md) - Guía de usuario web y móvil
+
+### Documentación Técnica
+- [Índice de Documentación](../docs/00.%20INDICE.md) - Índice completo
+- [Hoja de Ruta](../docs/02.%20HOJA_DE_RUTA.md) - Planificación del proyecto
 - [Especificación Técnica](../docs/03.%20ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura
 - [Backend README](../backend/README.md) - API REST con Spring Boot
 

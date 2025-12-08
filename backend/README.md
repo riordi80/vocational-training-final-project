@@ -45,9 +45,9 @@ backend/
 
 ## Requisitos Previos
 
-- Java 21 [x]
-- PostgreSQL 15+ (a instalar)
-- TimescaleDB (extensión de PostgreSQL, a instalar)
+- Java 21
+- PostgreSQL 16+
+- TimescaleDB (extensión de PostgreSQL)
 
 **Nota**: No necesitas instalar Maven manualmente, el proyecto incluye Maven Wrapper (`mvnw`).
 
@@ -216,64 +216,19 @@ Ver sección "Despliegue en Render" más abajo para detalles completos.
 - [x] Repositorios JPA con queries derivadas
 - [x] Relaciones bidireccionales implementadas
 
-## Estado del Proyecto
+## Estado del Backend
 
-**Fase actual**: Fase 2 COMPLETADA - API REST 1:N
+**API REST completada y desplegada en producción**
 
-### Completado (Fase 0)
-- [x] Configuración de PostgreSQL + TimescaleDB
-- [x] Modelo de datos diseñado (8 entidades)
-- [x] Scripts SQL de creación (`create_database.sql`)
-- [x] Scripts SQL de eliminación (`drop_tables.sql`)
-- [x] Configuración de Spring Boot (`application.properties`)
-- [x] Estructura del proyecto establecida
-
-### Completado (Fase 1 - Backend: Base de Datos y Modelo)
-- [x] **Entidades JPA completadas con Javadoc y equals/hashCode**:
-  - `Usuario` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado para JPA
-  - `Rol` (enum: ADMIN, PROFESOR, ESTUDIANTE, INVITADO)
-  - `CentroEducativo` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado, relación bidireccional @OneToMany, **validaciones @NotBlank/@NotNull**
-  - `Arbol` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado, **validaciones @NotBlank, @Past, @DecimalMin/@Max**
-  - `DispositivoEsp32` con anotaciones JPA completas, Javadoc, equals/hashCode optimizado
-- [x] **Repositorios JPA completados con queries derivadas**:
-  - `UsuarioRepository` (findByEmail, existsByEmail, findByActivo, findByRol)
-  - `CentroEducativoRepository` (findByNombre, existsByNombre, findByNombreContainingIgnoreCase, findByResponsable, findAllByOrderByNombreAsc)
-  - `ArbolRepository` (findByEspecie, findByCentroEducativo, findByDispositivoEsp32, findByNombreContainingIgnoreCase, findAllByOrderByNombreAsc, existsByNombreAndCentroEducativo)
-  - `DispositivoEsp32Repository` (findByMacAddress, existsByMacAddress, findByArbol)
-- [x] **Relaciones bidireccionales implementadas**:
-  - CentroEducativo ↔ Arbol (OneToMany/ManyToOne)
-  - Arbol ↔ DispositivoEsp32 (OneToOne bidireccional)
-- [x] **Aplicación Spring Boot arranca correctamente**
-- [x] **Compilación exitosa con Maven**
-
-### Completado (Fase 2 - Endpoints 1:N)
-- [x] **Validaciones completas**:
-  - @Valid en ArbolController y CentroEducativoController (POST y PUT)
-  - @NotBlank/@NotNull en CentroEducativo
-  - @JsonIgnore en List<Arbol> para evitar loops
-- [x] **ArbolController completo**:
-  - GET /api/arboles
-  - GET /api/arboles/{id}
-  - POST /api/arboles (con @Valid)
-  - PUT /api/arboles/{id} (con @Valid)
-  - DELETE /api/arboles/{id}
-  - Endpoints adicionales (por centro, especie, búsqueda)
-- [x] **CentroEducativoController completo**:
-  - GET /api/centros
-  - GET /api/centros/{id}
-  - POST /api/centros (con @Valid)
-  - PUT /api/centros/{id} (con @Valid)
-  - DELETE /api/centros/{id}
-  - GET /api/centros/{id}/arboles (relación 1:N)
-- [x] **Testing Postman completo**:
-  - CRUD de Árboles y Centros probado
-  - Validaciones verificadas (400, 409)
-  - Relación 1:N funcionando correctamente
-
-### Próximos Hitos
-- **Fase 3**: Frontend React - CRUD Árboles
-- **Fase 4**: Android App
-- **Fase 5**: Despliegue
+- [x] 4 Entidades JPA con anotaciones completas, Javadoc y validaciones
+- [x] Repositorios JPA con queries derivadas
+- [x] Relaciones bidireccionales (CentroEducativo ↔ Arbol)
+- [x] CRUD completo para Árboles y Centros Educativos
+- [x] Validaciones con Bean Validation
+- [x] Testing Postman completado
+- [x] Desplegado en Render con PostgreSQL 16
+- [x] CORS configurado para frontend en producción
+- [x] Perfiles Spring Boot (local/prod)
 
 ## Archivos Importantes del Backend
 
@@ -288,12 +243,17 @@ Ver sección "Despliegue en Render" más abajo para detalles completos.
 
 ### Documentación Relacionada
 
-- [Índice de Documentación](../docs/00.%20INDICE.md) - Índice completo de la documentación
-- [Hoja de Ruta Completa](../docs/02.%20HOJA_DE_RUTA.md) - Planificación del proyecto
+#### Manuales de Usuario
+- [Manual de Instalación](../docs/MANUAL_DE_INSTALACION.md) - Guía completa de instalación
+- [Manual de Usuario](../docs/MANUAL_DE_USUARIO.md) - Guía de uso del sistema
+
+#### Documentación Técnica
+- [Índice de Documentación](../docs/00.%20INDICE.md) - Índice completo
+- [Hoja de Ruta](../docs/02.%20HOJA_DE_RUTA.md) - Planificación por fases
 - [Especificación Técnica](../docs/03.%20ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura
 - [Modelo de Datos](../docs/04.%20MODELO_DATOS.md) - Diagramas E/R, UML y Relacional
-- [Configuración PostgreSQL](../docs/04b.%20CONFIGURACION_POSTGRESQL.md) - Guía de instalación de BD
-- [Testing Postman](../docs/TESTING_POSTMAN_RESULTS.md) - Resultados de pruebas de endpoints
+- [Configuración PostgreSQL](../docs/04b.%20CONFIGURACION_POSTGRESQL.md) - Instalación de BD
+- [Testing Postman](../docs/TESTING_POSTMAN_RESULTS.md) - Resultados de pruebas
 
 ## Despliegue en Render
 
@@ -393,6 +353,44 @@ curl https://proyecto-arboles-backend.onrender.com/api/arboles
 - Verificar que el Dockerfile está en la raíz correcta
 - Verificar que Java 21 está configurado en el Dockerfile
 - Revisar logs de build en Render Dashboard
+
+### Limitaciones del Free Tier de Render
+
+El backend está desplegado en Render con el plan gratuito, que tiene las siguientes características:
+
+**Suspensión automática (Cold Start)**:
+- El servicio se suspende tras 15 minutos de inactividad
+- Al primer acceso después de suspensión, tarda 30-60 segundos en reactivarse
+- Esto es comportamiento normal y esperado del free tier
+
+**Recomendaciones**:
+- Para entornos de producción real, considerar plan de pago
+- El frontend está configurado para manejar este comportamiento
+- Los timeouts están configurados en 60 segundos
+
+## Configuración: Desarrollo Local vs Producción
+
+### Para Desarrollo Local
+
+El proyecto está configurado por defecto para desarrollo local:
+
+1. **Perfil activo**: `local` (ver `application.properties`)
+2. **Configuración**: `application-local.properties`
+3. **Base de datos**: PostgreSQL local (localhost:5432)
+4. **Puerto**: 8080
+5. **No requiere cambios** para trabajar en local
+
+### Para Producción (Render)
+
+Render activa automáticamente el perfil de producción:
+
+1. **Perfil activo**: `prod` (variable de entorno `SPRING_PROFILES_ACTIVE=prod`)
+2. **Configuración**: `application-prod.properties`
+3. **Base de datos**: PostgreSQL de Render (variables de entorno)
+4. **CORS**: Configurado para frontend en Vercel
+5. **Deploy automático** desde la rama `main`
+
+Ver [Manual de Instalación](../docs/MANUAL_DE_INSTALACION.md) para más detalles sobre configuración de entornos.
 
 ## Contacto
 
