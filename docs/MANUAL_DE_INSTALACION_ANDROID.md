@@ -4,7 +4,7 @@
 
 ### Software Necesario
 - **Android Studio** (versión Arctic Fox o superior)
-- **JDK 11** o superior
+- **JDK 21** (recomendado para este proyecto)
 - **SDK de Android** (API Level 24 o superior)
 - **Gradle** 7.0+ (incluido con Android Studio)
 
@@ -15,27 +15,29 @@
 
 ## Configuración del Backend
 
-Antes de instalar la aplicación Android, asegúrate de que el backend esté ejecutándose:
+La aplicación Android se conecta al backend desplegado en producción por defecto. Si deseas usar un backend local para desarrollo:
 
 1. El backend debe estar corriendo en el puerto **8080**
 2. Anota la dirección IP de tu servidor backend
+3. Modifica la URL en `RetrofitClient.java` (ver sección siguiente)
 
 ### Configuración de la URL del Backend
 
-La aplicación está configurada para conectarse al backend mediante la clase `RetrofitClient.java`. Debes modificar la URL base según tu entorno:
+La aplicación está configurada para conectarse al backend en producción mediante la clase `RetrofitClient.java`:
 
 ```java
 // En: app/src/main/java/com/example/proyectoarboles/api/RetrofitClient.java
 
-private static final String BASE_URL = "http://10.0.2.2:8080/";
+private static final String BASE_URL = "https://proyecto-arboles-backend.onrender.com/";
 ```
 
-**Opciones de configuración:**
+**Opciones de configuración según tu entorno:**
 
-- **Emulador de Android**: `http://10.0.2.2:8080/`
-- **Dispositivo físico**: `http://TU_IP_LOCAL:8080/`
+- **Producción (por defecto)**: `https://proyecto-arboles-backend.onrender.com/`
+- **Emulador de Android (desarrollo local)**: `http://10.0.2.2:8080/`
+- **Dispositivo físico (desarrollo local)**: `http://TU_IP_LOCAL:8080/`
   - Ejemplo: `http://192.168.1.100:8080/`
-- **Producción**: `http://tu-servidor.com:8080/`
+  - Asegúrate de que el dispositivo y el ordenador estén en la misma red WiFi
 
 ## Instalación Paso a Paso
 
@@ -189,10 +191,91 @@ Para generar un APK instalable:
 
 ## Notas Adicionales
 
-- La aplicación incluye un sistema de **fallback** con datos XML en caso de que la API no esté disponible
-- Los datos de sensores se generan aleatoriamente si no están disponibles en el backend
+- La aplicación **se conecta por defecto al backend en producción** (Render)
+- Incluye un sistema de **fallback** con datos XML en caso de que la API no esté disponible
+- Los datos de sensores se generan aleatoriamente para demostración
 - El modo de edición permite modificar todos los campos del árbol
 - Las validaciones básicas están implementadas en el login y registro
+- **Timeout configurado**: 60 segundos (adecuado para el free tier de Render)
+
+## 8. Configuración: Desarrollo Local vs Producción
+
+### Configuración de la URL del Backend
+
+La aplicación Android tiene la URL del backend hardcoded en el código fuente. Necesitarás cambiarla manualmente dependiendo de si estás trabajando en desarrollo local o producción.
+
+**Archivo**: `android/app/src/main/java/com/example/proyectoarboles/api/RetrofitClient.java`
+
+### Configuración para Producción (Actual)
+
+```java
+private static final String BASE_URL = "https://proyecto-arboles-backend.onrender.com/";
+```
+
+Esta es la configuración actual que apunta al backend desplegado en Render.
+
+### Configuración para Desarrollo Local
+
+Si quieres trabajar con el backend en local, necesitas cambiar la URL según el tipo de dispositivo:
+
+#### Para Emulador Android:
+
+```java
+private static final String BASE_URL = "http://10.0.2.2:8080/";
+```
+
+**Explicación**: El emulador de Android usa `10.0.2.2` como alias para `localhost` de tu ordenador.
+
+#### Para Dispositivo Físico:
+
+```java
+private static final String BASE_URL = "http://192.168.1.X:8080/";
+```
+
+**Pasos**:
+1. Obtén tu IP local:
+   - **Linux/Mac**: `ip addr` o `ifconfig`
+   - **Windows**: `ipconfig`
+2. Reemplaza `192.168.1.X` con tu IP real (ej: `192.168.1.105`)
+3. Asegúrate de que el ordenador y el dispositivo estén en la misma red WiFi
+
+### Flujo de Trabajo Recomendado
+
+#### Desarrollo Local:
+
+1. Asegúrate de que el backend esté corriendo localmente:
+   ```bash
+   cd backend
+   ./mvnw spring-boot:run
+   # Backend en http://localhost:8080
+   ```
+
+2. Modifica `RetrofitClient.java`:
+   ```java
+   private static final String BASE_URL = "http://10.0.2.2:8080/";
+   ```
+
+3. Ejecuta la aplicación desde Android Studio
+
+4. **IMPORTANTE**: No hagas commit de este cambio. Antes de hacer commit, vuelve a poner la URL de producción.
+
+#### Producción:
+
+1. Asegúrate de que `RetrofitClient.java` apunte a Render:
+   ```java
+   private static final String BASE_URL = "https://proyecto-arboles-backend.onrender.com/";
+   ```
+
+2. Compila el APK para distribución
+
+### Notas Importantes
+
+- A diferencia del Frontend y Backend, la aplicación Android **requiere cambio manual** del código fuente
+- Recuerda revertir los cambios de URL antes de hacer commit al repositorio
+- Si trabajas en equipo, coordina para no commitear la URL de desarrollo local
+- Considera usar BuildConfig o variables de entorno en versiones futuras para automatizar esto
+
+---
 
 ## Soporte
 

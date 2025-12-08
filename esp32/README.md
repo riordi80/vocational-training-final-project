@@ -1,660 +1,142 @@
 # ESP32 - Proyecto Árboles
 
-Firmware para ESP32 que recopila datos de sensores ambientales y de suelo, transmitiéndolos al backend mediante WiFi.
+**Estado**: Planificación - No implementado
 
-## Tecnologías
+Componente futuro del sistema para recopilación de datos de sensores ambientales mediante dispositivos IoT ESP32.
 
-- **Lenguaje**: C/C++ (Arduino Framework)
+## Descripción
+
+Este componente está planificado como una extensión futura del sistema Garden Monitor. Permitiría la recopilación automática de datos ambientales mediante dispositivos IoT instalados en los árboles.
+
+## Tecnologías Planificadas
+
 - **Plataforma**: ESP32 (ESP-WROOM-32 o compatible)
-- **IDE**: Arduino IDE 2.x / PlatformIO (VS Code)
+- **Lenguaje**: C/C++ (Arduino Framework o PlatformIO)
 - **Conectividad**: WiFi 2.4GHz
-- **Protocolo**: HTTP/HTTPS REST
-- **Formato de datos**: JSON (ArduinoJson)
-
-## Sensores Utilizados
-
-- **DHT22**: Sensor de temperatura y humedad ambiental (digital)
-- **Sensor de Humedad de Suelo Capacitivo**: Medición de humedad del suelo (analógico)
-- **PH-4502C**: Sensor de pH del suelo (analógico)
-- **HC-SR04**: Sensor ultrasónico para medir nivel de agua (digital)
-
-## Características
+- **Protocolo**: HTTP/HTTPS REST hacia el backend
+- **Formato de datos**: JSON
 
-- Conectividad WiFi para transmisión de datos
-- Lectura multi-sensor (temperatura, humedad, pH, nivel de agua)
-- Modo Deep Sleep para ahorro energético
-- Reintentos automáticos en caso de fallo de conexión
-- Autenticación con token API
-- Intervalos de lectura configurables (15-30 minutos)
-- Buffer local para lecturas offline (opcional)
-- Optimización de batería con despertar programado
+## Componentes Considerados
 
-## Estructura del Proyecto
+Se han evaluado los siguientes componentes para el sistema de monitoreo:
 
-```
-esp32/
-├── src/
-│   ├── main.cpp              # Programa principal
-│   ├── config.h              # Configuración WiFi y API (NO COMMITEAR)
-│   ├── config.example.h      # Plantilla de configuración
-│   ├── sensors.h             # Declaraciones de funciones de sensores
-│   ├── sensors.cpp           # Implementación de lectura de sensores
-│   ├── api_client.h          # Cliente HTTP para backend
-│   ├── api_client.cpp        # Implementación de peticiones HTTP
-│   └── utils.h/.cpp          # Funciones auxiliares
-├── lib/                      # Librerías externas (si aplica)
-├── platformio.ini            # Configuración de PlatformIO
-├── .gitignore
-└── README.md
-```
+### Sensores
+- **Temperatura/Ambiente**: DHT11 o SHT31 (más preciso) - 12€
+- **Humedad de Suelo**: Vegetronix VH400 - 95-110€ (se puede sustituir por alternativa más económica)
+- **CO2**: MH-Z19 o Senseair S8 - 26-40€
+- **Dendómetro**: Ecomatik o potenciómetro banda - 80€ (para medir crecimiento del tronco, no esencial en presupuesto ajustado)
 
-## Requisitos Previos
+### Hardware Principal
+- **Microcontrolador**: ESP32 + regulador 5V - 12€
+- **Panel Solar**: 6V 3-5W - 15-18€
+- **Controlador Carga Solar**: CN3791 (para LiFePO4) - 12€
+- **Batería**: LiFePO4 3.2V 10000mAh - 35-40€ (se puede sustituir por batería más económica de 4000mAh)
+- **Caja Robusta**: IP66 + pasacables - 22-25€ (se puede sustituir por modelo imprimible en 3D)
+- **Soporte/Instalación**: Pérgola o sistema de fijación - 10€
 
-### Hardware
+### Notas sobre Componentes
+- **Vegetronix VH400**: Sensor de alta calidad pero caro. Se puede sustituir por alternativa más económica.
+- **Dendómetro**: Componente no esencial para el precio final. Mide crecimiento del diámetro del tronco.
+- **Batería**: Se puede optar por batería de 4000mAh más económica si el presupuesto es limitado.
+- **Caja**: Se puede sustituir por modelo imprimible en 3D más económico.
 
-- **Placa ESP32**: ESP-WROOM-32 o compatible
-- **Sensores**:
-  - DHT22 (temperatura y humedad)
-  - Sensor capacitivo de humedad de suelo
-  - Módulo PH-4502C
-  - HC-SR04 (sensor ultrasónico)
-- **Cables jumper** (macho-hembra y macho-macho)
-- **Protoboard**
-- **Cable USB** (para programación y alimentación)
-- **Fuente de alimentación**: USB, batería LiPo, panel solar con regulador
+**Presupuesto estimado**: 200-350€ por unidad (dependiendo de las alternativas seleccionadas)
 
-### Software
+**Referencia completa**: Ver [lista detallada de componentes y precios](../docs/Componentes%20para%20ESP32/Componentes.png)
 
-- **PlatformIO** (recomendado) o Arduino IDE 2.x
-- **Drivers USB**: CP2102 o CH340 (según tu ESP32)
-- **Python 3** (para esptool si usas PlatformIO)
+**Nota**: La lista es orientativa. La selección final dependerá de disponibilidad, presupuesto y requisitos específicos del despliegue.
 
-## Instalación y Configuración
+## Funcionalidades Planificadas
 
-### Opción 1: PlatformIO (Recomendado)
+- Lectura periódica de sensores ambientales
+- Transmisión de datos al backend vía WiFi
+- Modo de bajo consumo (Deep Sleep) para autonomía energética
+- Gestión de errores y reintentos de conexión
+- Identificación única de cada dispositivo
+- Almacenamiento temporal local en caso de pérdida de conexión
 
-#### 1. Instalar Visual Studio Code
+## Integración con el Backend
 
-Descargar desde: [https://code.visualstudio.com/](https://code.visualstudio.com/)
+El ESP32 se comunicará con el backend existente mediante:
 
-#### 2. Instalar extensión PlatformIO
+- **Endpoints REST**: Se crearán endpoints específicos para recibir lecturas de sensores
+- **Autenticación**: Sistema de tokens o API keys para identificar dispositivos
+- **Formato JSON**: Envío de datos estructurados con timestamp y valores de sensores
+- **Base de datos**: Almacenamiento en TimescaleDB (ya configurado) para series temporales
 
-- Abrir VS Code
-- Extensions → Buscar "PlatformIO IDE" → Instalar
-- Reiniciar VS Code
+## Hardware Necesario (Estimado)
 
-#### 3. Clonar e inicializar proyecto
+- Placa **ESP32** (modelo específico por determinar)
+- Sensores ambientales (selección pendiente según disponibilidad y presupuesto)
+- Cables, protoboard y componentes electrónicos
+- Cable USB para programación
+- Sistema de alimentación:
+  - **Desarrollo**: USB 5V
+  - **Producción**: Batería LiPo + panel solar (opcional)
 
-```bash
-git clone https://github.com/riordi80/vocational-training-final-project
-cd esp32
-pio init --board esp32dev
-```
+## Software Necesario (Estimado)
 
-#### 4. Configurar `platformio.ini`
+- **PlatformIO** o **Arduino IDE** (IDE por confirmar)
+- Drivers USB para el modelo de ESP32
+- Librerías específicas según sensores elegidos
+- Herramientas de monitorización serial
 
-Editar archivo `platformio.ini`:
+## Próximos Pasos
 
-```ini
-[env:esp32dev]
-platform = espressif32
-board = esp32dev
-framework = arduino
-monitor_speed = 115200
+Cuando se inicie el desarrollo de este componente:
 
-lib_deps =
-    adafruit/DHT sensor library@^1.4.4
-    adafruit/Adafruit Unified Sensor@^1.1.9
-    bblanchon/ArduinoJson@^6.21.3
-```
+1. **Definir especificaciones técnicas** de sensores y hardware
+2. **Adquirir componentes** según presupuesto disponible
+3. **Diseñar esquema de conexiones** y prototipo
+4. **Implementar firmware básico** de lectura de sensores
+5. **Integrar con backend** mediante API REST
+6. **Calibrar sensores** con valores conocidos
+7. **Probar en entorno real** (instalación en árbol)
+8. **Optimizar consumo energético** para autonomía
+9. **Documentar** proceso de instalación y mantenimiento
 
-#### 5. Compilar y subir firmware
+## Consideraciones Técnicas
 
-```bash
-pio run --target upload
-pio device monitor
-```
+### Conectividad WiFi
 
-### Opción 2: Arduino IDE
+- El ESP32 solo soporta WiFi 2.4GHz
+- Verificar cobertura en ubicación de instalación
+- Considerar repetidores WiFi o ubicación alternativa si es necesario
 
-#### 1. Instalar Arduino IDE
-
-Descargar desde: [https://www.arduino.cc/en/software](https://www.arduino.cc/en/software)
-
-#### 2. Añadir soporte para ESP32
-
-- File → Preferences → Additional Board Manager URLs:
-  ```
-  https://espressif.github.io/arduino-esp32/package_esp32_index.json
-  ```
-- Tools → Board → Boards Manager → Buscar "ESP32" → Instalar "ESP32 by Espressif Systems"
-
-#### 3. Instalar librerías
-
-- Tools → Manage Libraries
-- Instalar:
-  - DHT sensor library (by Adafruit)
-  - Adafruit Unified Sensor
-  - ArduinoJson (by Benoit Blanchon)
-
-#### 4. Configurar placa
-
-- Tools → Board → ESP32 Arduino → ESP32 Dev Module
-- Tools → Upload Speed → 115200
-- Tools → Port → Seleccionar tu puerto (COM3, /dev/ttyUSB0, etc.)
-
-#### 5. Subir sketch
-
-- Sketch → Upload
-
-## Configuración del Firmware
-
-### Crear archivo `src/config.h`
-
-**IMPORTANTE**: Este archivo contiene credenciales y NO debe commitearse.
-
-```cpp
-#ifndef CONFIG_H
-#define CONFIG_H
-
-// WiFi
-const char* WIFI_SSID = "tu_wifi_ssid";
-const char* WIFI_PASSWORD = "tu_wifi_password";
-
-// API Backend
-const char* API_BASE_URL = "http://tu-backend-url:8080/api";
-const char* DEVICE_ID = "ESP32_001";               // Identificador único del dispositivo
-const char* API_TOKEN = "tu_token_api";            // Token JWT o API key
-
-// Pines de sensores
-#define DHT_PIN 4                                   // GPIO4 para DHT22
-#define SOIL_MOISTURE_PIN 34                        // GPIO34 (ADC1_CH6) para humedad suelo
-#define PH_SENSOR_PIN 35                            // GPIO35 (ADC1_CH7) para pH
-#define WATER_LEVEL_TRIG_PIN 5                      // GPIO5 para trigger HC-SR04
-#define WATER_LEVEL_ECHO_PIN 18                     // GPIO18 para echo HC-SR04
-
-// Configuración de lectura
-#define SLEEP_TIME_MINUTES 15                       // Intervalo entre lecturas
-#define DHT_TYPE DHT22                              // Tipo de sensor DHT
-
-// Configuración de Deep Sleep
-#define uS_TO_S_FACTOR 1000000ULL                   // Factor conversión μs a s
-#define TIME_TO_SLEEP (SLEEP_TIME_MINUTES * 60)     // Tiempo en segundos
-
-#endif
-```
-
-### Crear archivo `src/config.example.h` (template público)
-
-```cpp
-#ifndef CONFIG_H
-#define CONFIG_H
-
-// WiFi
-const char* WIFI_SSID = "YOUR_WIFI_SSID";
-const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
-
-// API Backend
-const char* API_BASE_URL = "http://your-backend-url:8080/api";
-const char* DEVICE_ID = "ESP32_XXX";
-const char* API_TOKEN = "your_api_token_here";
-
-// Pines de sensores
-#define DHT_PIN 4
-#define SOIL_MOISTURE_PIN 34
-#define PH_SENSOR_PIN 35
-#define WATER_LEVEL_TRIG_PIN 5
-#define WATER_LEVEL_ECHO_PIN 18
-
-// Configuración
-#define SLEEP_TIME_MINUTES 15
-#define DHT_TYPE DHT22
-
-#define uS_TO_S_FACTOR 1000000ULL
-#define TIME_TO_SLEEP (SLEEP_TIME_MINUTES * 60)
-
-#endif
-```
-
-**Añadir a `.gitignore`**:
-
-```
-src/config.h
-secrets.h
-```
-
-## Esquema de Conexiones
-
-### Tabla de Pines
-
-| Componente           | Pin ESP32      | Voltaje | Notas                          |
-|----------------------|----------------|---------|--------------------------------|
-| DHT22 Data           | GPIO 4         | 3.3V    | Resistencia pull-up 10kΩ      |
-| DHT22 VCC            | 3.3V           | -       | -                              |
-| DHT22 GND            | GND            | -       | -                              |
-| Humedad Suelo Analog | GPIO 34 (ADC)  | 3.3V    | Sensor capacitivo              |
-| Humedad Suelo VCC    | 3.3V           | -       | -                              |
-| Humedad Suelo GND    | GND            | -       | -                              |
-| pH Sensor Analog     | GPIO 35 (ADC)  | 3.3V    | **Divisor de voltaje si es 5V**|
-| pH Sensor VCC        | 5V o 3.3V      | -       | Verificar voltaje del módulo   |
-| pH Sensor GND        | GND            | -       | -                              |
-| HC-SR04 Trigger      | GPIO 5         | 3.3V    | -                              |
-| HC-SR04 Echo         | GPIO 18        | 3.3V    | **Divisor de voltaje si es 5V**|
-| HC-SR04 VCC          | 5V             | -       | -                              |
-| HC-SR04 GND          | GND            | -       | -                              |
-
-### Divisor de Voltaje (Para sensores 5V)
-
-Si un sensor funciona a 5V pero su salida es 5V, necesitas un divisor de voltaje para proteger los pines ADC del ESP32 (que soportan máx 3.3V).
-
-**Ejemplo**: Para Echo del HC-SR04
-
-```
-5V ───[R1 10kΩ]─┬─── GPIO18 (ESP32)
-                │
-              [R2 20kΩ]
-                │
-               GND
-```
-
-Fórmula: `Vout = Vin * (R2 / (R1 + R2))`
-
-## Código Principal
-
-### `src/main.cpp`
-
-```cpp
-#include <Arduino.h>
-#include <WiFi.h>
-#include <HTTPClient.h>
-#include <DHT.h>
-#include <ArduinoJson.h>
-#include "config.h"
-
-// Inicializar sensor DHT
-DHT dht(DHT_PIN, DHT_TYPE);
-
-// Variables globales
-float temperatura = 0.0;
-float humedadSuelo = 0.0;
-float ph = 0.0;
-float nivelAgua = 0.0;
-
-// Prototipos de funciones
-void conectarWiFi();
-void leerSensores();
-float leerHumedadSuelo();
-float leerPH();
-float leerNivelAgua();
-bool enviarDatos();
-void entrarDeepSleep();
-
-void setup() {
-  Serial.begin(115200);
-  delay(1000);
-
-  Serial.println("=== ESP32 Proyecto Árboles ===");
-
-  // Configurar pines
-  pinMode(WATER_LEVEL_TRIG_PIN, OUTPUT);
-  pinMode(WATER_LEVEL_ECHO_PIN, INPUT);
-
-  // Inicializar DHT
-  dht.begin();
-
-  // Conectar WiFi
-  conectarWiFi();
-
-  // Leer sensores
-  leerSensores();
-
-  // Enviar datos al backend
-  if (enviarDatos()) {
-    Serial.println("Datos enviados correctamente");
-  } else {
-    Serial.println("Error al enviar datos");
-  }
-
-  // Entrar en Deep Sleep
-  entrarDeepSleep();
-}
-
-void loop() {
-  // No se ejecuta debido a Deep Sleep
-}
-
-void conectarWiFi() {
-  Serial.print("Conectando a WiFi: ");
-  Serial.println(WIFI_SSID);
-
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
-  int intentos = 0;
-  while (WiFi.status() != WL_CONNECTED && intentos < 20) {
-    delay(500);
-    Serial.print(".");
-    intentos++;
-  }
-
-  if (WiFi.status() == WL_CONNECTED) {
-    Serial.println("\nWiFi conectado");
-    Serial.print("IP: ");
-    Serial.println(WiFi.localIP());
-  } else {
-    Serial.println("\nError al conectar WiFi");
-  }
-}
-
-void leerSensores() {
-  Serial.println("\n--- Leyendo sensores ---");
-
-  // Leer DHT22
-  temperatura = dht.readTemperature();
-  if (isnan(temperatura)) {
-    Serial.println("Error al leer DHT22");
-    temperatura = 0.0;
-  } else {
-    Serial.print("Temperatura: ");
-    Serial.print(temperatura);
-    Serial.println(" °C");
-  }
-
-  // Leer humedad del suelo
-  humedadSuelo = leerHumedadSuelo();
-  Serial.print("Humedad Suelo: ");
-  Serial.print(humedadSuelo);
-  Serial.println(" %");
-
-  // Leer pH
-  ph = leerPH();
-  Serial.print("pH: ");
-  Serial.println(ph);
-
-  // Leer nivel de agua
-  nivelAgua = leerNivelAgua();
-  Serial.print("Nivel Agua: ");
-  Serial.print(nivelAgua);
-  Serial.println(" cm");
-}
-
-float leerHumedadSuelo() {
-  int valorAnalogico = analogRead(SOIL_MOISTURE_PIN);
-
-  // Calibración (ajustar según tu sensor)
-  const int VALOR_SECO = 3000;   // Sensor en aire
-  const int VALOR_MOJADO = 1000;  // Sensor en agua
-
-  // Convertir a porcentaje
-  float porcentaje = map(valorAnalogico, VALOR_SECO, VALOR_MOJADO, 0, 100);
-  porcentaje = constrain(porcentaje, 0, 100);
-
-  return porcentaje;
-}
-
-float leerPH() {
-  int valorAnalogico = analogRead(PH_SENSOR_PIN);
-
-  // Convertir lectura ADC a voltaje
-  float voltaje = valorAnalogico * (3.3 / 4095.0);
-
-  // Calibración (ajustar con soluciones buffer pH 4.0, 7.0, 10.0)
-  // Fórmula de ejemplo (necesita calibración específica)
-  float phValue = 7.0 + ((2.5 - voltaje) / 0.18);
-
-  phValue = constrain(phValue, 0, 14);
-
-  return phValue;
-}
-
-float leerNivelAgua() {
-  digitalWrite(WATER_LEVEL_TRIG_PIN, LOW);
-  delayMicroseconds(2);
-
-  digitalWrite(WATER_LEVEL_TRIG_PIN, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(WATER_LEVEL_TRIG_PIN, LOW);
-
-  long duracion = pulseIn(WATER_LEVEL_ECHO_PIN, HIGH);
-
-  // Calcular distancia en cm
-  float distancia = duracion * 0.034 / 2;
-
-  return distancia;
-}
-
-bool enviarDatos() {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi no conectado");
-    return false;
-  }
-
-  HTTPClient http;
-
-  // Construir URL
-  String url = String(API_BASE_URL) + "/dispositivos/" + String(DEVICE_ID) + "/lecturas";
-
-  Serial.print("URL: ");
-  Serial.println(url);
-
-  http.begin(url);
-  http.addHeader("Content-Type", "application/json");
-  http.addHeader("Authorization", "Bearer " + String(API_TOKEN));
-
-  // Crear JSON
-  StaticJsonDocument<256> doc;
-  doc["temperatura"] = temperatura;
-  doc["humedad_suelo"] = humedadSuelo;
-  doc["ph"] = ph;
-  doc["nivel_agua"] = nivelAgua;
-  doc["timestamp"] = millis();
-
-  String jsonString;
-  serializeJson(doc, jsonString);
-
-  Serial.println("Enviando: " + jsonString);
-
-  // Enviar POST
-  int httpCode = http.POST(jsonString);
-
-  Serial.print("HTTP Code: ");
-  Serial.println(httpCode);
-
-  if (httpCode > 0) {
-    String response = http.getString();
-    Serial.println("Respuesta: " + response);
-  }
-
-  http.end();
-
-  return (httpCode == 200 || httpCode == 201);
-}
-
-void entrarDeepSleep() {
-  Serial.println("\n--- Entrando en Deep Sleep ---");
-  Serial.print("Despertar en ");
-  Serial.print(SLEEP_TIME_MINUTES);
-  Serial.println(" minutos");
-
-  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
-
-  Serial.flush();
-  esp_deep_sleep_start();
-}
-```
-
-## Calibración de Sensores
-
-### Sensor de Humedad de Suelo
-
-1. **Medición en aire** (seco): Anotar valor analógico (~3000-4095)
-2. **Medición en agua**: Anotar valor analógico (~1000-1500)
-3. Actualizar constantes `VALOR_SECO` y `VALOR_MOJADO` en el código
-
-### Sensor de pH
-
-1. Obtener **soluciones buffer**: pH 4.0, 7.0, 10.0
-2. Sumergir sensor en pH 7.0, anotar voltaje
-3. Sumergir en pH 4.0, anotar voltaje
-4. Calcular pendiente: `(pH2 - pH1) / (V2 - V1)`
-5. Ajustar fórmula en función `leerPH()`
-
-Ejemplo de calibración:
-```cpp
-// Si a 2.5V → pH 7.0
-// Y a 2.0V → pH 4.0
-// Pendiente = (7-4) / (2.5-2.0) = 3 / 0.5 = 6 pH/V
-
-float phValue = 7.0 + ((2.5 - voltaje) * 6.0);
-```
-
-## Gestión de Energía
-
-### Consumo
+### Alimentación
 
 - **Modo activo**: ~160-260 mA
 - **Deep Sleep**: ~10-20 µA
+- Evaluar necesidad de sistema solar según frecuencia de lecturas
+- Considerar batería de respaldo para días nublados
 
-### Deep Sleep
+### Protección
 
-El ESP32 entra en Deep Sleep tras enviar datos, reduciendo el consumo a niveles mínimos. Se despierta automáticamente tras el tiempo configurado.
+- Caja impermeable (IP65 o superior) para instalación exterior
+- Protección contra rayos si está expuesto
+- Acceso para mantenimiento y recalibración de sensores
 
-```cpp
-esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
-esp_deep_sleep_start();
-```
+## Documentación de Referencia
 
-### Opciones de Alimentación
+Cuando se inicie la implementación, consultar:
 
-1. **USB**: 5V constante (desarrollo)
-2. **Batería LiPo + Panel Solar**: Ideal para despliegue exterior
-3. **Fuente externa regulada**: 5V/3.3V con suficiente amperaje
+- [Documentación oficial ESP32](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/)
+- [Arduino Framework para ESP32](https://github.com/espressif/arduino-esp32)
+- [PlatformIO ESP32](https://docs.platformio.org/en/latest/boards/espressif32.html)
+- Datasheets de sensores específicos seleccionados
 
-**Recomendación para exteriores**:
-- Panel solar 5-6W
-- Batería LiPo 3.7V 2000-5000 mAh
-- Módulo de carga TP4056 con protección
+## Componentes Hardware
 
-## Comunicación con Backend
+Para referencia de componentes considerados, ver:
+- [Lista de componentes y precios](../docs/Componentes%20para%20ESP32/Componentes.png)
 
-### Endpoint
+**Nota**: Esta lista es orientativa y puede variar según disponibilidad y presupuesto final.
 
-```
-POST /api/dispositivos/{DEVICE_ID}/lecturas
-Content-Type: application/json
-Authorization: Bearer {API_TOKEN}
-```
+## Estado Actual
 
-### Payload JSON
+**Este componente NO está implementado**. Es una extensión futura planificada para después del 8 de diciembre de 2025.
 
-```json
-{
-  "temperatura": 23.5,
-  "humedad_suelo": 45.2,
-  "ph": 6.8,
-  "nivel_agua": 12.5,
-  "timestamp": 1234567890
-}
-```
-
-### Respuesta esperada
-
-```json
-{
-  "id": 1234,
-  "mensaje": "Lectura registrada correctamente"
-}
-```
-
-## Solución de Problemas
-
-### No conecta al WiFi
-
-- Verificar SSID y contraseña en `config.h`
-- Asegurar que es WiFi 2.4 GHz (ESP32 NO soporta 5 GHz)
-- Verificar intensidad de señal
-
-### Error al subir firmware
-
-- Mantener pulsado botón **BOOT** durante la subida
-- Verificar puerto COM correcto
-- Reinstalar drivers USB (CP2102/CH340)
-
-### Lecturas incorrectas
-
-- Verificar conexiones de cables
-- Revisar voltajes (3.3V vs 5V)
-- Calibrar sensores con valores conocidos
-- Añadir delays entre lecturas de ADC
-
-### No envía datos al backend
-
-- Verificar que el backend esté accesible (ping/curl)
-- Revisar token de autenticación
-- Verificar formato JSON
-- Comprobar logs en Serial Monitor (115200 baud)
-
-## Monitoreo Serial
-
-### PlatformIO
-
-```bash
-pio device monitor
-```
-
-### Arduino IDE
-
-- Tools → Serial Monitor
-- Configurar velocidad: **115200 baud**
-
-Ejemplo de salida:
-
-```
-=== ESP32 Proyecto Árboles ===
-Conectando a WiFi: MiWiFi
-........
-WiFi conectado
-IP: 192.168.1.100
-
---- Leyendo sensores ---
-Temperatura: 23.5 °C
-Humedad Suelo: 45.2 %
-pH: 6.8
-Nivel Agua: 12.5 cm
-
-URL: http://192.168.1.50:8080/api/dispositivos/ESP32_001/lecturas
-Enviando: {"temperatura":23.5,"humedad_suelo":45.2,"ph":6.8,"nivel_agua":12.5,"timestamp":45000}
-HTTP Code: 201
-Respuesta: {"id":1234,"mensaje":"Lectura registrada correctamente"}
-Datos enviados correctamente
-
---- Entrando en Deep Sleep ---
-Despertar en 15 minutos
-```
-
-## Testing
-
-```bash
-# Compilar sin subir
-pio run
-
-# Compilar y subir
-pio run --target upload
-
-# Monitor serial
-pio device monitor
-```
-
-## Despliegue en Campo
-
-1. **Protección física**: Caja impermeable IP65
-2. **Alimentación solar**: Panel + batería LiPo
-3. **Antena WiFi externa**: Mejorar alcance si es necesario
-4. **Protección contra rayos**: Si está en exteriores expuestos
-5. **Mantenimiento**: Limpieza de sensores cada 2-4 semanas
-
-## Estado
-
-En desarrollo (opcional - después del 8 de diciembre)
+El sistema actual (Backend, Frontend, Android) funciona sin este componente. Los datos de sensores en las aplicaciones son actualmente simulados/aleatorios para propósitos de demostración.
 
 ## Documentación Relacionada
 
@@ -662,8 +144,10 @@ En desarrollo (opcional - después del 8 de diciembre)
 - [Hoja de Ruta Completa](../docs/02.%20HOJA_DE_RUTA.md) - Planificación del proyecto
 - [Especificación Técnica](../docs/03.%20ESPECIFICACION_TECNICA.md) - Requisitos y arquitectura
 - [Backend README](../backend/README.md) - API REST con Spring Boot
-- [Componentes Hardware](../docs/Componentes%20para%20ESP32/Componentes.png) - Lista de componentes y precios
+- [Modelo de Datos](../docs/04.%20MODELO_DATOS.md) - Incluye entidades para lecturas de sensores
 
-## Contacto
+---
 
-Proyecto Final DAM 2025-2026
+**Proyecto Final DAM 2025-2026**
+
+**Componente ESP32**: Planificación futura (post-entrega)
