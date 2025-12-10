@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
-import ProtectedRoute from './components/common/ProtectedRoute';
-import MainLayout from './components/layout/MainLayout';
+import ProtectedRoute from './routes/ProtectedRoute';
+import MainLayout from './layout/MainLayout';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Dashboard from './pages/dashboard/Dashboard';
