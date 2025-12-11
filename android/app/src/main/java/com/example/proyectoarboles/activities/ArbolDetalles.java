@@ -85,6 +85,13 @@ public class ArbolDetalles extends AppCompatActivity {
         btnEditar.setOnClickListener(v -> activarModoEdicion());
         btnGuardar.setOnClickListener(v -> guardarCambios());
         btnCancelar.setOnClickListener(v -> cancelarEdicion());
+        btnVolver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent vIntent = new Intent(ArbolDetalles.this, ListarArboles.class);
+
+            }
+        });
 
         // Inicialmente mostrar solo TextViews
         mostrarTextViews();
