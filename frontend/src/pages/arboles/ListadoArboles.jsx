@@ -160,6 +160,9 @@
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          ID
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Nombre
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -183,6 +186,9 @@
                           className="hover:bg-gray-50 cursor-pointer transition-colors"
                           onClick={() => handleVerDetalle(arbol.id)}
                         >
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-600">#{arbol.id}</div>
+                          </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm font-medium text-gray-900">{arbol.nombre}</div>
                           </td>
@@ -226,7 +232,12 @@
                       className="p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors"
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">{arbol.nombre}</h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-lg font-semibold text-gray-900">{arbol.nombre}</h3>
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            #{arbol.id}
+                          </span>
+                        </div>
                       </div>
                       <p className="text-sm text-gray-600 mb-1">
                         <span className="font-medium">Especie:</span> {arbol.especie}

@@ -109,7 +109,12 @@
         {/* Header con título y botones */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">{arbol.nombre}</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-bold text-gray-800">{arbol.nombre}</h1>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                #{arbol.id}
+              </span>
+            </div>
             <p className="text-gray-600 mt-1">{arbol.especie}</p>
           </div>
           <div className="flex gap-2">
