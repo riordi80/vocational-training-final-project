@@ -45,9 +45,6 @@ public class ListarArboles extends AppCompatActivity {
         // Inicializar vistas
         recyclerViewArboles = findViewById(R.id.RecyclerViewArboles);
 
-        // Opcional: Si tienes ProgressBar y TextView en el layout
-        // progressBar = findViewById(R.id.progressBar);
-        // tvEstado = findViewById(R.id.tvEstado);
 
         // Configurar adapter
         adapter = new ArbolAdapter(listaArboles,
