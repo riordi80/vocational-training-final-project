@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
-import ProtectedRoute from './components/common/ProtectedRoute';
-import MainLayout from './components/layout/MainLayout';
+import ProtectedRoute from './routes/ProtectedRoute';
+import MainLayout from './layout/MainLayout';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Dashboard from './pages/dashboard/Dashboard';
@@ -9,6 +9,9 @@ import ComponentLibrary from './pages/component-library/ComponentLibrary';
 import ListadoArboles from './pages/arboles/ListadoArboles';
 import DetalleArbol from './pages/arboles/DetalleArbol';
 import FormularioArbol from './pages/arboles/FormularioArbol';
+import ListadoCentros from './pages/centros/ListadoCentros';
+import DetalleCentro from './pages/centros/DetalleCentro';
+import FormularioCentro from './pages/centros/FormularioCentro';
 import './App.css';
 
 function App() {
@@ -43,7 +46,10 @@ function App() {
           <Route path="/arboles/nuevo" element={<FormularioArbol />} />
           <Route path="/arboles/:id/editar" element={<FormularioArbol />} />
           <Route path="/arboles/:id" element={<DetalleArbol />} />
-          <Route path="/centros" element={<div className="text-center"><h1 className="text-2xl font-bold">Listado de Centros (próximamente)</h1></div>} />
+          <Route path="/centros" element={<ListadoCentros />} />
+          <Route path="/centros/nuevo" element={<FormularioCentro />} />
+          <Route path="/centros/:id/editar" element={<FormularioCentro />} />
+          <Route path="/centros/:id" element={<DetalleCentro />} />
         </Route>
 
         {/* 404 */}
