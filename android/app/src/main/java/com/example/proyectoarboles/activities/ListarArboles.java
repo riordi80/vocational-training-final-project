@@ -36,6 +36,7 @@ public class ListarArboles extends AppCompatActivity {
     ProgressBar progressBar;
     TextView tvEstado;
     private List<Arbol> listaArboles = new ArrayList<>();
+    Button btCerrarSesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,16 @@ public class ListarArboles extends AppCompatActivity {
 
         // Cargar datos
         cargarArbolesDesdeAPI();
+
+        btCerrarSesion = findViewById(R.id.btCerrarS);
+
+        btCerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sIntent = new Intent(ListarArboles.this, Login.class);
+                startActivity(sIntent);
+            }
+        });
     }
 
     private void cargarArbolesDesdeAPI() {
