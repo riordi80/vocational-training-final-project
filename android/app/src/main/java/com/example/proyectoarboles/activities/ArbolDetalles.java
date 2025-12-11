@@ -72,6 +72,7 @@ public class ArbolDetalles extends AppCompatActivity {
         btnEditar = findViewById(R.id.buttonEditar);
         btnGuardar = findViewById(R.id.buttonGuardar);
         btnCancelar = findViewById(R.id.buttonCancelar);
+        btnVolver = findViewById(R.id.buttonVolver);
 
         // Cargar datos desde la API si hay un ID válido
         if (arbolId != -1) {
@@ -85,6 +86,8 @@ public class ArbolDetalles extends AppCompatActivity {
         btnEditar.setOnClickListener(v -> activarModoEdicion());
         btnGuardar.setOnClickListener(v -> guardarCambios());
         btnCancelar.setOnClickListener(v -> cancelarEdicion());
+        btnVolver.setOnClickListener(v -> volverAtras());
+
 
         // Inicialmente mostrar solo TextViews
         mostrarTextViews();
@@ -355,5 +358,10 @@ public class ArbolDetalles extends AppCompatActivity {
         btnEditar.setVisibility(View.GONE);
         btnGuardar.setVisibility(View.VISIBLE);
         btnCancelar.setVisibility(View.VISIBLE);
+    }
+
+    private void volverAtras(){
+        Intent vIntent = new Intent(ArbolDetalles.this, ListarArboles.class);
+        startActivity(vIntent);
     }
 }
