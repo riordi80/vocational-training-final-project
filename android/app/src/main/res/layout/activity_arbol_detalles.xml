@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="16dp">
+    android:background="@color/background_app">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -16,251 +17,345 @@
             android:text="Detalles del Árbol"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="@color/green_primary"
             android:gravity="center"
+            android:layout_marginTop="32dp"
             android:layout_marginBottom="24dp"/>
 
-        <!-- Nombre -->
-        <TextView
+        <!-- Card: Información General -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre:"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/background_card"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
 
-        <TextView
-            android:id="@+id/textViewNombreDetalle"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Información General"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Nombre -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🌳 Nombre:"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginTop="8dp"/>
+
+                <TextView
+                    android:id="@+id/textViewNombreDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
+                    android:padding="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextNombreDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre del árbol"
+                    android:visibility="gone"
+                    android:inputType="text"/>
+
+                <!-- Especie -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🍃 Especie:"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginTop="16dp"/>
+
+                <TextView
+                    android:id="@+id/textViewEspecieDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
+                    android:padding="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextEspecieDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Especie"
+                    android:visibility="gone"
+                    android:inputType="text"/>
+
+                <!-- Fecha -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📅 Fecha de Plantación:"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginTop="16dp"/>
+
+                <TextView
+                    android:id="@+id/textViewFechaDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
+                    android:padding="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextFechaDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Fecha (DD/MM/YYYY)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+
+                <!-- Centro Educativo -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🏫 Centro Educativo:"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginTop="16dp"/>
+
+                <TextView
+                    android:id="@+id/textViewCentroEducativo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
+                    android:padding="8dp"/>
+
+                <Spinner
+                    android:id="@+id/spinnerCentroEducativo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:padding="8dp"/>
+
+                <!-- Ubicación -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📍 Ubicación:"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginTop="16dp"/>
+
+                <TextView
+                    android:id="@+id/textViewUbicacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
+                    android:padding="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextUbicacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ubicación"
+                    android:visibility="gone"
+                    android:inputType="text"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card: Datos de Sensores -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:padding="8dp"/>
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/background_card"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
 
-        <EditText
-            android:id="@+id/editTextNombreDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombre del árbol"
-            android:visibility="gone"
-            android:inputType="text"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <!-- Especie -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Especie:"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Datos de Sensores"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:id="@+id/textViewEspecieDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:padding="8dp"/>
+                <!-- Temperatura -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🌡️ Temperatura:"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginTop="8dp"/>
 
-        <EditText
-            android:id="@+id/editTextEspecieDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Especie"
-            android:visibility="gone"
-            android:inputType="text"/>
+                <TextView
+                    android:id="@+id/textViewTemp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
+                    android:padding="8dp"/>
 
-        <!-- Fecha -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Fecha de Plantación:"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"/>
+                <EditText
+                    android:id="@+id/editTextTemp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Temperatura"
+                    android:visibility="gone"
+                    android:inputType="text"/>
 
-        <TextView
-            android:id="@+id/textViewFechaDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:padding="8dp"/>
+                <!-- Humedad -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="💧 Humedad Ambiental:"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginTop="16dp"/>
 
-        <EditText
-            android:id="@+id/editTextFechaDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Fecha (DD/MM/YYYY)"
-            android:visibility="gone"
-            android:inputType="date"/>
+                <TextView
+                    android:id="@+id/textViewHumedad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
+                    android:padding="8dp"/>
 
-        <!-- Ubicación -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ubicación:"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"/>
+                <EditText
+                    android:id="@+id/editTextHumedad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Humedad ambiental"
+                    android:visibility="gone"
+                    android:inputType="text"/>
 
-        <TextView
-            android:id="@+id/textViewUbicacion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:padding="8dp"/>
+                <!-- Humedad del Suelo -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🌱 Humedad del Suelo:"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginTop="16dp"/>
 
-        <EditText
-            android:id="@+id/editTextUbicacion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ubicación"
-            android:visibility="gone"
-            android:inputType="text"/>
+                <TextView
+                    android:id="@+id/textViewHumedadSuelo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
+                    android:padding="8dp"/>
 
-        <!-- Separador para datos de sensores -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#CCCCCC"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"/>
+                <EditText
+                    android:id="@+id/editTextHumedadSuelo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Humedad del suelo"
+                    android:visibility="gone"
+                    android:inputType="text"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Datos de Sensores"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="16dp"/>
+                <!-- CO2 -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="☁️ Nivel de CO2:"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginTop="16dp"/>
 
-        <!-- Temperatura -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Temperatura:"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"/>
+                <TextView
+                    android:id="@+id/textViewCO2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
+                    android:padding="8dp"/>
 
-        <TextView
-            android:id="@+id/textViewTemp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:padding="8dp"/>
+                <EditText
+                    android:id="@+id/editTextCO2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nivel de CO2"
+                    android:visibility="gone"
+                    android:inputType="text"/>
 
-        <EditText
-            android:id="@+id/editTextTemp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Temperatura"
-            android:visibility="gone"
-            android:inputType="text"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Humedad -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Humedad Ambiental:"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"/>
-
-        <TextView
-            android:id="@+id/textViewHumedad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:padding="8dp"/>
-
-        <EditText
-            android:id="@+id/editTextHumedad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Humedad ambiental"
-            android:visibility="gone"
-            android:inputType="text"/>
-
-        <!-- Humedad del Suelo -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Humedad del Suelo:"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"/>
-
-        <TextView
-            android:id="@+id/textViewHumedadSuelo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:padding="8dp"/>
-
-        <EditText
-            android:id="@+id/editTextHumedadSuelo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Humedad del suelo"
-            android:visibility="gone"
-            android:inputType="text"/>
-
-        <!-- CO2 -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nivel de CO2:"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"/>
-
-        <TextView
-            android:id="@+id/textViewCO2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:padding="8dp"/>
-
-        <EditText
-            android:id="@+id/editTextCO2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nivel de CO2"
-            android:visibility="gone"
-            android:inputType="text"/>
-
-        <!-- Botones -->
+        <!-- Botones de Acción -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:gravity="center">
 
             <Button
                 android:id="@+id/buttonEditar"
+                style="@style/ButtonPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Editar"
-                android:layout_margin="8dp"/>
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="Editar"/>
 
             <Button
                 android:id="@+id/buttonGuardar"
+                style="@style/ButtonPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:text="Guardar"
-                android:visibility="gone"
-                android:layout_margin="8dp"/>
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/buttonCancelar"
+                style="@style/ButtonSecondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:text="Cancelar"
-                android:visibility="gone"
-                android:layout_margin="8dp"/>
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/buttonEliminar"
+                style="@style/ButtonDanger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="Eliminar"/>
+
+            <Button
+                android:id="@+id/buttonVolver"
+                style="@style/ButtonSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="Volver"/>
 
         </LinearLayout>
-
-        <!-- Botón Volver -->
-        <Button
-            android:id="@+id/buttonVolver"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Volver"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="#757575"/>
 
     </LinearLayout>
 </ScrollView>

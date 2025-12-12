@@ -1,11 +1,14 @@
 package com.example.proyectoarboles.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,26 +16,41 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectoarboles.R;
-import com.example.proyectoarboles.api.RetrofitClient;  // ⚠️ AÑADIR import
+import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.Arbol;
+import com.example.proyectoarboles.model.CentroEducativo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
-import retrofit2.Call;  // ⚠️ AÑADIR imports de Retrofit
+import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ArbolDetalles extends AppCompatActivity {
 
-    private TextView tvNombre, tvEspecie, tvFecha, tvUbicacion, tvTemp, tvHumedad, tvCO2, tvHumedadSuelo;
+    private TextView tvNombre, tvEspecie, tvFecha, tvUbicacion, tvCentroEducativo, tvTemp, tvHumedad, tvCO2, tvHumedadSuelo;
     private EditText etNombre, etEspecie, etFecha, etUbicacion, etTemp, etHumedad, etCO2, etHumedadSuelo;
-    private Button btnEditar, btnGuardar, btnCancelar, btnVolver;
+    private Spinner spinnerCentroEducativo;
+    private Button btnEditar, btnGuardar, btnCancelar, btnEliminar, btnVolver;
     private boolean modoEdicion = false;
 
     // Variables para guardar los valores originales
     private String nombreOriginal, especieOriginal, fechaOriginal, ubicacionOriginal;
     private String tempOriginal, humedadOriginal, co2Original, humedadSueloOriginal;
     private Long arbolId;
+
+    // Variable para guardar la fecha en formato ISO (yyyy-MM-dd) para enviar al servidor
+    private String fechaISO;
+
+    // Lista de centros educativos y adapter para el Spinner
+    private List<CentroEducativo> listaCentros = new ArrayList<>();
+    private ArrayAdapter<CentroEducativo> centrosAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +71,7 @@ public class ArbolDetalles extends AppCompatActivity {
         tvEspecie = findViewById(R.id.textViewEspecieDetalle);
         tvFecha = findViewById(R.id.textViewFechaDetalle);
         tvUbicacion = findViewById(R.id.textViewUbicacion);
+        tvCentroEducativo = findViewById(R.id.textViewCentroEducativo);
         tvTemp = findViewById(R.id.textViewTemp);
         tvHumedad = findViewById(R.id.textViewHumedad);
         tvCO2 = findViewById(R.id.textViewCO2);
@@ -68,10 +87,19 @@ public class ArbolDetalles extends AppCompatActivity {
         etCO2 = findViewById(R.id.editTextCO2);
         etHumedadSuelo = findViewById(R.id.editTextHumedadSuelo);
 
+        // Inicializar Spinner
+        spinnerCentroEducativo = findViewById(R.id.spinnerCentroEducativo);
+
+        // Configurar adapter del Spinner
+        centrosAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listaCentros);
+        centrosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCentroEducativo.setAdapter(centrosAdapter);
+
         // Inicializar botones
         btnEditar = findViewById(R.id.buttonEditar);
         btnGuardar = findViewById(R.id.buttonGuardar);
         btnCancelar = findViewById(R.id.buttonCancelar);
+        btnEliminar = findViewById(R.id.buttonEliminar);
         btnVolver = findViewById(R.id.buttonVolver);
 
         // Cargar datos desde la API si hay un ID válido
@@ -86,6 +114,7 @@ public class ArbolDetalles extends AppCompatActivity {
         btnEditar.setOnClickListener(v -> activarModoEdicion());
         btnGuardar.setOnClickListener(v -> guardarCambios());
         btnCancelar.setOnClickListener(v -> cancelarEdicion());
+        btnEliminar.setOnClickListener(v -> mostrarDialogoEliminar());
         btnVolver.setOnClickListener(v -> volverAtras());
 
 
@@ -124,12 +153,22 @@ public class ArbolDetalles extends AppCompatActivity {
     private void mostrarDatosDelArbol(Arbol arbol) {
         tvNombre.setText(arbol.getNombre());
         tvEspecie.setText(arbol.getEspecie());
-        tvFecha.setText(arbol.getFechaPlantacion());
+
+        // Guardar fecha ISO original para enviar al servidor
+        fechaISO = arbol.getFechaPlantacion();
+        tvFecha.setText(formatearFechaEspanol(arbol.getFechaPlantacion()));
 
         if (arbol.getUbicacion() != null && !arbol.getUbicacion().isEmpty()) {
             tvUbicacion.setText(arbol.getUbicacion());
         } else {
             tvUbicacion.setText("Ubicación no disponible");
+        }
+
+        // Mostrar centro educativo
+        if (arbol.getCentroEducativo() != null) {
+            tvCentroEducativo.setText(arbol.getCentroEducativo().getNombre());
+        } else {
+            tvCentroEducativo.setText("Sin centro asignado");
         }
 
         // Mostrar datos de sensores si existen, sino generar aleatorios
@@ -164,7 +203,10 @@ public class ArbolDetalles extends AppCompatActivity {
     private void mostrarDatosDelIntent(String nombre, String especie, String fecha, String ubicacion) {
         tvNombre.setText(nombre);
         tvEspecie.setText(especie);
-        tvFecha.setText(fecha);
+
+        // Guardar fecha ISO original para enviar al servidor
+        fechaISO = fecha;
+        tvFecha.setText(formatearFechaEspanol(fecha));
 
         if (ubicacion != null && !ubicacion.isEmpty()) {
             tvUbicacion.setText(ubicacion);
@@ -211,8 +253,51 @@ public class ArbolDetalles extends AppCompatActivity {
         etCO2.setText(tvCO2.getText());
         etHumedadSuelo.setText(tvHumedadSuelo.getText());
 
+        // Cargar centros educativos en el Spinner
+        cargarCentrosEducativos();
+
         // Mostrar EditTexts y ocultar TextViews
         mostrarEditTexts();
+    }
+
+    private void cargarCentrosEducativos() {
+        Call<List<CentroEducativo>> call = RetrofitClient.getCentroEducativoApi().obtenerTodosLosCentros();
+
+        call.enqueue(new Callback<List<CentroEducativo>>() {
+            @Override
+            public void onResponse(Call<List<CentroEducativo>> call, Response<List<CentroEducativo>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    listaCentros.clear();
+                    listaCentros.addAll(response.body());
+                    centrosAdapter.notifyDataSetChanged();
+
+                    // Seleccionar el centro actual del árbol en el Spinner
+                    seleccionarCentroActual();
+                } else {
+                    Toast.makeText(ArbolDetalles.this,
+                            "Error al cargar centros educativos",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CentroEducativo>> call, Throwable t) {
+                Toast.makeText(ArbolDetalles.this,
+                        "Error de conexión al cargar centros: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void seleccionarCentroActual() {
+        // Buscar el centro actual en la lista y seleccionarlo en el Spinner
+        String centroActual = tvCentroEducativo.getText().toString();
+        for (int i = 0; i < listaCentros.size(); i++) {
+            if (listaCentros.get(i).getNombre().equals(centroActual)) {
+                spinnerCentroEducativo.setSelection(i);
+                break;
+            }
+        }
     }
 
     // Metodo para guardar los cambios en la API
@@ -222,13 +307,19 @@ public class ArbolDetalles extends AppCompatActivity {
                 arbolId,
                 etNombre.getText().toString(),
                 etEspecie.getText().toString(),
-                etFecha.getText().toString(),
+                fechaISO,  // Usar fecha en formato ISO para el servidor
                 etUbicacion.getText().toString(),
                 etTemp.getText().toString().replace("°C", "").trim(),
                 etHumedad.getText().toString().replace("%", "").trim(),
                 etHumedadSuelo.getText().toString().replace("%", "").trim(),
                 etCO2.getText().toString().replace(" ppm", "").trim()
         );
+
+        // Establecer el centro educativo seleccionado del Spinner
+        if (spinnerCentroEducativo.getSelectedItem() != null) {
+            CentroEducativo centroSeleccionado = (CentroEducativo) spinnerCentroEducativo.getSelectedItem();
+            arbolActualizado.setCentroEducativo(centroSeleccionado);
+        }
 
         // ️ Si hay un ID válido, actualizar en la API
         if (arbolId != -1) {
@@ -311,6 +402,7 @@ public class ArbolDetalles extends AppCompatActivity {
         tvEspecie.setVisibility(View.VISIBLE);
         tvFecha.setVisibility(View.VISIBLE);
         tvUbicacion.setVisibility(View.VISIBLE);
+        tvCentroEducativo.setVisibility(View.VISIBLE);
         tvTemp.setVisibility(View.VISIBLE);
         tvHumedad.setVisibility(View.VISIBLE);
         tvCO2.setVisibility(View.VISIBLE);
@@ -321,15 +413,17 @@ public class ArbolDetalles extends AppCompatActivity {
         etEspecie.setVisibility(View.GONE);
         etFecha.setVisibility(View.GONE);
         etUbicacion.setVisibility(View.GONE);
+        spinnerCentroEducativo.setVisibility(View.GONE);
         etTemp.setVisibility(View.GONE);
         etHumedad.setVisibility(View.GONE);
         etCO2.setVisibility(View.GONE);
         etHumedadSuelo.setVisibility(View.GONE);
 
-        // Mostrar solo botón Editar
+        // Mostrar botones Editar y Eliminar, ocultar Guardar y Cancelar
         btnEditar.setVisibility(View.VISIBLE);
         btnGuardar.setVisibility(View.GONE);
         btnCancelar.setVisibility(View.GONE);
+        btnEliminar.setVisibility(View.VISIBLE);
     }
 
     private void mostrarEditTexts() {
@@ -338,6 +432,7 @@ public class ArbolDetalles extends AppCompatActivity {
         tvEspecie.setVisibility(View.GONE);
         tvFecha.setVisibility(View.GONE);
         tvUbicacion.setVisibility(View.GONE);
+        tvCentroEducativo.setVisibility(View.GONE);
         tvTemp.setVisibility(View.GONE);
         tvHumedad.setVisibility(View.GONE);
         tvCO2.setVisibility(View.GONE);
@@ -348,16 +443,93 @@ public class ArbolDetalles extends AppCompatActivity {
         etEspecie.setVisibility(View.VISIBLE);
         etFecha.setVisibility(View.VISIBLE);
         etUbicacion.setVisibility(View.VISIBLE);
-        etUbicacion.setVisibility(View.VISIBLE);
+        spinnerCentroEducativo.setVisibility(View.VISIBLE);
         etTemp.setVisibility(View.VISIBLE);
         etHumedad.setVisibility(View.VISIBLE);
         etCO2.setVisibility(View.VISIBLE);
         etHumedadSuelo.setVisibility(View.VISIBLE);
 
-        // Mostrar botones Guardar y Cancelar, ocultar Editar
+        // Mostrar botones Guardar y Cancelar, ocultar Editar y Eliminar
         btnEditar.setVisibility(View.GONE);
         btnGuardar.setVisibility(View.VISIBLE);
         btnCancelar.setVisibility(View.VISIBLE);
+        btnEliminar.setVisibility(View.GONE);
+    }
+
+    private String formatearFechaEspanol(String fecha) {
+        if (fecha == null || fecha.isEmpty()) {
+            return "Fecha no disponible";
+        }
+
+        try {
+            // Intentar parsear formato ISO (yyyy-MM-dd) del backend
+            SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-MM-dd", new Locale("es", "ES"));
+            Date date = formatoEntrada.parse(fecha);
+
+            // Formatear a español: "8 dic 2024"
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("d MMM yyyy", new Locale("es", "ES"));
+            return formatoSalida.format(date);
+        } catch (ParseException e) {
+            // Si falla, intentar con otro formato común (dd/MM/yyyy)
+            try {
+                SimpleDateFormat formatoEntrada2 = new SimpleDateFormat("dd/MM/yyyy", new Locale("es", "ES"));
+                Date date = formatoEntrada2.parse(fecha);
+
+                SimpleDateFormat formatoSalida = new SimpleDateFormat("d MMM yyyy", new Locale("es", "ES"));
+                return formatoSalida.format(date);
+            } catch (ParseException e2) {
+                // Si todos fallan, devolver la fecha original
+                return fecha;
+            }
+        }
+    }
+
+    private void mostrarDialogoEliminar() {
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar árbol")
+                .setMessage("¿Estás seguro de que deseas eliminar \"" + tvNombre.getText().toString() + "\"?")
+                .setPositiveButton("Eliminar", (dialog, which) -> {
+                    eliminarArbol();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void eliminarArbol() {
+        if (arbolId == null || arbolId == -1) {
+            Toast.makeText(this, "Error: ID del árbol no válido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Call<Arbol> call = RetrofitClient.getArbolApi().eliminarArbol(arbolId);
+
+        call.enqueue(new Callback<Arbol>() {
+            @Override
+            public void onResponse(Call<Arbol> call, Response<Arbol> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(ArbolDetalles.this,
+                            "Árbol eliminado correctamente",
+                            Toast.LENGTH_SHORT).show();
+
+                    // Volver a ListarArboles
+                    Intent intent = new Intent(ArbolDetalles.this, ListarArboles.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(ArbolDetalles.this,
+                            "Error al eliminar árbol (código " + response.code() + ")",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Arbol> call, Throwable t) {
+                Toast.makeText(ArbolDetalles.this,
+                        "Error de conexión: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void volverAtras(){

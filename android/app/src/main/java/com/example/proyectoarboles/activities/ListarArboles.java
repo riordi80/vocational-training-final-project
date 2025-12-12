@@ -49,13 +49,7 @@ public class ListarArboles extends AppCompatActivity {
 
 
         // Configurar adapter
-        adapter = new ArbolAdapter(listaArboles,
-                new ArbolAdapter.onArbolDeleteListener() {
-                    @Override
-                    public void onArbolDelete(int position) {
-                        mostrarDialogoConfirmacion(position);
-                    }
-                }, arbol -> {
+        adapter = new ArbolAdapter(listaArboles, arbol -> {
             Intent intent = new Intent(ListarArboles.this, ArbolDetalles.class);
             intent.putExtra("arbol_id", arbol.getId());
             intent.putExtra("arbol_nombre", arbol.getNombre());
@@ -208,64 +202,6 @@ public class ListarArboles extends AppCompatActivity {
             Log.e(TAG, "Error al cargar datos XML: " + e.getMessage());
             return new ArrayList<>();
         }
-    }
-
-    private void mostrarDialogoConfirmacion(int position){
-        if (position < 0 || position >= listaArboles.size()) {
-            Log.e(TAG, "Posición inválida para eliminar: " + position);
-            return;
-        }
-
-        Arbol arbol = listaArboles.get(position);
-
-        new AlertDialog.Builder(this)
-                .setTitle("Eliminar árbol")
-                .setMessage("¿Seguro que quieres eliminar \"" + arbol.getNombre() + "\"?")
-                .setPositiveButton("Eliminar", (dialog, which) -> {
-                    eliminarArbolAPI(arbol.getId(), position);
-                })
-                .setNegativeButton("Cancelar", null)
-                .show();
-    }
-
-    private void eliminarArbolAPI(Long id, int position) {
-        if (id == null) {
-            Toast.makeText(this, "Error: ID del árbol no válido", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Log.d(TAG, "Eliminando árbol con ID: " + id);
-
-        Call<Arbol> call = RetrofitClient.getArbolApi().eliminarArbol(id);
-
-        call.enqueue(new Callback<Arbol>() {
-            @Override
-            public void onResponse(Call<Arbol> call, Response<Arbol> response) {
-                if (response.isSuccessful()) {
-                    // Eliminar del adapter
-                    adapter.eliminarArbol(position);
-
-                    Toast.makeText(ListarArboles.this,
-                            "Árbol eliminado correctamente",
-                            Toast.LENGTH_SHORT).show();
-
-                    Log.d(TAG, "Árbol eliminado exitosamente");
-                } else {
-                    Log.e(TAG, "Error al eliminar - Código: " + response.code());
-                    Toast.makeText(ListarArboles.this,
-                            "Error al eliminar árbol (código " + response.code() + ")",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Arbol> call, Throwable t) {
-                Log.e(TAG, "Error al eliminar árbol: " + t.getMessage());
-                Toast.makeText(ListarArboles.this,
-                        "Error de conexión al eliminar: " + t.getMessage(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
