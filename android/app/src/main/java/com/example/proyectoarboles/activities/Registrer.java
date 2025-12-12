@@ -16,6 +16,7 @@ import com.example.proyectoarboles.R;
 
 public class Registrer extends AppCompatActivity {
 
+    EditText inputNombre;
     EditText inputUsuario;
     EditText inputPassword;
     Button volverButton;
@@ -27,6 +28,7 @@ public class Registrer extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registrer);
 
+        inputNombre = findViewById(R.id.editTextNombreRegistrer);
         inputUsuario = findViewById(R.id.editTextUsuarioRegistrer);
         inputPassword = findViewById(R.id.editTextPasswordRegistrer);
 
@@ -46,7 +48,9 @@ public class Registrer extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Registrer.this, ListarArboles.class);
 
-                if (inputUsuario.getText().toString().isBlank()){
+                if (inputNombre.getText().toString().isBlank()){
+                    inputNombre.setError("Este campo no puede quedar en blanco");
+                }else if (inputUsuario.getText().toString().isBlank()){
                     inputUsuario.setError("Este campo no puede quedar en blanco");
                 }else if (inputPassword.getText().toString().isBlank()){
                     inputPassword.setError("Este campo no puede quedar en blanco");

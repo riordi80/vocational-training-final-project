@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Primary colors (Green) - matching frontend -->
+    <color name="green_primary">#16a34a</color>
+    <color name="green_primary_dark">#15803d</color>
+    <color name="green_primary_light">#22c55e</color>
+    <color name="green_50">#f0fdf4</color>
+    <color name="green_100">#dcfce7</color>
+
+    <!-- Secondary colors (Gray) - matching frontend -->
+    <color name="gray_50">#f9fafb</color>
+    <color name="gray_100">#f3f4f6</color>
+    <color name="gray_200">#e5e7eb</color>
+    <color name="gray_300">#d1d5db</color>
+    <color name="gray_600">#4b5563</color>
+    <color name="gray_800">#1f2937</color>
+
+    <!-- Danger colors (Red) - matching frontend -->
+    <color name="red_primary">#dc2626</color>
+    <color name="red_primary_dark">#b91c1c</color>
+
+    <!-- Accent colors -->
+    <color name="blue_primary">#3b82f6</color>
+    <color name="blue_50">#eff6ff</color>
+
+    <!-- Text colors -->
+    <color name="text_primary">#111827</color>
+    <color name="text_secondary">#6b7280</color>
+
+    <!-- Background colors -->
+    <color name="background_app">#f3f4f6</color>
+    <color name="background_card">#ffffff</color>
 </resources>

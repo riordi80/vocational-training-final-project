@@ -16,6 +16,7 @@ public class RetrofitClient {
 
     private static Retrofit retrofit = null;
     private static ArbolApi arbolApi = null;
+    private static CentroEducativoApi centroEducativoApi = null;
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
@@ -49,5 +50,12 @@ public class RetrofitClient {
             arbolApi = getRetrofitInstance().create(ArbolApi.class);
         }
         return arbolApi;
+    }
+
+    public static CentroEducativoApi getCentroEducativoApi() {
+        if (centroEducativoApi == null) {
+            centroEducativoApi = getRetrofitInstance().create(CentroEducativoApi.class);
+        }
+        return centroEducativoApi;
     }
 }
