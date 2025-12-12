@@ -19,6 +19,9 @@ public class Arbol {
     @SerializedName("ubicacionEspecifica")
     private String ubicacion;
 
+    @SerializedName("centroEducativo")
+    private CentroEducativo centroEducativo;
+
     @SerializedName("temperatura")
     private String temperatura;
 
@@ -78,6 +81,10 @@ public class Arbol {
         return ubicacion;
     }
 
+    public CentroEducativo getCentroEducativo() {
+        return centroEducativo;
+    }
+
     public String getTemperatura() {
         return temperatura;
     }
@@ -113,6 +120,10 @@ public class Arbol {
 
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+
+    public void setCentroEducativo(CentroEducativo centroEducativo) {
+        this.centroEducativo = centroEducativo;
     }
 
     public void setTemperatura(String temperatura) {

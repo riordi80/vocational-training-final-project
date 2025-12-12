@@ -12,17 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.model.Arbol;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ArbolAdapter extends RecyclerView.Adapter<ArbolAdapter.ArbolViewHolder>{
     private List<Arbol> listaArboles;
     private OnItemClickListener listener;
 
-    private onArbolDeleteListener deleteListener;
-
-    public ArbolAdapter(List<Arbol> listaArboles, onArbolDeleteListener deleteListener,OnItemClickListener listener){
+    public ArbolAdapter(List<Arbol> listaArboles, OnItemClickListener listener){
         this.listaArboles = listaArboles;
-        this.deleteListener = deleteListener;
         this.listener = listener;
     }
 
@@ -41,16 +42,20 @@ public class ArbolAdapter extends RecyclerView.Adapter<ArbolAdapter.ArbolViewHol
         Arbol arbol = listaArboles.get(position);
 
         holder.textViewNombre.setText(arbol.getNombre());
-        holder.textViewEspecieFecha.setText(arbol.getEspecie() + " - " + arbol.getFechaPlantacion());
+        holder.textViewEspecieFecha.setText(arbol.getEspecie() + " - " + formatearFechaEspanol(arbol.getFechaPlantacion()));
 
-        holder.buttonDelete.setOnClickListener(v -> {
-            int pos = holder.getBindingAdapterPosition();
-            if (pos != RecyclerView.NO_POSITION && deleteListener != null){
-                deleteListener.onArbolDelete(pos);
-            }
-        });
+        // Mostrar centro educativo
+        if (arbol.getCentroEducativo() != null) {
+            holder.textViewCentro.setText("📍 " + arbol.getCentroEducativo().getNombre());
+        } else {
+            holder.textViewCentro.setText("📍 Sin centro asignado");
+        }
 
+        // Click en el item completo
         holder.itemView.setOnClickListener(v -> listener.OnItemClick(arbol));
+
+        // Click en botón "Ver detalles"
+        holder.buttonVerDetalles.setOnClickListener(v -> listener.OnItemClick(arbol));
 
     }
 
@@ -60,13 +65,14 @@ public class ArbolAdapter extends RecyclerView.Adapter<ArbolAdapter.ArbolViewHol
     }
 
     public static class ArbolViewHolder extends RecyclerView.ViewHolder{
-        TextView textViewNombre, textViewEspecieFecha;
-        Button buttonDelete;
+        TextView textViewNombre, textViewEspecieFecha, textViewCentro;
+        Button buttonVerDetalles;
         public ArbolViewHolder(@NonNull View itemView){
             super(itemView);
             textViewNombre = itemView.findViewById(R.id.textViewNombre);
             textViewEspecieFecha = itemView.findViewById(R.id.textViewEspecieFecha);
-            buttonDelete = itemView.findViewById(R.id.buttonDelete);
+            textViewCentro = itemView.findViewById(R.id.textViewCentro);
+            buttonVerDetalles = itemView.findViewById(R.id.buttonVerDetalles);
         }
     }
 
@@ -74,13 +80,31 @@ public class ArbolAdapter extends RecyclerView.Adapter<ArbolAdapter.ArbolViewHol
         void OnItemClick(Arbol arbol);
     }
 
-    public interface onArbolDeleteListener{
-        void onArbolDelete(int position);
-    }
+    private String formatearFechaEspanol(String fecha) {
+        if (fecha == null || fecha.isEmpty()) {
+            return "Fecha no disponible";
+        }
 
-    public void eliminarArbol(int position) {
-        listaArboles.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, listaArboles.size());
+        try {
+            // Intentar parsear formato ISO (yyyy-MM-dd) del backend
+            SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-MM-dd", new Locale("es", "ES"));
+            Date date = formatoEntrada.parse(fecha);
+
+            // Formatear a español: "8 dic 2024"
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("d MMM yyyy", new Locale("es", "ES"));
+            return formatoSalida.format(date);
+        } catch (ParseException e) {
+            // Si falla, intentar con otro formato común (dd/MM/yyyy)
+            try {
+                SimpleDateFormat formatoEntrada2 = new SimpleDateFormat("dd/MM/yyyy", new Locale("es", "ES"));
+                Date date = formatoEntrada2.parse(fecha);
+
+                SimpleDateFormat formatoSalida = new SimpleDateFormat("d MMM yyyy", new Locale("es", "ES"));
+                return formatoSalida.format(date);
+            } catch (ParseException e2) {
+                // Si todos fallan, devolver la fecha original
+                return fecha;
+            }
+        }
     }
 }

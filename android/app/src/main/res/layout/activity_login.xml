@@ -5,69 +5,110 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_app"
+    android:padding="16dp"
     tools:context=".activities.Login">
 
-    <EditText
-        android:id="@+id/editTextUsuario"
+    <!-- Logo -->
+    <TextView
+        android:id="@+id/textViewLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="53dp"
-        android:ems="10"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/textViewPassword"
+        android:layout_marginTop="60dp"
+        android:text="🌳"
+        android:textSize="72sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="292dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Título -->
+    <TextView
+        android:id="@+id/textViewTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Garden Monitor"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/green_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewLogo" />
+
+    <!-- Label Usuario -->
     <TextView
         android:id="@+id/textViewUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginTop="48dp"
         android:text="Usuario"
-        app:layout_constraintBottom_toTopOf="@+id/editTextUsuario"
-        app:layout_constraintStart_toStartOf="@+id/editTextUsuario" />
+        app:layout_constraintStart_toStartOf="@+id/editTextUsuario"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
 
+    <!-- Campo Usuario -->
+    <EditText
+        android:id="@+id/editTextUsuario"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Introduzca su usuario"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUsuario" />
+
+    <!-- Label Contraseña -->
     <TextView
         android:id="@+id/textViewPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="9dp"
+        android:layout_marginTop="24dp"
         android:text="Contraseña"
-        app:layout_constraintBottom_toTopOf="@+id/editTextPassword"
-        app:layout_constraintStart_toStartOf="@+id/editTextPassword" />
+        app:layout_constraintStart_toStartOf="@+id/editTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUsuario" />
 
+    <!-- Campo Contraseña -->
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Introduzca su contraseña"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPassword" />
+
+    <!-- Botón Iniciar Sesión -->
     <Button
         android:id="@+id/buttonLogin"
-        android:layout_width="wrap_content"
+        style="@style/ButtonPrimary"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="37dp"
-        android:layout_marginBottom="188dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:text="Iniciar Sesión"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
+    <!-- Botón Registrarse -->
     <Button
         android:id="@+id/buttonRegistrer"
-        android:layout_width="wrap_content"
+        style="@style/ButtonOutline"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="21dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:text="Registrarse"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonLogin"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/buttonLogin" />
-
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
