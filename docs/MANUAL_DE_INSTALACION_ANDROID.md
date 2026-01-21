@@ -15,29 +15,17 @@
 
 ## Configuración del Backend
 
-La aplicación Android se conecta al backend desplegado en producción por defecto. Si deseas usar un backend local para desarrollo:
+La aplicación Android utiliza **Build Variants** para gestionar la conexión a diferentes backends sin modificar código. Esto permite cambiar fácilmente entre desarrollo local y producción.
 
-1. El backend debe estar corriendo en el puerto **8080**
-2. Anota la dirección IP de tu servidor backend
-3. Modifica la URL en `RetrofitClient.java` (ver sección siguiente)
+**Build Variants disponibles:**
 
-### Configuración de la URL del Backend
+| Entorno | Build Variant | URL |
+|---------|---------------|-----|
+| Emulador + backend local | `localEmulatorDebug` | `http://10.0.2.2:8080/` |
+| Móvil físico + backend local | `localDeviceDebug` | `http://192.168.1.158:8080/` |
+| Producción (Render) | `productionDebug` / `productionRelease` | `https://proyecto-arboles-backend.onrender.com/` |
 
-La aplicación está configurada para conectarse al backend en producción mediante la clase `RetrofitClient.java`:
-
-```java
-// En: app/src/main/java/com/example/proyectoarboles/api/RetrofitClient.java
-
-private static final String BASE_URL = "https://proyecto-arboles-backend.onrender.com/";
-```
-
-**Opciones de configuración según tu entorno:**
-
-- **Producción (por defecto)**: `https://proyecto-arboles-backend.onrender.com/`
-- **Emulador de Android (desarrollo local)**: `http://10.0.2.2:8080/`
-- **Dispositivo físico (desarrollo local)**: `http://TU_IP_LOCAL:8080/`
-  - Ejemplo: `http://192.168.1.100:8080/`
-  - Asegúrate de que el dispositivo y el ordenador estén en la misma red WiFi
+Para más detalles sobre cómo seleccionar un Build Variant, consulta la **Sección 8: Build Variants**.
 
 ## Instalación Paso a Paso
 
@@ -184,98 +172,102 @@ Si la app no puede conectarse, verifica que el `AndroidManifest.xml` incluya:
 
 ## Compilar APK para Distribución
 
-Para generar un APK instalable:
+Para generar un APK instalable para producción:
 
-1. Ve a **Build > Build Bundle(s) / APK(s) > Build APK(s)**
-2. Espera a que se complete la compilación
-3. Haz clic en **locate** para encontrar el APK generado
-4. El APK estará en: `app/build/outputs/apk/debug/app-debug.apk`
+1. Selecciona el Build Variant **`productionRelease`** (View > Tool Windows > Build Variants)
+2. Ve a **Build > Build Bundle(s) / APK(s) > Build APK(s)**
+3. Espera a que se complete la compilación
+4. Haz clic en **locate** para encontrar el APK generado
+5. El APK estará en: `app/build/outputs/apk/production/release/app-production-release.apk`
+
+**Nota**: Para desarrollo/pruebas, el APK debug estará en `app/build/outputs/apk/[variant]/debug/`
 
 ## Notas Adicionales
 
-- La aplicación **se conecta por defecto al backend en producción** (Render)
+- La aplicación usa **Build Variants** para seleccionar el entorno (local/producción)
+- Para producción, usa el variant `productionDebug` o `productionRelease`
 - Incluye un sistema de **fallback** con datos XML en caso de que la API no esté disponible
 - Los datos de sensores se generan aleatoriamente para demostración
 - El modo de edición permite modificar todos los campos del árbol
 - Las validaciones básicas están implementadas en el login y registro
 - **Timeout configurado**: 60 segundos (adecuado para el free tier de Render)
 
-## 8. Configuración: Desarrollo Local vs Producción
+## 8. Build Variants: Seleccionar Entorno de Desarrollo
 
-### Configuración de la URL del Backend
+### ¿Qué son los Build Variants?
 
-La aplicación Android tiene la URL del backend hardcoded en el código fuente. Necesitarás cambiarla manualmente dependiendo de si estás trabajando en desarrollo local o producción.
+Los Build Variants permiten compilar diferentes versiones de la aplicación sin modificar el código fuente. Cada variant tiene su propia URL de backend configurada automáticamente.
 
-**Archivo**: `android/app/src/main/java/com/example/proyectoarboles/api/RetrofitClient.java`
+La aplicación tiene **6 Build Variants** disponibles:
 
-### Configuración para Producción (Actual)
+| Build Variant | URL del Backend | Uso |
+|---------------|-----------------|-----|
+| `localEmulatorDebug` | `http://10.0.2.2:8080/` | Desarrollo con emulador + backend local |
+| `localEmulatorRelease` | `http://10.0.2.2:8080/` | Probar release con emulador + backend local |
+| `localDeviceDebug` | `http://192.168.1.158:8080/` | Desarrollo con móvil físico + backend local |
+| `localDeviceRelease` | `http://192.168.1.158:8080/` | Probar release con móvil físico + backend local |
+| `productionDebug` | `https://proyecto-arboles-backend.onrender.com/` | Debugging contra servidor de producción |
+| `productionRelease` | `https://proyecto-arboles-backend.onrender.com/` | **APK final para distribución** |
 
-```java
-private static final String BASE_URL = "https://proyecto-arboles-backend.onrender.com/";
-```
+### Cómo Seleccionar un Build Variant
 
-Esta es la configuración actual que apunta al backend desplegado en Render.
+1. En Android Studio, ve a **View > Tool Windows > Build Variants** (o usa el panel lateral izquierdo)
+2. En el panel que aparece, haz clic en el dropdown de tu módulo `:app`
+3. Selecciona el variant adecuado según tu situación:
 
-### Configuración para Desarrollo Local
+#### Flujo de Trabajo Recomendado
 
-Si quieres trabajar con el backend en local, necesitas cambiar la URL según el tipo de dispositivo:
+| Situación | Build Variant a usar |
+|-----------|---------------------|
+| Desarrollo diario con emulador y backend local | `localEmulatorDebug` |
+| Desarrollo con móvil físico y backend local | `localDeviceDebug` |
+| Probar contra el servidor de producción (Render) | `productionDebug` |
+| Generar APK final para distribución | `productionRelease` |
 
-#### Para Emulador Android:
+### Configuración para Dispositivo Físico
 
-```java
-private static final String BASE_URL = "http://10.0.2.2:8080/";
-```
+Si usas `localDeviceDebug` o `localDeviceRelease`, necesitas verificar que la IP configurada sea correcta:
 
-**Explicación**: El emulador de Android usa `10.0.2.2` como alias para `localhost` de tu ordenador.
-
-#### Para Dispositivo Físico:
-
-```java
-private static final String BASE_URL = "http://192.168.1.X:8080/";
-```
-
-**Pasos**:
 1. Obtén tu IP local:
    - **Linux/Mac**: `ip addr` o `ifconfig`
    - **Windows**: `ipconfig`
-2. Reemplaza `192.168.1.X` con tu IP real (ej: `192.168.1.105`)
+
+2. Si tu IP es diferente a `192.168.1.158`, modifica el archivo `android/app/build.gradle.kts`:
+
+   ```kotlin
+   create("localDevice") {
+       dimension = "environment"
+       // Cambia esta IP por la de tu ordenador
+       buildConfigField("String", "BASE_URL", "\"http://TU_IP_LOCAL:8080/\"")
+   }
+   ```
+
 3. Asegúrate de que el ordenador y el dispositivo estén en la misma red WiFi
 
-### Flujo de Trabajo Recomendado
+### Diferencia entre Debug y Release
 
-#### Desarrollo Local:
+| Característica | Debug | Release |
+|----------------|-------|---------|
+| Debuggable | Sí (puedes usar breakpoints) | No |
+| Optimizado | No | Sí (si `isMinifyEnabled = true`) |
+| Velocidad de compilación | Rápida | Más lenta |
+| Firma | Automática (debug keystore) | Manual (requiere keystore de producción) |
 
-1. Asegúrate de que el backend esté corriendo localmente:
-   ```bash
-   cd backend
-   ./mvnw spring-boot:run
-   # Backend en http://localhost:8080
-   ```
+**Para desarrollo diario**, usa siempre variantes `Debug`.
+**Para distribución final**, usa `productionRelease`.
 
-2. Modifica `RetrofitClient.java`:
-   ```java
-   private static final String BASE_URL = "http://10.0.2.2:8080/";
-   ```
+### Ventajas de usar Build Variants
 
-3. Ejecuta la aplicación desde Android Studio
-
-4. **IMPORTANTE**: No hagas commit de este cambio. Antes de hacer commit, vuelve a poner la URL de producción.
-
-#### Producción:
-
-1. Asegúrate de que `RetrofitClient.java` apunte a Render:
-   ```java
-   private static final String BASE_URL = "https://proyecto-arboles-backend.onrender.com/";
-   ```
-
-2. Compila el APK para distribución
+- **Sin riesgo de errores**: No necesitas modificar código fuente para cambiar de entorno
+- **Sin commits accidentales**: La URL correcta está siempre en el código
+- **Cambio instantáneo**: Solo selecciona el variant y ejecuta
+- **Profesional**: Es la forma estándar en desarrollo Android
 
 ### Notas Importantes
 
-- A diferencia del Frontend y Backend, la aplicación Android **requiere cambio manual** del código fuente
-- Recuerda revertir los cambios de URL antes de hacer commit al repositorio
-- Si trabajas en equipo, coordina para no commitear la URL de desarrollo local
-- Considera usar BuildConfig o variables de entorno en versiones futuras para automatizar esto
+- El código accede a la URL mediante `BuildConfig.BASE_URL` (configurado en `RetrofitClient.java`)
+- Al cambiar de variant, Android Studio recompilará automáticamente
+- Los variants `localDevice*` requieren que configures tu IP local en `build.gradle.kts`
 
 ---
 
@@ -298,7 +290,7 @@ Para problemas adicionales:
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2025-12-08
+**Última actualización**: 2026-01-21
 
 ### Colaboradores
 
