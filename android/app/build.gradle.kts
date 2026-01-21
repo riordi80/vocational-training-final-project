@@ -18,6 +18,30 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // Habilitar BuildConfig para acceder a las variables
+    buildFeatures {
+        buildConfig = true
+    }
+
+    // Dimensión para agrupar los flavors
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("localEmulator") {
+            dimension = "environment"
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/\"")
+        }
+        create("localDevice") {
+            dimension = "environment"
+            // Cambia esta IP si tu red local asigna otra a tu PC
+            buildConfigField("String", "BASE_URL", "\"http://192.168.1.158:8080/\"")
+        }
+        create("production") {
+            dimension = "environment"
+            buildConfigField("String", "BASE_URL", "\"https://proyecto-arboles-backend.onrender.com/\"")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

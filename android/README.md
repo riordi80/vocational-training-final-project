@@ -43,29 +43,35 @@ cd android
 - Seleccionar carpeta `android/`
 - Esperar a que Gradle sincronice las dependencias
 
-### 3. Configurar URL del Backend
+### 3. Seleccionar Build Variant
 
-La aplicación está configurada para conectarse al backend en producción:
+La aplicación usa **Build Variants** para gestionar la conexión a diferentes backends sin modificar código.
 
-**RetrofitClient.java:**
-```java
-private static final String BASE_URL = "https://proyecto-arboles-backend.onrender.com/";
-```
+**En Android Studio:**
+1. Ve a **View → Tool Windows → Build Variants**
+2. Selecciona el variant según tu entorno:
 
-Para desarrollo local, cambiar a:
-```java
-private static final String BASE_URL = "http://10.0.2.2:8080/"; // Emulador Android
-// o
-private static final String BASE_URL = "http://TU_IP_LOCAL:8080/"; // Dispositivo físico
-```
+| Build Variant | Backend | Uso |
+|---------------|---------|-----|
+| `localEmulatorDebug` | `http://10.0.2.2:8080/` | Desarrollo con emulador + backend local |
+| `localDeviceDebug` | `http://192.168.1.158:8080/` | Desarrollo con móvil físico + backend local |
+| `productionDebug` | `https://proyecto-arboles-backend.onrender.com/` | Pruebas contra producción |
+| `productionRelease` | `https://proyecto-arboles-backend.onrender.com/` | **APK final para distribución** |
+
+> **Nota**: Si usas `localDevice*`, verifica que la IP en `build.gradle.kts` coincida con la de tu ordenador.
 
 ### 4. Compilar y ejecutar
 
+**Desde terminal (variant por defecto):**
 ```bash
-./gradlew assembleDebug
+./gradlew assembleLocalEmulatorDebug   # Para emulador + backend local
+./gradlew assembleProductionDebug       # Para producción
+./gradlew assembleProductionRelease     # APK final
 ```
 
-O desde Android Studio: Run → Run 'app'
+**Desde Android Studio:**
+1. Selecciona el Build Variant deseado (paso 3)
+2. Run → Run 'app' (o Shift+F10)
 
 ## Estructura del Proyecto
 
@@ -78,18 +84,18 @@ android/
 │   │   │   │   └── com/example/proyectoarboles/
 │   │   │   │       ├── activities/    # Login, Registrer, ListarArboles, ArbolDetalles
 │   │   │   │       ├── adapter/       # ArbolAdapter, BigDecimalStringAdapter
-│   │   │   │       ├── api/           # ApiClient, ApiService, AuthInterceptor
+│   │   │   │       ├── api/           # RetrofitClient, ArbolApi
 │   │   │   │       └── model/         # Arbol, CentroEducativo
 │   │   │   ├── res/
 │   │   │   │   ├── layout/           # activity_*.xml, item_arbol.xml
 │   │   │   │   └── values/           # strings.xml, colors.xml, themes.xml
 │   │   │   └── AndroidManifest.xml
 │   │   └── test/
-│   ├── build.gradle
+│   ├── build.gradle.kts              # Configuración del módulo app (con Build Variants)
 │   └── proguard-rules.pro
 ├── gradle/
-├── build.gradle
-├── settings.gradle
+├── build.gradle.kts                  # Configuración raíz
+├── settings.gradle.kts
 ├── .gitignore
 └── README.md
 ```
@@ -191,7 +197,7 @@ La app Android está completamente funcional, conectada al backend desplegado en
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2025-12-08
+**Última actualización**: 2026-01-21
 
 ### Colaboradores
 

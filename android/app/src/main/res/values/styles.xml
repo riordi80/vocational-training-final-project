@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Button Styles - matching frontend design -->
 
-    <!-- Primary Button (Green) -->
+    <!-- Botón Primario Button (Verde) -->
     <style name="ButtonPrimary" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/green_primary</item>
         <item name="android:textColor">@color/white</item>
@@ -15,7 +14,7 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <!-- Secondary Button (Gray) -->
+    <!-- Botón Secundario (Gris) -->
     <style name="ButtonSecondary" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/gray_200</item>
         <item name="android:textColor">@color/gray_800</item>
@@ -28,7 +27,7 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <!-- Danger Button (Red) -->
+    <!-- Boton Danger (Rojo) -->
     <style name="ButtonDanger" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/red_primary</item>
         <item name="android:textColor">@color/white</item>
@@ -41,7 +40,7 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <!-- Outline Button (Green border) -->
+    <!-- Boton con borde (Borde verde) -->
     <style name="ButtonOutline" parent="Widget.Material3.Button.OutlinedButton">
         <item name="strokeColor">@color/green_primary</item>
         <item name="android:textColor">@color/green_primary</item>
@@ -55,7 +54,7 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <!-- Card Style -->
+    <!-- Card -->
     <style name="CardStyle" parent="Widget.Material3.CardView.Elevated">
         <item name="cardBackgroundColor">@color/background_card</item>
         <item name="cardCornerRadius">12dp</item>
@@ -64,7 +63,7 @@
         <item name="android:layout_margin">8dp</item>
     </style>
 
-    <!-- Section Header Style -->
+    <!-- Header -->
     <style name="SectionHeader">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
@@ -73,7 +72,7 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
 
-    <!-- Field Label Style -->
+    <!-- Field Label -->
     <style name="FieldLabel">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
