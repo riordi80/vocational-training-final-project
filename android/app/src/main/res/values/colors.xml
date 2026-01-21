@@ -4,14 +4,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Primary colors (Green) - matching frontend -->
+    <!-- Primary colors (Green) -->
     <color name="green_primary">#16a34a</color>
     <color name="green_primary_dark">#15803d</color>
     <color name="green_primary_light">#22c55e</color>
     <color name="green_50">#f0fdf4</color>
     <color name="green_100">#dcfce7</color>
 
-    <!-- Secondary colors (Gray) - matching frontend -->
+    <!-- Secondary colors (Gray) -->
     <color name="gray_50">#f9fafb</color>
     <color name="gray_100">#f3f4f6</color>
     <color name="gray_200">#e5e7eb</color>
@@ -19,7 +19,7 @@
     <color name="gray_600">#4b5563</color>
     <color name="gray_800">#1f2937</color>
 
-    <!-- Danger colors (Red) - matching frontend -->
+    <!-- Danger colors (Red) -->
     <color name="red_primary">#dc2626</color>
     <color name="red_primary_dark">#b91c1c</color>
 

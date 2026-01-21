@@ -1,5 +1,6 @@
 package com.example.proyectoarboles.api;
 
+import com.example.proyectoarboles.BuildConfig;
 import com.example.proyectoarboles.adapter.BigDecimalStringAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,7 +13,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "https://proyecto-arboles-backend.onrender.com/";
+    // URL configurada automáticamente según el Build Flavor seleccionado
+    private static final String BASE_URL = BuildConfig.BASE_URL;
 
     private static Retrofit retrofit = null;
     private static ArbolApi arbolApi = null;
