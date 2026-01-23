@@ -176,9 +176,10 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Logout limpia localStorage
 
 ### Sistema de Roles
-- Roles: Admin, Profesor, Estudiante (mock)
-- Rutas protegidas según rol
-- Funcionalidades restringidas por rol
+- Roles globales: ADMIN, USUARIO
+- Roles por centro: COORDINADOR, PROFESOR, ESTUDIANTE, OBSERVADOR
+- Rutas protegidas según rol global y rol en centro
+- Funcionalidades restringidas por permisos
 
 ### Feedback al Usuario
 - Mensajes de éxito (toast/alert verde)
