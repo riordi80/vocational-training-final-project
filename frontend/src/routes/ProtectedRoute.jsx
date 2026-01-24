@@ -1,7 +1,14 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { hasRoleInCenter } from "../utils/permissions";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({
+    children,
+    requiredRoles,
+    centroId,
+    requiredCenterRoles
+
+ }) => {
     const { user, loading } = useAuth();
 
     if (loading) {
@@ -17,6 +24,20 @@ const ProtectedRoute = ({ children }) => {
 
     if (!user) {
         return <Navigate to="/login" replace />;
+    }
+
+    if (requiredRoles && requiredRoles.length > 0) {
+        const hasRole = user.rol === 'ADMIN' || requiredRoles.includes(user.rol);
+        if (!hasRole) {
+            return <Navigate to="/access-denied" replace />;
+        }
+    }
+
+    if (centroId && requiredCenterRoles) {
+        const hasPermission = hasRoleInCenter(user, centroId, requiredCenterRoles);
+        if (!hasPermission) {
+            return <Navigate to="/access-denied" replace />;
+        }
     }
 
     return children;
