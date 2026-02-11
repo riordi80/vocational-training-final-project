@@ -5,6 +5,8 @@
   import Button from '../../components/common/Button';
   import Spinner from '../../components/common/Spinner';
   import Alert from '../../components/common/Alert';
+  import { usePermissions } from '../../hooks/usePermissions';
+  import { useAuth } from '../../context/AuthContext';
 
   function ListadoArboles() {
     // Estados
@@ -15,6 +17,8 @@
     const [centroFiltro, setCentroFiltro] = useState('');
 
     const navigate = useNavigate();
+    const { isAdmin, canCreateArbol } = usePermissions();
+    const { user } = useAuth();
 
     // Cargar árboles y centros al montar el componente
     useEffect(() => {
@@ -33,8 +37,16 @@
           getCentros()
         ]);
 
-        setArboles(arbolesData);
-        setCentros(centrosData);
+        if (isAdmin()) {
+          setArboles(arbolesData);
+          setCentros(centrosData);
+        } else {
+          // TODO: eliminar cuando el backend filtre por permisos del token
+          const idsCentrosUsuarios = user.centros.map(c => c.centroId);
+          setCentros(centrosData.filter(c => idsCentrosUsuarios.includes(c.id)));
+          setArboles(arbolesData.filter(a => idsCentrosUsuarios.includes(a.centroEducativo?.id)));
+        }
+
       } catch (err) {
         console.error('Error cargando datos:', err);
         setError('No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos.');
@@ -56,6 +68,11 @@
         if (centroId === '') {
           // Si no hay filtro, cargar todos
           arbolesData = await getArboles();
+          // TODO: eliminar cuando el backend filtre por permisos del token
+          if (!isAdmin()) {
+            const idsCentrosUsuario = user.centros.map(c => c.centroId);
+            arbolesData = arbolesData.filter(a => idsCentrosUsuario.includes(a.centroEducativo?.id));
+          }
         } else {
           // Si hay filtro, cargar por centro
           arbolesData = await getArbolesByCentro(centroId);
@@ -116,12 +133,13 @@
           </div>
 
           {/* Botón añadir árbol */}
+          {(isAdmin() || user.centros.some(c => canCreateArbol(c.centroId))) && (
           <Button
             variant="primary"
             onClick={handleNuevoArbol}
           >
             + Añadir Árbol
-          </Button>
+          </Button> )}
         </div>
 
         {/* Mensaje de error */}

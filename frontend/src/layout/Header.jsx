@@ -25,7 +25,7 @@ const Header = () => {
                     {/* Logo y título */}
                     <Link to="/dashboard" className="flex items-center space-x-2">
                         <span className="text-2xl">🌳</span>
-                        <h1 className="text-xl font-bold">Garden Monitor</h1>
+                        <h1 className="text-xl font-bold">Proyecto Árboles</h1>
                     </Link>
 
                     {user && (

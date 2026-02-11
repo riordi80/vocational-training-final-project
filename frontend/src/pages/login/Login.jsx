@@ -48,7 +48,7 @@ const Login = () => {
         {/* Logo y título */}
         <div className="text-center mb-8">
           <span className="text-5xl">🌳</span>
-          <h1 className="text-2xl font-bold text-gray-800 mt-2">Garden Monitor</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mt-2">Proyecto Árboles</h1>
           <p className="text-gray-600 mt-1">Inicia sesión en tu cuenta</p>
         </div>
 
