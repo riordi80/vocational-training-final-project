@@ -1,0 +1,12 @@
+// ============================================
+// CONFIGURACIÓN PRIVADA - NO SUBIR A GIT
+// ============================================
+// Copia este archivo como config.h y rellena tus datos.
+// config.h está en .gitignore y no se sube al repositorio.
+
+const char* WIFI_SSID     = "TU_SSID";
+const char* WIFI_PASSWORD = "TU_PASSWORD";
+
+// URL del backend (descomentar la que corresponda)
+const char* BACKEND_URL = "http://TU_IP_LOCAL:8080/api/lecturas";  // Local (IP de tu PC)
+// const char* BACKEND_URL = "https://proyecto-arboles-backend.onrender.com/api/lecturas";  // Produccion
