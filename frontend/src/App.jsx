@@ -12,6 +12,7 @@ import FormularioArbol from './pages/arboles/FormularioArbol';
 import ListadoCentros from './pages/centros/ListadoCentros';
 import DetalleCentro from './pages/centros/DetalleCentro';
 import FormularioCentro from './pages/centros/FormularioCentro';
+import AccessDenied from './pages/access-denied/AccessDenied';
 import './App.css';
 
 function App() {
@@ -47,9 +48,18 @@ function App() {
           <Route path="/arboles/:id/editar" element={<FormularioArbol />} />
           <Route path="/arboles/:id" element={<DetalleArbol />} />
           <Route path="/centros" element={<ListadoCentros />} />
-          <Route path="/centros/nuevo" element={<FormularioCentro />} />
-          <Route path="/centros/:id/editar" element={<FormularioCentro />} />
+          <Route path="/centros/nuevo" element={
+            <ProtectedRoute requiredRoles={['ADMIN']}>
+              <FormularioCentro />
+            </ProtectedRoute>
+          } />
+          <Route path="/centros/:id/editar" element={
+            <ProtectedRoute requiredRoles={['ADMIN']}>
+              <FormularioCentro />
+            </ProtectedRoute>
+          } />
           <Route path="/centros/:id" element={<DetalleCentro />} />
+          <Route path="/access-denied" element={<AccessDenied />} />
         </Route>
 
         {/* 404 */}

@@ -1,5 +1,6 @@
 package com.example.gardenmonitor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
@@ -44,6 +45,7 @@ public class DispositivoEsp32 {
      * Relación One-to-One bidireccional: un dispositivo monitoriza un único árbol.
      * </p>
      */
+    @JsonIgnore
     @OneToOne(mappedBy = "dispositivoEsp32")
     private Arbol arbol;
 

@@ -39,6 +39,7 @@ yarn-error.log*
 secrets.json
 credentials.json
 config.local.*
+esp32/**/config.h
 
 # Dependencias (se gestionan en cada subcarpeta)
 node_modules/

@@ -20,7 +20,7 @@ CREATE TABLE usuario (
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT pk_usuario PRIMARY KEY (id),
     CONSTRAINT uq_usuario_email UNIQUE (email),
-    CONSTRAINT chk_usuario_rol CHECK (rol IN ('ADMIN', 'PROFESOR', 'ESTUDIANTE', 'INVITADO'))
+    CONSTRAINT chk_usuario_rol CHECK (rol IN ('ADMIN', 'USUARIO'))
 );
 
 CREATE INDEX idx_usuario_rol ON usuario(rol);
