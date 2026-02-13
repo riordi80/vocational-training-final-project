@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
 import MainLayout from './layout/MainLayout';
 import Login from './pages/login/Login';
@@ -16,50 +15,49 @@ import AccessDenied from './pages/access-denied/AccessDenied';
 import './App.css';
 
 function App() {
-  const { user } = useAuth();
-
   return (
     <Router>
       <Routes>
-        {/* Redirección raíz */}
-        <Route
-          path="/"
-          element={user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
-        />
+        {/* Redirección raíz - siempre a dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-        {/* Rutas públicas */}
+        {/* Rutas de autenticación */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
         {/* Biblioteca de componentes - Documentación */}
         <Route path="/component-library" element={<ComponentLibrary />} />
 
-        {/* Rutas protegidas con layout */}
-        <Route
-          element={
-            <ProtectedRoute>
-              <MainLayout />
-            </ProtectedRoute>
-          }
-        >
+        {/* Rutas públicas de lectura con layout */}
+        <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/arboles" element={<ListadoArboles />} />
-          <Route path="/arboles/nuevo" element={<FormularioArbol />} />
-          <Route path="/arboles/:id/editar" element={<FormularioArbol />} />
           <Route path="/arboles/:id" element={<DetalleArbol />} />
           <Route path="/centros" element={<ListadoCentros />} />
+          <Route path="/centros/:id" element={<DetalleCentro />} />
+          <Route path="/access-denied" element={<AccessDenied />} />
+
+          {/* Rutas protegidas de escritura */}
+          <Route path="/arboles/nuevo" element={
+            <ProtectedRoute requiredRoles={['ADMIN', 'COORDINADOR']}>
+              <FormularioArbol />
+            </ProtectedRoute>
+          } />
+          <Route path="/arboles/:id/editar" element={
+            <ProtectedRoute requiredRoles={['ADMIN', 'COORDINADOR']}>
+              <FormularioArbol />
+            </ProtectedRoute>
+          } />
           <Route path="/centros/nuevo" element={
             <ProtectedRoute requiredRoles={['ADMIN']}>
               <FormularioCentro />
             </ProtectedRoute>
           } />
           <Route path="/centros/:id/editar" element={
-            <ProtectedRoute requiredRoles={['ADMIN']}>
+            <ProtectedRoute requiredRoles={['ADMIN', 'COORDINADOR']}>
               <FormularioCentro />
             </ProtectedRoute>
           } />
-          <Route path="/centros/:id" element={<DetalleCentro />} />
-          <Route path="/access-denied" element={<AccessDenied />} />
         </Route>
 
         {/* 404 */}
