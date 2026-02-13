@@ -9,10 +9,12 @@ const Dashboard = () => {
       {/* Bienvenida */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
-          ¡Bienvenido, {user?.nombre}!
+          {user ? `¡Bienvenido, ${user.nombre}!` : '¡Bienvenido a Proyecto Árboles!'}
         </h1>
         <p className="text-gray-600">
-          Gestiona los árboles y centros educativos desde tu panel de control.
+          {user
+            ? 'Gestiona los árboles y centros educativos desde tu panel de control.'
+            : 'Explora los árboles y centros educativos. Inicia sesión para gestionar contenido.'}
         </p>
       </div>
 
@@ -52,12 +54,14 @@ const Dashboard = () => {
       </div>
 
       {/* Info del usuario */}
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-6 text-center">
-        <p className="text-sm text-gray-700">
-          <span className="font-medium">Rol:</span> {user?.rol} |
-          <span className="font-medium ml-3">Email:</span> {user?.email}
-        </p>
-      </div>
+      {user && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-6 text-center">
+          <p className="text-sm text-gray-700">
+            <span className="font-medium">Rol:</span> {user.rol} |
+            <span className="font-medium ml-3">Email:</span> {user.email}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
