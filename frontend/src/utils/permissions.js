@@ -1,36 +1,28 @@
-import { ROLES, ROLES_CENTRO } from "../constants/roles";
+import { ROLES } from "../constants/roles";
 
 export function isAdminUser(user) {
+  if (!user) return false;
   return user.rol === ROLES.ADMIN;
 }
 
-export function hasRoleInCenter(user, centroId, roles) {
-  if (isAdminUser(user)) {
-    return true;
-  }
-  const asignacion = user.centros.find(c => c.centroId === centroId);
-  if (!asignacion) {
-    return false;
-  }
-  return roles.includes(asignacion.rolEnCentro);
+export function isCoordinadorInCenter(user, centroId) {
+  if (!user) return false;
+  if (isAdminUser(user)) return true;
+  return user.centros?.some(c => c.centroId === centroId);
 }
 
 export function canCreateArbol(user, centroId) {
-  return hasRoleInCenter(user, centroId, [ROLES_CENTRO.COORDINADOR, ROLES_CENTRO.PROFESOR]);
+  return isCoordinadorInCenter(user, centroId);
 }
 
 export function canEditArbol(user, centroId) {
-  return hasRoleInCenter(user, centroId, [ROLES_CENTRO.COORDINADOR, ROLES_CENTRO.PROFESOR]);
+  return isCoordinadorInCenter(user, centroId);
 }
 
 export function canDeleteArbol(user, centroId) {
-  return hasRoleInCenter(user, centroId, [ROLES_CENTRO.COORDINADOR]);
+  return isCoordinadorInCenter(user, centroId);
 }
 
 export function canManageCenter(user, centroId) {
-  return hasRoleInCenter(user, centroId, [ROLES_CENTRO.COORDINADOR]);
-}
-
-export function canAssignUsersToCenter(user, centroId){
-  return hasRoleInCenter(user, centroId, [ROLES_CENTRO.COORDINADOR]);
+  return isCoordinadorInCenter(user, centroId);
 }
