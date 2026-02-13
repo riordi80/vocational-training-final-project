@@ -37,15 +37,8 @@
           getCentros()
         ]);
 
-        if (isAdmin()) {
-          setArboles(arbolesData);
-          setCentros(centrosData);
-        } else {
-          // TODO: eliminar cuando el backend filtre por permisos del token
-          const idsCentrosUsuarios = user.centros.map(c => c.centroId);
-          setCentros(centrosData.filter(c => idsCentrosUsuarios.includes(c.id)));
-          setArboles(arbolesData.filter(a => idsCentrosUsuarios.includes(a.centroEducativo?.id)));
-        }
+        setArboles(arbolesData);
+        setCentros(centrosData);
 
       } catch (err) {
         console.error('Error cargando datos:', err);
@@ -66,15 +59,8 @@
 
         let arbolesData;
         if (centroId === '') {
-          // Si no hay filtro, cargar todos
           arbolesData = await getArboles();
-          // TODO: eliminar cuando el backend filtre por permisos del token
-          if (!isAdmin()) {
-            const idsCentrosUsuario = user.centros.map(c => c.centroId);
-            arbolesData = arbolesData.filter(a => idsCentrosUsuario.includes(a.centroEducativo?.id));
-          }
         } else {
-          // Si hay filtro, cargar por centro
           arbolesData = await getArbolesByCentro(centroId);
         }
 
@@ -102,6 +88,11 @@
       if (!fecha) return '-';
       return new Date(fecha).toLocaleDateString('es-ES');
     };
+
+    // Mostrar botón "Añadir" solo si el usuario tiene permisos
+    const mostrarBotonAnadir = user && (
+      isAdmin() || user.centros?.some(c => canCreateArbol(c.centroId))
+    );
 
     return (
       <div className="container mx-auto px-4 py-8">
@@ -133,7 +124,7 @@
           </div>
 
           {/* Botón añadir árbol */}
-          {(isAdmin() || user.centros.some(c => canCreateArbol(c.centroId))) && (
+          {mostrarBotonAnadir && (
           <Button
             variant="primary"
             onClick={handleNuevoArbol}

@@ -25,49 +25,10 @@ const MOCK_USERS = {
         nombre: 'Coordinador',
         email: 'coordinador@test.com',
         password: 'coord123',
-        rol: 'USUARIO',
+        rol: 'COORDINADOR',
         centros: [
-            { centroId: 1, rolEnCentro: 'COORDINADOR' }
+            { centroId: 1 }
         ]
-    },
-    'profesor@test.com': {
-        id: 3,
-        nombre: 'Profesor',
-        email: 'profesor@test.com',
-        password: 'prof123',
-        rol: 'USUARIO',
-        centros: [
-            { centroId: 1, rolEnCentro: 'PROFESOR' },
-            { centroId: 2, rolEnCentro: 'PROFESOR' }
-        ]
-    },
-    'estudiante@test.com': {
-        id: 4,
-        nombre: 'Estudiante',
-        email: 'estudiante@test.com',
-        password: 'est123',
-        rol: 'USUARIO',
-        centros: [
-            { centroId: 1, rolEnCentro: 'ESTUDIANTE' }
-        ]
-    },
-    'observador@test.com': {
-        id: 5,
-        nombre: 'Observador',
-        email: 'observador@test.com',
-        password: 'obs123',
-        rol: 'USUARIO',
-        centros: [
-            { centroId: 1, rolEnCentro: 'OBSERVADOR' }
-        ]
-    },
-    'nuevo@test.com': {
-        id: 6,
-        nombre: 'Nuevo',
-        email: 'nuevo@test.com',
-        password: 'nuevo123',
-        rol: 'USUARIO',
-        centros: []
     }
 }
 
@@ -132,7 +93,7 @@ export const AuthProvider = ({ children }) => {
             id: Date.now(),
             nombre: nombre,
             email: email,
-            rol: 'USUARIO',
+            rol: 'COORDINADOR',
             centros: []
         };
 
@@ -152,4 +113,3 @@ export const AuthProvider = ({ children }) => {
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-

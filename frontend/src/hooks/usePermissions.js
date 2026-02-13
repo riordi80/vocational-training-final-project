@@ -1,15 +1,14 @@
 import { useAuth } from '../context/AuthContext';
-import { isAdminUser, canCreateArbol, canEditArbol, canDeleteArbol, canManageCenter, canAssignUsersToCenter } from '../utils/permissions';
+import { isAdminUser, canCreateArbol, canEditArbol, canDeleteArbol, canManageCenter } from '../utils/permissions';
 
 export function usePermissions() {
   const { user } = useAuth();
 
   return {
-    isAdmin: () => isAdminUser(user),
-    canCreateArbol: (centroId) => canCreateArbol(user, centroId),
-    canEditArbol: (centroId) => canEditArbol(user, centroId),
-    canDeleteArbol: (centroId) => canDeleteArbol(user, centroId),
-    canManageCenter: (centroId) => canManageCenter(user, centroId),
-    canAssignUsersToCenter: (centroId) => canAssignUsersToCenter(user, centroId),
+    isAdmin: () => user ? isAdminUser(user) : false,
+    canCreateArbol: (centroId) => user ? canCreateArbol(user, centroId) : false,
+    canEditArbol: (centroId) => user ? canEditArbol(user, centroId) : false,
+    canDeleteArbol: (centroId) => user ? canDeleteArbol(user, centroId) : false,
+    canManageCenter: (centroId) => user ? canManageCenter(user, centroId) : false,
   };
 }

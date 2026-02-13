@@ -2,6 +2,6 @@ package com.example.gardenmonitor.model;
 
     public enum Rol {
         ADMIN,
-        USUARIO
+        COORDINADOR
     }
 

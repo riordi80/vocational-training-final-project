@@ -20,7 +20,7 @@ CREATE TABLE usuario (
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT pk_usuario PRIMARY KEY (id),
     CONSTRAINT uq_usuario_email UNIQUE (email),
-    CONSTRAINT chk_usuario_rol CHECK (rol IN ('ADMIN', 'USUARIO'))
+    CONSTRAINT chk_usuario_rol CHECK (rol IN ('ADMIN', 'COORDINADOR'))
 );
 
 CREATE INDEX idx_usuario_rol ON usuario(rol);
@@ -160,14 +160,12 @@ CREATE TABLE usuario_centro (
     id BIGSERIAL,
     usuario_id BIGINT NOT NULL,
     centro_id BIGINT NOT NULL,
-    rol_en_centro VARCHAR(30) NOT NULL,
     fecha_asignacion TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT pk_usuario_centro PRIMARY KEY (id),
     CONSTRAINT fk_usuario_centro_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
     CONSTRAINT fk_usuario_centro_centro FOREIGN KEY (centro_id) REFERENCES centro_educativo(id) ON DELETE CASCADE,
-    CONSTRAINT uq_usuario_centro UNIQUE (usuario_id, centro_id),
-    CONSTRAINT chk_usuario_centro_rol CHECK (rol_en_centro IN ('COORDINADOR', 'PROFESOR', 'ESTUDIANTE', 'OBSERVADOR'))
+    CONSTRAINT uq_usuario_centro UNIQUE (usuario_id, centro_id)
 );
 
 CREATE INDEX idx_usuario_centro_usuario ON usuario_centro(usuario_id);
