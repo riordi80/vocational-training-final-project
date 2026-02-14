@@ -4,6 +4,7 @@ import { getCentroById, deleteCentro, getArbolesByCentro } from '../../services/
 import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
 import Alert from '../../components/common/Alert';
+import { usePermissions } from '../../hooks/usePermissions';
 
 function DetalleCentro() {
   const { id } = useParams();
@@ -16,6 +17,7 @@ function DetalleCentro() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { isAdmin, canManageCenter } = usePermissions();
 
   useEffect(() => {
     cargarCentro();
@@ -154,12 +156,16 @@ function DetalleCentro() {
           <Button onClick={handleVolver} variant="outline">
             Volver
           </Button>
-          <Button onClick={handleEditar} variant="primary">
-            Editar
-          </Button>
-          <Button onClick={() => setShowDeleteModal(true)} variant="danger">
-            Eliminar
-          </Button>
+          {canManageCenter(centro.id) && (
+            <Button onClick={handleEditar} variant="primary">
+              Editar
+            </Button>
+          )}
+          {isAdmin() && (
+            <Button onClick={() => setShowDeleteModal(true)} variant="danger">
+              Eliminar
+            </Button>
+          )}
         </div>
       </div>
 
