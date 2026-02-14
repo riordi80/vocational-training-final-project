@@ -4,6 +4,7 @@ import { getCentros } from '../../services/centrosService';
 import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
 import Alert from '../../components/common/Alert';
+import { usePermissions } from '../../hooks/usePermissions';
 
 function ListadoCentros() {
   // Estados
@@ -12,6 +13,7 @@ function ListadoCentros() {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+  const { isAdmin } = usePermissions();
 
   // Cargar centros al montar el componente
   useEffect(() => {
@@ -58,15 +60,16 @@ function ListadoCentros() {
       </div>
 
       {/* Barra de acciones */}
-      <div className="mb-6 flex justify-end">
-        {/* Botón añadir centro */}
-        <Button
-          variant="primary"
-          onClick={handleNuevoCentro}
-        >
-          + Añadir Centro
-        </Button>
-      </div>
+      {isAdmin() && (
+        <div className="mb-6 flex justify-end">
+          <Button
+            variant="primary"
+            onClick={handleNuevoCentro}
+          >
+            + Añadir Centro
+          </Button>
+        </div>
+      )}
 
       {/* Mensaje de error */}
       {error && (

@@ -4,6 +4,7 @@
   import Button from '../../components/common/Button';
   import Spinner from '../../components/common/Spinner';
   import Alert from '../../components/common/Alert';
+  import { usePermissions } from '../../hooks/usePermissions';
 
   function DetalleArbol() {
     const { id } = useParams();
@@ -14,6 +15,7 @@
     const [error, setError] = useState('');
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const { canEditArbol, canDeleteArbol } = usePermissions();
 
     useEffect(() => {
       cargarArbol();
@@ -121,16 +123,20 @@
             <Button variant="outline" onClick={handleVolver}>
               Volver
             </Button>
-            <Button variant="primary" onClick={handleEditar}>
-              Editar
-            </Button>
-            <Button 
-              variant="danger" 
-              onClick={() => setShowDeleteConfirm(true)}
-              disabled={deleting}
-            >
-              Eliminar
-            </Button>
+            {canEditArbol(arbol.centroEducativo?.id) && (
+              <Button variant="primary" onClick={handleEditar}>
+                Editar
+              </Button>
+            )}
+            {canDeleteArbol(arbol.centroEducativo?.id) && (
+              <Button
+                variant="danger"
+                onClick={() => setShowDeleteConfirm(true)}
+                disabled={deleting}
+              >
+                Eliminar
+              </Button>
+            )}
           </div>
         </div>
 
