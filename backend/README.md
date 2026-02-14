@@ -25,8 +25,9 @@ backend/
 │   │   ├── java/
 │   │   │   └── com/example/gardenmonitor/
 │   │   │       ├── GardenmonitorApplication.java  # Clase principal
+│   │   │       ├── config/         # Configuración (CORS, etc.)
 │   │   │       ├── controller/     # Controladores REST
-│   │   │       ├── service/        # Lógica de negocio
+│   │   │       ├── dto/            # DTOs (LoginRequest, RegisterRequest, AuthResponse, etc.)
 │   │   │       ├── repository/     # Repositorios JPA
 │   │   │       └── model/          # Entidades JPA
 │   │   └── resources/
@@ -142,7 +143,7 @@ mvnw.cmd spring-boot:run
 
 El servidor estará disponible en: `http://localhost:8080`
 
-## Endpoints (Requisito PGV Noviembre)
+## Endpoints
 
 ### Centros Educativos
 - `GET /api/centros` - Listar centros
@@ -158,6 +159,23 @@ El servidor estará disponible en: `http://localhost:8080`
 - `POST /api/arboles` - Crear árbol
 - `PUT /api/arboles/{id}` - Actualizar árbol
 - `DELETE /api/arboles/{id}` - Eliminar árbol
+
+### Usuarios
+- `GET /api/usuarios` - Listar todos
+- `GET /api/usuarios/{id}` - Obtener por ID
+- `POST /api/usuarios` - Crear nuevo
+- `PUT /api/usuarios/{id}` - Actualizar
+- `DELETE /api/usuarios/{id}` - Eliminar
+
+### Asignación Usuario-Centro (Relación N:M)
+- `GET /api/usuario-centro/usuario/{usuarioId}` - Centros de un usuario
+- `GET /api/usuario-centro/centro/{centroId}` - Coordinadores de un centro
+- `POST /api/usuario-centro` - Asignar coordinador a centro
+- `DELETE /api/usuario-centro/{id}` - Desasignar coordinador
+
+### Autenticación
+- `POST /api/auth/login` - Login con email y password (valida contra BD)
+- `POST /api/auth/register` - Registro de nuevo usuario (rol COORDINADOR por defecto)
 
 ## Testing
 
@@ -224,10 +242,13 @@ Ver sección "Despliegue en Render" más abajo para detalles completos.
 
 **API REST completada y desplegada en producción**
 
-- [x] 4 Entidades JPA con anotaciones completas, Javadoc y validaciones
+- [x] 6 Entidades JPA con anotaciones completas, Javadoc y validaciones
 - [x] Repositorios JPA con queries derivadas
 - [x] Relaciones bidireccionales (CentroEducativo ↔ Arbol)
-- [x] CRUD completo para Árboles y Centros Educativos
+- [x] Relación N:M (Usuario ↔ CentroEducativo via UsuarioCentro)
+- [x] CRUD completo para Árboles, Centros Educativos y Usuarios
+- [x] Autenticación real contra BD (login/register via AuthController)
+- [x] Sistema de roles (ADMIN, COORDINADOR)
 - [x] Validaciones con Bean Validation
 - [x] Testing Postman completado
 - [x] Desplegado en Render con PostgreSQL 16
@@ -408,7 +429,7 @@ Ver [Manual de Instalación](../docs/MANUAL_DE_INSTALACION.md) para más detalle
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2025-12-08
+**Última actualización**: 2026-02-14
 
 ### Colaboradores
 
