@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import api from "../services/api";
 
 const AuthContext = createContext();
 
@@ -9,28 +10,6 @@ export const useAuth = () => {
     }
     return context;
 };
-
-// EN DESARROLLO...
-const MOCK_USERS = {
-    'admin@test.com': {
-        id: 1,
-        nombre: 'Admin',
-        email: 'admin@test.com',
-        password: 'admin123',
-        rol: 'ADMIN',
-        centros: []
-    },
-    'coordinador@test.com': {
-        id: 2,
-        nombre: 'Coordinador',
-        email: 'coordinador@test.com',
-        password: 'coord123',
-        rol: 'COORDINADOR',
-        centros: [
-            { centroId: 1 }
-        ]
-    }
-}
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -50,30 +29,26 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    // Login mock - guarda usuario (sin contraseña) en localStorage
-    const login = (email, password) => {
+    const login = async (email, password) => {
         if (!email || !password) {
             throw new Error('Email y contraseña son requeridos');
         }
-        const mockUser = MOCK_USERS[email];
-        if (!mockUser) {
-            throw new Error('Usuario o contraseña incorrecta');
-        }
-        if (mockUser.password !== password) {
-            throw new Error('Usuario o contraseña incorrecta');
-        }
 
-        // Crear objeto sin password y guardar (seguridad)
-        const userToSave = {
-            id: mockUser.id,
-            nombre: mockUser.nombre,
-            email: mockUser.email,
-            rol: mockUser.rol,
-            centros: mockUser.centros
-        };
-        localStorage.setItem('user', JSON.stringify(userToSave));
-        setUser(userToSave);
-        return userToSave;
+        try {
+            const response = await api.post('/auth/login', { email, password });
+            const userData = response.data;
+            localStorage.setItem('user', JSON.stringify(userData));
+            setUser(userData);
+            return userData;
+        } catch (error) {
+            if (error.response?.status === 401) {
+                throw new Error('Usuario o contraseña incorrecta');
+            }
+            if (error.response?.status === 403) {
+                throw new Error('Usuario no activo');
+            }
+            throw new Error(error.response?.data?.message || 'Error al iniciar sesión');
+        }
     };
 
     // Logout - elimina usuario del localStorage
@@ -82,24 +57,23 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
-    // Register mock - guarda usuario en localStorage
-    const register = (nombre, email, password) => {
+    const register = async (nombre, email, password) => {
         if (!nombre || !email || !password) {
             throw new Error('Todos los campos son requeridos');
         }
 
-        // Simular registro exitoso
-        const mockUser = {
-            id: Date.now(),
-            nombre: nombre,
-            email: email,
-            rol: 'COORDINADOR',
-            centros: []
-        };
-
-        localStorage.setItem('user', JSON.stringify(mockUser));
-        setUser(mockUser);
-        return mockUser;
+        try {
+            const response = await api.post('/auth/register', { nombre, email, password });
+            const userData = response.data;
+            localStorage.setItem('user', JSON.stringify(userData));
+            setUser(userData);
+            return userData;
+        } catch (error) {
+            if (error.response?.status === 409) {
+                throw new Error('El email ya está registrado');
+            }
+            throw new Error(error.response?.data?.message || 'Error al registrarse');
+        }
     };
 
     const value = {
