@@ -6,6 +6,8 @@
   import Button from '../../components/common/Button';
   import Spinner from '../../components/common/Spinner';
   import Alert from '../../components/common/Alert';
+  import { usePermissions } from '../../hooks/usePermissions';
+  import { useAuth } from '../../context/AuthContext';
 
   function FormularioArbol() {
     const { id } = useParams();
@@ -32,6 +34,13 @@
     const [loadingData, setLoadingData] = useState(isEditMode);
     const [error, setError] = useState('');
     const [errors, setErrors] = useState({});
+    const { isAdmin } = usePermissions();
+    const { user } = useAuth();
+
+    // ADMIN ve todos los centros, COORDINADOR solo los suyos
+    const centrosFiltrados = isAdmin()
+      ? centros
+      : centros.filter(c => user?.centros?.some(uc => uc.centroId === c.id));
 
     // Cargar centros y datos del árbol (si es edición)
     useEffect(() => {
@@ -288,7 +297,7 @@
                     required
                   >
                     <option value="">Selecciona un centro</option>
-                    {centros.map(centro => (
+                    {centrosFiltrados.map(centro => (
                       <option key={centro.id} value={centro.id}>
                         {centro.nombre}
                       </option>
