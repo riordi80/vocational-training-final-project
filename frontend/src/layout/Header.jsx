@@ -48,6 +48,14 @@ const Header = () => {
                         >
                             Centros
                         </Link>
+                        {user?.rol === 'ADMIN' && (
+                            <Link
+                                to="/usuarios"
+                                className="hover:text-green-200 transition"
+                            >
+                                Usuarios
+                            </Link>
+                        )}
 
                         {user ? (
                             <>
@@ -129,6 +137,15 @@ const Header = () => {
                             >
                                 Centros
                             </Link>
+                            {user?.rol === 'ADMIN' && (
+                                <Link
+                                    to="/usuarios"
+                                    onClick={closeMobileMenu}
+                                    className="hover:text-green-200 transition py-2"
+                                >
+                                    Usuarios
+                                </Link>
+                            )}
 
                             {user ? (
                                 <Button
