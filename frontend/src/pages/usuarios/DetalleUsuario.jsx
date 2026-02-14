@@ -116,7 +116,7 @@ function DetalleUsuario() {
 
   // Filtrar centros que no están ya asignados
   const centrosDisponibles = todosCentros.filter(
-    centro => !centrosAsignados.some(asig => asig.centroId === centro.id)
+    centro => !centrosAsignados.some(asig => asig.centroEducativo?.id === centro.id)
   );
 
   if (loading) {
@@ -291,7 +291,7 @@ function DetalleUsuario() {
                   {centrosAsignados.map((asignacion) => (
                     <tr key={asignacion.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {asignacion.centroNombre || `Centro #${asignacion.centroId}`}
+                        {asignacion.centroEducativo?.nombre || `Centro #${asignacion.centroEducativo?.id}`}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <Button
