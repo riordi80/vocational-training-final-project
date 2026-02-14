@@ -11,6 +11,9 @@ import FormularioArbol from './pages/arboles/FormularioArbol';
 import ListadoCentros from './pages/centros/ListadoCentros';
 import DetalleCentro from './pages/centros/DetalleCentro';
 import FormularioCentro from './pages/centros/FormularioCentro';
+import ListadoUsuarios from './pages/usuarios/ListadoUsuarios';
+import DetalleUsuario from './pages/usuarios/DetalleUsuario';
+import FormularioUsuario from './pages/usuarios/FormularioUsuario';
 import AccessDenied from './pages/access-denied/AccessDenied';
 import './App.css';
 
@@ -56,6 +59,28 @@ function App() {
           <Route path="/centros/:id/editar" element={
             <ProtectedRoute requiredRoles={['ADMIN', 'COORDINADOR']}>
               <FormularioCentro />
+            </ProtectedRoute>
+          } />
+
+          {/* Rutas protegidas de usuarios (solo ADMIN) */}
+          <Route path="/usuarios" element={
+            <ProtectedRoute requiredRoles={['ADMIN']}>
+              <ListadoUsuarios />
+            </ProtectedRoute>
+          } />
+          <Route path="/usuarios/nuevo" element={
+            <ProtectedRoute requiredRoles={['ADMIN']}>
+              <FormularioUsuario />
+            </ProtectedRoute>
+          } />
+          <Route path="/usuarios/:id" element={
+            <ProtectedRoute requiredRoles={['ADMIN']}>
+              <DetalleUsuario />
+            </ProtectedRoute>
+          } />
+          <Route path="/usuarios/:id/editar" element={
+            <ProtectedRoute requiredRoles={['ADMIN']}>
+              <FormularioUsuario />
             </ProtectedRoute>
           } />
         </Route>
