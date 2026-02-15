@@ -83,6 +83,9 @@ public class CentroEducativo {
     @Column(name = "telefono", length = 20)
     private String telefono;
 
+    @Column(name = "email", length = 150)
+    private String email;
+
     /**
      * Fecha y hora de creación del centro educativo.
      * <p>
@@ -173,6 +176,9 @@ public class CentroEducativo {
 
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
     public LocalDateTime getFechaCreacion() { return fechaCreacion; }
     public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }

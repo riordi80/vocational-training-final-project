@@ -106,6 +106,7 @@ public class CentroEducativoController {
         centro.setProvincia(detallesCentro.getProvincia());
         centro.setCodigoPostal(detallesCentro.getCodigoPostal());
         centro.setTelefono(detallesCentro.getTelefono());
+        centro.setEmail(detallesCentro.getEmail());
 
         return centroEducativoRepository.save(centro);
     }

@@ -1,6 +1,6 @@
 -- ============================================
 -- MIGRACIÓN: Añadir campos a centro_educativo
--- (isla, poblacion, provincia, codigo_postal, telefono)
+-- (isla, poblacion, provincia, codigo_postal, telefono, email)
 -- Idempotente: se puede ejecutar múltiples veces
 -- ============================================
 
@@ -9,6 +9,7 @@ ALTER TABLE centro_educativo ADD COLUMN IF NOT EXISTS poblacion VARCHAR(100);
 ALTER TABLE centro_educativo ADD COLUMN IF NOT EXISTS provincia VARCHAR(100);
 ALTER TABLE centro_educativo ADD COLUMN IF NOT EXISTS codigo_postal VARCHAR(10);
 ALTER TABLE centro_educativo ADD COLUMN IF NOT EXISTS telefono VARCHAR(20);
+ALTER TABLE centro_educativo ADD COLUMN IF NOT EXISTS email VARCHAR(150);
 
 -- CHECK constraint para isla (solo si no existe)
 DO $$
