@@ -68,7 +68,7 @@ function DetalleCentro() {
   };
 
   const handleVolver = () => {
-    navigate('/centros');
+    navigate(-1);
   };
 
   const handleEditar = () => {
@@ -274,9 +274,20 @@ function DetalleCentro() {
 
       {/* Árboles del Centro */}
       <div className="mt-6 bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
-          Árboles del Centro ({arboles.length})
-        </h2>
+        <div className="flex items-center justify-between mb-4 border-b pb-2">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Árboles del Centro ({arboles.length})
+          </h2>
+          {canManageCenter(centro.id) && (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => navigate('/arboles/nuevo', { state: { centroId: centro.id } })}
+            >
+              + Añadir Árbol
+            </Button>
+          )}
+        </div>
         {arboles.length === 0 ? (
           <p className="text-gray-500 text-center py-4">
             Este centro aún no tiene árboles registrados.

@@ -189,11 +189,7 @@ function FormularioCentro() {
   };
 
   const handleCancelar = () => {
-    if (esEdicion) {
-      navigate(`/centros/${id}`);
-    } else {
-      navigate('/centros');
-    }
+    navigate(-1);
   };
 
   if (loadingCentro) {
