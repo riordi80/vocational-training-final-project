@@ -99,6 +99,7 @@ public class ArbolController {
         arbol.setUmbralHumedadAmbienteMax(detallesArbol.getUmbralHumedadAmbienteMax());
         arbol.setUmbralHumedadSueloMin(detallesArbol.getUmbralHumedadSueloMin());
         arbol.setUmbralCO2Max(detallesArbol.getUmbralCO2Max());
+        arbol.setAbsorcionCo2Anual(detallesArbol.getAbsorcionCo2Anual());
 
         return arbolRepository.save(arbol);
     }
