@@ -5,6 +5,7 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Alert from '../../components/common/Alert';
 import Spinner from '../../components/common/Spinner';
+import { ISLAS } from '../../constants/islas';
 
 function FormularioCentro() {
   const { id } = useParams();
@@ -17,7 +18,12 @@ function FormularioCentro() {
     direccion: '',
     latitud: '',
     longitud: '',
-    responsable: ''
+    responsable: '',
+    isla: '',
+    poblacion: '',
+    provincia: '',
+    codigoPostal: '',
+    telefono: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -41,7 +47,12 @@ function FormularioCentro() {
         direccion: centro.direccion || '',
         latitud: centro.latitud?.toString() || '',
         longitud: centro.longitud?.toString() || '',
-        responsable: centro.responsable || ''
+        responsable: centro.responsable || '',
+        isla: centro.isla || '',
+        poblacion: centro.poblacion || '',
+        provincia: centro.provincia || '',
+        codigoPostal: centro.codigoPostal || '',
+        telefono: centro.telefono || ''
       });
     } catch (err) {
       console.error('Error cargando centro:', err);
@@ -136,7 +147,12 @@ function FormularioCentro() {
         direccion: formData.direccion.trim(),
         latitud: parseFloat(formData.latitud),
         longitud: parseFloat(formData.longitud),
-        responsable: formData.responsable.trim()
+        responsable: formData.responsable.trim(),
+        isla: formData.isla || null,
+        poblacion: formData.poblacion.trim() || null,
+        provincia: formData.provincia.trim() || null,
+        codigoPostal: formData.codigoPostal.trim() || null,
+        telefono: formData.telefono.trim() || null
       };
 
       if (esEdicion) {
@@ -261,6 +277,79 @@ function FormularioCentro() {
             <p className="text-xs text-gray-500 mt-1">
               Máximo 100 caracteres
             </p>
+          </div>
+
+          {/* Isla */}
+          <div>
+            <label htmlFor="isla" className="block text-sm font-medium text-gray-700 mb-1">
+              Isla
+            </label>
+            <select
+              id="isla"
+              name="isla"
+              value={formData.isla}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            >
+              <option value="">-- Seleccionar isla --</option>
+              {ISLAS.map((isla) => (
+                <option key={isla.value} value={isla.value}>
+                  {isla.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Población */}
+          <div>
+            <Input
+              id="poblacion"
+              name="poblacion"
+              label="Población"
+              type="text"
+              value={formData.poblacion}
+              onChange={handleChange}
+              placeholder="Ej: Las Palmas de Gran Canaria"
+            />
+          </div>
+
+          {/* Provincia */}
+          <div>
+            <Input
+              id="provincia"
+              name="provincia"
+              label="Provincia"
+              type="text"
+              value={formData.provincia}
+              onChange={handleChange}
+              placeholder="Ej: Las Palmas"
+            />
+          </div>
+
+          {/* Código Postal */}
+          <div>
+            <Input
+              id="codigoPostal"
+              name="codigoPostal"
+              label="Código Postal"
+              type="text"
+              value={formData.codigoPostal}
+              onChange={handleChange}
+              placeholder="Ej: 35001"
+            />
+          </div>
+
+          {/* Teléfono */}
+          <div>
+            <Input
+              id="telefono"
+              name="telefono"
+              label="Teléfono"
+              type="tel"
+              value={formData.telefono}
+              onChange={handleChange}
+              placeholder="Ej: 928 123 456"
+            />
           </div>
 
           {/* Latitud */}

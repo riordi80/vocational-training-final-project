@@ -5,6 +5,7 @@ import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
 import Alert from '../../components/common/Alert';
 import { usePermissions } from '../../hooks/usePermissions';
+import { ISLAS } from '../../constants/islas';
 
 function DetalleCentro() {
   const { id } = useParams();
@@ -88,6 +89,12 @@ function DetalleCentro() {
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  const formatearIsla = (isla) => {
+    if (!isla) return null;
+    const found = ISLAS.find((i) => i.value === isla);
+    return found ? found.label : isla;
   };
 
   if (loading) {
@@ -189,6 +196,36 @@ function DetalleCentro() {
               <label className="text-sm font-medium text-gray-500">Responsable</label>
               <p className="text-gray-900">{centro.responsable}</p>
             </div>
+            {centro.isla && (
+              <div>
+                <label className="text-sm font-medium text-gray-500">Isla</label>
+                <p className="text-gray-900">{formatearIsla(centro.isla)}</p>
+              </div>
+            )}
+            {centro.poblacion && (
+              <div>
+                <label className="text-sm font-medium text-gray-500">Población</label>
+                <p className="text-gray-900">{centro.poblacion}</p>
+              </div>
+            )}
+            {centro.provincia && (
+              <div>
+                <label className="text-sm font-medium text-gray-500">Provincia</label>
+                <p className="text-gray-900">{centro.provincia}</p>
+              </div>
+            )}
+            {centro.codigoPostal && (
+              <div>
+                <label className="text-sm font-medium text-gray-500">Código Postal</label>
+                <p className="text-gray-900">{centro.codigoPostal}</p>
+              </div>
+            )}
+            {centro.telefono && (
+              <div>
+                <label className="text-sm font-medium text-gray-500">Teléfono</label>
+                <p className="text-gray-900">{centro.telefono}</p>
+              </div>
+            )}
             <div>
               <label className="text-sm font-medium text-gray-500">Fecha de Creación</label>
               <p className="text-gray-900">{formatearFecha(centro.fechaCreacion)}</p>

@@ -5,6 +5,7 @@ import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
 import Alert from '../../components/common/Alert';
 import { usePermissions } from '../../hooks/usePermissions';
+import { ISLAS } from '../../constants/islas';
 
 function ListadoCentros() {
   // Estados
@@ -50,6 +51,12 @@ function ListadoCentros() {
   const formatearFecha = (fecha) => {
     if (!fecha) return '-';
     return new Date(fecha).toLocaleDateString('es-ES');
+  };
+
+  const formatearIsla = (isla) => {
+    if (!isla) return '-';
+    const found = ISLAS.find((i) => i.value === isla);
+    return found ? found.label : isla;
   };
 
   return (
@@ -108,6 +115,9 @@ function ListadoCentros() {
                         Nombre
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Isla
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Dirección
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -130,6 +140,9 @@ function ListadoCentros() {
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-gray-900">{centro.nombre}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-500">{formatearIsla(centro.isla)}</div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="text-sm text-gray-500">{centro.direccion}</div>
@@ -171,6 +184,11 @@ function ListadoCentros() {
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="text-lg font-semibold text-gray-900">{centro.nombre}</h3>
                     </div>
+                    {centro.isla && (
+                      <p className="text-sm text-gray-600 mb-1">
+                        <span className="font-medium">Isla:</span> {formatearIsla(centro.isla)}
+                      </p>
+                    )}
                     <p className="text-sm text-gray-600 mb-1">
                       <span className="font-medium">Dirección:</span> {centro.direccion}
                     </p>
