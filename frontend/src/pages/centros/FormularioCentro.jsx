@@ -23,7 +23,8 @@ function FormularioCentro() {
     poblacion: '',
     provincia: '',
     codigoPostal: '',
-    telefono: ''
+    telefono: '',
+    email: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -52,7 +53,8 @@ function FormularioCentro() {
         poblacion: centro.poblacion || '',
         provincia: centro.provincia || '',
         codigoPostal: centro.codigoPostal || '',
-        telefono: centro.telefono || ''
+        telefono: centro.telefono || '',
+        email: centro.email || ''
       });
     } catch (err) {
       console.error('Error cargando centro:', err);
@@ -64,10 +66,15 @@ function FormularioCentro() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const updates = { [name]: value };
+
+    // Auto-rellenar provincia al seleccionar isla
+    if (name === 'isla') {
+      const islaSeleccionada = ISLAS.find((i) => i.value === value);
+      updates.provincia = islaSeleccionada ? islaSeleccionada.provincia : '';
+    }
+
+    setFormData(prev => ({ ...prev, ...updates }));
     // Limpiar error del campo al escribir
     if (errors[name]) {
       setErrors(prev => ({
@@ -152,7 +159,8 @@ function FormularioCentro() {
         poblacion: formData.poblacion.trim() || null,
         provincia: formData.provincia.trim() || null,
         codigoPostal: formData.codigoPostal.trim() || null,
-        telefono: formData.telefono.trim() || null
+        telefono: formData.telefono.trim() || null,
+        email: formData.email.trim() || null
       };
 
       if (esEdicion) {
@@ -313,7 +321,7 @@ function FormularioCentro() {
             />
           </div>
 
-          {/* Provincia */}
+          {/* Provincia (auto-rellenada por isla) */}
           <div>
             <Input
               id="provincia"
@@ -321,8 +329,9 @@ function FormularioCentro() {
               label="Provincia"
               type="text"
               value={formData.provincia}
-              onChange={handleChange}
-              placeholder="Ej: Las Palmas"
+              readOnly
+              disabled
+              placeholder="Se rellena al seleccionar isla"
             />
           </div>
 
@@ -349,6 +358,19 @@ function FormularioCentro() {
               value={formData.telefono}
               onChange={handleChange}
               placeholder="Ej: 928 123 456"
+            />
+          </div>
+
+          {/* Email */}
+          <div>
+            <Input
+              id="email"
+              name="email"
+              label="Correo Electrónico"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Ej: centro@ejemplo.es"
             />
           </div>
 

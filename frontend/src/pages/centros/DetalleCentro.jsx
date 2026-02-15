@@ -6,6 +6,17 @@ import Spinner from '../../components/common/Spinner';
 import Alert from '../../components/common/Alert';
 import { usePermissions } from '../../hooks/usePermissions';
 import { ISLAS } from '../../constants/islas';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fix para el icono por defecto de Leaflet en builds con bundlers (Vite/Webpack)
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
 
 function DetalleCentro() {
   const { id } = useParams();
@@ -156,8 +167,12 @@ function DetalleCentro() {
       {/* Encabezado */}
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">{centro.nombre}</h1>
-          <p className="text-gray-600">Detalles del centro educativo</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            {centro.nombre}
+            {centro.isla && (
+              <span className="text-xl font-normal text-gray-500"> · {formatearIsla(centro.isla)}</span>
+            )}
+          </h1>
         </div>
         <div className="flex gap-2 mt-4 md:mt-0">
           <Button onClick={handleVolver} variant="outline">
@@ -185,21 +200,42 @@ function DetalleCentro() {
           </h2>
           <div className="space-y-3">
             <div>
-              <label className="text-sm font-medium text-gray-500">Nombre</label>
-              <p className="text-gray-900">{centro.nombre}</p>
+              <label className="text-sm font-medium text-gray-500">Responsable</label>
+              <p className="text-gray-900">{centro.responsable}</p>
             </div>
+            {centro.telefono && (
+              <div>
+                <label className="text-sm font-medium text-gray-500">Teléfono</label>
+                <p className="text-gray-900">{centro.telefono}</p>
+              </div>
+            )}
+            {centro.email && (
+              <div>
+                <label className="text-sm font-medium text-gray-500">Correo Electrónico</label>
+                <p className="text-gray-900">{centro.email}</p>
+              </div>
+            )}
+            <div>
+              <label className="text-sm font-medium text-gray-500">Fecha de Creación</label>
+              <p className="text-gray-900">{formatearFecha(centro.fechaCreacion)}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Ubicación Geográfica */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
+            Ubicación Geográfica
+          </h2>
+          <div className="grid grid-cols-2 gap-3 mb-4">
             <div>
               <label className="text-sm font-medium text-gray-500">Dirección</label>
               <p className="text-gray-900">{centro.direccion}</p>
             </div>
-            <div>
-              <label className="text-sm font-medium text-gray-500">Responsable</label>
-              <p className="text-gray-900">{centro.responsable}</p>
-            </div>
-            {centro.isla && (
+            {centro.codigoPostal && (
               <div>
-                <label className="text-sm font-medium text-gray-500">Isla</label>
-                <p className="text-gray-900">{formatearIsla(centro.isla)}</p>
+                <label className="text-sm font-medium text-gray-500">Código Postal</label>
+                <p className="text-gray-900">{centro.codigoPostal}</p>
               </div>
             )}
             {centro.poblacion && (
@@ -214,53 +250,25 @@ function DetalleCentro() {
                 <p className="text-gray-900">{centro.provincia}</p>
               </div>
             )}
-            {centro.codigoPostal && (
-              <div>
-                <label className="text-sm font-medium text-gray-500">Código Postal</label>
-                <p className="text-gray-900">{centro.codigoPostal}</p>
-              </div>
-            )}
-            {centro.telefono && (
-              <div>
-                <label className="text-sm font-medium text-gray-500">Teléfono</label>
-                <p className="text-gray-900">{centro.telefono}</p>
-              </div>
-            )}
-            <div>
-              <label className="text-sm font-medium text-gray-500">Fecha de Creación</label>
-              <p className="text-gray-900">{formatearFecha(centro.fechaCreacion)}</p>
-            </div>
           </div>
-        </div>
-
-        {/* Coordenadas */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
-            Ubicación Geográfica
-          </h2>
-          <div className="space-y-3">
-            <div>
-              <label className="text-sm font-medium text-gray-500">Latitud</label>
-              <p className="text-gray-900">{centro.latitud}°</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-500">Longitud</label>
-              <p className="text-gray-900">{centro.longitud}°</p>
-            </div>
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded">
-              <p className="text-sm text-blue-800">
-                <span className="font-medium">Coordenadas:</span> {centro.latitud}, {centro.longitud}
-              </p>
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${centro.latitud},${centro.longitud}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-blue-600 hover:text-blue-800 underline mt-2 inline-block"
+          {centro.latitud && centro.longitud && (
+            <div className="rounded overflow-hidden border border-gray-200" style={{ height: '200px' }}>
+              <MapContainer
+                center={[parseFloat(centro.latitud), parseFloat(centro.longitud)]}
+                zoom={15}
+                style={{ height: '100%', width: '100%' }}
+                scrollWheelZoom={false}
               >
-                Ver en Google Maps →
-              </a>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={[parseFloat(centro.latitud), parseFloat(centro.longitud)]}>
+                  <Popup>{centro.nombre}</Popup>
+                </Marker>
+              </MapContainer>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
