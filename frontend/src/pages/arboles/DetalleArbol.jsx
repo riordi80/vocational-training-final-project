@@ -56,7 +56,7 @@
     };
 
     const handleVolver = () => {
-      navigate('/arboles');
+      navigate(-1);
     };
 
     const formatearFecha = (fecha) => {

@@ -36,8 +36,15 @@ CREATE TABLE centro_educativo (
     latitud DECIMAL(10, 8),
     longitud DECIMAL(11, 8),
     responsable VARCHAR(100),
+    isla VARCHAR(20),
+    poblacion VARCHAR(100),
+    provincia VARCHAR(100),
+    codigo_postal VARCHAR(10),
+    telefono VARCHAR(20),
+    email VARCHAR(150),
     fecha_creacion TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    CONSTRAINT pk_centro_educativo PRIMARY KEY (id)
+    CONSTRAINT pk_centro_educativo PRIMARY KEY (id),
+    CONSTRAINT chk_centro_isla CHECK (isla IN ('GRAN_CANARIA','TENERIFE','LANZAROTE','FUERTEVENTURA','LA_PALMA','LA_GOMERA','EL_HIERRO'))
 );
 
 CREATE INDEX idx_centro_educativo_nombre ON centro_educativo(nombre);

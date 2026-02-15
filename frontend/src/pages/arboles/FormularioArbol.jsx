@@ -1,5 +1,5 @@
   import { useState, useEffect } from 'react';
-  import { useParams, useNavigate } from 'react-router-dom';
+  import { useParams, useNavigate, useLocation } from 'react-router-dom';
   import { getArbolById, createArbol, updateArbol } from '../../services/arbolesService';
   import { getCentros } from '../../services/centrosService';
   import Input from '../../components/common/Input';
@@ -12,15 +12,17 @@
   function FormularioArbol() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const isEditMode = Boolean(id);
 
     // Estados del formulario
+    const centroIdDesdeState = location.state?.centroId;
     const [formData, setFormData] = useState({
       nombre: '',
       especie: '',
       fechaPlantacion: '',
       ubicacionEspecifica: '',
-      centroEducativo: { id: '' },
+      centroEducativo: { id: centroIdDesdeState || '' },
       umbralTempMin: '',
       umbralTempMax: '',
       umbralHumedadAmbienteMin: '',
@@ -209,11 +211,7 @@
     };
 
     const handleCancel = () => {
-      if (isEditMode) {
-        navigate(`/arboles/${id}`);
-      } else {
-        navigate('/arboles');
-      }
+      navigate(-1);
     };
 
     if (loadingData) {
