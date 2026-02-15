@@ -86,6 +86,8 @@ CREATE TABLE arbol (
     umbral_humedad_suelo_min DECIMAL(5, 2) DEFAULT 30.00,
     -- Umbrales de CO2 (opcional, solo si tiene sensor)
     umbral_co2_max DECIMAL(7, 2) DEFAULT 1000.00,
+    -- Absorción de CO2 estimada al año (kg CO2/año)
+    absorcion_co2_anual DECIMAL(8, 2),
     CONSTRAINT pk_arbol PRIMARY KEY (id),
     CONSTRAINT fk_arbol_centro FOREIGN KEY (centro_id) REFERENCES centro_educativo(id) ON DELETE CASCADE,
     CONSTRAINT fk_arbol_dispositivo FOREIGN KEY (dispositivo_id) REFERENCES dispositivo_esp32(id) ON DELETE SET NULL,
