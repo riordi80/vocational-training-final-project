@@ -28,7 +28,8 @@
       umbralHumedadAmbienteMin: '',
       umbralHumedadAmbienteMax: '',
       umbralHumedadSueloMin: '',
-      umbralCO2Max: ''
+      umbralCO2Max: '',
+      absorcionCo2Anual: ''
     });
 
     const [centros, setCentros] = useState([]);
@@ -74,7 +75,8 @@
             umbralHumedadAmbienteMin: arbolData.umbralHumedadAmbienteMin || '',
             umbralHumedadAmbienteMax: arbolData.umbralHumedadAmbienteMax || '',
             umbralHumedadSueloMin: arbolData.umbralHumedadSueloMin || '',
-            umbralCO2Max: arbolData.umbralCO2Max || ''
+            umbralCO2Max: arbolData.umbralCO2Max || '',
+            absorcionCo2Anual: arbolData.absorcionCo2Anual || ''
           });
         }
       } catch (err) {
@@ -185,7 +187,8 @@
           umbralHumedadAmbienteMin: formData.umbralHumedadAmbienteMin !== '' ? parseFloat(formData.umbralHumedadAmbienteMin) : null,
           umbralHumedadAmbienteMax: formData.umbralHumedadAmbienteMax !== '' ? parseFloat(formData.umbralHumedadAmbienteMax) : null,
           umbralHumedadSueloMin: formData.umbralHumedadSueloMin !== '' ? parseFloat(formData.umbralHumedadSueloMin) : null,
-          umbralCO2Max: formData.umbralCO2Max !== '' ? parseFloat(formData.umbralCO2Max) : null
+          umbralCO2Max: formData.umbralCO2Max !== '' ? parseFloat(formData.umbralCO2Max) : null,
+          absorcionCo2Anual: formData.absorcionCo2Anual !== '' ? parseFloat(formData.absorcionCo2Anual) : null
         };
 
         if (isEditMode) {
@@ -329,6 +332,24 @@
                     onChange={handleChange}
                     placeholder="Ej: Patio principal, junto a la entrada"
                   />
+                </div>
+
+                {/* Absorción CO2 Anual */}
+                <div>
+                  <Input
+                    id="absorcionCo2Anual"
+                    name="absorcionCo2Anual"
+                    label="Absorción CO2 Anual (kg/año)"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.absorcionCo2Anual}
+                    onChange={handleChange}
+                    placeholder="Ej: 22.50"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Estimación de kg de CO2 absorbidos al año
+                  </p>
                 </div>
               </div>
             </div>
