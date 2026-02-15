@@ -67,6 +67,22 @@ public class CentroEducativo {
     @Column(name = "responsable", length = 100)
     private String responsable;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "isla", length = 20)
+    private Isla isla;
+
+    @Column(name = "poblacion", length = 100)
+    private String poblacion;
+
+    @Column(name = "provincia", length = 100)
+    private String provincia;
+
+    @Column(name = "codigo_postal", length = 10)
+    private String codigoPostal;
+
+    @Column(name = "telefono", length = 20)
+    private String telefono;
+
     /**
      * Fecha y hora de creación del centro educativo.
      * <p>
@@ -142,6 +158,21 @@ public class CentroEducativo {
 
     public String getResponsable() { return responsable; }
     public void setResponsable(String responsable) { this.responsable = responsable; }
+
+    public Isla getIsla() { return isla; }
+    public void setIsla(Isla isla) { this.isla = isla; }
+
+    public String getPoblacion() { return poblacion; }
+    public void setPoblacion(String poblacion) { this.poblacion = poblacion; }
+
+    public String getProvincia() { return provincia; }
+    public void setProvincia(String provincia) { this.provincia = provincia; }
+
+    public String getCodigoPostal() { return codigoPostal; }
+    public void setCodigoPostal(String codigoPostal) { this.codigoPostal = codigoPostal; }
+
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 
     public LocalDateTime getFechaCreacion() { return fechaCreacion; }
     public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }

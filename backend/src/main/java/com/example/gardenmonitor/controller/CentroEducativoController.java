@@ -101,6 +101,11 @@ public class CentroEducativoController {
         centro.setLatitud(detallesCentro.getLatitud());
         centro.setLongitud(detallesCentro.getLongitud());
         centro.setResponsable(detallesCentro.getResponsable());
+        centro.setIsla(detallesCentro.getIsla());
+        centro.setPoblacion(detallesCentro.getPoblacion());
+        centro.setProvincia(detallesCentro.getProvincia());
+        centro.setCodigoPostal(detallesCentro.getCodigoPostal());
+        centro.setTelefono(detallesCentro.getTelefono());
 
         return centroEducativoRepository.save(centro);
     }
