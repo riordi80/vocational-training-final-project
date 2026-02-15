@@ -33,7 +33,7 @@ public class Login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Login.this, ListarArboles.class);
+                Intent intent = new Intent(Login.this, ListarCentros.class);
 
                 if (inputUsuario.getText().toString().isBlank()){
                     inputUsuario.setError("Este campo no puede quedar en blanco");
