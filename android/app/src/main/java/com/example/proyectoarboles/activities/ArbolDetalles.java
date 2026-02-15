@@ -61,11 +61,6 @@ public class ArbolDetalles extends AppCompatActivity {
         // Obtener los datos del Intent
         Intent intent = getIntent();
         arbolId = intent.getLongExtra("arbol_id", -1);
-        String nombre = intent.getStringExtra("arbol_nombre");
-        String especie = intent.getStringExtra("arbol_especie");
-        String fecha = intent.getStringExtra("arbol_fecha");
-        String ubicacion = intent.getStringExtra("arbol_ubicacion");
-
         // Inicializar TextViews
         tvNombre = findViewById(R.id.textViewNombreDetalle);
         tvEspecie = findViewById(R.id.textViewEspecieDetalle);
@@ -106,8 +101,8 @@ public class ArbolDetalles extends AppCompatActivity {
         if (arbolId != -1) {
             cargarDetallesDesdeAPI(arbolId);
         } else {
-            // Fallback: mostrar datos del Intent
-            mostrarDatosDelIntent(nombre, especie, fecha, ubicacion);
+            Toast.makeText(this, "Error: No se recibió el ID del árbol.", Toast.LENGTH_LONG).show();
+            finish(); // Cierra la actividad si no hay ID
         }
 
         // Configurar listeners de botones

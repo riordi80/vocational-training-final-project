@@ -52,10 +52,6 @@ public class ListarArboles extends AppCompatActivity {
         adapter = new ArbolAdapter(listaArboles, arbol -> {
             Intent intent = new Intent(ListarArboles.this, ArbolDetalles.class);
             intent.putExtra("arbol_id", arbol.getId());
-            intent.putExtra("arbol_nombre", arbol.getNombre());
-            intent.putExtra("arbol_especie", arbol.getEspecie());
-            intent.putExtra("arbol_fecha", arbol.getFechaPlantacion());
-            intent.putExtra("arbol_ubicacion", arbol.getUbicacion());
             startActivity(intent);
         });
 
