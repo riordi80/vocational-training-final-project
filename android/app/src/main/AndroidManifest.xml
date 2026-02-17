@@ -16,6 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoArboles">
         <activity
+            android:name=".activities.ListarCentros"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activities.Registrer"
             android:exported="false" />
         <activity
@@ -26,13 +34,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.Login"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
     </application>
 
 </manifest>
