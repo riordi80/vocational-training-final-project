@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+#include <DHT.h>
 
 // ============================================
 // CONFIGURACIÓN PRIVADA (WiFi + Backend URL)
@@ -22,15 +23,18 @@ const unsigned long INTERVALO_LECTURA = 30000;  // 30s para testing (en producci
 #define servoPin 25
 
 const int sensorAgua = 39;
+#define DHTPIN 33
+#define DHTTYPE DHT22
 
-// ============================================
+// =============================================
 // VARIABLES GLOBALES
-// ============================================
+  // ============================================
 int estadoAnterior = 0;  // 0 = sin agua, 1 = con agua
 unsigned long ultimoEnvio = 0;
 String macAddress = "";
 
 Servo miServo;
+DHT dht(DHTPIN, DHTTYPE);
 const int posicionSinAgua = 0;
 const int posicionConAgua = 90;
 
@@ -100,18 +104,10 @@ float normalizarHumedadSuelo(int valorSensor) {
 }
 
 /**
- * Genera un valor aleatorio float dentro de un rango.
- * Se usa para simular sensores que aún no están conectados.
- */
-float valorSimulado(float minimo, float maximo) {
-  return minimo + (random(0, 1000) / 1000.0) * (maximo - minimo);
-}
-
-/**
  * Lee los sensores, construye el JSON y envía HTTP POST al backend.
  * - humedad_suelo: valor real del sensor de agua normalizado a %
- * - temperatura: simulada (15-35 °C)
- * - humedad_ambiente: simulada (40-80 %)
+ * - temperatura: valor real del DHT22 (°C)
+ * - humedad_ambiente: valor real del DHT22 (%)
  */
 void enviarLectura() {
   if (WiFi.status() != WL_CONNECTED) {
@@ -122,13 +118,18 @@ void enviarLectura() {
     }
   }
 
-  // Leer sensor real
+  // Leer sensor de agua
   int valorAgua = analogRead(sensorAgua);
   float humedadSuelo = normalizarHumedadSuelo(valorAgua);
 
-  // Simular sensores no conectados
-  float temperatura = valorSimulado(15.0, 35.0);
-  float humedadAmbiente = valorSimulado(40.0, 80.0);
+  // Leer DHT22 (temperatura y humedad ambiental)
+  float temperatura = dht.readTemperature();
+  float humedadAmbiente = dht.readHumidity();
+
+  if (isnan(temperatura) || isnan(humedadAmbiente)) {
+    Serial.println("Error leyendo DHT22. Saltando envío.");
+    return;
+  }
 
   // Construir JSON
   JsonDocument doc;
@@ -180,11 +181,11 @@ void setup() {
   miServo.attach(servoPin);
   miServo.write(posicionSinAgua);
 
+  // Inicializar DHT22
+  dht.begin();
+
   // Conectar WiFi
   conectarWiFi();
-
-  // Semilla para valores simulados
-  randomSeed(analogRead(0));
 }
 
 // ============================================
@@ -192,8 +193,6 @@ void setup() {
 // ============================================
 void loop() {
   int valorAgua = analogRead(sensorAgua);
-  Serial.print("Valor sensor: ");
-  Serial.println(valorAgua);
 
   // --- Lógica de LEDs y servo (existente) ---
   if (valorAgua > 1000) {

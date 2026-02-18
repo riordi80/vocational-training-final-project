@@ -1,0 +1,22 @@
+name: Protect main branch
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-source-branch:
+    name: Only allow merges from develop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check source branch
+        if: github.head_ref != 'develop'
+        run: |
+          echo "❌ PRs to main are only allowed from the 'develop' branch."
+          echo "   Source branch detected: '${{ github.head_ref }}'"
+          echo "   Please merge your changes into 'develop' first."
+          exit 1
+
+      - name: Branch check passed
+        run: echo "✅ Source branch is 'develop'. PR is allowed."
