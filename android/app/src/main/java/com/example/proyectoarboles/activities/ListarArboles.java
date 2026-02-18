@@ -1,7 +1,9 @@
 package com.example.proyectoarboles.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +31,8 @@ public class ListarArboles extends AppCompatActivity {
     private RecyclerView recyclerViewArboles;
     private ArbolAdapter adapter;
     private List<Arbol> listaArboles = new ArrayList<>();
-    private Button btCerrarSesion;
+    private Button btVolver, btLogin, btCerrarSesion;
+    private SharedPreferences sharedPreferences;
     private long centroId = -1; // Variable para almacenar el ID del centro
 
     @Override
@@ -37,9 +40,12 @@ public class ListarArboles extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_arboles);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         centroId = getIntent().getLongExtra("centro_id", -1);
 
         recyclerViewArboles = findViewById(R.id.RecyclerViewArboles);
+        btVolver = findViewById(R.id.btVolver);
+        btLogin = findViewById(R.id.btLogin);
         btCerrarSesion = findViewById(R.id.btCerrarS);
 
         adapter = new ArbolAdapter(listaArboles, arbol -> {
@@ -52,12 +58,8 @@ public class ListarArboles extends AppCompatActivity {
         recyclerViewArboles.setAdapter(adapter);
 
         cargarArbolesDesdeAPI();
-
-        btCerrarSesion.setOnClickListener(v -> {
-            Intent intent = new Intent(ListarArboles.this, Login.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        });
+        configurarListeners();
+        actualizarVisibilidadBotones();
     }
 
     private void cargarArbolesDesdeAPI() {
@@ -67,7 +69,6 @@ public class ListarArboles extends AppCompatActivity {
 
         if (centroId != -1) {
             Log.d(TAG, "Cargando árboles para el centro ID: " + centroId);
-            // Usar el nuevo endpoint de CentroEducativoApi
             call = RetrofitClient.getCentroEducativoApi().obtenerArbolesPorCentro(centroId);
         } else {
             Log.d(TAG, "Cargando todos los árboles");
@@ -99,5 +100,34 @@ public class ListarArboles extends AppCompatActivity {
                 Toast.makeText(ListarArboles.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void configurarListeners() {
+        btVolver.setOnClickListener(v -> finish()); // Cierra la actividad actual y vuelve a la anterior
+
+        btLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(ListarArboles.this, Login.class);
+            startActivity(intent);
+        });
+
+        btCerrarSesion.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+            actualizarVisibilidadBotones();
+            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void actualizarVisibilidadBotones() {
+        boolean isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false);
+        btLogin.setVisibility(isLoggedIn ? View.GONE : View.VISIBLE);
+        btCerrarSesion.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        actualizarVisibilidadBotones();
     }
 }

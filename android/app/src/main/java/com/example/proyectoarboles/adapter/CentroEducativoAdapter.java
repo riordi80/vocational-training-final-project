@@ -59,17 +59,21 @@ public class CentroEducativoAdapter extends RecyclerView.Adapter<CentroEducativo
         }
 
         public void bind(final CentroEducativo centro, final OnItemClickListener listener) {
-            textViewNombre.setText(centro.getNombre());
-            
-            // Usar el campo direccion directamente
-            if (centro.getDireccion() != null && !centro.getDireccion().isEmpty()) {
-                textViewDireccion.setText(centro.getDireccion());
-            } else {
-                textViewDireccion.setText("Dirección no disponible");
-            }
+            if (centro != null) {
+                if (centro.getNombre() != null) {
+                    textViewNombre.setText(centro.getNombre());
+                } else {
+                    textViewNombre.setText("Nombre no disponible");
+                }
 
-            // Configurar el listener en el botón
-            buttonVerArboles.setOnClickListener(v -> listener.onVerArbolesClick(centro));
+                if (centro.getDireccion() != null && !centro.getDireccion().isEmpty()) {
+                    textViewDireccion.setText(centro.getDireccion());
+                } else {
+                    textViewDireccion.setText("Dirección no disponible");
+                }
+
+                buttonVerArboles.setOnClickListener(v -> listener.onVerArbolesClick(centro));
+            }
         }
     }
 }

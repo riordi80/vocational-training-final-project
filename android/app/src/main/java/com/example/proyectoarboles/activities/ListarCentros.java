@@ -80,17 +80,26 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
                     listaCentros.clear();
                     listaCentros.addAll(response.body());
                     adapter.notifyDataSetChanged();
+                    Log.d(TAG, "Centros cargados: " + listaCentros.size());
                     if (listaCentros.isEmpty()) {
                         Toast.makeText(ListarCentros.this, "No hay centros registrados", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(ListarCentros.this, "Error al cargar centros", Toast.LENGTH_SHORT).show();
+                    String errorBody = "";
+                    try {
+                        errorBody = response.errorBody().string();
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error al leer el cuerpo del error", e);
+                    }
+                    Log.e(TAG, "Error al cargar centros. Código: " + response.code() + ", Mensaje: " + response.message() + ", Cuerpo: " + errorBody);
+                    Toast.makeText(ListarCentros.this, "Error al cargar centros: " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<CentroEducativo>> call, Throwable t) {
-                Toast.makeText(ListarCentros.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Error de conexión", t);
+                Toast.makeText(ListarCentros.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
