@@ -16,9 +16,6 @@ public interface ArbolApi {
     @GET("api/arboles/especie/{especie}")
     Call<List<Arbol>> obtenerArbolesPorEspecie(@Path("especie") String especie);
 
-    @GET("api/arboles/centro/{centroId}")
-    Call<List<Arbol>> obtenerArbolesPorCentro(@Path("centroId") Long centroId);
-
     @GET("api/arboles/dispositivo/{dispositivoId}")
     Call<Arbol> obtenerArbolPorDispositivo(@Path("dispositivoId") Long dispositivoId);
 

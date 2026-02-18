@@ -3,6 +3,7 @@ package com.example.proyectoarboles.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +20,7 @@ public class CentroEducativoAdapter extends RecyclerView.Adapter<CentroEducativo
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(CentroEducativo centro);
+        void onVerArbolesClick(CentroEducativo centro);
     }
 
     public CentroEducativoAdapter(List<CentroEducativo> listaCentros, OnItemClickListener listener) {
@@ -30,7 +31,7 @@ public class CentroEducativoAdapter extends RecyclerView.Adapter<CentroEducativo
     @NonNull
     @Override
     public CentroEducativoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_centros, parent, false);
         return new CentroEducativoViewHolder(view);
     }
 
@@ -47,15 +48,28 @@ public class CentroEducativoAdapter extends RecyclerView.Adapter<CentroEducativo
 
     public static class CentroEducativoViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewNombre;
+        private TextView textViewDireccion;
+        private Button buttonVerArboles;
 
         public CentroEducativoViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewNombre = itemView.findViewById(R.id.textViewNombre);
+            textViewNombre = itemView.findViewById(R.id.textViewNombreCentro);
+            textViewDireccion = itemView.findViewById(R.id.textViewDireccionCentro);
+            buttonVerArboles = itemView.findViewById(R.id.buttonVerArboles);
         }
 
         public void bind(final CentroEducativo centro, final OnItemClickListener listener) {
             textViewNombre.setText(centro.getNombre());
-            itemView.setOnClickListener(v -> listener.onItemClick(centro));
+            
+            // Usar el campo direccion directamente
+            if (centro.getDireccion() != null && !centro.getDireccion().isEmpty()) {
+                textViewDireccion.setText(centro.getDireccion());
+            } else {
+                textViewDireccion.setText("Dirección no disponible");
+            }
+
+            // Configurar el listener en el botón
+            buttonVerArboles.setOnClickListener(v -> listener.onVerArbolesClick(centro));
         }
     }
 }

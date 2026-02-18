@@ -25,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListarCentros extends AppCompatActivity {
+public class ListarCentros extends AppCompatActivity implements CentroEducativoAdapter.OnItemClickListener {
 
     private static final String TAG = "ListarCentros";
 
@@ -40,36 +40,33 @@ public class ListarCentros extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_centros);
 
-        // Inicializar SharedPreferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Inicializar vistas
         recyclerViewCentros = findViewById(R.id.RecyclerViewCentros);
         btLogin = findViewById(R.id.btLogin);
         btRegister = findViewById(R.id.btRegister);
         btCerrarSesion = findViewById(R.id.btCerrarS);
 
-        // Configurar RecyclerView
+        btRegister.setVisibility(View.GONE);
+
         configurarRecyclerView();
-
-        // Cargar centros desde la API
         cargarCentrosDesdeAPI();
-
-        // Configurar listeners de botones
         configurarListeners();
-
-        // Actualizar la visibilidad de los botones según el estado de la sesión
         actualizarVisibilidadBotones();
     }
 
     private void configurarRecyclerView() {
         recyclerViewCentros.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CentroEducativoAdapter(listaCentros, centro -> {
-            Intent intent = new Intent(ListarCentros.this, ListarArboles.class);
-            intent.putExtra("centro_id", centro.getId());
-            startActivity(intent);
-        });
+        // Pasamos 'this' como listener porque esta clase implementa la interfaz
+        adapter = new CentroEducativoAdapter(listaCentros, this);
         recyclerViewCentros.setAdapter(adapter);
+    }
+
+    @Override
+    public void onVerArbolesClick(CentroEducativo centro) {
+        Intent intent = new Intent(ListarCentros.this, ListarArboles.class);
+        intent.putExtra("centro_id", centro.getId());
+        startActivity(intent);
     }
 
     private void cargarCentrosDesdeAPI() {
@@ -80,23 +77,19 @@ public class ListarCentros extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<CentroEducativo>> call, Response<List<CentroEducativo>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d(TAG, "Centros recibidos: " + response.body().size());
                     listaCentros.clear();
                     listaCentros.addAll(response.body());
                     adapter.notifyDataSetChanged();
-
                     if (listaCentros.isEmpty()) {
                         Toast.makeText(ListarCentros.this, "No hay centros registrados", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.e(TAG, "Error en respuesta - Código: " + response.code());
                     Toast.makeText(ListarCentros.this, "Error al cargar centros", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<CentroEducativo>> call, Throwable t) {
-                Log.e(TAG, "Error de conexión: " + t.getMessage());
                 Toast.makeText(ListarCentros.this, "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
@@ -108,18 +101,10 @@ public class ListarCentros extends AppCompatActivity {
             startActivity(intent);
         });
 
-        btRegister.setOnClickListener(v -> {
-            Intent intent = new Intent(ListarCentros.this, Registrer.class);
-            startActivity(intent);
-        });
-
         btCerrarSesion.setOnClickListener(v -> {
-            // Limpiar SharedPreferences para cerrar sesión
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("is_logged_in", false);
+            editor.clear();
             editor.apply();
-
-            // Actualizar visibilidad de botones
             actualizarVisibilidadBotones();
             Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
         });
@@ -127,22 +112,14 @@ public class ListarCentros extends AppCompatActivity {
 
     private void actualizarVisibilidadBotones() {
         boolean isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false);
-
-        if (isLoggedIn) {
-            btLogin.setVisibility(View.GONE);
-            btRegister.setVisibility(View.GONE);
-            btCerrarSesion.setVisibility(View.VISIBLE);
-        } else {
-            btLogin.setVisibility(View.VISIBLE);
-            btRegister.setVisibility(View.VISIBLE);
-            btCerrarSesion.setVisibility(View.GONE);
-        }
+        btLogin.setVisibility(isLoggedIn ? View.GONE : View.VISIBLE);
+        btRegister.setVisibility(View.GONE); // Siempre oculto por ahora
+        btCerrarSesion.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Actualizar la visibilidad de los botones cada vez que la actividad se reanuda
         actualizarVisibilidadBotones();
     }
 }

@@ -37,14 +37,11 @@ public class ListarArboles extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_arboles);
 
-        // Recoger el ID del centro del Intent
         centroId = getIntent().getLongExtra("centro_id", -1);
 
-        // Inicializar vistas
         recyclerViewArboles = findViewById(R.id.RecyclerViewArboles);
         btCerrarSesion = findViewById(R.id.btCerrarS);
 
-        // Configurar adapter
         adapter = new ArbolAdapter(listaArboles, arbol -> {
             Intent intent = new Intent(ListarArboles.this, ArbolDetalles.class);
             intent.putExtra("arbol_id", arbol.getId());
@@ -54,10 +51,8 @@ public class ListarArboles extends AppCompatActivity {
         recyclerViewArboles.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewArboles.setAdapter(adapter);
 
-        // Cargar datos según si se ha pasado un ID de centro o no
         cargarArbolesDesdeAPI();
 
-        // Configurar botón de cerrar sesión
         btCerrarSesion.setOnClickListener(v -> {
             Intent intent = new Intent(ListarArboles.this, Login.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -71,11 +66,10 @@ public class ListarArboles extends AppCompatActivity {
         Call<List<Arbol>> call;
 
         if (centroId != -1) {
-            // Si hay un ID de centro, cargar árboles de ese centro
             Log.d(TAG, "Cargando árboles para el centro ID: " + centroId);
-            call = RetrofitClient.getArbolApi().obtenerArbolesPorCentro(centroId);
+            // Usar el nuevo endpoint de CentroEducativoApi
+            call = RetrofitClient.getCentroEducativoApi().obtenerArbolesPorCentro(centroId);
         } else {
-            // Si no, cargar todos los árboles
             Log.d(TAG, "Cargando todos los árboles");
             call = RetrofitClient.getArbolApi().obtenerTodosLosArboles();
         }
@@ -84,7 +78,6 @@ public class ListarArboles extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Arbol>> call, Response<List<Arbol>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d(TAG, "Árboles recibidos: " + response.body().size());
                     listaArboles.clear();
                     listaArboles.addAll(response.body());
                     adapter.notifyDataSetChanged();
@@ -96,7 +89,7 @@ public class ListarArboles extends AppCompatActivity {
                     }
                 } else {
                     Log.e(TAG, "Error en respuesta - Código: " + response.code());
-                    Toast.makeText(ListarArboles.this, "Error al cargar árboles", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ListarArboles.this, "Error al cargar árboles (código: " + response.code() + ")", Toast.LENGTH_SHORT).show();
                 }
             }
 
