@@ -36,8 +36,15 @@ CREATE TABLE centro_educativo (
     latitud DECIMAL(10, 8),
     longitud DECIMAL(11, 8),
     responsable VARCHAR(100),
+    isla VARCHAR(20),
+    poblacion VARCHAR(100),
+    provincia VARCHAR(100),
+    codigo_postal VARCHAR(10),
+    telefono VARCHAR(20),
+    email VARCHAR(150),
     fecha_creacion TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    CONSTRAINT pk_centro_educativo PRIMARY KEY (id)
+    CONSTRAINT pk_centro_educativo PRIMARY KEY (id),
+    CONSTRAINT chk_centro_isla CHECK (isla IN ('GRAN_CANARIA','TENERIFE','LANZAROTE','FUERTEVENTURA','LA_PALMA','LA_GOMERA','EL_HIERRO'))
 );
 
 CREATE INDEX idx_centro_educativo_nombre ON centro_educativo(nombre);
@@ -79,6 +86,8 @@ CREATE TABLE arbol (
     umbral_humedad_suelo_min DECIMAL(5, 2) DEFAULT 30.00,
     -- Umbrales de CO2 (opcional, solo si tiene sensor)
     umbral_co2_max DECIMAL(7, 2) DEFAULT 1000.00,
+    -- Absorción de CO2 estimada al año (kg CO2/año)
+    absorcion_co2_anual DECIMAL(8, 2),
     CONSTRAINT pk_arbol PRIMARY KEY (id),
     CONSTRAINT fk_arbol_centro FOREIGN KEY (centro_id) REFERENCES centro_educativo(id) ON DELETE CASCADE,
     CONSTRAINT fk_arbol_dispositivo FOREIGN KEY (dispositivo_id) REFERENCES dispositivo_esp32(id) ON DELETE SET NULL,

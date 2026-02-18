@@ -56,7 +56,7 @@
     };
 
     const handleVolver = () => {
-      navigate('/arboles');
+      navigate(-1);
     };
 
     const formatearFecha = (fecha) => {
@@ -187,6 +187,18 @@
                 </label>
                 <p className="text-gray-900">
                   {arbol.ubicacionEspecifica || 'No especificada'}
+                </p>
+              </div>
+
+              {/* Absorción CO2 Anual */}
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Absorción CO2 Anual
+                </label>
+                <p className="text-gray-900">
+                  {arbol.absorcionCo2Anual != null
+                    ? `${arbol.absorcionCo2Anual} kg CO2/año`
+                    : 'No estimado'}
                 </p>
               </div>
             </div>

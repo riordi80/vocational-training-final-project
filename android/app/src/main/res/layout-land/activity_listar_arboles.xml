@@ -2,38 +2,35 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_app"
     android:padding="16dp"
     tools:context=".activities.ListarArboles">
 
-    <!-- Título -->
     <TextView
-        android:id="@+id/textViewTitulo"
-        android:layout_width="wrap_content"
+        android:id="@+id/textViewTitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Listado de Árboles"
+        android:text="Árboles"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/green_primary"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- RecyclerView con lista de árboles -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RecyclerViewArboles"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
         app:layout_constraintBottom_toTopOf="@+id/btVolver"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Botón para volver a la lista de centros -->
     <Button
@@ -46,7 +43,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline" />
 
-    <!-- Guideline para separar los botones -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
@@ -70,13 +66,13 @@
     <!-- Botón Cerrar Sesión (inicialmente visible si está logueado) -->
     <Button
         android:id="@+id/btCerrarS"
-        style="@style/ButtonSecondary"
+        style="@style/ButtonDanger"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Cerrar sesión"
+        android:text="Cerrar Sesión"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline" />
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

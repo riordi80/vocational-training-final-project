@@ -40,11 +40,14 @@ frontend/
 │   │   │   └── ComponentLibrary.jsx
 │   │   ├── arboles/
 │   │   ├── centros/
+│   │   ├── usuarios/        # Gestión de usuarios (solo ADMIN)
 │   │   └── ...
 │   ├── services/            # Llamadas a API
 │   │   ├── api.js           # Configuración axios
 │   │   ├── arbolesService.js # CRUD completo de árboles
 │   │   ├── centrosService.js # CRUD completo de centros
+│   │   ├── usuariosService.js # CRUD de usuarios (solo ADMIN)
+│   │   ├── usuarioCentroService.js # Asignación usuario-centro
 │   │   └── ...
 │   ├── context/             # Context API para estado global
 │   │   ├── AuthContext.jsx
@@ -122,13 +125,14 @@ npm run lint             # Ejecuta ESLint para verificar código
 
 ### 1. Login (`/login`)
 - Formulario con email y contraseña
-- Mock: guarda en localStorage, redirige a Dashboard
+- Autenticación real contra BD via `POST /api/auth/login`
+- Sesión guardada en localStorage
 - Validación básica
 
 ### 2. Register (`/register`)
 - Formulario de registro
+- Registro real via `POST /api/auth/register` (rol COORDINADOR por defecto)
 - Validación (email válido, contraseñas coinciden)
-- Redirige a Login
 
 ### 3. Dashboard (`/dashboard`)
 - Mensaje de bienvenida
@@ -176,10 +180,10 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Logout limpia localStorage
 
 ### Sistema de Roles
-- Roles globales: ADMIN, USUARIO
-- Roles por centro: COORDINADOR, PROFESOR, ESTUDIANTE, OBSERVADOR
-- Rutas protegidas según rol global y rol en centro
-- Funcionalidades restringidas por permisos
+- 2 roles: ADMIN (acceso total), COORDINADOR (gestiona centros asignados)
+- Acceso público sin login para lectura
+- Login requerido solo para operaciones de escritura
+- Gestión de usuarios solo para ADMIN
 
 ### Feedback al Usuario
 - Mensajes de éxito (toast/alert verde)
@@ -197,14 +201,17 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Variables de entorno para API
 - Build optimizado
 
-## Autenticación (Mock)
+## Autenticación
 
-Login mock con localStorage:
+Login y registro reales contra la API del backend:
 
 ```javascript
-// Login.jsx
-localStorage.setItem('user', JSON.stringify({ email, name: 'Usuario' }));
+// AuthContext.jsx
+const response = await api.post('/auth/login', { email, password });
+localStorage.setItem('user', JSON.stringify(response.data));
 ```
+
+El backend devuelve un objeto `AuthResponse` con `{ id, nombre, email, rol, centros }`. Los centros del usuario se cargan de la tabla `usuario_centro` al hacer login.
 
 ## Consumo de API REST
 
@@ -395,7 +402,7 @@ curl https://vocational-training-final-project.vercel.app/
   - [x] Desplegar en Vercel (COMPLETADO - https://vocational-training-final-project.vercel.app/)
   - [x] Navegación dinámica
   - [x] Gestión de CRUD establecidos (Árboles completo: crear, editar, eliminar, listar, detalle)
-  - [x] Establecer roles (mock básico implementado)
+  - [x] Establecer roles (auth real contra BD, 2 roles: ADMIN y COORDINADOR)
   - [x] Feedback al usuario (componentes Alert, Spinner, modales de confirmación)
 
 ## Plugins de Vite
@@ -408,13 +415,17 @@ Este proyecto usa:
 
 **Aplicación completada y desplegada en producción**
 
-- [x] Servicios API implementados (arbolesService, centrosService)
+- [x] Servicios API implementados (arbolesService, centrosService, usuariosService, usuarioCentroService)
 - [x] Componentes comunes reutilizables (Button, Input, Alert, Spinner)
-- [x] Sistema de autenticación mock con Context API
+- [x] Autenticación real contra BD via AuthContext (login/register con API)
+- [x] Sistema de roles y permisos (ADMIN, COORDINADOR, acceso público)
 - [x] CRUD completo de árboles:
   - ListadoArboles (listar, filtrar, buscar)
   - DetalleArbol (ver detalles completos)
   - FormularioArbol (crear y editar)
+- [x] Gestión de usuarios (solo ADMIN):
+  - ListadoUsuarios, DetalleUsuario, FormularioUsuario
+  - Asignación/desasignación de coordinadores a centros
 - [x] Diseño responsive con Tailwind CSS
 - [x] Menú hamburguesa para móvil
 - [x] React Router configurado
@@ -444,7 +455,7 @@ Este proyecto usa:
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2025-12-08
+**Última actualización**: 2026-02-14
 
 ### Colaboradores
 

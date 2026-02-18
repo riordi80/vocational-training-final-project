@@ -19,6 +19,7 @@ public class RetrofitClient {
     private static Retrofit retrofit = null;
     private static ArbolApi arbolApi = null;
     private static CentroEducativoApi centroEducativoApi = null;
+    private static AuthApi authApi = null; // Instancia para AuthApi
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
@@ -59,5 +60,13 @@ public class RetrofitClient {
             centroEducativoApi = getRetrofitInstance().create(CentroEducativoApi.class);
         }
         return centroEducativoApi;
+    }
+
+    // Método para obtener la instancia de AuthApi
+    public static AuthApi getAuthApi() {
+        if (authApi == null) {
+            authApi = getRetrofitInstance().create(AuthApi.class);
+        }
+        return authApi;
     }
 }

@@ -137,11 +137,7 @@ function FormularioUsuario() {
   };
 
   const handleCancel = () => {
-    if (isEditMode) {
-      navigate(`/usuarios/${id}`);
-    } else {
-      navigate('/usuarios');
-    }
+    navigate(-1);
   };
 
   if (loadingData) {

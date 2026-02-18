@@ -109,6 +109,10 @@ public class Arbol {
     @Column(name = "umbral_co2_max", columnDefinition = "DECIMAL(5,2) DEFAULT 1000.00")
     private BigDecimal umbralCO2Max;
 
+    @Column(name = "absorcion_co2_anual", columnDefinition = "DECIMAL(8,2)")
+    @DecimalMin(value = "0")
+    private BigDecimal absorcionCo2Anual;
+
     /**
      * Constructor vacío requerido por JPA.
      */
@@ -214,6 +218,10 @@ public class Arbol {
         return umbralCO2Max;
     }
 
+    public BigDecimal getAbsorcionCo2Anual() {
+        return absorcionCo2Anual;
+    }
+
     public void setCentroEducativo(CentroEducativo centroEducativo) {
         this.centroEducativo = centroEducativo;
     }
@@ -260,6 +268,10 @@ public class Arbol {
 
     public void setUmbralCO2Max(BigDecimal umbralCO2Max) {
         this.umbralCO2Max = umbralCO2Max;
+    }
+
+    public void setAbsorcionCo2Anual(BigDecimal absorcionCo2Anual) {
+        this.absorcionCo2Anual = absorcionCo2Anual;
     }
 
     /**
