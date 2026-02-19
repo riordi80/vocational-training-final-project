@@ -1,6 +1,7 @@
   import { useState, useEffect } from 'react';
   import { useParams, useNavigate } from 'react-router-dom';
   import { getArbolById, deleteArbol } from '../../services/arbolesService';
+  import { getUltimaLectura } from '../../services/lecturasService';
   import Button from '../../components/common/Button';
   import Spinner from '../../components/common/Spinner';
   import Alert from '../../components/common/Alert';
@@ -15,6 +16,8 @@
     const [error, setError] = useState('');
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [ultimaLectura, setUltimaLectura] = useState(null);
+    const [loadingLectura, setLoadingLectura] = useState(false);
     const { canEditArbol, canDeleteArbol } = usePermissions();
 
     useEffect(() => {
@@ -32,6 +35,17 @@
         setError('No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos.');
       } finally {
         setLoading(false);
+      }
+      // Cargamos la última lectura en paralelo (sin bloquear la carga principal)
+      try {
+        setLoadingLectura(true);
+        const lectura = await getUltimaLectura(id);
+        setUltimaLectura(lectura);
+      } catch {
+        // La sección de lecturas simplemente no se muestra si falla
+        setUltimaLectura(null);
+      } finally {
+        setLoadingLectura(false);
       }
     };
 
@@ -66,6 +80,33 @@
         month: 'long',
         day: 'numeric'
       });
+    };
+
+    const formatearTimestamp = (ts) => {
+      if (!ts) return '-';
+      return new Date(ts).toLocaleString('es-ES', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      });
+    };
+
+    const tiempoRelativo = (ts) => {
+      if (!ts) return null;
+      const diffMs = Date.now() - new Date(ts).getTime();
+      const diffMin = Math.round(diffMs / 60000);
+      if (diffMin < 1) return 'hace menos de 1 min';
+      if (diffMin < 60) return `hace ${diffMin} min`;
+      const diffH = Math.round(diffMin / 60);
+      if (diffH < 24) return `hace ${diffH} h`;
+      return formatearTimestamp(ts);
+    };
+
+    const fueraDeRango = (valor, min, max) => {
+      if (valor == null) return false;
+      const v = parseFloat(valor);
+      if (min != null && v < parseFloat(min)) return true;
+      if (max != null && v > parseFloat(max)) return true;
+      return false;
     };
 
     if (loading) {
@@ -278,6 +319,92 @@
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Sección Última Lectura */}
+        <div className="border-t border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-gray-800">Última Lectura</h2>
+            <Button
+              variant="outline"
+              onClick={() => navigate(`/arboles/${id}/lecturas`)}
+            >
+              Ver histórico completo →
+            </Button>
+          </div>
+
+          {loadingLectura ? (
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <Spinner size="sm" /> Cargando lectura...
+            </div>
+          ) : ultimaLectura === null ? (
+            <p className="text-gray-500 text-sm italic">Sin lecturas registradas aún.</p>
+          ) : (
+            <>
+              <p className="text-xs text-gray-500 mb-4">
+                Última lectura: {tiempoRelativo(ultimaLectura.timestamp)}
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {/* Temperatura */}
+                {(() => {
+                  const alerta = fueraDeRango(ultimaLectura.temperatura, arbol.umbralTempMin, arbol.umbralTempMax);
+                  return (
+                    <div className={`rounded-lg p-4 flex flex-col gap-1 border ${alerta ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50'}`}>
+                      <span className="text-2xl">🌡</span>
+                      <span className="text-xs font-medium text-gray-500">Temperatura</span>
+                      <span className="text-xl font-bold text-gray-800">
+                        {ultimaLectura.temperatura != null ? `${parseFloat(ultimaLectura.temperatura).toFixed(1)} °C` : '-'}
+                      </span>
+                      {alerta && (
+                        <span className="text-xs font-semibold text-red-600 bg-red-100 rounded px-2 py-0.5 self-start">
+                          Fuera de umbral
+                        </span>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Humedad Ambiente */}
+                {(() => {
+                  const alerta = fueraDeRango(ultimaLectura.humedadAmbiente, arbol.umbralHumedadAmbienteMin, arbol.umbralHumedadAmbienteMax);
+                  return (
+                    <div className={`rounded-lg p-4 flex flex-col gap-1 border ${alerta ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-gray-50'}`}>
+                      <span className="text-2xl">💧</span>
+                      <span className="text-xs font-medium text-gray-500">Humedad Ambiente</span>
+                      <span className="text-xl font-bold text-gray-800">
+                        {ultimaLectura.humedadAmbiente != null ? `${parseFloat(ultimaLectura.humedadAmbiente).toFixed(1)} %` : '-'}
+                      </span>
+                      {alerta && (
+                        <span className="text-xs font-semibold text-red-600 bg-red-100 rounded px-2 py-0.5 self-start">
+                          Fuera de umbral
+                        </span>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Humedad Suelo */}
+                <div className="rounded-lg p-4 flex flex-col gap-1 border border-gray-200 bg-gray-50">
+                  <span className="text-2xl">🌱</span>
+                  <span className="text-xs font-medium text-gray-500">Humedad Suelo</span>
+                  <span className="text-xl font-bold text-gray-800">
+                    {ultimaLectura.humedadSuelo != null ? `${parseFloat(ultimaLectura.humedadSuelo).toFixed(1)} %` : '-'}
+                  </span>
+                </div>
+
+                {/* CO2 (solo si viene el valor) */}
+                {ultimaLectura.co2 != null && (
+                  <div className="rounded-lg p-4 flex flex-col gap-1 border border-gray-200 bg-gray-50">
+                    <span className="text-2xl">💨</span>
+                    <span className="text-xs font-medium text-gray-500">CO2</span>
+                    <span className="text-xl font-bold text-gray-800">
+                      {parseFloat(ultimaLectura.co2).toFixed(0)} ppm
+                    </span>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Modal de confirmación de eliminación */}
