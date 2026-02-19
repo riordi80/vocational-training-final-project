@@ -112,7 +112,7 @@ En esta intro del proyecto los datos en tiempo-real serán simulados.
 
 ## Información del Proyecto
 
-**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+**Nombre**: Proyecto Árboles - Sistema de Monitorización de Árboles
 
 **Institución**: IES El Rincón
 

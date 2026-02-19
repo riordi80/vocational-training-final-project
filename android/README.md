@@ -189,7 +189,7 @@ La app Android está completamente funcional, conectada al backend desplegado en
 
 ## Información del Proyecto
 
-**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+**Nombre**: Proyecto Árboles - Sistema de Monitorización de Árboles
 
 **Institución**: IES El Rincón
 
