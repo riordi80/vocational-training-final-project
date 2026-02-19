@@ -20,6 +20,26 @@ export const getLecturasByArbol = async (arbolId, page = 0, size = 20) => {
 };
 
 /**
+ * Obtener lecturas REALES muestreadas (stride sampling) para la gráfica.
+ * El backend garantiza siempre ≤ ~400 puntos preservando picos y valles reales.
+ *
+ * @param {number} arbolId - ID del árbol
+ * @param {'DIA'|'SEMANA'|'MES'|'SEMESTRE'|'ANIO'} periodo - Periodo predefinido
+ * @returns {Promise<Array>} Lista de { id, timestamp, temperatura, humedadAmbiente, ... }
+ */
+export const getLecturasParaGrafica = async (arbolId, periodo) => {
+  try {
+    const response = await api.get(`/lecturas/arbol/${arbolId}/grafica`, {
+      params: { periodo },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error obteniendo muestra de lecturas del árbol ${arbolId}`, error);
+    throw error;
+  }
+};
+
+/**
  * Obtener la lectura más reciente de un árbol.
  * @param {number} arbolId - ID del árbol
  * @returns {Promise<Object|null>} Lectura más reciente o null si no hay ninguna
