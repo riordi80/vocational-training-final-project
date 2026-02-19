@@ -30,7 +30,7 @@ public class CentroEducativoAdapter extends RecyclerView.Adapter<CentroEducativo
     @NonNull
     @Override
     public CentroEducativoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_centros, parent, false);
         return new CentroEducativoViewHolder(view);
     }
 
