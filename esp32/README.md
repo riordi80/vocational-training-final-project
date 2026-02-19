@@ -1,20 +1,41 @@
 # ESP32 - Proyecto Árboles
 
-**Estado**: Planificación - No implementado
+**Estado**: Implementado (fase inicial)
 
-Componente futuro del sistema para recopilación de datos de sensores ambientales mediante dispositivos IoT ESP32.
+Componente IoT del sistema Garden Monitor para recopilación de datos de sensores ambientales mediante dispositivos ESP32. El firmware está operativo y enviando lecturas periódicas al backend vía HTTP REST.
 
 ## Descripción
 
-Este componente está planificado como una extensión futura del sistema Garden Monitor. Permitiría la recopilación automática de datos ambientales mediante dispositivos IoT instalados en los árboles.
+Este componente implementa la parte IoT del sistema Garden Monitor. Realiza lecturas periódicas de sensores ambientales instalados en los árboles y las envía automáticamente al backend.
 
-## Tecnologías Planificadas
+## Tecnologías
 
-- **Plataforma**: ESP32 (ESP-WROOM-32 o compatible)
-- **Lenguaje**: C/C++ (Arduino Framework o PlatformIO)
+- **Plataforma**: ESP32 (Arduino Framework)
+- **Lenguaje**: C/C++
 - **Conectividad**: WiFi 2.4GHz
-- **Protocolo**: HTTP/HTTPS REST hacia el backend
+- **Protocolo**: HTTP REST hacia el backend
 - **Formato de datos**: JSON
+- **Librerías**: ESP32Servo, WiFi, HTTPClient, ArduinoJson, DHT
+
+## Hardware Implementado
+
+| Componente | Pin | Función |
+|---|---|---|
+| DHT22 | GPIO 33 | Temperatura y humedad ambiente |
+| Sensor de agua analógico | GPIO 39 | Humedad de suelo (0-4095 normalizado a 0-100%) |
+| LED Rojo | GPIO 4 | Indicador de error |
+| LED Amarillo | GPIO 16 | Indicador de conexión WiFi en progreso |
+| LED Verde | GPIO 5 | Indicador de operación correcta |
+| Servo SG90 | GPIO 25 | Control de riego |
+
+## Funcionalidades Implementadas
+
+- Conexión a WiFi con reintentos (LED amarillo durante conexión)
+- Lectura periódica de sensores (intervalo configurable: 30 s en testing, 15 min en producción)
+- Construcción de payload JSON con `macAddress`, temperatura, humedad ambiente y humedad de suelo
+- Envío HTTP POST a `POST /api/lecturas` del backend
+- Indicadores LED de estado (verde = ok, rojo = error)
+- Reconexión WiFi automática ante pérdida de señal
 
 ## Componentes Considerados
 
@@ -46,13 +67,11 @@ Se han evaluado los siguientes componentes para el sistema de monitoreo:
 
 **Nota**: La lista es orientativa. La selección final dependerá de disponibilidad, presupuesto y requisitos específicos del despliegue.
 
-## Funcionalidades Planificadas
+## Funcionalidades Pendientes
 
-- Lectura periódica de sensores ambientales
-- Transmisión de datos al backend vía WiFi
+- Sensor de CO2 (MH-Z19)
+- Dendómetro (medición de crecimiento de tronco)
 - Modo de bajo consumo (Deep Sleep) para autonomía energética
-- Gestión de errores y reintentos de conexión
-- Identificación única de cada dispositivo
 - Almacenamiento temporal local en caso de pérdida de conexión
 
 ## Integración con el Backend
@@ -83,17 +102,10 @@ El ESP32 se comunicará con el backend existente mediante:
 
 ## Próximos Pasos
 
-Cuando se inicie el desarrollo de este componente:
-
-1. **Definir especificaciones técnicas** de sensores y hardware
-2. **Adquirir componentes** según presupuesto disponible
-3. **Diseñar esquema de conexiones** y prototipo
-4. **Implementar firmware básico** de lectura de sensores
-5. **Integrar con backend** mediante API REST
-6. **Calibrar sensores** con valores conocidos
-7. **Probar en entorno real** (instalación en árbol)
-8. **Optimizar consumo energético** para autonomía
-9. **Documentar** proceso de instalación y mantenimiento
+1. **Añadir sensor CO2** (MH-Z19) y enviar campo correspondiente al backend
+2. **Incorporar dendómetro** para medición de crecimiento de tronco
+3. **Optimizar consumo energético** (Deep Sleep entre lecturas)
+4. **Probar en entorno real** (instalación permanente en árbol exterior)
 
 ## Consideraciones Técnicas
 
@@ -134,9 +146,10 @@ Para referencia de componentes considerados, ver:
 
 ## Estado Actual
 
-**Este componente NO está implementado**. Es una extensión futura planificada para después del 8 de diciembre de 2025.
+El firmware básico está implementado y enviando lecturas al backend.
 
-El sistema actual (Backend, Frontend, Android) funciona sin este componente. Los datos de sensores en las aplicaciones son actualmente simulados/aleatorios para propósitos de demostración.
+- **Sensores operativos**: temperatura (DHT22), humedad ambiente (DHT22), humedad de suelo (sensor analógico)
+- **Sensores pendientes**: CO2 (MH-Z19), dendómetro
 
 ## Documentación Relacionada
 
@@ -158,7 +171,7 @@ El sistema actual (Backend, Frontend, Android) funciona sin este componente. Los
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2025-12-08
+**Última actualización**: 2026-02-19
 
 ### Colaboradores
 

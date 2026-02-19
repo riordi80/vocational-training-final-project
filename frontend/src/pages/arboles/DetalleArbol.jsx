@@ -1,6 +1,7 @@
   import { useState, useEffect } from 'react';
   import { useParams, useNavigate } from 'react-router-dom';
   import { getArbolById, deleteArbol } from '../../services/arbolesService';
+  import { getUltimaLectura } from '../../services/lecturasService';
   import Button from '../../components/common/Button';
   import Spinner from '../../components/common/Spinner';
   import Alert from '../../components/common/Alert';
@@ -15,6 +16,8 @@
     const [error, setError] = useState('');
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [ultimaLectura, setUltimaLectura] = useState(null);
+    const [loadingLectura, setLoadingLectura] = useState(false);
     const { canEditArbol, canDeleteArbol } = usePermissions();
 
     useEffect(() => {
@@ -32,6 +35,17 @@
         setError('No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos.');
       } finally {
         setLoading(false);
+      }
+      // Cargamos la última lectura en paralelo (sin bloquear la carga principal)
+      try {
+        setLoadingLectura(true);
+        const lectura = await getUltimaLectura(id);
+        setUltimaLectura(lectura);
+      } catch {
+        // La sección de lecturas simplemente no se muestra si falla
+        setUltimaLectura(null);
+      } finally {
+        setLoadingLectura(false);
       }
     };
 
@@ -66,6 +80,33 @@
         month: 'long',
         day: 'numeric'
       });
+    };
+
+    const formatearTimestamp = (ts) => {
+      if (!ts) return '-';
+      return new Date(ts).toLocaleString('es-ES', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      });
+    };
+
+    const tiempoRelativo = (ts) => {
+      if (!ts) return null;
+      const diffMs = Date.now() - new Date(ts).getTime();
+      const diffMin = Math.round(diffMs / 60000);
+      if (diffMin < 1) return 'hace menos de 1 min';
+      if (diffMin < 60) return `hace ${diffMin} min`;
+      const diffH = Math.round(diffMin / 60);
+      if (diffH < 24) return `hace ${diffH} h`;
+      return formatearTimestamp(ts);
+    };
+
+    const fueraDeRango = (valor, min, max) => {
+      if (valor == null) return false;
+      const v = parseFloat(valor);
+      if (min != null && v < parseFloat(min)) return true;
+      if (max != null && v > parseFloat(max)) return true;
+      return false;
     };
 
     if (loading) {
@@ -140,61 +181,132 @@
           </div>
         </div>
 
-        {/* Card con información del árbol */}
+        {/* Card unificada: Última Lectura → Info General → Umbrales */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
+
+          {/* ── Última Lectura ── */}
           <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800">Última Lectura</h2>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  {loadingLectura
+                    ? 'Cargando...'
+                    : ultimaLectura
+                      ? tiempoRelativo(ultimaLectura.timestamp)
+                      : 'Sin lecturas registradas aún'}
+                </p>
+              </div>
+              <Button variant="outline" onClick={() => navigate(`/arboles/${id}/lecturas`)}>
+                Ver histórico →
+              </Button>
+            </div>
+
+            {loadingLectura ? (
+              <div className="flex items-center gap-2 text-gray-400 text-sm py-2">
+                <Spinner size="sm" />
+              </div>
+            ) : ultimaLectura ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {/* Temperatura */}
+                {(() => {
+                  const alerta = fueraDeRango(ultimaLectura.temperatura, arbol.umbralTempMin, arbol.umbralTempMax);
+                  return (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-1">
+                        Temperatura
+                      </label>
+                      <p className={`text-lg font-semibold ${alerta ? 'text-red-600' : 'text-gray-900'}`}>
+                        {ultimaLectura.temperatura != null
+                          ? `${parseFloat(ultimaLectura.temperatura).toFixed(1)} °C`
+                          : '-'}
+                      </p>
+                      {alerta && (
+                        <span className="text-xs text-red-500 mt-0.5 block">Fuera de umbral</span>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Humedad Ambiente */}
+                {(() => {
+                  const alerta = fueraDeRango(ultimaLectura.humedadAmbiente, arbol.umbralHumedadAmbienteMin, arbol.umbralHumedadAmbienteMax);
+                  return (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-1">
+                        Humedad Ambiente
+                      </label>
+                      <p className={`text-lg font-semibold ${alerta ? 'text-red-600' : 'text-gray-900'}`}>
+                        {ultimaLectura.humedadAmbiente != null
+                          ? `${parseFloat(ultimaLectura.humedadAmbiente).toFixed(1)} %`
+                          : '-'}
+                      </p>
+                      {alerta && (
+                        <span className="text-xs text-red-500 mt-0.5 block">Fuera de umbral</span>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Humedad Suelo */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">
+                    Humedad Suelo
+                  </label>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {ultimaLectura.humedadSuelo != null
+                      ? `${parseFloat(ultimaLectura.humedadSuelo).toFixed(1)} %`
+                      : '-'}
+                  </p>
+                </div>
+
+                {/* CO2 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">
+                    CO2
+                  </label>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {ultimaLectura.co2 != null
+                      ? `${parseFloat(ultimaLectura.co2).toFixed(0)} ppm`
+                      : '-'}
+                  </p>
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          {/* ── Información General ── */}
+          <div className="border-t border-gray-200 p-6 bg-gray-50">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Información General</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Nombre */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Nombre
-                </label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Nombre</label>
                 <p className="text-gray-900">{arbol.nombre}</p>
               </div>
 
-              {/* Especie */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Especie
-                </label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Especie</label>
                 <p className="text-gray-900">{arbol.especie}</p>
               </div>
 
-              {/* Centro Educativo */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Centro Educativo
-                </label>
-                <p className="text-gray-900">
-                  {arbol.centroEducativo?.nombre || 'No asignado'}
-                </p>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Centro Educativo</label>
+                <p className="text-gray-900">{arbol.centroEducativo?.nombre || 'No asignado'}</p>
               </div>
 
-              {/* Fecha de Plantación */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Fecha de Plantación
-                </label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Fecha de Plantación</label>
                 <p className="text-gray-900">{formatearFecha(arbol.fechaPlantacion)}</p>
               </div>
 
-              {/* Ubicación Específica */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Ubicación Específica
-                </label>
-                <p className="text-gray-900">
-                  {arbol.ubicacionEspecifica || 'No especificada'}
-                </p>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Ubicación Específica</label>
+                <p className="text-gray-900">{arbol.ubicacionEspecifica || 'No especificada'}</p>
               </div>
 
-              {/* Absorción CO2 Anual */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Absorción CO2 Anual
-                </label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Absorción CO2 Anual</label>
                 <p className="text-gray-900">
                   {arbol.absorcionCo2Anual != null
                     ? `${arbol.absorcionCo2Anual} kg CO2/año`
@@ -204,76 +316,50 @@
             </div>
           </div>
 
-          {/* Sección de umbrales */}
-          <div className="border-t border-gray-200 p-6 bg-gray-50">
+          {/* ── Umbrales de Monitorización ── */}
+          <div className="border-t border-gray-200 p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Umbrales de Monitorización</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Temperatura Mínima */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Temperatura Mínima
-                </label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Temperatura Mínima</label>
                 <p className="text-gray-900">
-                  {arbol.umbralTempMin !== null ? `${arbol.umbralTempMin}°C` : 'No configurado'}
+                  {arbol.umbralTempMin !== null ? `${arbol.umbralTempMin} °C` : 'No configurado'}
                 </p>
               </div>
 
-              {/* Temperatura Máxima */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Temperatura Máxima
-                </label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Temperatura Máxima</label>
                 <p className="text-gray-900">
-                  {arbol.umbralTempMax !== null ? `${arbol.umbralTempMax}°C` : 'No configurado'}
+                  {arbol.umbralTempMax !== null ? `${arbol.umbralTempMax} °C` : 'No configurado'}
                 </p>
               </div>
 
-              {/* Humedad Ambiente Mínima */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Humedad Ambiente Mínima
-                </label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Humedad Ambiente Mínima</label>
                 <p className="text-gray-900">
-                  {arbol.umbralHumedadAmbienteMin !== null
-                    ? `${arbol.umbralHumedadAmbienteMin}%`
-                    : 'No configurado'}
+                  {arbol.umbralHumedadAmbienteMin !== null ? `${arbol.umbralHumedadAmbienteMin} %` : 'No configurado'}
                 </p>
               </div>
 
-              {/* Humedad Ambiente Máxima */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Humedad Ambiente Máxima
-                </label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Humedad Ambiente Máxima</label>
                 <p className="text-gray-900">
-                  {arbol.umbralHumedadAmbienteMax !== null
-                    ? `${arbol.umbralHumedadAmbienteMax}%`
-                    : 'No configurado'}
+                  {arbol.umbralHumedadAmbienteMax !== null ? `${arbol.umbralHumedadAmbienteMax} %` : 'No configurado'}
                 </p>
               </div>
 
-              {/* Humedad Suelo Mínima */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Humedad Suelo Mínima
-                </label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Humedad Suelo Mínima</label>
                 <p className="text-gray-900">
-                  {arbol.umbralHumedadSueloMin !== null
-                    ? `${arbol.umbralHumedadSueloMin}%`
-                    : 'No configurado'}
+                  {arbol.umbralHumedadSueloMin !== null ? `${arbol.umbralHumedadSueloMin} %` : 'No configurado'}
                 </p>
               </div>
 
-              {/* CO2 Máximo */}
               <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  CO2 Máximo
-                </label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">CO2 Máximo</label>
                 <p className="text-gray-900">
-                  {arbol.umbralCO2Max !== null
-                    ? `${arbol.umbralCO2Max} ppm`
-                    : 'No configurado'}
+                  {arbol.umbralCO2Max !== null ? `${arbol.umbralCO2Max} ppm` : 'No configurado'}
                 </p>
               </div>
             </div>
