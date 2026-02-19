@@ -1,6 +1,6 @@
 -- ============================================
 -- SCRIPT PARA ELIMINAR TODAS LAS TABLAS
--- Proyecto Árboles (Garden Monitor)
+-- Proyecto Árboles
 -- ============================================
 -- ADVERTENCIA: Este script eliminará TODOS los datos
 -- ============================================

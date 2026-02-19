@@ -1,6 +1,6 @@
 -- ============================================
 -- SCRIPT DE MIGRACIÓN: Roles simplificados
--- Proyecto Árboles (Garden Monitor)
+-- Proyecto Árboles
 -- Ejecutar sobre BD existentes con el esquema antiguo
 -- ============================================
 

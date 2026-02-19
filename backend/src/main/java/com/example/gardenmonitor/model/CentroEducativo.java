@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Entidad JPA que representa un centro educativo en el sistema Garden Monitor.
+ * Entidad JPA que representa un centro educativo en el sistema Proyecto Árboles.
  * <p>
  * Esta clase mapea la tabla 'centro_educativo' de la base de datos PostgreSQL
  * y almacena información de los centros educativos que participan en el
