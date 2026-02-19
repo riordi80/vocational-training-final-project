@@ -15,6 +15,7 @@ import ListadoUsuarios from './pages/usuarios/ListadoUsuarios';
 import DetalleUsuario from './pages/usuarios/DetalleUsuario';
 import FormularioUsuario from './pages/usuarios/FormularioUsuario';
 import AccessDenied from './pages/access-denied/AccessDenied';
+import HistoricoArbol from './pages/arboles/HistoricoArbol';
 import './App.css';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/arboles" element={<ListadoArboles />} />
           <Route path="/arboles/:id" element={<DetalleArbol />} />
+          <Route path="/arboles/:id/lecturas" element={<HistoricoArbol />} />
           <Route path="/centros" element={<ListadoCentros />} />
           <Route path="/centros/:id" element={<DetalleCentro />} />
           <Route path="/access-denied" element={<AccessDenied />} />

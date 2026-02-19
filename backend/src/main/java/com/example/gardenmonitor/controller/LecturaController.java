@@ -9,12 +9,13 @@ import com.example.gardenmonitor.repository.DispositivoEsp32Repository;
 import com.example.gardenmonitor.repository.LecturaRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/lecturas")
@@ -76,22 +77,28 @@ public class LecturaController {
     }
 
     @GetMapping("/arbol/{arbolId}")
-    public List<Lectura> obtenerLecturasPorArbol(@PathVariable("arbolId") Long arbolId) {
+    public Page<Lectura> obtenerLecturasPorArbol(
+            @PathVariable("arbolId") Long arbolId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
         Arbol arbol = arbolRepository.findById(arbolId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Árbol no encontrado"));
-        return lecturaRepository.findByArbolOrderByTimestampDesc(arbol);
+        return lecturaRepository.findByArbolOrderByTimestampDesc(
+                arbol, PageRequest.of(page, size));
     }
 
     @GetMapping("/arbol/{arbolId}/rango")
-    public List<Lectura> obtenerLecturasPorRango(
+    public Page<Lectura> obtenerLecturasPorRango(
             @PathVariable("arbolId") Long arbolId,
             @RequestParam("desde") LocalDateTime desde,
-            @RequestParam("hasta") LocalDateTime hasta) {
+            @RequestParam("hasta") LocalDateTime hasta,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
         Arbol arbol = arbolRepository.findById(arbolId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Árbol no encontrado"));
         return lecturaRepository.findByArbolAndTimestampBetweenOrderByTimestampDesc(
-                arbol, desde, hasta);
+                arbol, desde, hasta, PageRequest.of(page, size));
     }
 }
