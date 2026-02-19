@@ -1,6 +1,6 @@
 -- ============================================
 -- SCRIPT DE CREACIÓN DE BASE DE DATOS
--- Proyecto Árboles (Garden Monitor)
+-- Proyecto Árboles
 -- PostgreSQL + TimescaleDB
 -- ============================================
 

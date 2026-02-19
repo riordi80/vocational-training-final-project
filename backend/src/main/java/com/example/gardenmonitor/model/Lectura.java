@@ -12,7 +12,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Entidad JPA que representa una lectura de sensores en el sistema Garden Monitor.
+ * Entidad JPA que representa una lectura de sensores en el sistema Proyecto Árboles.
  * <p>
  * Esta clase mapea la tabla 'lectura' de la base de datos PostgreSQL + TimescaleDB.
  * La tabla está configurada como hypertable particionada por timestamp.
