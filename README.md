@@ -1,10 +1,10 @@
-# Proyecto Árboles
+# Garden Monitor - Sistema de Monitorización de Árboles
 
 Sistema de monitorización y gestión de árboles plantados en centros educativos mediante sensores IoT.
 
 ## Tecnologías
 
-![Java](https://img.shields.io/badge/Java_21-ED8B00?style=flat&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot_3-6DB33F?style=flat&logo=spring-boot&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL_16-316192?style=flat&logo=postgresql&logoColor=white) ![TimescaleDB](https://img.shields.io/badge/TimescaleDB-FDB515?style=flat&logo=timescale&logoColor=black) ![React](https://img.shields.io/badge/React_18-20232A?style=flat&logo=react&logoColor=61DAFB) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white) ![Render](https://img.shields.io/badge/Render-46E3B7?style=flat&logo=render&logoColor=white)
+![Java](https://img.shields.io/badge/Java_21-ED8B00?style=flat&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot_3-6DB33F?style=flat&logo=spring-boot&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL_16-316192?style=flat&logo=postgresql&logoColor=white) ![TimescaleDB](https://img.shields.io/badge/TimescaleDB-FDB515?style=flat&logo=timescale&logoColor=black) ![React](https://img.shields.io/badge/React_19-20232A?style=flat&logo=react&logoColor=61DAFB) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white) ![Render](https://img.shields.io/badge/Render-46E3B7?style=flat&logo=render&logoColor=white)
 
 ## Aplicaciones Desplegadas
 
@@ -32,9 +32,10 @@ Aplicación web con **React**
 - Dashboard + CRUD Árboles completo (listar, crear, editar, eliminar, detalle)
 - React Router + navegación dinámica
 - Responsive con menú hamburguesa (Tailwind CSS)
-- Sistema de roles (mock)
+- Sistema de roles (ADMIN / COORDINADOR, autenticación real contra BD)
 - Componentes reutilizables (Button, Input, Alert, Spinner)
 - Feedback usuario (mensajes éxito/error, validaciones)
+- Visualización de lecturas IoT con gráficas (Recharts) y mapas (Leaflet)
 - Configurado para despliegue en Vercel
 
 ### `/android`
@@ -47,9 +48,9 @@ Aplicación móvil con **Android (Java)**
 - Conectado a backend en Render
 
 ### `/esp32`
-Firmware **ESP32 (C/C++)** - Opcional
-- Lectura de sensores
-- WiFi + envío de datos
+Firmware **ESP32 (C/C++)**
+- Implementado: lectura de DHT22 (temperatura/humedad) y sensor de humedad de suelo
+- Envío periódico al backend vía HTTP REST
 
 ### `/docs`
 Documentación completa del proyecto
@@ -61,8 +62,10 @@ Documentación completa del proyecto
 
 | Componente | Tecnología | Versión |
 |------------|-----------|---------|
-| Backend | Spring Boot (Java) | 3.x / Java 21 |
-| Frontend | React | 18+ |
+| Backend | Spring Boot (Java) | 3.5.7 / Java 21 |
+| Frontend | React | 19.2.0 |
+| Frontend | Recharts | 3.x |
+| Frontend | Leaflet | 1.9.x |
 | Mobile | Android (Java) | SDK 24+ |
 | ESP32 | C/C++ (Arduino/PlatformIO) | - |
 | Base de Datos | PostgreSQL + TimescaleDB | 16+ |
@@ -135,7 +138,7 @@ Cada componente tiene documentación técnica detallada:
 
 - [x] Modelo de datos (E/R, UML, Relacional)
 - [x] PostgreSQL 16 + TimescaleDB 2.23.1
-- [x] 4 Entidades JPA con validaciones completas
+- [x] 8 Entidades JPA con validaciones completas
 - [x] Repositorios JPA con queries derivadas
 - [x] ArbolController (GET, POST, PUT, DELETE con @Valid)
 - [x] CentroEducativoController (GET, POST, PUT, DELETE con @Valid)
@@ -151,18 +154,20 @@ Cada componente tiene documentación técnica detallada:
 - [x] Frontend React - CRUD Árboles (Fase 4 - 100% completada)
   - [x] Servicios API (arbolesService, centrosService)
   - [x] ListadoArboles (tabla responsive, filtros, cards móvil)
-  - [x] DetalleArbol (vista completa, eliminar con confirmación)
+  - [x] DetalleArbol (vista completa, eliminar con confirmación, última lectura IoT)
   - [x] FormularioArbol (crear/editar, validaciones completas)
   - [x] Rutas configuradas y funcionando
   - [x] Refactorización Login/Register con componentes comunes
   - [x] Configuración Vercel (vercel.json, documentación)
+- [x] Sistema de roles real (ADMIN / COORDINADOR, autenticación contra BD)
 - [x] App Android (Fase 5 - 100% completada)
 - [x] Despliegue (Vercel + Render + PostgreSQL)
 - [x] Documentación (Fase 6 - 100% completada)
   - [x] Manual de Instalación completo
   - [x] Manual de Usuario (Web + móvil)
   - [x] Manuales específicos de Android
-- [ ] ESP32 (Opcional - después del 8 dic)
+- [x] ESP32 Firmware (lectura sensores + envío al backend)
+- [x] Lecturas IoT en frontend (HistoricoArbol con gráfica Recharts + mapa Leaflet, DetalleArbol con última lectura)
 
 ## Estado del Proyecto
 
@@ -356,7 +361,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2025-12-08
+**Última actualización**: 2026-02-19
 
 ### Colaboradores
 
