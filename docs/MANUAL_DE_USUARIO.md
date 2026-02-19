@@ -1,4 +1,4 @@
-# Manual de Usuario - Proyecto Árboles (Garden Monitor)
+# Manual de Usuario - Proyecto Árboles (Proyecto Árboles)
 
 **Última actualización**: 2025-12-07
 
@@ -6,11 +6,11 @@
 
 ## Introducción
 
-Bienvenido a **Garden Monitor** (Proyecto Árboles), un sistema de gestión y monitorización de árboles plantados en centros educativos.
+Bienvenido a **Proyecto Árboles** (Proyecto Árboles), un sistema de gestión y monitorización de árboles plantados en centros educativos.
 
-### ¿Qué es Garden Monitor?
+### ¿Qué es Proyecto Árboles?
 
-Garden Monitor es una plataforma que permite:
+Proyecto Árboles es una plataforma que permite:
 - **Gestionar centros educativos** y sus árboles plantados
 - **Registrar información** de cada árbol (especie, fecha de plantación, ubicación)
 - **Monitorizar datos ambientales** mediante sensores IoT (temperatura, humedad, CO2)
@@ -37,7 +37,7 @@ Garden Monitor es una plataforma que permite:
 
 ## 1. Acceso al Sistema
 
-Garden Monitor está disponible en dos plataformas:
+Proyecto Árboles está disponible en dos plataformas:
 
 ### Aplicación Web
 
@@ -528,7 +528,7 @@ El sistema está en desarrollo activo. Próximas funcionalidades planificadas:
 
 ## Información del Proyecto
 
-**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+**Nombre**: Proyecto Árboles - Sistema de Monitorización de Árboles
 
 **Institución**: IES El Rincón
 

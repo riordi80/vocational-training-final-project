@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * Entidad JPA que representa un usuario del sistema Garden Monitor.
+ * Entidad JPA que representa un usuario del sistema Proyecto Árboles.
  * <p>
  * Esta clase mapea la tabla 'usuario' de la base de datos PostgreSQL
  * y gestiona los usuarios que interactúan con el sistema de monitorización

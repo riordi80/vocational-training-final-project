@@ -1,4 +1,4 @@
-# Manual de Instalación - Proyecto Árboles (Garden Monitor)
+# Manual de Instalación - Proyecto Árboles (Proyecto Árboles)
 
 **Última actualización**: 2025-12-07
 
@@ -6,11 +6,11 @@
 
 ## Introducción
 
-Este manual describe el proceso de instalación completo del sistema **Garden Monitor** (Proyecto Árboles), un sistema de monitorización IoT para árboles en centros educativos.
+Este manual describe el proceso de instalación completo del sistema **Proyecto Árboles** (Proyecto Árboles), un sistema de monitorización IoT para árboles en centros educativos.
 
 ### Descripción del Sistema
 
-Garden Monitor permite:
+Proyecto Árboles permite:
 - Monitorizar el estado de árboles mediante sensores IoT
 - Gestionar centros educativos y sus árboles
 - Visualizar datos en tiempo real desde aplicaciones web y móvil
@@ -668,7 +668,7 @@ Para problemas o preguntas:
 
 ## Información del Proyecto
 
-**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+**Nombre**: Proyecto Árboles - Sistema de Monitorización de Árboles
 
 **Institución**: IES El Rincón
 

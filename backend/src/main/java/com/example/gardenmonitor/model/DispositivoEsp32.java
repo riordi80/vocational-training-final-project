@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 /**
- * Entidad JPA que representa un dispositivo ESP32 en el sistema Garden Monitor.
+ * Entidad JPA que representa un dispositivo ESP32 en el sistema Proyecto Árboles.
  * <p>
  * Esta clase mapea la tabla 'dispositivo_esp32' de la base de datos PostgreSQL
  * y almacena información de los dispositivos ESP32 utilizados para la monitorización

@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 
 /**
- * Entidad JPA que representa un árbol en el sistema Garden Monitor.
+ * Entidad JPA que representa un árbol en el sistema Proyecto Árboles.
  * <p>
  * Esta clase mapea la tabla 'arbol' de la base de datos PostgreSQL
  * y almacena información de los árboles monitorizados en los centros educativos,

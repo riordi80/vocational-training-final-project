@@ -1,4 +1,4 @@
-# Backend - Garden Monitor (Proyecto Árboles)
+# Backend - Proyecto Árboles (Proyecto Árboles)
 
 API REST desarrollada con Spring Boot para el sistema de monitorización de árboles.
 
@@ -427,7 +427,7 @@ Ver [Manual de Instalación](../docs/MANUAL_DE_INSTALACION.md) para más detalle
 
 ## Información del Proyecto
 
-**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+**Nombre**: Proyecto Árboles - Sistema de Monitorización de Árboles
 
 **Institución**: IES El Rincón
 

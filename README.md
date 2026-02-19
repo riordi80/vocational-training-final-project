@@ -1,4 +1,4 @@
-# Garden Monitor - Sistema de Monitorización de Árboles
+# Proyecto Árboles - Sistema de Monitorización de Árboles
 
 Sistema de monitorización y gestión de árboles plantados en centros educativos mediante sensores IoT.
 
@@ -353,7 +353,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 
 ## Información del Proyecto
 
-**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+**Nombre**: Proyecto Árboles - Sistema de Monitorización de Árboles
 
 **Institución**: IES El Rincón
 

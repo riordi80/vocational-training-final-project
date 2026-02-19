@@ -2,11 +2,11 @@
 
 **Estado**: Implementado (fase inicial)
 
-Componente IoT del sistema Garden Monitor para recopilación de datos de sensores ambientales mediante dispositivos ESP32. El firmware está operativo y enviando lecturas periódicas al backend vía HTTP REST.
+Componente IoT del sistema Proyecto Árboles para recopilación de datos de sensores ambientales mediante dispositivos ESP32. El firmware está operativo y enviando lecturas periódicas al backend vía HTTP REST.
 
 ## Descripción
 
-Este componente implementa la parte IoT del sistema Garden Monitor. Realiza lecturas periódicas de sensores ambientales instalados en los árboles y las envía automáticamente al backend.
+Este componente implementa la parte IoT del sistema Proyecto Árboles. Realiza lecturas periódicas de sensores ambientales instalados en los árboles y las envía automáticamente al backend.
 
 ## Tecnologías
 
@@ -163,7 +163,7 @@ El firmware básico está implementado y enviando lecturas al backend.
 
 ## Información del Proyecto
 
-**Nombre**: Garden Monitor - Sistema de Monitorización de Árboles
+**Nombre**: Proyecto Árboles - Sistema de Monitorización de Árboles
 
 **Institución**: IES El Rincón
 
