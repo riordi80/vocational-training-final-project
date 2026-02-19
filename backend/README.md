@@ -173,6 +173,12 @@ El servidor estará disponible en: `http://localhost:8080`
 - `POST /api/usuario-centro` - Asignar coordinador a centro
 - `DELETE /api/usuario-centro/{id}` - Desasignar coordinador
 
+### Lecturas IoT
+- `GET /api/lecturas/arbol/{id}` - Listar lecturas de un árbol (paginado)
+- `GET /api/lecturas/arbol/{id}/ultima` - Obtener la última lectura del árbol
+- `GET /api/lecturas/arbol/{id}/grafica?periodo={DIA|SEMANA|MES|SEMESTRE|ANIO}` - Stride sampling: hasta 400 lecturas reales del rango, sin promedios
+- `POST /api/lecturas` - Crear lectura (usado por el firmware ESP32)
+
 ### Autenticación
 - `POST /api/auth/login` - Login con email y password (valida contra BD)
 - `POST /api/auth/register` - Registro de nuevo usuario (rol COORDINADOR por defecto)
@@ -429,7 +435,7 @@ Ver [Manual de Instalación](../docs/MANUAL_DE_INSTALACION.md) para más detalle
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-02-14
+**Última actualización**: 2026-02-19
 
 ### Colaboradores
 
