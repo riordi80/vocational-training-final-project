@@ -10,13 +10,15 @@ Aplicación web desarrollada con React para el sistema de monitorización de ár
 
 ## Tecnologías
 
-- **Framework**: React 18+
-- **Lenguaje**: JavaScript/TypeScript
+- **Framework**: React 19.2.0
+- **Lenguaje**: JavaScript
 - **Build Tool**: Vite
 - **Routing**: React Router DOM
-- **Estilización**: Tailwind CSS (configurado)
-- **HTTP Client**: Axios o Fetch API
-- **State Management**: Context API / Redux (a definir)
+- **Estilización**: Tailwind CSS
+- **HTTP Client**: Axios
+- **State Management**: Context API
+- **Gráficas**: Recharts 3.x — Series temporales de lecturas IoT
+- **Mapas**: Leaflet 1.9.x + React Leaflet — Mapas interactivos
 
 ## Estructura del Proyecto
 
@@ -39,6 +41,10 @@ frontend/
 │   │   ├── component-library/
 │   │   │   └── ComponentLibrary.jsx
 │   │   ├── arboles/
+│   │   │   ├── ListadoArboles.jsx
+│   │   │   ├── DetalleArbol.jsx      # Incluye sección "Última Lectura" con umbrales
+│   │   │   ├── FormularioArbol.jsx
+│   │   │   └── HistoricoArbol.jsx    # Gráfica Recharts + tabla paginada de lecturas IoT
 │   │   ├── centros/
 │   │   ├── usuarios/        # Gestión de usuarios (solo ADMIN)
 │   │   └── ...
@@ -48,6 +54,7 @@ frontend/
 │   │   ├── centrosService.js # CRUD completo de centros
 │   │   ├── usuariosService.js # CRUD de usuarios (solo ADMIN)
 │   │   ├── usuarioCentroService.js # Asignación usuario-centro
+│   │   ├── lecturasService.js # Lecturas IoT (tabla, gráfica stride sampling, última lectura)
 │   │   └── ...
 │   ├── context/             # Context API para estado global
 │   │   ├── AuthContext.jsx
@@ -165,6 +172,13 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Detección automática de modo (crear/editar) con useParams
 - Navegación con state para mensajes de éxito
 - Integración con createArbol y updateArbol
+
+### 7. Histórico de Lecturas (`/arboles/:id/lecturas`)
+- Selector de período predefinido: Hoy / 7 días / 30 días / 6 meses / 1 año
+- Gráfica de series temporales con Recharts (stride sampling, máx. 400 puntos reales del rango)
+- Tabla de lecturas paginada server-side
+- Datos representados: temperatura, humedad ambiente, humedad suelo, CO2, diámetro de tronco
+- Integración con `lecturasService.js` (`getGraficaArbol`, `getLecturasArbol`, `getUltimaLectura`)
 
 ## Requisitos Funcionales Adicionales
 
@@ -455,7 +469,7 @@ Este proyecto usa:
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-02-14
+**Última actualización**: 2026-02-19
 
 ### Colaboradores
 
