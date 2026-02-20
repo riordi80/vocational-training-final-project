@@ -36,6 +36,7 @@ Aplicación web con **React**
 - Componentes reutilizables (Button, Input, Alert, Spinner)
 - Feedback usuario (mensajes éxito/error, validaciones)
 - Visualización de lecturas IoT con gráficas (Recharts) y mapas (Leaflet)
+- Suite de tests con Vitest: 21 tests en 7 archivos (ver [TESTING.md](./frontend/TESTING.md))
 - Configurado para despliegue en Vercel
 
 ### `/android`
@@ -101,7 +102,8 @@ proyecto-arboles/
 │   ├── pom.xml
 │   └── README.md
 ├── frontend/                              # Web App (React)
-│   └── README.md
+│   ├── README.md
+│   └── TESTING.md                        # Suite de tests: setup, comandos, cobertura y guía
 ├── android/                               # Mobile App (Android)
 │   └── README.md
 ├── esp32/                                 # Firmware ESP32
@@ -168,6 +170,7 @@ Cada componente tiene documentación técnica detallada:
   - [x] Manuales específicos de Android
 - [x] ESP32 Firmware (lectura sensores + envío al backend)
 - [x] Lecturas IoT en frontend (HistoricoArbol con gráfica Recharts + mapa Leaflet, DetalleArbol con última lectura)
+- [x] Testing frontend con Vitest — 21 tests en 7 archivos, cobertura ~60%
 
 ## Estado del Proyecto
 
@@ -256,6 +259,13 @@ Cada componente tiene documentación técnica detallada:
 - [x] **Manual de Usuario Android**: Guía detallada de uso de la app móvil
 - [x] **Índice actualizado**: Todos los documentos referenciados correctamente
 
+### Completado (Fase 9 - Testing Frontend)
+- [x] **Vitest 4.x** configurado con jsdom, coverage-v8 y scripts en package.json
+- [x] **21 tests en 7 archivos**: permissions, AuthContext, arbolesService, lecturasService, FormularioArbol, ProtectedRoute, Login
+- [x] **Técnicas cubiertas**: lógica pura, mocks de axios, renderHook, interacción UI, navegación con MemoryRouter
+- [x] **Cobertura**: ~60% statements — funcionalidades críticas cubiertas
+- [x] **[TESTING.md](./frontend/TESTING.md)**: documentación completa con guía AAA, mocks y troubleshooting
+
 ## Requisitos Académicos
 
 Este proyecto cumple con los requisitos de los siguientes módulos:
@@ -336,6 +346,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 **README por Componente:**
 - [Backend README](./backend/README.md) - API REST con Spring Boot
 - [Frontend README](./frontend/README.md) - Aplicación web con React
+- [Frontend TESTING](./frontend/TESTING.md) - Suite de tests: setup, comandos, cobertura y guía
 - [Android README](./android/README.md) - Aplicación móvil Android
 - [ESP32 README](./esp32/README.md) - Firmware para dispositivos IoT
 
@@ -361,7 +372,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-02-19
+**Última actualización**: 2026-02-20
 
 ### Colaboradores
 
