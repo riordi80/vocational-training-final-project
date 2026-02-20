@@ -9,13 +9,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.api.RetrofitClient;
@@ -30,11 +30,10 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -61,8 +60,6 @@ public class ArbolDetalles extends AppCompatActivity {
     // Datos del árbol y estado
     private Arbol arbolActual;
     private Long arbolId;
-    private boolean modoEdicion = false;
-    private String fechaISO;
 
     // Datos de sesión
     private SharedPreferences sharedPreferences;
@@ -171,7 +168,7 @@ public class ArbolDetalles extends AppCompatActivity {
     private void mostrarDatosDelArbol(Arbol arbol) {
         tvNombre.setText(arbol.getNombre());
         tvEspecie.setText(arbol.getEspecie());
-        fechaISO = arbol.getFechaPlantacion();
+        String fechaISO = arbol.getFechaPlantacion();
         tvFecha.setText(formatearFechaEspanol(fechaISO));
         tvUbicacion.setText(arbol.getUbicacion() != null ? arbol.getUbicacion() : "No disponible");
 
@@ -312,7 +309,7 @@ public class ArbolDetalles extends AppCompatActivity {
     }
 
     private void inicializarLineChart() {
-        lineChart.setNoData("Cargando datos...");
+        lineChart.setNoDataText("Cargando datos...");
         lineChart.getDescription().setEnabled(false);
         lineChart.setTouchEnabled(true);
         lineChart.setDragEnabled(true);
@@ -323,11 +320,11 @@ public class ArbolDetalles extends AppCompatActivity {
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        xAxis.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
 
         // Configurar leyenda
         lineChart.getLegend().setEnabled(true);
-        lineChart.getLegend().setTextColor(getResources().getColor(android.R.color.darker_gray));
+        lineChart.getLegend().setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
     }
 
     private void cargarDatosEnTiempoReal(Long arbolId) {
@@ -390,18 +387,21 @@ public class ArbolDetalles extends AppCompatActivity {
                         crearGrafica(lecturas);
                     } else {
                         Log.w(TAG, "No hay datos para el período: " + periodo);
-                        lineChart.setNoData("No hay datos disponibles");
+                        lineChart.setNoDataText("No hay datos disponibles");
+                        lineChart.invalidate(); // Refrescar para mostrar el texto
                     }
                 } else {
                     Log.e(TAG, "Error al obtener lecturas para gráfica");
-                    lineChart.setNoData("Error al cargar datos");
+                    lineChart.setNoDataText("Error al cargar datos");
+                    lineChart.invalidate();
                 }
             }
 
             @Override
             public void onFailure(Call<List<LecturaMuestraProjection>> call, Throwable t) {
                 Log.e(TAG, "Error de conexión al cargar gráfica: " + t.getMessage());
-                lineChart.setNoData("Error de conexión");
+                lineChart.setNoDataText("Error de conexión");
+                lineChart.invalidate();
             }
         });
     }
@@ -429,28 +429,28 @@ public class ArbolDetalles extends AppCompatActivity {
 
         // Crear LineDataSet para cada sensor
         LineDataSet temperaturasDataSet = new LineDataSet(temperaturasEntries, "Temperatura (°C)");
-        temperaturasDataSet.setColor(getResources().getColor(android.R.color.holo_red_light, null));
-        temperaturasDataSet.setCircleColor(getResources().getColor(android.R.color.holo_red_light, null));
+        temperaturasDataSet.setColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
+        temperaturasDataSet.setCircleColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
         temperaturasDataSet.setLineWidth(2);
         temperaturasDataSet.setCircleRadius(3);
         temperaturasDataSet.setDrawValues(false);
 
         LineDataSet humedadAmbienteDataSet = new LineDataSet(humedadAmbienteEntries, "Humedad Ambiente (%)");
-        humedadAmbienteDataSet.setColor(getResources().getColor(android.R.color.holo_blue_light, null));
-        humedadAmbienteDataSet.setCircleColor(getResources().getColor(android.R.color.holo_blue_light, null));
+        humedadAmbienteDataSet.setColor(ContextCompat.getColor(this, android.R.color.holo_blue_light));
+        humedadAmbienteDataSet.setCircleColor(ContextCompat.getColor(this, android.R.color.holo_blue_light));
         humedadAmbienteDataSet.setLineWidth(2);
         humedadAmbienteDataSet.setCircleRadius(3);
         humedadAmbienteDataSet.setDrawValues(false);
 
         LineDataSet humedadSueloDataSet = new LineDataSet(humedadSueloEntries, "Humedad Suelo (%)");
-        humedadSueloDataSet.setColor(getResources().getColor(android.R.color.holo_green_light, null));
-        humedadSueloDataSet.setCircleColor(getResources().getColor(android.R.color.holo_green_light, null));
+        humedadSueloDataSet.setColor(ContextCompat.getColor(this, android.R.color.holo_green_light));
+        humedadSueloDataSet.setCircleColor(ContextCompat.getColor(this, android.R.color.holo_green_light));
         humedadSueloDataSet.setLineWidth(2);
         humedadSueloDataSet.setCircleRadius(3);
         humedadSueloDataSet.setDrawValues(false);
 
         // Combinar todos los datasets
-        ArrayList<LineDataSet> dataSets = new ArrayList<>();
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(temperaturasDataSet);
         dataSets.add(humedadAmbienteDataSet);
         dataSets.add(humedadSueloDataSet);

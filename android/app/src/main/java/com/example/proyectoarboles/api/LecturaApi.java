@@ -27,7 +27,7 @@ public interface LecturaApi {
      * @param size Registros por página (default: 20)
      */
     @GET("api/lecturas/arbol/{arbolId}")
-    Call<Lectura> obtenerLecturasPorArbol(
+    Call<List<Lectura>> obtenerLecturasPorArbol(
             @Path("arbolId") Long arbolId,
             @Query("page") int page,
             @Query("size") int size
