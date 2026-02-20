@@ -20,6 +20,7 @@ import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.Arbol;
 import com.example.proyectoarboles.model.CentroEducativo;
 import com.example.proyectoarboles.model.Rol;
+import com.example.proyectoarboles.util.PermissionManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,6 +54,7 @@ public class ArbolDetalles extends AppCompatActivity {
 
     // Datos de sesión
     private SharedPreferences sharedPreferences;
+    private PermissionManager permissionManager;
     private Rol userRole;
     private Set<String> userCentrosIds;
 
@@ -80,6 +82,7 @@ public class ArbolDetalles extends AppCompatActivity {
 
     private void cargarDatosSesion() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        permissionManager = new PermissionManager(this);
         String roleString = sharedPreferences.getString("user_role", null);
         userRole = (roleString != null) ? Rol.valueOf(roleString) : null;
         userCentrosIds = sharedPreferences.getStringSet("user_centros", Collections.emptySet());
@@ -169,22 +172,16 @@ public class ArbolDetalles extends AppCompatActivity {
     }
 
     private void verificarPermisosYActualizarUI() {
-        if (arbolActual == null) return;
+        if (arbolActual == null || arbolActual.getCentroEducativo() == null) return;
 
-        boolean puedeGestionar = false;
-        if (userRole == Rol.ADMIN) {
-            puedeGestionar = true;
-        } else if (userRole == Rol.COORDINADOR) {
-            if (arbolActual.getCentroEducativo() != null && userCentrosIds != null) {
-                String arbolCentroId = String.valueOf(arbolActual.getCentroEducativo().getId());
-                if (userCentrosIds.contains(arbolCentroId)) {
-                    puedeGestionar = true;
-                }
-            }
-        }
+        Long centroId = arbolActual.getCentroEducativo().getId();
 
-        btnEditar.setVisibility(puedeGestionar ? View.VISIBLE : View.GONE);
-        btnEliminar.setVisibility(puedeGestionar ? View.VISIBLE : View.GONE);
+        // Usar PermissionManager para validar permisos
+        boolean puedeEditar = permissionManager.puedeEditarArbol(centroId);
+        boolean puedeEliminar = permissionManager.puedeEliminarArbol(centroId);
+
+        btnEditar.setVisibility(puedeEditar ? View.VISIBLE : View.GONE);
+        btnEliminar.setVisibility(puedeEliminar ? View.VISIBLE : View.GONE);
     }
 
     private void activarModoEdicion() {
