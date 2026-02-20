@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.model.Arbol;
+import com.example.proyectoarboles.util.PermissionManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,10 +22,18 @@ import java.util.Locale;
 public class ArbolAdapter extends RecyclerView.Adapter<ArbolAdapter.ArbolViewHolder>{
     private List<Arbol> listaArboles;
     private OnItemClickListener listener;
+    private PermissionManager permissionManager;
 
     public ArbolAdapter(List<Arbol> listaArboles, OnItemClickListener listener){
         this.listaArboles = listaArboles;
         this.listener = listener;
+        this.permissionManager = null; // Puede ser null si no se pasa
+    }
+
+    public ArbolAdapter(List<Arbol> listaArboles, OnItemClickListener listener, PermissionManager permissionManager){
+        this.listaArboles = listaArboles;
+        this.listener = listener;
+        this.permissionManager = permissionManager;
     }
 
     @NonNull

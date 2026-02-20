@@ -17,6 +17,7 @@ import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.adapter.CentroEducativoAdapter;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.CentroEducativo;
+import com.example.proyectoarboles.util.PermissionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
     private List<CentroEducativo> listaCentros = new ArrayList<>();
     private Button btLogin, btRegister, btCerrarSesion;
     private SharedPreferences sharedPreferences;
+    private PermissionManager permissionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
         setContentView(R.layout.activity_listar_centros);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        permissionManager = new PermissionManager(this);
 
         recyclerViewCentros = findViewById(R.id.RecyclerViewCentros);
         btLogin = findViewById(R.id.btLogin);
@@ -57,8 +60,8 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
 
     private void configurarRecyclerView() {
         recyclerViewCentros.setLayoutManager(new LinearLayoutManager(this));
-        // Pasamos 'this' como listener porque esta clase implementa la interfaz
-        adapter = new CentroEducativoAdapter(listaCentros, this);
+        // Pasamos permissionManager para que el adaptador pueda validar permisos
+        adapter = new CentroEducativoAdapter(listaCentros, this, permissionManager);
         recyclerViewCentros.setAdapter(adapter);
     }
 
@@ -67,6 +70,20 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
         Intent intent = new Intent(ListarCentros.this, ListarArboles.class);
         intent.putExtra("centro_id", centro.getId());
         startActivity(intent);
+    }
+
+    @Override
+    public void onEditarCentroClick(CentroEducativo centro) {
+        Toast.makeText(this, "Editar centro: " + centro.getNombre(), Toast.LENGTH_SHORT).show();
+        // TODO: Aquí iría la lógica para editar el centro
+        // Por ejemplo, abrir un diálogo o llamar a API para actualizar
+    }
+
+    @Override
+    public void onEliminarCentroClick(CentroEducativo centro) {
+        Toast.makeText(this, "Eliminar centro: " + centro.getNombre(), Toast.LENGTH_SHORT).show();
+        // TODO: Aquí iría la lógica para eliminar el centro
+        // Por ejemplo, mostrar confirmation dialog y llamar a API
     }
 
     private void cargarCentrosDesdeAPI() {
@@ -111,16 +128,14 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
         });
 
         btCerrarSesion.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
+            permissionManager.clearSession();
             actualizarVisibilidadBotones();
             Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void actualizarVisibilidadBotones() {
-        boolean isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false);
+        boolean isLoggedIn = permissionManager.isLoggedIn();
         btLogin.setVisibility(isLoggedIn ? View.GONE : View.VISIBLE);
         btRegister.setVisibility(View.GONE); // Siempre oculto por ahora
         btCerrarSesion.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
