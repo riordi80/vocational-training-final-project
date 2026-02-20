@@ -36,7 +36,7 @@ Aplicación web con **React**
 - Componentes reutilizables (Button, Input, Alert, Spinner)
 - Feedback usuario (mensajes éxito/error, validaciones)
 - Visualización de lecturas IoT con gráficas (Recharts) y mapas (Leaflet)
-- Suite de tests con Vitest: 21 tests en 7 archivos (ver [TESTING.md](./frontend/TESTING.md))
+- Suite de tests con Vitest: 21 tests en 7 archivos (ver [TESTING_VITEST.md](./docs/TESTING_VITEST.md))
 - Configurado para despliegue en Vercel
 
 ### `/android`
@@ -85,6 +85,7 @@ proyecto-arboles/
 │   ├── 04b. CONFIGURACION_POSTGRESQL.md  # Instalación PostgreSQL
 │   ├── REQUISITOS.md                     # Requisitos académicos por módulo
 │   ├── TESTING_POSTMAN_RESULTS.md        # Resultados testing API REST
+│   ├── TESTING_VITEST.md                 # Suite de tests frontend: setup, comandos, cobertura y guía
 │   ├── MANUAL_DE_INSTALACION.md          # Manual de instalación completo
 │   ├── MANUAL_DE_USUARIO.md              # Manual de usuario (Web + móvil)
 │   ├── MANUAL_DE_INSTALACION_ANDROID.md  # Manual instalación Android
@@ -102,8 +103,7 @@ proyecto-arboles/
 │   ├── pom.xml
 │   └── README.md
 ├── frontend/                              # Web App (React)
-│   ├── README.md
-│   └── TESTING.md                        # Suite de tests: setup, comandos, cobertura y guía
+│   └── README.md
 ├── android/                               # Mobile App (Android)
 │   └── README.md
 ├── esp32/                                 # Firmware ESP32
@@ -264,7 +264,7 @@ Cada componente tiene documentación técnica detallada:
 - [x] **21 tests en 7 archivos**: permissions, AuthContext, arbolesService, lecturasService, FormularioArbol, ProtectedRoute, Login
 - [x] **Técnicas cubiertas**: lógica pura, mocks de axios, renderHook, interacción UI, navegación con MemoryRouter
 - [x] **Cobertura**: ~60% statements — funcionalidades críticas cubiertas
-- [x] **[TESTING.md](./frontend/TESTING.md)**: documentación completa con guía AAA, mocks y troubleshooting
+- [x] **[TESTING_VITEST.md](./docs/TESTING_VITEST.md)**: documentación completa con guía AAA, mocks y troubleshooting
 
 ## Requisitos Académicos
 
@@ -336,6 +336,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 - [Configuración PostgreSQL](./docs/04b.%20CONFIGURACION_POSTGRESQL.md) - Guía de instalación de BD
 - [Requisitos Académicos](./docs/REQUISITOS.md) - Requisitos por módulo (PGV, DAD, AED, PGL)
 - [Testing Postman](./docs/TESTING_POSTMAN_RESULTS.md) - Resultados de pruebas de endpoints REST
+- [Testing Frontend](./docs/TESTING_VITEST.md) - Suite de tests Vitest: setup, comandos, cobertura y guía
 
 **Manuales de Usuario e Instalación:**
 - [Manual de Instalación](./docs/MANUAL_DE_INSTALACION.md) - Guía completa para instalar todos los componentes del sistema
@@ -346,7 +347,6 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 **README por Componente:**
 - [Backend README](./backend/README.md) - API REST con Spring Boot
 - [Frontend README](./frontend/README.md) - Aplicación web con React
-- [Frontend TESTING](./frontend/TESTING.md) - Suite de tests: setup, comandos, cobertura y guía
 - [Android README](./android/README.md) - Aplicación móvil Android
 - [ESP32 README](./esp32/README.md) - Firmware para dispositivos IoT
 
