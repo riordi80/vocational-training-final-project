@@ -79,6 +79,9 @@ dependencies {
     // Gson
     implementation("com.google.code.gson:gson:2.10.1")
 
+    // MPAndroidChart para gráficas
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-messaging")
