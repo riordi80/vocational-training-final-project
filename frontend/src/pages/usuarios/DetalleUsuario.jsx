@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { getUsuarioById, deleteUsuario } from '../../services/usuariosService';
+import { getUsuarioById, updateUsuario, deleteUsuario } from '../../services/usuariosService';
 import { getCentrosDeUsuario, asignarCentro, desasignarCentro } from '../../services/usuarioCentroService';
 import { getCentros } from '../../services/centrosService';
 import Button from '../../components/common/Button';
@@ -60,6 +60,18 @@ function DetalleUsuario() {
 
   const handleEditar = () => {
     navigate(`/usuarios/${id}/editar`);
+  };
+
+  const handleToggleActivo = async () => {
+    try {
+      setError('');
+      await updateUsuario(id, { ...usuario, activo: !usuario.activo });
+      await cargarUsuario();
+      setSuccessMessage(`Usuario ${!usuario.activo ? 'activado' : 'desactivado'} correctamente`);
+    } catch (err) {
+      console.error('Error actualizando estado del usuario:', err);
+      setError('No se pudo actualizar el estado del usuario.');
+    }
   };
 
   const handleEliminar = async () => {
@@ -196,9 +208,29 @@ function DetalleUsuario() {
 
       {/* Información del usuario */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
-          Información General
-        </h2>
+        <div className="flex items-center justify-between mb-4 border-b pb-2">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Información General
+          </h2>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleToggleActivo}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                usuario.activo ? 'bg-green-500' : 'bg-gray-300'
+              }`}
+              title={usuario.activo ? 'Desactivar usuario' : 'Activar usuario'}
+            >
+              <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                usuario.activo ? 'translate-x-6' : 'translate-x-1'
+              }`} />
+            </button>
+            <span className={`text-sm font-medium ${
+              usuario.activo ? 'text-green-700' : 'text-gray-400'
+            }`}>
+              {usuario.activo ? 'Activo' : 'Inactivo'}
+            </span>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-medium text-gray-500">Nombre</label>
@@ -217,18 +249,6 @@ function DetalleUsuario() {
                   : 'bg-blue-100 text-blue-800'
               }`}>
                 {usuario.rol}
-              </span>
-            </p>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-500">Activo</label>
-            <p>
-              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                usuario.activo
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-red-100 text-red-800'
-              }`}>
-                {usuario.activo ? 'Sí' : 'No'}
               </span>
             </p>
           </div>
