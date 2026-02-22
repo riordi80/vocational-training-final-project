@@ -51,9 +51,6 @@ public class Login extends AppCompatActivity {
         loginButton = findViewById(R.id.buttonLogin);
         registrerButton = findViewById(R.id.buttonRegistrer);
 
-        registrerButton.setVisibility(View.GONE);
-
-
         loginButton.setOnClickListener(v -> {
             String email = inputUsuario.getText().toString().trim();
             String password = inputPassword.getText().toString().trim();
@@ -64,6 +61,11 @@ public class Login extends AppCompatActivity {
             }
 
             realizarLogin(email, password);
+        });
+
+        registrerButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Login.this, Registrer.class);
+            startActivity(intent);
         });
     }
 
