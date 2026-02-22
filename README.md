@@ -14,7 +14,7 @@ Sistema de monitorización y gestión de árboles plantados en centros educativo
 
 ## Descripción
 
-Este proyecto permite recopilar datos ambientales (temperatura, humedad del suelo, pH, nivel de agua) a través de dispositivos ESP32 con sensores, y visualizarlos en tiempo real mediante aplicaciones web y móvil. El sistema está diseñado para centros educativos que desean monitorizar el crecimiento y estado de sus árboles.
+Este proyecto permite recopilar datos ambientales (temperatura, humedad ambiente, humedad del suelo, CO2, diámetro de tronco) a través de dispositivos ESP32 con sensores, y visualizarlos en tiempo real mediante aplicaciones web y móvil. El sistema está diseñado para centros educativos que desean monitorizar el crecimiento y estado de sus árboles.
 
 ## Componentes del Proyecto
 
@@ -22,9 +22,10 @@ Este es un **monorepo** que contiene todos los componentes del sistema:
 
 ### `/backend`
 API REST con **Spring Boot (Java)**
-- CRUD de centros educativos y árboles
-- Relaciones 1:N con validaciones
-- PostgreSQL + TimescaleDB
+- CRUD completo para las 8 entidades: centros educativos, árboles, usuarios, dispositivos ESP32, lecturas IoT, alertas, notificaciones y asignación usuario-centro (N:M)
+- Relaciones 1:N y N:M con validaciones
+- PostgreSQL + TimescaleDB (hypertable para series temporales)
+- Sistema de roles (ADMIN / COORDINADOR) con autenticación real contra BD
 
 ### `/frontend`
 Aplicación web con **React**
@@ -171,10 +172,11 @@ Cada componente tiene documentación técnica detallada:
 - [x] ESP32 Firmware (lectura sensores + envío al backend)
 - [x] Lecturas IoT en frontend (HistoricoArbol con gráfica Recharts + mapa Leaflet, DetalleArbol con última lectura)
 - [x] Testing frontend con Vitest — 21 tests en 7 archivos, cobertura ~60%
+- [x] CRUD completo para todas las entidades de la BD (Fase 14): DispositivoEsp32Controller, AlertaController, NotificacionController
 
 ## Estado del Proyecto
 
-**Fase actual**: TODAS LAS FASES COMPLETADAS
+**Fase actual**: Fases 1–9, 11 y 14 completadas | Fases 10, 12, 13 y 15 pendientes (2ª evaluación)
 
 ### Completado (Fase 0 - Configuración Inicial)
 - [x] Configuración de entornos de desarrollo
@@ -185,7 +187,7 @@ Cada componente tiene documentación técnica detallada:
 - [x] Estructura de proyecto Git establecida
 
 ### Completado (Fase 1 - Backend: Base de Datos y Modelo)
-- [x] **Entidades JPA completadas con Javadoc y equals/hashCode**: Usuario, Rol, CentroEducativo, Arbol (con validaciones), DispositivoEsp32
+- [x] **Entidades JPA completadas con Javadoc y equals/hashCode**: Usuario, CentroEducativo, Arbol (con validaciones), DispositivoEsp32, UsuarioCentro, Lectura — enums: Rol, Isla
 - [x] **Repositorios JPA completados con queries derivadas**: UsuarioRepository, CentroEducativoRepository, ArbolRepository, DispositivoEsp32Repository
 - [x] **Relaciones bidireccionales implementadas**:
   - CentroEducativo ↔ Arbol (OneToMany/ManyToOne)
@@ -209,7 +211,7 @@ Cada componente tiene documentación técnica detallada:
 
 ### Completado (Fase 3 - Frontend Estructura)
 - [x] **React + Vite + Tailwind CSS v3**
-- [x] **Estructura de carpetas**: components, pages, context, services
+- [x] **Estructura de carpetas**: components, pages, context, services, hooks, utils, constants, layout, routes
 - [x] **React Router configurado** con rutas públicas y protegidas
 - [x] **AuthContext** con login, register, logout y localStorage
 - [x] **Componentes de layout**: Header con menú hamburguesa responsive, MainLayout, ProtectedRoute
@@ -259,12 +261,37 @@ Cada componente tiene documentación técnica detallada:
 - [x] **Manual de Usuario Android**: Guía detallada de uso de la app móvil
 - [x] **Índice actualizado**: Todos los documentos referenciados correctamente
 
+### Completado (Fase 7 - N:M + Roles + Auth real)
+- [x] **UsuarioCentroController**: GET, POST, DELETE, PUT `/api/usuario-centro` (relación N:M)
+- [x] **UsuarioController**: CRUD completo `/api/usuarios` con gestión de roles
+- [x] **AuthController**: `POST /api/auth/login` y `POST /api/auth/register` contra BD real
+- [x] **Sistema de roles**: ADMIN y COORDINADOR — eliminados mocks de AuthContext
+- [x] **DTOs de autenticación**: LoginRequest, RegisterRequest, AuthResponse
+
+### Completado (Lecturas IoT + ESP32)
+- [x] **LecturaController**: GET (paginado, última lectura, stride sampling por período), POST `/api/lecturas`
+- [x] **TimescaleDB hypertable**: tabla `lectura` configurada para series temporales
+- [x] **HistoricoArbol.jsx**: gráfica Recharts con stride sampling + tabla paginada + mapa Leaflet
+- [x] **DetalleArbol.jsx**: sección "Última Lectura" con indicadores de umbrales
+- [x] **ESP32 firmware**: DHT22 (temperatura/humedad) + sensor humedad suelo + envío HTTP REST
+
 ### Completado (Fase 9 - Testing Frontend)
 - [x] **Vitest 4.x** configurado con jsdom, coverage-v8 y scripts en package.json
 - [x] **21 tests en 7 archivos**: permissions, AuthContext, arbolesService, lecturasService, FormularioArbol, ProtectedRoute, Login
 - [x] **Técnicas cubiertas**: lógica pura, mocks de axios, renderHook, interacción UI, navegación con MemoryRouter
 - [x] **Cobertura**: ~60% statements — funcionalidades críticas cubiertas
 - [x] **[TESTING_VITEST.md](./docs/TESTING_VITEST.md)**: documentación completa con guía AAA, mocks y troubleshooting
+
+### Completado (Fase 11 - PUT N:M)
+- [x] **`PUT /api/usuario-centro/{id}`**: actualización de asignación usuario-centro con validaciones (usuario es COORDINADOR, sin duplicados)
+
+### Completado (Fase 14 - CRUD Entidades Pendientes)
+- [x] **Entidades JPA nuevas**: Alerta (con TipoAlerta, EstadoAlerta) y Notificacion — con Javadoc completo
+- [x] **Repositorios JPA**: AlertaRepository y NotificacionRepository con queries derivadas
+- [x] **DispositivoEsp32Controller**: GET, POST, PUT, DELETE `/api/dispositivos` (+ GET /activos)
+- [x] **AlertaController**: GET, POST, PUT, DELETE `/api/alertas` (+ filtros por árbol y estado)
+- [x] **NotificacionController**: GET, POST, PUT, DELETE `/api/notificaciones` (+ filtros por usuario y no leídas)
+- [x] **Javadoc**: añadido a todos los modelos y controladores sin documentar (UsuarioCentro, Lectura, ArbolController, AuthController, LecturaController, UsuarioCentroController, UsuarioController)
 
 ## Requisitos Académicos
 
@@ -372,7 +399,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-02-20
+**Última actualización**: 2026-02-22
 
 ### Colaboradores
 

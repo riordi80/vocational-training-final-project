@@ -171,6 +171,7 @@ El servidor estará disponible en: `http://localhost:8080`
 - `GET /api/usuario-centro/usuario/{usuarioId}` - Centros de un usuario
 - `GET /api/usuario-centro/centro/{centroId}` - Coordinadores de un centro
 - `POST /api/usuario-centro` - Asignar coordinador a centro
+- `PUT /api/usuario-centro/{id}` - Actualizar asignación (usuarioId, centroId, activo)
 - `DELETE /api/usuario-centro/{id}` - Desasignar coordinador
 
 ### Lecturas IoT
@@ -178,6 +179,33 @@ El servidor estará disponible en: `http://localhost:8080`
 - `GET /api/lecturas/arbol/{id}/ultima` - Obtener la última lectura del árbol
 - `GET /api/lecturas/arbol/{id}/grafica?periodo={DIA|SEMANA|MES|SEMESTRE|ANIO}` - Stride sampling: hasta 400 lecturas reales del rango, sin promedios
 - `POST /api/lecturas` - Crear lectura (usado por el firmware ESP32)
+
+### Dispositivos ESP32
+- `GET /api/dispositivos` - Listar todos los dispositivos
+- `GET /api/dispositivos/{id}` - Obtener dispositivo
+- `GET /api/dispositivos/activos` - Listar dispositivos activos
+- `POST /api/dispositivos` - Registrar dispositivo (valida MAC única)
+- `PUT /api/dispositivos/{id}` - Actualizar dispositivo
+- `DELETE /api/dispositivos/{id}` - Eliminar dispositivo
+
+### Alertas
+- `GET /api/alertas` - Listar todas las alertas
+- `GET /api/alertas/{id}` - Obtener alerta
+- `GET /api/alertas/arbol/{arbolId}` - Alertas de un árbol
+- `GET /api/alertas/estado/{estado}` - Alertas por estado (ACTIVA, RESUELTA, IGNORADA)
+- `GET /api/alertas/arbol/{arbolId}/estado/{estado}` - Alertas de un árbol por estado
+- `POST /api/alertas` - Crear alerta
+- `PUT /api/alertas/{id}` - Actualizar alerta (tipo, mensaje, estado, fechaResolucion)
+- `DELETE /api/alertas/{id}` - Eliminar alerta
+
+### Notificaciones
+- `GET /api/notificaciones` - Listar todas las notificaciones
+- `GET /api/notificaciones/{id}` - Obtener notificación
+- `GET /api/notificaciones/usuario/{usuarioId}` - Notificaciones de un usuario
+- `GET /api/notificaciones/usuario/{usuarioId}/no-leidas` - Notificaciones no leídas de un usuario
+- `POST /api/notificaciones` - Crear notificación (requiere usuarioId y alertaId)
+- `PUT /api/notificaciones/{id}` - Marcar como leída/no leída
+- `DELETE /api/notificaciones/{id}` - Eliminar notificación
 
 ### Autenticación
 - `POST /api/auth/login` - Login con email y password (valida contra BD)
@@ -240,7 +268,7 @@ Ver sección "Despliegue en Render" más abajo para detalles completos.
 
 ### [AED] Acceso a Datos
 - [x] Modelo de datos documentado
-- [x] Mapeo ORM con JPA completado (4 entidades JPA)
+- [x] Mapeo ORM con JPA completado (8 entidades JPA)
 - [x] Repositorios JPA con queries derivadas
 - [x] Relaciones bidireccionales implementadas
 
@@ -248,7 +276,7 @@ Ver sección "Despliegue en Render" más abajo para detalles completos.
 
 **API REST completada y desplegada en producción**
 
-- [x] 6 Entidades JPA con anotaciones completas, Javadoc y validaciones
+- [x] 8 Entidades JPA con anotaciones completas, Javadoc y validaciones
 - [x] Repositorios JPA con queries derivadas
 - [x] Relaciones bidireccionales (CentroEducativo ↔ Arbol)
 - [x] Relación N:M (Usuario ↔ CentroEducativo via UsuarioCentro)
@@ -435,7 +463,7 @@ Ver [Manual de Instalación](../docs/MANUAL_DE_INSTALACION.md) para más detalle
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-02-19
+**Última actualización**: 2026-02-22
 
 ### Colaboradores
 
