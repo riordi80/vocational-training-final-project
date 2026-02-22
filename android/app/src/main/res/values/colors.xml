@@ -38,4 +38,6 @@
     <color name="purple_500">#6200EE</color>
     <color name="text_hint">#9E9E9E</color>
 
+    <color name="gray">#CDCDCD</color>
+
 </resources>
