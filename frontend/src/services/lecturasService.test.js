@@ -10,7 +10,7 @@ describe('lecturasService', () => {
 
   describe('getUltimaLectura', () => {
     // Test 11
-    it('returns null when content array is empty', async () => {
+    it('devuelve null cuando el array de contenido está vacío', async () => {
       // Arrange
       api.get.mockResolvedValue({ data: { content: [], totalElements: 0 } });
       // Act
@@ -20,7 +20,7 @@ describe('lecturasService', () => {
     });
 
     // Test 12
-    it('returns first element when readings exist', async () => {
+    it('devuelve el primer elemento cuando existen lecturas', async () => {
       // Arrange
       const lectura = { id: 1, temperatura: 22.5, timestamp: '2026-02-19T10:00:00' };
       api.get.mockResolvedValue({ data: { content: [lectura], totalElements: 1 } });

@@ -5,7 +5,7 @@ describe('permissions', () => {
 
   describe('isAdminUser', () => {
     // Test 1
-    it('returns true when user has ADMIN role', () => {
+    it('devuelve true cuando el usuario tiene rol ADMIN', () => {
       // Arrange
       const user = { rol: ROLES.ADMIN };
       // Act
@@ -15,7 +15,7 @@ describe('permissions', () => {
     });
 
     // Test 2
-    it('returns false when user has COORDINADOR role', () => {
+    it('devuelve false cuando el usuario tiene rol COORDINADOR', () => {
       // Arrange
       const user = { rol: ROLES.COORDINADOR };
       // Act & Assert
@@ -25,7 +25,7 @@ describe('permissions', () => {
 
   describe('isCoordinadorInCenter', () => {
     // Test 3
-    it('returns true for ADMIN regardless of centroId', () => {
+    it('devuelve true para ADMIN independientemente del centroId', () => {
       // Arrange
       const admin = { rol: ROLES.ADMIN, centros: [] };
       // Act & Assert
@@ -33,7 +33,7 @@ describe('permissions', () => {
     });
 
     // Test 4
-    it('returns false when COORDINADOR is not assigned to that center', () => {
+    it('devuelve false cuando el COORDINADOR no está asignado a ese centro', () => {
       // Arrange
       const coordinador = { rol: ROLES.COORDINADOR, centros: [{ centroId: 1 }] };
       // Act & Assert

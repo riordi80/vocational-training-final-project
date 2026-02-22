@@ -29,7 +29,7 @@ describe('FormularioArbol', () => {
   afterEach(() => vi.clearAllMocks());
 
   // Test 13
-  it('shows validation errors when required fields are empty', async () => {
+  it('muestra errores de validación cuando los campos obligatorios están vacíos', async () => {
     const { container } = renderForm();
     fireEvent.submit(container.querySelector('form'));
     expect(await screen.findByText('El nombre es obligatorio')).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe('FormularioArbol', () => {
   });
 
   // Test 14
-  it('shows error when umbralTempMin is not less than umbralTempMax', async () => {
+  it('muestra error cuando umbralTempMin no es menor que umbralTempMax', async () => {
     const user = userEvent.setup();
     renderForm();
 
