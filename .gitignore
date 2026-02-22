@@ -32,6 +32,10 @@ yarn-error.log*
 *.swp
 .cache/
 
+# Archivos temporales
+tmpclaude-*
+nul
+
 # Secretos y configuración local
 .env
 .env.local

@@ -173,7 +173,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Card: Datos de Sensores -->
+        <!-- Card: Datos de Sensores EN TIEMPO REAL -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -191,7 +191,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Datos de Sensores"
+                    android:text="Datos de Sensores - En Tiempo Real"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary"
@@ -214,15 +214,7 @@
                     android:textColor="@color/text_secondary"
                     android:padding="8dp"/>
 
-                <EditText
-                    android:id="@+id/editTextTemp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Temperatura"
-                    android:visibility="gone"
-                    android:inputType="text"/>
-
-                <!-- Humedad -->
+                <!-- Humedad Ambiente -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -238,14 +230,6 @@
                     android:textSize="16sp"
                     android:textColor="@color/text_secondary"
                     android:padding="8dp"/>
-
-                <EditText
-                    android:id="@+id/editTextHumedad"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Humedad ambiental"
-                    android:visibility="gone"
-                    android:inputType="text"/>
 
                 <!-- Humedad del Suelo -->
                 <TextView
@@ -264,14 +248,6 @@
                     android:textColor="@color/text_secondary"
                     android:padding="8dp"/>
 
-                <EditText
-                    android:id="@+id/editTextHumedadSuelo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Humedad del suelo"
-                    android:visibility="gone"
-                    android:inputType="text"/>
-
                 <!-- CO2 -->
                 <TextView
                     android:layout_width="match_parent"
@@ -289,13 +265,93 @@
                     android:textColor="@color/text_secondary"
                     android:padding="8dp"/>
 
-                <EditText
-                    android:id="@+id/editTextCO2"
+                <!-- Timestamp de última actualización -->
+                <TextView
+                    android:id="@+id/textViewUltimaActualizacion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nivel de CO2"
-                    android:visibility="gone"
-                    android:inputType="text"/>
+                    android:text="Última actualización: --"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_hint"
+                    android:padding="8dp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="end"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card: Histórico de Datos (Gráfica) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/background_card"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Histórico de Datos"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Selector de período -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Período:"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="8dp"/>
+
+                <RadioGroup
+                    android:id="@+id/radioGroupPeriodo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <RadioButton
+                        android:id="@+id/radioBtnDia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Día"
+                        android:checked="true"
+                        android:textColor="@color/text_primary"/>
+
+                    <RadioButton
+                        android:id="@+id/radioBtnSemana"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Semana"
+                        android:layout_marginStart="16dp"
+                        android:textColor="@color/text_primary"/>
+
+                    <RadioButton
+                        android:id="@+id/radioBtnMes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mes"
+                        android:layout_marginStart="16dp"
+                        android:textColor="@color/text_primary"/>
+
+                </RadioGroup>
+
+                <!-- LineChart -->
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChartHistorico"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginTop="8dp"/>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

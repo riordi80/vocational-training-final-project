@@ -127,7 +127,7 @@
             onClose={() => setError('')}
           />
           <div className="mt-4">
-            <Button onClick={handleVolver}>Volver al listado</Button>
+            <Button onClick={() => navigate('/arboles')}>Volver al listado</Button>
           </div>
         </div>
       );
@@ -141,7 +141,7 @@
             message="No se encontró el árbol solicitado."
           />
           <div className="mt-4">
-            <Button onClick={handleVolver}>Volver al listado</Button>
+            <Button onClick={() => navigate('/arboles')}>Volver al listado</Button>
           </div>
         </div>
       );

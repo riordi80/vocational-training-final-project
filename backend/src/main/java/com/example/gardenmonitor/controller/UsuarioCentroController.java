@@ -76,6 +76,58 @@ public class UsuarioCentroController {
         return usuarioCentroRepository.save(usuarioCentro);
     }
 
+    @PutMapping("/{id}")
+    public UsuarioCentro actualizarAsignacion(
+            @PathVariable("id") Long id,
+            @RequestBody Map<String, Object> body) {
+
+        UsuarioCentro usuarioCentro = usuarioCentroRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Asignación no encontrada"));
+
+        if (body.containsKey("activo")) {
+            if (!(body.get("activo") instanceof Boolean)) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "El campo 'activo' debe ser true o false");
+            }
+            usuarioCentro.setActivo((Boolean) body.get("activo"));
+        }
+
+        if (body.containsKey("usuarioId")) {
+            Long usuarioId = Long.valueOf(body.get("usuarioId").toString());
+            Usuario usuario = usuarioRepository.findById(usuarioId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+            if (usuario.getRol() != Rol.COORDINADOR) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Solo usuarios con rol COORDINADOR pueden ser asignados a centros");
+            }
+            Long centroId = usuarioCentro.getCentroEducativo().getId();
+            if (!usuarioId.equals(usuarioCentro.getUsuario().getId())
+                    && usuarioCentroRepository.existsByUsuarioIdAndCentroEducativoId(usuarioId, centroId)) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT, "El usuario ya está asignado a este centro");
+            }
+            usuarioCentro.setUsuario(usuario);
+        }
+
+        if (body.containsKey("centroId")) {
+            Long centroId = Long.valueOf(body.get("centroId").toString());
+            CentroEducativo centro = centroEducativoRepository.findById(centroId)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Centro educativo no encontrado"));
+            Long usuarioId = usuarioCentro.getUsuario().getId();
+            if (!centroId.equals(usuarioCentro.getCentroEducativo().getId())
+                    && usuarioCentroRepository.existsByUsuarioIdAndCentroEducativoId(usuarioId, centroId)) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT, "El usuario ya está asignado a este centro");
+            }
+            usuarioCentro.setCentroEducativo(centro);
+        }
+
+        return usuarioCentroRepository.save(usuarioCentro);
+    }
+
     @DeleteMapping("/{id}")
     public UsuarioCentro desasignarCoordinador(@PathVariable("id") Long id) {
         UsuarioCentro usuarioCentro = usuarioCentroRepository.findById(id)

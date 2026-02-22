@@ -34,4 +34,8 @@
     <!-- Background colors -->
     <color name="background_app">#f3f4f6</color>
     <color name="background_card">#ffffff</color>
+
+    <color name="purple_500">#6200EE</color>
+    <color name="text_hint">#9E9E9E</color>
+
 </resources>

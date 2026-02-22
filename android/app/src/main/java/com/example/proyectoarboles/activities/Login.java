@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ public class Login extends AppCompatActivity {
     private EditText inputPassword;
     private Button loginButton;
     private SharedPreferences sharedPreferences;
+    private Button registrerButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,10 @@ public class Login extends AppCompatActivity {
         inputUsuario = findViewById(R.id.editTextUsuario);
         inputPassword = findViewById(R.id.editTextPassword);
         loginButton = findViewById(R.id.buttonLogin);
+        registrerButton = findViewById(R.id.buttonRegistrer);
+
+        registrerButton.setVisibility(View.GONE);
+
 
         loginButton.setOnClickListener(v -> {
             String email = inputUsuario.getText().toString().trim();

@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.recyclerview)
+    implementation(libs.preference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -77,6 +78,9 @@ dependencies {
 
     // Gson
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // MPAndroidChart para gráficas
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))

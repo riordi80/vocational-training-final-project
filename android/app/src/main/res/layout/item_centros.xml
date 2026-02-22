@@ -34,13 +34,40 @@
             android:textColor="@color/text_secondary"
             android:layout_marginBottom="12dp" />
 
-        <Button
-            android:id="@+id/buttonVerArboles"
-            style="@style/ButtonPrimary"
-            android:layout_width="wrap_content"
+        <!-- Fila de botones de acción -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ver Árboles"
-            android:layout_gravity="end" />
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:spacing="8dp">
+
+            <Button
+                android:id="@+id/buttonVerArboles"
+                style="@style/ButtonPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver Árboles"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/buttonEditarCentro"
+                style="@style/ButtonSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar"
+                android:visibility="gone"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/buttonEliminarCentro"
+                style="@style/ButtonDanger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Eliminar"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

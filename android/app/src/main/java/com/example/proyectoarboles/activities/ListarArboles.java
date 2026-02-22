@@ -16,6 +16,7 @@ import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.adapter.ArbolAdapter;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.Arbol;
+import com.example.proyectoarboles.util.PermissionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class ListarArboles extends AppCompatActivity {
     private List<Arbol> listaArboles = new ArrayList<>();
     private Button btVolver, btLogin, btCerrarSesion;
     private SharedPreferences sharedPreferences;
+    private PermissionManager permissionManager;
     private long centroId = -1; // Variable para almacenar el ID del centro
 
     @Override
@@ -41,6 +43,7 @@ public class ListarArboles extends AppCompatActivity {
         setContentView(R.layout.activity_listar_arboles);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        permissionManager = new PermissionManager(this);
         centroId = getIntent().getLongExtra("centro_id", -1);
 
         recyclerViewArboles = findViewById(R.id.RecyclerViewArboles);
@@ -52,7 +55,7 @@ public class ListarArboles extends AppCompatActivity {
             Intent intent = new Intent(ListarArboles.this, ArbolDetalles.class);
             intent.putExtra("arbol_id", arbol.getId());
             startActivity(intent);
-        });
+        }, permissionManager);
 
         recyclerViewArboles.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewArboles.setAdapter(adapter);
@@ -60,6 +63,7 @@ public class ListarArboles extends AppCompatActivity {
         cargarArbolesDesdeAPI();
         configurarListeners();
         actualizarVisibilidadBotones();
+        configurarBotonesDinamicos();
     }
 
     private void cargarArbolesDesdeAPI() {
@@ -111,18 +115,33 @@ public class ListarArboles extends AppCompatActivity {
         });
 
         btCerrarSesion.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
+            permissionManager.clearSession();
             actualizarVisibilidadBotones();
             Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void actualizarVisibilidadBotones() {
-        boolean isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false);
+        boolean isLoggedIn = permissionManager.isLoggedIn();
         btLogin.setVisibility(isLoggedIn ? View.GONE : View.VISIBLE);
         btCerrarSesion.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * Configura los botones dinámicos según los permisos del usuario.
+     * Actualmente solo es un placeholder, se expandirá cuando se agregue FAB.
+     */
+    private void configurarBotonesDinamicos() {
+        // Si el usuario es COORDINADOR, mostrar FAB solo si es de este centro
+        // Si el usuario es ADMIN, siempre mostrar FAB
+        // Si es PUBLICO, no mostrar FAB
+
+        if (permissionManager.puedeCrearArbol(centroId)) {
+            // FAB visible (se agregará cuando se actualice el layout)
+            Log.d(TAG, "Usuario puede crear árbol en este centro");
+        } else {
+            Log.d(TAG, "Usuario NO puede crear árbol en este centro");
+        }
     }
 
     @Override
