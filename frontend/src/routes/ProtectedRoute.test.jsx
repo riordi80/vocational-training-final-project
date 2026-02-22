@@ -13,7 +13,7 @@ describe('ProtectedRoute', () => {
   afterEach(() => vi.clearAllMocks());
 
   // Test 15
-  it('redirects to /login when user is not authenticated', () => {
+  it('redirige a /login cuando el usuario no está autenticado', () => {
     useAuth.mockReturnValue({ user: null, loading: false });
     render(
       <MemoryRouter initialEntries={['/arboles/nuevo']}>
