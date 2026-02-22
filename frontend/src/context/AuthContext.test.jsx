@@ -16,7 +16,7 @@ describe('AuthContext', () => {
 
   describe('login', () => {
     // Test 5
-    it('throws error when email is empty', async () => {
+    it('lanza error cuando el email está vacío', async () => {
       // Arrange
       const { result } = renderHook(() => useAuth(), { wrapper });
       // Act & Assert
@@ -25,7 +25,7 @@ describe('AuthContext', () => {
     });
 
     // Test 6
-    it('sets user in localStorage on successful login', async () => {
+    it('guarda el usuario en localStorage al iniciar sesión correctamente', async () => {
       // Arrange
       const mockUser = { id: 1, email: 'test@test.com', rol: 'ADMIN' };
       api.post.mockResolvedValue({ data: mockUser });
@@ -37,7 +37,7 @@ describe('AuthContext', () => {
     });
 
     // Test 7
-    it('throws correct message on 401 response', async () => {
+    it('lanza el mensaje correcto ante una respuesta 401', async () => {
       // Arrange
       api.post.mockRejectedValue({ response: { status: 401 } });
       const { result } = renderHook(() => useAuth(), { wrapper });
@@ -49,7 +49,7 @@ describe('AuthContext', () => {
 
   describe('logout', () => {
     // Test 8
-    it('removes user from localStorage', async () => {
+    it('elimina el usuario de localStorage', async () => {
       // Arrange
       localStorage.setItem('user', JSON.stringify({ id: 1 }));
       const { result } = renderHook(() => useAuth(), { wrapper });

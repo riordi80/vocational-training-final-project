@@ -18,14 +18,14 @@ describe('Login', () => {
   afterEach(() => vi.clearAllMocks());
 
   // Test 16
-  it('renders email and password inputs', () => {
+  it('renderiza los campos de email y contraseña', () => {
     render(<MemoryRouter><Login /></MemoryRouter>);
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
     expect(screen.getByLabelText('Contraseña')).toBeInTheDocument();
   });
 
   // Test 17
-  it('shows error when email field is empty', async () => {
+  it('muestra error cuando el campo email está vacío', async () => {
     const user = userEvent.setup();
     render(<MemoryRouter><Login /></MemoryRouter>);
     await user.click(screen.getByRole('button', { name: /iniciar sesión/i }));
@@ -33,7 +33,7 @@ describe('Login', () => {
   });
 
   // Test 18
-  it('shows error when password field is empty', async () => {
+  it('muestra error cuando el campo contraseña está vacío', async () => {
     const user = userEvent.setup();
     render(<MemoryRouter><Login /></MemoryRouter>);
     await user.type(screen.getByLabelText('Email'), 'test@test.com');
@@ -42,7 +42,7 @@ describe('Login', () => {
   });
 
   // Test 19
-  it('shows error message when login fails', async () => {
+  it('muestra el mensaje de error cuando el login falla', async () => {
     const user = userEvent.setup();
     login.mockRejectedValue(new Error('Usuario o contraseña incorrecta'));
     render(<MemoryRouter><Login /></MemoryRouter>);
@@ -53,7 +53,7 @@ describe('Login', () => {
   });
 
   // Test 20
-  it('navigates to /dashboard on successful login', async () => {
+  it('navega a /dashboard al iniciar sesión correctamente', async () => {
     const user = userEvent.setup();
     login.mockResolvedValue();
     render(
@@ -71,7 +71,7 @@ describe('Login', () => {
   });
 
   // Test 21
-  it('disables submit button while login is in progress', async () => {
+  it('deshabilita el botón de envío mientras el login está en curso', async () => {
     const user = userEvent.setup();
     let resolveLogin;
     login.mockImplementation(() => new Promise(resolve => { resolveLogin = resolve; }));

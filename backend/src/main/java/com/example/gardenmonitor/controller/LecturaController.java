@@ -20,6 +20,17 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Controlador REST para gestionar lecturas de sensores IoT.
+ * <p>
+ * Proporciona endpoints para recibir lecturas enviadas por dispositivos ESP32
+ * y para consultar el histórico de lecturas de un árbol. Soporta paginación
+ * server-side y stride sampling para optimizar la carga de datos en gráficas.
+ * </p>
+ *
+ * @author Richard Ortiz y Enrique Pérez
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/api/lecturas")
 public class LecturaController {
@@ -37,11 +48,18 @@ public class LecturaController {
      * Recibe una lectura enviada por un dispositivo ESP32.
      * <p>
      * Flujo:
-     * 1. Busca el dispositivo por MAC address
-     * 2. Verifica que el dispositivo tiene un árbol asignado
-     * 3. Crea la lectura con timestamp actual
-     * 4. Actualiza la última conexión del dispositivo
      * </p>
+     * <ol>
+     *   <li>Busca el dispositivo por dirección MAC</li>
+     *   <li>Verifica que el dispositivo tiene un árbol asignado</li>
+     *   <li>Crea la lectura con timestamp actual</li>
+     *   <li>Actualiza la fecha de última conexión del dispositivo</li>
+     * </ol>
+     *
+     * @param request datos de la lectura enviada por el ESP32 (validado con @Valid)
+     * @return la lectura registrada
+     * @throws ResponseStatusException si el dispositivo no está registrado (404)
+     *                                 o no tiene árbol asignado (422)
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -79,6 +97,15 @@ public class LecturaController {
         return lecturaRepository.save(lectura);
     }
 
+    /**
+     * Obtiene las lecturas de un árbol paginadas, ordenadas por timestamp descendente.
+     *
+     * @param arbolId identificador del árbol
+     * @param page    número de página (0-indexed, por defecto 0)
+     * @param size    tamaño de página (por defecto 20)
+     * @return página de lecturas del árbol
+     * @throws ResponseStatusException si no se encuentra el árbol (404)
+     */
     @GetMapping("/arbol/{arbolId}")
     public Page<Lectura> obtenerLecturasPorArbol(
             @PathVariable("arbolId") Long arbolId,
@@ -91,6 +118,17 @@ public class LecturaController {
                 arbol, PageRequest.of(page, size));
     }
 
+    /**
+     * Obtiene las lecturas de un árbol en un rango de fechas, paginadas.
+     *
+     * @param arbolId identificador del árbol
+     * @param desde   inicio del rango temporal (ISO 8601)
+     * @param hasta   fin del rango temporal (ISO 8601)
+     * @param page    número de página (0-indexed, por defecto 0)
+     * @param size    tamaño de página (por defecto 20)
+     * @return página de lecturas del árbol en el rango indicado
+     * @throws ResponseStatusException si no se encuentra el árbol (404)
+     */
     @GetMapping("/arbol/{arbolId}/rango")
     public Page<Lectura> obtenerLecturasPorRango(
             @PathVariable("arbolId") Long arbolId,
@@ -106,16 +144,26 @@ public class LecturaController {
     }
 
     /**
-     * Devuelve lecturas REALES muestreadas (stride sampling) para la gráfica del frontend.
+     * Devuelve lecturas reales muestreadas (stride sampling) para la gráfica del frontend.
+     * <p>
      * Garantiza siempre ≤ ~400 puntos independientemente del volumen de datos,
      * preservando los picos y valles reales (a diferencia de promedios con time_bucket).
-     *
+     * </p>
+     * <p>
      * Periodos aceptados:
-     *   DIA      → últimas 24 h
-     *   SEMANA   → últimos 7 días
-     *   MES      → últimos 30 días
-     *   SEMESTRE → últimos 180 días
-     *   ANIO     → últimos 365 días
+     * </p>
+     * <ul>
+     *   <li>DIA — últimas 24 horas</li>
+     *   <li>SEMANA — últimos 7 días</li>
+     *   <li>MES — últimos 30 días</li>
+     *   <li>SEMESTRE — últimos 180 días</li>
+     *   <li>ANIO — últimos 365 días</li>
+     * </ul>
+     *
+     * @param arbolId identificador del árbol
+     * @param periodo período de tiempo a consultar
+     * @return lista de lecturas muestreadas para la gráfica
+     * @throws ResponseStatusException si no se encuentra el árbol (404) o el período es inválido (400)
      */
     @GetMapping("/arbol/{arbolId}/grafica")
     public List<LecturaMuestraProjection> obtenerLecturasParaGrafica(
@@ -140,5 +188,4 @@ public class LecturaController {
 
         return lecturaRepository.findMuestraByArbolAndRango(arbol.getId(), desde, hasta);
     }
-
 }

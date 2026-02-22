@@ -3,6 +3,8 @@ package com.example.proyectoarboles.activities;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -71,10 +73,18 @@ public class ArbolDetalles extends AppCompatActivity {
     private List<CentroEducativo> listaCentros = new ArrayList<>();
     private ArrayAdapter<CentroEducativo> centrosAdapter;
 
+    // Handler para actualización en tiempo real cada 30 segundos
+    private Handler handlerActualizacion;
+    private final long INTERVALO_ACTUALIZACION = 30000; // 30 segundos en milisegundos
+    private Runnable runnableActualizacion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arbol_detalles);
+
+        // Inicializar Handler para actualización periódica
+        handlerActualizacion = new Handler(Looper.getMainLooper());
 
         cargarDatosSesion();
         inicializarVistas();
@@ -84,7 +94,7 @@ public class ArbolDetalles extends AppCompatActivity {
         arbolId = getIntent().getLongExtra("arbol_id", -1);
         if (arbolId != -1) {
             cargarDetallesDesdeAPI(arbolId);
-            cargarDatosEnTiempoReal(arbolId);
+            iniciarActualizacionTiempoReal(arbolId);
             configurarSelectorPeriodo(arbolId);
             // Cargar gráfica inicial (DÍA por defecto)
             cargarGraficaHistorica(arbolId, "DIA");
@@ -200,14 +210,51 @@ public class ArbolDetalles extends AppCompatActivity {
     }
 
     private void activarModoEdicion() {
-        // ... (similar a tu implementación original)
+        // Cargar lista de centros en el spinner
+        cargarCentrosEnSpinner();
         mostrarEditTexts();
     }
 
     private void guardarCambios() {
-        // ... (similar a tu implementación original)
-        mostrarTextViews();
-        verificarPermisosYActualizarUI();
+        // Validar campos
+        String nombre = etNombre.getText().toString().trim();
+        String especie = etEspecie.getText().toString().trim();
+        String fecha = etFecha.getText().toString().trim();
+        String ubicacion = etUbicacion.getText().toString().trim();
+
+        if (nombre.isEmpty()) {
+            etNombre.setError("El nombre es requerido");
+            return;
+        }
+
+        if (especie.isEmpty()) {
+            etEspecie.setError("La especie es requerida");
+            return;
+        }
+
+        if (fecha.isEmpty()) {
+            etFecha.setError("La fecha es requerida");
+            return;
+        }
+
+        // Obtener el centro seleccionado del spinner
+        CentroEducativo centroSeleccionado = (CentroEducativo) spinnerCentroEducativo.getSelectedItem();
+        if (centroSeleccionado == null) {
+            Toast.makeText(this, "Debe seleccionar un centro", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Crear objeto Arbol con los cambios
+        Arbol arbolActualizado = new Arbol();
+        arbolActualizado.setId(arbolActual.getId());
+        arbolActualizado.setNombre(nombre);
+        arbolActualizado.setEspecie(especie);
+        arbolActualizado.setFechaPlantacion(fecha);
+        arbolActualizado.setUbicacion(ubicacion);
+        arbolActualizado.setCentroEducativo(centroSeleccionado);
+
+        // Llamar a la API para actualizar
+        actualizarArbolEnAPI(arbolActual.getId(), arbolActualizado);
     }
 
     private void cancelarEdicion() {
@@ -250,7 +297,10 @@ public class ArbolDetalles extends AppCompatActivity {
 
         tvFecha.setVisibility(View.GONE);
         etFecha.setVisibility(View.VISIBLE);
-        etFecha.setText(tvFecha.getText());
+        // Usar la fecha original la estructura en formato ISO (yyyy-MM-dd)
+        if (arbolActual != null) {
+            etFecha.setText(arbolActual.getFechaPlantacion());
+        }
 
         tvUbicacion.setVisibility(View.GONE);
         etUbicacion.setVisibility(View.VISIBLE);
@@ -264,6 +314,93 @@ public class ArbolDetalles extends AppCompatActivity {
         btnEliminar.setVisibility(View.GONE);
         btnGuardar.setVisibility(View.VISIBLE);
         btnCancelar.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Carga la lista de centros educativos en el spinner
+     */
+    private void cargarCentrosEnSpinner() {
+        Call<List<CentroEducativo>> call = RetrofitClient.getCentroEducativoApi().obtenerTodosLosCentros();
+        call.enqueue(new Callback<List<CentroEducativo>>() {
+            @Override
+            public void onResponse(Call<List<CentroEducativo>> call, Response<List<CentroEducativo>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    listaCentros.clear();
+                    listaCentros.addAll(response.body());
+                    centrosAdapter.notifyDataSetChanged();
+
+                    // Seleccionar el centro actual del árbol
+                    if (arbolActual != null && arbolActual.getCentroEducativo() != null) {
+                        for (int i = 0; i < listaCentros.size(); i++) {
+                            if (listaCentros.get(i).getId().equals(arbolActual.getCentroEducativo().getId())) {
+                                spinnerCentroEducativo.setSelection(i);
+                                break;
+                            }
+                        }
+                    }
+
+                    Log.d(TAG, "Centros cargados: " + listaCentros.size());
+                } else {
+                    Toast.makeText(ArbolDetalles.this, "Error al cargar centros", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Error al cargar centros - Código: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CentroEducativo>> call, Throwable t) {
+                Log.e(TAG, "Error de conexión al cargar centros: " + t.getMessage());
+                Toast.makeText(ArbolDetalles.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * Actualiza el árbol en la API mediante PUT
+     */
+    private void actualizarArbolEnAPI(Long arbolId, Arbol arbolActualizado) {
+        Call<Arbol> call = RetrofitClient.getArbolApi().actualizarArbol(arbolId, arbolActualizado);
+        call.enqueue(new Callback<Arbol>() {
+            @Override
+            public void onResponse(Call<Arbol> call, Response<Arbol> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Arbol arbolGuardado = response.body();
+                    Log.d(TAG, "Árbol actualizado: " + arbolGuardado.getNombre());
+
+                    // Actualizar el árbol actual con los datos guardados
+                    arbolActual = arbolGuardado;
+                    mostrarDatosDelArbol(arbolActual);
+
+                    Toast.makeText(ArbolDetalles.this, "Árbol actualizado exitosamente", Toast.LENGTH_SHORT).show();
+
+                    // Volver a modo lectura
+                    mostrarTextViews();
+                    verificarPermisosYActualizarUI();
+
+                } else {
+                    // Manejar errores específicos
+                    String errorMsg = "Error al actualizar el árbol";
+
+                    if (response.code() == 409) {
+                        errorMsg = "Ya existe un árbol con ese nombre en este centro";
+                    } else if (response.code() == 400) {
+                        errorMsg = "Datos inválidos. Verifica los campos.";
+                    } else if (response.code() == 403) {
+                        errorMsg = "No tienes permiso para editar este árbol";
+                    } else if (response.code() == 404) {
+                        errorMsg = "Árbol no encontrado";
+                    }
+
+                    Log.e(TAG, "Error al actualizar - Código: " + response.code());
+                    Toast.makeText(ArbolDetalles.this, errorMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Arbol> call, Throwable t) {
+                Log.e(TAG, "Error de conexión: " + t.getMessage());
+                Toast.makeText(ArbolDetalles.this, "Error de conexión. Inténtalo de nuevo.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void mostrarDialogoEliminar() {
@@ -357,6 +494,41 @@ public class ArbolDetalles extends AppCompatActivity {
                 Log.e(TAG, "Error de conexión al cargar datos en tiempo real: " + t.getMessage());
             }
         });
+    }
+
+    /**
+     * Inicia la actualización automática de datos en tiempo real cada 30 segundos
+     */
+    private void iniciarActualizacionTiempoReal(Long arbolId) {
+        // Crear el Runnable que se ejecutará periódicamente
+        runnableActualizacion = new Runnable() {
+            @Override
+            public void run() {
+                // Cargar datos en tiempo real
+                cargarDatosEnTiempoReal(arbolId);
+
+                // Programar la siguiente ejecución en 30 segundos
+                handlerActualizacion.postDelayed(this, INTERVALO_ACTUALIZACION);
+            }
+        };
+
+        // Ejecutar la primera carga inmediatamente
+        cargarDatosEnTiempoReal(arbolId);
+
+        // Programar las siguientes actualizaciones cada 30 segundos
+        handlerActualizacion.postDelayed(runnableActualizacion, INTERVALO_ACTUALIZACION);
+
+        Log.d(TAG, "Actualización automática iniciada - Intervalo: " + INTERVALO_ACTUALIZACION + "ms");
+    }
+
+    /**
+     * Detiene la actualización automática de datos (llamar en onDestroy)
+     */
+    private void detenerActualizacionTiempoReal() {
+        if (handlerActualizacion != null && runnableActualizacion != null) {
+            handlerActualizacion.removeCallbacks(runnableActualizacion);
+            Log.d(TAG, "Actualización automática detenida");
+        }
     }
 
     private void configurarSelectorPeriodo(Long arbolId) {
@@ -458,5 +630,12 @@ public class ArbolDetalles extends AppCompatActivity {
         LineData lineData = new LineData(dataSets);
         lineChart.setData(lineData);
         lineChart.invalidate();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Detener la actualización automática para evitar memory leaks
+        detenerActualizacionTiempoReal();
     }
 }

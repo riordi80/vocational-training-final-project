@@ -127,12 +127,12 @@ Mock de `api.js`. Verifica que el servicio construye correctamente las peticione
 
 ### Tests 11-12. Servicio de lecturas (`lecturasService.test.js`)
 
-Mock de `api.js`. Verifica URL con parámetros y lógica de composición interna.
+Mock de `api.js`. Verifica los dos comportamientos de `getUltimaLectura`: cuando no hay lecturas y cuando las hay.
 
 | # | Test | Qué verifica |
 |---|------|--------------|
-| 11 | `getLecturasByArbol` construye URL y params | La llamada incluye `/lecturas/arbol/5` y los query params `page` y `size` correctos |
-| 12 | `getUltimaLectura` devuelve `null` sin lecturas | Si `content` está vacío, la función retorna `null` (no `undefined` ni error) |
+| 11 | `getUltimaLectura` devuelve `null` sin lecturas | Si `content` está vacío, la función retorna `null` (no `undefined` ni error) |
+| 12 | `getUltimaLectura` devuelve el primer elemento cuando hay lecturas | Si `content` tiene datos, devuelve `content[0]` correctamente |
 
 ---
 

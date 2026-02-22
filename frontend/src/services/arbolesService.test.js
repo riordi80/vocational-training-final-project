@@ -9,7 +9,7 @@ describe('arbolesService', () => {
   afterEach(() => vi.clearAllMocks());
 
   // Test 9
-  it('getArboles calls GET /arboles and returns data', async () => {
+  it('getArboles llama a GET /arboles y devuelve los datos', async () => {
     // Arrange
     const mockArboles = [{ id: 1, nombre: 'Pino' }, { id: 2, nombre: 'Olivo' }];
     api.get.mockResolvedValue({ data: mockArboles });
@@ -21,7 +21,7 @@ describe('arbolesService', () => {
   });
 
   // Test 10
-  it('deleteArbol throws the original error on API failure', async () => {
+  it('deleteArbol relanza el error original al fallar la API', async () => {
     // Arrange
     const apiError = new Error('Network Error');
     api.delete.mockRejectedValue(apiError);

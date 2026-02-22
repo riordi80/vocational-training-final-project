@@ -45,7 +45,7 @@ public class AuthResponse {
      * Clase anidada para la referencia de los centros
      */
     public static class CentroRef {
-        @SerializedName("id")
+        @SerializedName("centroId")
         private Long id;
 
         public Long getId() {
