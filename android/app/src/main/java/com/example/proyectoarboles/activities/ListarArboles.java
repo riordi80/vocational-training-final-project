@@ -17,6 +17,7 @@ import com.example.proyectoarboles.adapter.ArbolAdapter;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.Arbol;
 import com.example.proyectoarboles.util.PermissionManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class ListarArboles extends AppCompatActivity {
     private ArbolAdapter adapter;
     private List<Arbol> listaArboles = new ArrayList<>();
     private Button btVolver, btLogin, btCerrarSesion;
+    private FloatingActionButton fabAnadirArbol;
     private SharedPreferences sharedPreferences;
     private PermissionManager permissionManager;
     private long centroId = -1; // Variable para almacenar el ID del centro
@@ -50,6 +52,7 @@ public class ListarArboles extends AppCompatActivity {
         btVolver = findViewById(R.id.btVolver);
         btLogin = findViewById(R.id.btLogin);
         btCerrarSesion = findViewById(R.id.btCerrarS);
+        fabAnadirArbol = findViewById(R.id.fabAnadirArbol);
 
         adapter = new ArbolAdapter(listaArboles, arbol -> {
             Intent intent = new Intent(ListarArboles.this, ArbolDetalles.class);
@@ -129,7 +132,7 @@ public class ListarArboles extends AppCompatActivity {
 
     /**
      * Configura los botones dinámicos según los permisos del usuario.
-     * Actualmente solo es un placeholder, se expandirá cuando se agregue FAB.
+     * Muestra/oculta el FAB según si puede crear árboles en este centro.
      */
     private void configurarBotonesDinamicos() {
         // Si el usuario es COORDINADOR, mostrar FAB solo si es de este centro
@@ -137,16 +140,26 @@ public class ListarArboles extends AppCompatActivity {
         // Si es PUBLICO, no mostrar FAB
 
         if (permissionManager.puedeCrearArbol(centroId)) {
-            // FAB visible (se agregará cuando se actualice el layout)
-            Log.d(TAG, "Usuario puede crear árbol en este centro");
+            fabAnadirArbol.setVisibility(View.VISIBLE);
+            Log.d(TAG, "Usuario puede crear árbol en este centro - FAB visible");
+
+            // Configurar listener para el FAB
+            fabAnadirArbol.setOnClickListener(v -> {
+                Intent intent = new Intent(ListarArboles.this, CrearArbol.class);
+                intent.putExtra("centro_id", centroId);
+                startActivity(intent);
+            });
         } else {
-            Log.d(TAG, "Usuario NO puede crear árbol en este centro");
+            fabAnadirArbol.setVisibility(View.GONE);
+            Log.d(TAG, "Usuario NO puede crear árbol en este centro - FAB oculto");
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        cargarArbolesDesdeAPI();
         actualizarVisibilidadBotones();
+        configurarBotonesDinamicos();
     }
 }

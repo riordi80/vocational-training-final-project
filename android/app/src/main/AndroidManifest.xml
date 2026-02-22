@@ -35,6 +35,9 @@
         <activity
             android:name=".activities.Login"
             android:exported="false" />
+        <activity
+            android:name=".activities.CrearArbol"
+            android:exported="false" />
     </application>
 
 </manifest>
