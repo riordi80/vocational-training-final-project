@@ -155,7 +155,7 @@ function HistoricoArbol() {
             </p>
           )}
         </div>
-        <Button variant="outline" onClick={() => navigate(`/arboles/${id}`)}>
+        <Button variant="outline" onClick={() => navigate(-1)}>
           ← Volver al árbol
         </Button>
       </div>
