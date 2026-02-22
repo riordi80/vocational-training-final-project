@@ -3,6 +3,8 @@ package com.example.proyectoarboles.activities;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -71,10 +73,18 @@ public class ArbolDetalles extends AppCompatActivity {
     private List<CentroEducativo> listaCentros = new ArrayList<>();
     private ArrayAdapter<CentroEducativo> centrosAdapter;
 
+    // Handler para actualización en tiempo real cada 30 segundos
+    private Handler handlerActualizacion;
+    private final long INTERVALO_ACTUALIZACION = 30000; // 30 segundos en milisegundos
+    private Runnable runnableActualizacion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arbol_detalles);
+
+        // Inicializar Handler para actualización periódica
+        handlerActualizacion = new Handler(Looper.getMainLooper());
 
         cargarDatosSesion();
         inicializarVistas();
@@ -84,7 +94,7 @@ public class ArbolDetalles extends AppCompatActivity {
         arbolId = getIntent().getLongExtra("arbol_id", -1);
         if (arbolId != -1) {
             cargarDetallesDesdeAPI(arbolId);
-            cargarDatosEnTiempoReal(arbolId);
+            iniciarActualizacionTiempoReal(arbolId);
             configurarSelectorPeriodo(arbolId);
             // Cargar gráfica inicial (DÍA por defecto)
             cargarGraficaHistorica(arbolId, "DIA");
@@ -359,6 +369,41 @@ public class ArbolDetalles extends AppCompatActivity {
         });
     }
 
+    /**
+     * Inicia la actualización automática de datos en tiempo real cada 30 segundos
+     */
+    private void iniciarActualizacionTiempoReal(Long arbolId) {
+        // Crear el Runnable que se ejecutará periódicamente
+        runnableActualizacion = new Runnable() {
+            @Override
+            public void run() {
+                // Cargar datos en tiempo real
+                cargarDatosEnTiempoReal(arbolId);
+
+                // Programar la siguiente ejecución en 30 segundos
+                handlerActualizacion.postDelayed(this, INTERVALO_ACTUALIZACION);
+            }
+        };
+
+        // Ejecutar la primera carga inmediatamente
+        cargarDatosEnTiempoReal(arbolId);
+
+        // Programar las siguientes actualizaciones cada 30 segundos
+        handlerActualizacion.postDelayed(runnableActualizacion, INTERVALO_ACTUALIZACION);
+
+        Log.d(TAG, "Actualización automática iniciada - Intervalo: " + INTERVALO_ACTUALIZACION + "ms");
+    }
+
+    /**
+     * Detiene la actualización automática de datos (llamar en onDestroy)
+     */
+    private void detenerActualizacionTiempoReal() {
+        if (handlerActualizacion != null && runnableActualizacion != null) {
+            handlerActualizacion.removeCallbacks(runnableActualizacion);
+            Log.d(TAG, "Actualización automática detenida");
+        }
+    }
+
     private void configurarSelectorPeriodo(Long arbolId) {
         radioGroupPeriodo.setOnCheckedChangeListener((group, checkedId) -> {
             String periodo;
@@ -458,5 +503,12 @@ public class ArbolDetalles extends AppCompatActivity {
         LineData lineData = new LineData(dataSets);
         lineChart.setData(lineData);
         lineChart.invalidate();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Detener la actualización automática para evitar memory leaks
+        detenerActualizacionTiempoReal();
     }
 }
