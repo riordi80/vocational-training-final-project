@@ -128,6 +128,40 @@ public class Lectura {
     public void setCo2(BigDecimal co2) { this.co2 = co2; }
     public void setDiametroTronco(BigDecimal diametroTronco) { this.diametroTronco = diametroTronco; }
 
+    /**
+     * @return representación en String de la lectura
+     */
+    @Override
+    public String toString() {
+        return "Lectura{" +
+                "id=" + id +
+                ", timestamp=" + timestamp +
+                ", arbolId=" + (arbol != null ? arbol.getId() : null) +
+                ", dispositivoId=" + (dispositivo != null ? dispositivo.getId() : null) +
+                ", temperatura=" + temperatura +
+                ", humedadAmbiente=" + humedadAmbiente +
+                ", humedadSuelo=" + humedadSuelo +
+                '}';
+    }
+
+    /**
+     * Compara esta lectura con otro objeto para determinar igualdad.
+     * <p>
+     * Dos lecturas se consideran iguales si tienen el mismo ID (clave primaria).
+     * Esto es consistente con la lógica de base de datos relacional.
+     * </p>
+     * <p>
+     * Implementación optimizada para entidades JPA:
+     * </p>
+     * <ul>
+     *   <li>Solo compara IDs (no todos los campos)</li>
+     *   <li>Verifica que el ID no sea null antes de comparar</li>
+     *   <li>Funciona correctamente antes y después de persistir</li>
+     * </ul>
+     *
+     * @param o objeto a comparar con esta lectura
+     * @return true si los objetos son iguales (mismo ID), false en caso contrario
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -136,6 +170,20 @@ public class Lectura {
         return id != null && id.equals(lectura.getId());
     }
 
+    /**
+     * Genera un código hash para esta lectura.
+     * <p>
+     * Implementación optimizada para entidades JPA que garantiza que el hashCode
+     * permanece constante durante toda la vida del objeto, incluso cuando cambian
+     * los campos (incluido el ID al ser persistido).
+     * </p>
+     * <p>
+     * Esto es crucial para que los objetos funcionen correctamente en colecciones
+     * como HashSet o HashMap.
+     * </p>
+     *
+     * @return código hash basado en la clase (constante para todas las lecturas)
+     */
     @Override
     public int hashCode() {
         return getClass().hashCode();
