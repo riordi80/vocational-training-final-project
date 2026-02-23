@@ -2,7 +2,6 @@ package com.example.proyectoarboles.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.preference.PreferenceManager;
 import java.util.Collections;
 import java.util.Set;
 
@@ -30,7 +29,7 @@ public class PermissionManager {
     private final SharedPreferences sharedPreferences;
 
     public PermissionManager(Context context) {
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
     }
 
     // ========== MÉTODOS DE SESIÓN ==========

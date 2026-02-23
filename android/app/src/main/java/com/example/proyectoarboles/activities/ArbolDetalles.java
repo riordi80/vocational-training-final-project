@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -105,7 +104,7 @@ public class ArbolDetalles extends AppCompatActivity {
     }
 
     private void cargarDatosSesion() {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
         permissionManager = new PermissionManager(this);
         String roleString = sharedPreferences.getString("user_role", null);
         userRole = (roleString != null) ? Rol.valueOf(roleString) : null;
