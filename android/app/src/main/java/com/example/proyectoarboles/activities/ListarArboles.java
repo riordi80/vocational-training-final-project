@@ -57,6 +57,7 @@ public class ListarArboles extends AppCompatActivity {
         adapter = new ArbolAdapter(listaArboles, arbol -> {
             Intent intent = new Intent(ListarArboles.this, ArbolDetalles.class);
             intent.putExtra("arbol_id", arbol.getId());
+            intent.putExtra("centro_id", centroId);
             startActivity(intent);
         }, permissionManager);
 
