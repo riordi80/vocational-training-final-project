@@ -35,13 +35,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
 
-    <!-- Botón para volver a la lista de centros -->
+    <!-- Botón para volver al Dashboard -->
     <Button
         android:id="@+id/btVolver"
         style="@style/ButtonSecondary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Volver a Centros"
+        android:text="Dashboard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline" />
