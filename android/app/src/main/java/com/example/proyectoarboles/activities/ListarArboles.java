@@ -110,7 +110,11 @@ public class ListarArboles extends AppCompatActivity {
     }
 
     private void configurarListeners() {
-        btVolver.setOnClickListener(v -> finish()); // Cierra la actividad actual y vuelve a la anterior
+        btVolver.setOnClickListener(v -> {
+            Intent intent = new Intent(ListarArboles.this, Dashboard.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        });
 
         btLogin.setOnClickListener(v -> {
             Intent intent = new Intent(ListarArboles.this, Login.class);

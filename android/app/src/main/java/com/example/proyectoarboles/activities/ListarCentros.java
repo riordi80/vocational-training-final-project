@@ -32,7 +32,7 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
     private RecyclerView recyclerViewCentros;
     private CentroEducativoAdapter adapter;
     private List<CentroEducativo> listaCentros = new ArrayList<>();
-    private Button btLogin, btRegister, btCerrarSesion;
+    private Button btLogin, btRegister, btCerrarSesion, btVolverDashboard;
     private SharedPreferences sharedPreferences;
     private PermissionManager permissionManager;
 
@@ -48,6 +48,7 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
         btLogin = findViewById(R.id.btLogin);
         btRegister = findViewById(R.id.btRegister);
         btCerrarSesion = findViewById(R.id.btCerrarS);
+        btVolverDashboard = findViewById(R.id.btVolverDashboard);
 
         btRegister.setVisibility(View.GONE);
 
@@ -121,6 +122,12 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
     }
 
     private void configurarListeners() {
+        btVolverDashboard.setOnClickListener(v -> {
+            Intent intent = new Intent(ListarCentros.this, Dashboard.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        });
+
         btLogin.setOnClickListener(v -> {
             Intent intent = new Intent(ListarCentros.this, Login.class);
             startActivity(intent);
