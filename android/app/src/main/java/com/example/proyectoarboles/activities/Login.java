@@ -34,6 +34,7 @@ public class Login extends AppCompatActivity {
     private Button loginButton;
     private SharedPreferences sharedPreferences;
     private Button registrerButton;
+    private Button backToDashboardButton;
 
 
     @Override
@@ -49,6 +50,7 @@ public class Login extends AppCompatActivity {
         inputPassword = findViewById(R.id.editTextPassword);
         loginButton = findViewById(R.id.buttonLogin);
         registrerButton = findViewById(R.id.buttonRegistrer);
+        backToDashboardButton = findViewById(R.id.buttonBackToDashboard);
 
         loginButton.setOnClickListener(v -> {
             String email = inputUsuario.getText().toString().trim();
@@ -65,6 +67,12 @@ public class Login extends AppCompatActivity {
         registrerButton.setOnClickListener(v -> {
             Intent intent = new Intent(Login.this, Registrer.class);
             startActivity(intent);
+        });
+
+        backToDashboardButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Login.this, Dashboard.class);
+            startActivity(intent);
+            finish();
         });
     }
 
