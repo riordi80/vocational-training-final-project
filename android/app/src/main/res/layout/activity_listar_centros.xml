@@ -35,22 +35,6 @@
         android:layout_marginTop="16dp">
 
         <Button
-            android:id="@+id/btVolverDashboard"
-            style="@style/ButtonSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="Dashboard" />
-
-        <Button
-            android:id="@+id/btLogin"
-            style="@style/ButtonPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="Login"/>
-
-        <Button
             android:id="@+id/btRegister"
             style="@style/ButtonSecondary"
             android:layout_width="wrap_content"

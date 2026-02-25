@@ -15,32 +15,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoArboles">
+
+        <!-- Activity principal con el menú inferior fijo -->
         <activity
-            android:name=".activities.Dashboard"
+            android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.ListarCentros"
-            android:exported="false" />
-        <activity
-            android:name=".activities.Registrer"
-            android:exported="false" />
+
+        <!-- Activities independientes (sin bottom nav) -->
         <activity
             android:name=".activities.ArbolDetalles"
             android:exported="false" />
         <activity
-            android:name=".activities.ListarArboles"
+            android:name=".activities.CrearArbol"
             android:exported="false" />
         <activity
             android:name=".activities.Login"
             android:exported="false" />
         <activity
-            android:name=".activities.CrearArbol"
+            android:name=".activities.Registrer"
             android:exported="false" />
+
     </application>
 
 </manifest>
