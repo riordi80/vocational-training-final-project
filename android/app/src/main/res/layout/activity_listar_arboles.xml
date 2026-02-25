@@ -14,7 +14,7 @@
         android:id="@+id/textViewTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
         android:text="Listado de Árboles"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -30,54 +30,21 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/btVolver"
+        app:layout_constraintBottom_toTopOf="@+id/btCerrarS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
 
-    <!-- Botón para volver al Dashboard -->
-    <Button
-        android:id="@+id/btVolver"
-        style="@style/ButtonSecondary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Dashboard"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline" />
-
-    <!-- Guideline para separar los botones -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <!-- Botón Iniciar Sesión (inicialmente oculto) -->
-    <Button
-        android:id="@+id/btLogin"
-        style="@style/ButtonPrimary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Iniciar Sesión"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Botón Cerrar Sesión (inicialmente visible si está logueado) -->
+    <!-- Botón Cerrar Sesión -->
     <Button
         android:id="@+id/btCerrarS"
         style="@style/ButtonSecondary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:text="Cerrar sesión"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- FAB para añadir árbol (solo visible para Admin/Coordinador) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

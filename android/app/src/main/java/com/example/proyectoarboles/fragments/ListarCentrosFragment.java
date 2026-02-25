@@ -1,18 +1,21 @@
-package com.example.proyectoarboles.activities;
+package com.example.proyectoarboles.fragments;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectoarboles.R;
+import com.example.proyectoarboles.activities.MainActivity;
 import com.example.proyectoarboles.adapter.CentroEducativoAdapter;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.CentroEducativo;
@@ -25,30 +28,32 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListarCentros extends AppCompatActivity implements CentroEducativoAdapter.OnItemClickListener {
+public class ListarCentrosFragment extends Fragment implements CentroEducativoAdapter.OnItemClickListener {
 
-    private static final String TAG = "ListarCentros";
+    private static final String TAG = "ListarCentrosFragment";
 
     private RecyclerView recyclerViewCentros;
     private CentroEducativoAdapter adapter;
     private List<CentroEducativo> listaCentros = new ArrayList<>();
-    private Button btLogin, btRegister, btCerrarSesion, btVolverDashboard;
-    private SharedPreferences sharedPreferences;
+    private Button btRegister, btCerrarSesion;
     private PermissionManager permissionManager;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listar_centros);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_listar_centros, container, false);
+    }
 
-        sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
-        permissionManager = new PermissionManager(this);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        recyclerViewCentros = findViewById(R.id.RecyclerViewCentros);
-        btLogin = findViewById(R.id.btLogin);
-        btRegister = findViewById(R.id.btRegister);
-        btCerrarSesion = findViewById(R.id.btCerrarS);
-        btVolverDashboard = findViewById(R.id.btVolverDashboard);
+        permissionManager = new PermissionManager(requireContext());
+
+        recyclerViewCentros = view.findViewById(R.id.RecyclerViewCentros);
+        btRegister = view.findViewById(R.id.btRegister);
+        btCerrarSesion = view.findViewById(R.id.btCerrarS);
 
         btRegister.setVisibility(View.GONE);
 
@@ -59,31 +64,24 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
     }
 
     private void configurarRecyclerView() {
-        recyclerViewCentros.setLayoutManager(new LinearLayoutManager(this));
-        // Pasamos permissionManager para que el adaptador pueda validar permisos
+        recyclerViewCentros.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new CentroEducativoAdapter(listaCentros, this, permissionManager);
         recyclerViewCentros.setAdapter(adapter);
     }
 
     @Override
     public void onVerArbolesClick(CentroEducativo centro) {
-        Intent intent = new Intent(ListarCentros.this, ListarArboles.class);
-        intent.putExtra("centro_id", centro.getId());
-        startActivity(intent);
+        ((MainActivity) requireActivity()).navigateToListarArboles(centro.getId());
     }
 
     @Override
     public void onEditarCentroClick(CentroEducativo centro) {
-        Toast.makeText(this, "Editar centro: " + centro.getNombre(), Toast.LENGTH_SHORT).show();
-        // TODO: Aquí iría la lógica para editar el centro
-        // Por ejemplo, abrir un diálogo o llamar a API para actualizar
+        Toast.makeText(requireContext(), "Editar centro: " + centro.getNombre(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEliminarCentroClick(CentroEducativo centro) {
-        Toast.makeText(this, "Eliminar centro: " + centro.getNombre(), Toast.LENGTH_SHORT).show();
-        // TODO: Aquí iría la lógica para eliminar el centro
-        // Por ejemplo, mostrar confirmation dialog y llamar a API
+        Toast.makeText(requireContext(), "Eliminar centro: " + centro.getNombre(), Toast.LENGTH_SHORT).show();
     }
 
     private void cargarCentrosDesdeAPI() {
@@ -93,13 +91,14 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
         call.enqueue(new Callback<List<CentroEducativo>>() {
             @Override
             public void onResponse(Call<List<CentroEducativo>> call, Response<List<CentroEducativo>> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     listaCentros.clear();
                     listaCentros.addAll(response.body());
                     adapter.notifyDataSetChanged();
                     Log.d(TAG, "Centros cargados: " + listaCentros.size());
                     if (listaCentros.isEmpty()) {
-                        Toast.makeText(ListarCentros.this, "No hay centros registrados", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "No hay centros registrados");
                     }
                 } else {
                     String errorBody = "";
@@ -108,48 +107,40 @@ public class ListarCentros extends AppCompatActivity implements CentroEducativoA
                     } catch (Exception e) {
                         Log.e(TAG, "Error al leer el cuerpo del error", e);
                     }
-                    Log.e(TAG, "Error al cargar centros. Código: " + response.code() + ", Mensaje: " + response.message() + ", Cuerpo: " + errorBody);
-                    Toast.makeText(ListarCentros.this, "Error al cargar centros: " + response.code(), Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Error al cargar centros. Código: " + response.code() + ", Cuerpo: " + errorBody);
+                    Toast.makeText(requireContext(), "Error al cargar centros: " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<CentroEducativo>> call, Throwable t) {
+                if (!isAdded()) return;
                 Log.e(TAG, "Error de conexión", t);
-                Toast.makeText(ListarCentros.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "Error de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void configurarListeners() {
-        btVolverDashboard.setOnClickListener(v -> {
-            Intent intent = new Intent(ListarCentros.this, Dashboard.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-        });
-
-        btLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(ListarCentros.this, Login.class);
-            startActivity(intent);
-        });
-
         btCerrarSesion.setOnClickListener(v -> {
             permissionManager.clearSession();
             actualizarVisibilidadBotones();
-            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Sesión cerrada", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void actualizarVisibilidadBotones() {
         boolean isLoggedIn = permissionManager.isLoggedIn();
-        btLogin.setVisibility(isLoggedIn ? View.GONE : View.VISIBLE);
-        btRegister.setVisibility(View.GONE); // Siempre oculto por ahora
+        btRegister.setVisibility(View.GONE);
         btCerrarSesion.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        actualizarVisibilidadBotones();
+        if (permissionManager != null) {
+            actualizarVisibilidadBotones();
+            cargarCentrosDesdeAPI();
+        }
     }
 }

@@ -109,8 +109,8 @@ public class Registrer extends AppCompatActivity {
 
                     Toast.makeText(Registrer.this, "Registro exitoso. Bienvenido " + authResponse.getNombre(), Toast.LENGTH_SHORT).show();
 
-                    // Navegar a ListarCentros
-                    Intent intent = new Intent(Registrer.this, ListarCentros.class);
+                    // Navegar a la pantalla principal
+                    Intent intent = new Intent(Registrer.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();

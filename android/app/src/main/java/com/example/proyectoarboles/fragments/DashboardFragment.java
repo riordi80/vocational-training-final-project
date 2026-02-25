@@ -1,18 +1,23 @@
-package com.example.proyectoarboles.activities;
+package com.example.proyectoarboles.fragments;
 
-import android.content.Intent;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
+import com.example.proyectoarboles.activities.MainActivity;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.Arbol;
 import com.example.proyectoarboles.model.CentroEducativo;
@@ -24,41 +29,44 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Dashboard extends AppCompatActivity {
+public class DashboardFragment extends Fragment {
 
-    private static final String TAG = "Dashboard";
+    private static final String TAG = "DashboardFragment";
 
     private TextView tvNumeroCentros, tvNumeroArboles, tvNombreUsuario, tvRolUsuario;
-    private Button btVerCentros, btVerArboles, btLogin, btRegister, btCerrarSesion;
+    private Button btVerCentros, btVerArboles, btRegister, btCerrarSesion;
     private LinearLayout llEstadoUsuario;
     private SharedPreferences sharedPreferences;
     private PermissionManager permissionManager;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_dashboard, container, false);
+    }
 
-        sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
-        permissionManager = new PermissionManager(this);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        // Inicializar vistas
-        tvNumeroCentros = findViewById(R.id.tvNumeroCentros);
-        tvNumeroArboles = findViewById(R.id.tvNumeroArboles);
-        tvNombreUsuario = findViewById(R.id.tvNombreUsuario);
-        tvRolUsuario = findViewById(R.id.tvRolUsuario);
-        llEstadoUsuario = findViewById(R.id.llEstadoUsuario);
+        sharedPreferences = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+        permissionManager = new PermissionManager(requireContext());
 
-        btVerCentros = findViewById(R.id.btVerCentros);
-        btVerArboles = findViewById(R.id.btVerArboles);
-        btLogin = findViewById(R.id.btLogin);
-        btRegister = findViewById(R.id.btRegister);
-        btCerrarSesion = findViewById(R.id.btCerrarSesion);
+        tvNumeroCentros = view.findViewById(R.id.tvNumeroCentros);
+        tvNumeroArboles = view.findViewById(R.id.tvNumeroArboles);
+        tvNombreUsuario = view.findViewById(R.id.tvNombreUsuario);
+        tvRolUsuario = view.findViewById(R.id.tvRolUsuario);
+        llEstadoUsuario = view.findViewById(R.id.llEstadoUsuario);
 
-        // Cargar datos
-        cargarEstadisticas();
+        btVerCentros = view.findViewById(R.id.btVerCentros);
+        btVerArboles = view.findViewById(R.id.btVerArboles);
+        btRegister = view.findViewById(R.id.btRegister);
+        btCerrarSesion = view.findViewById(R.id.btCerrarSesion);
+
         configurarListeners();
         actualizarVisibilidadBotones();
+        cargarEstadisticas();
     }
 
     private void cargarEstadisticas() {
@@ -73,10 +81,10 @@ public class Dashboard extends AppCompatActivity {
         call.enqueue(new Callback<List<CentroEducativo>>() {
             @Override
             public void onResponse(Call<List<CentroEducativo>> call, Response<List<CentroEducativo>> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
-                    int numeroCentros = response.body().size();
-                    tvNumeroCentros.setText(String.valueOf(numeroCentros));
-                    Log.d(TAG, "Centros cargados: " + numeroCentros);
+                    tvNumeroCentros.setText(String.valueOf(response.body().size()));
+                    Log.d(TAG, "Centros cargados: " + response.body().size());
                 } else {
                     Log.e(TAG, "Error al cargar centros: " + response.code());
                     tvNumeroCentros.setText("Error");
@@ -85,6 +93,7 @@ public class Dashboard extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<CentroEducativo>> call, Throwable t) {
+                if (!isAdded()) return;
                 Log.e(TAG, "Error de conexión al cargar centros", t);
                 tvNumeroCentros.setText("Error");
             }
@@ -98,10 +107,10 @@ public class Dashboard extends AppCompatActivity {
         call.enqueue(new Callback<List<Arbol>>() {
             @Override
             public void onResponse(Call<List<Arbol>> call, Response<List<Arbol>> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
-                    int numeroArboles = response.body().size();
-                    tvNumeroArboles.setText(String.valueOf(numeroArboles));
-                    Log.d(TAG, "Árboles cargados: " + numeroArboles);
+                    tvNumeroArboles.setText(String.valueOf(response.body().size()));
+                    Log.d(TAG, "Árboles cargados: " + response.body().size());
                 } else {
                     Log.e(TAG, "Error al cargar árboles: " + response.code());
                     tvNumeroArboles.setText("Error");
@@ -110,6 +119,7 @@ public class Dashboard extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Arbol>> call, Throwable t) {
+                if (!isAdded()) return;
                 Log.e(TAG, "Error de conexión al cargar árboles", t);
                 tvNumeroArboles.setText("Error");
             }
@@ -117,34 +127,22 @@ public class Dashboard extends AppCompatActivity {
     }
 
     private void configurarListeners() {
-        btVerCentros.setOnClickListener(v -> {
-            Intent intent = new Intent(Dashboard.this, ListarCentros.class);
-            startActivity(intent);
-        });
+        btVerCentros.setOnClickListener(v ->
+                ((MainActivity) requireActivity()).navigateToListarCentros());
 
-        btVerArboles.setOnClickListener(v -> {
-            Intent intent = new Intent(Dashboard.this, ListarArboles.class);
-            // Pasar centro_id = -1 para indicar que se muestren todos los árboles
-            intent.putExtra("centro_id", -1L);
-            startActivity(intent);
-        });
-
-        btLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(Dashboard.this, Login.class);
-            startActivity(intent);
-        });
+        btVerArboles.setOnClickListener(v ->
+                ((MainActivity) requireActivity()).navigateToListarArboles(-1L));
 
         btCerrarSesion.setOnClickListener(v -> {
             permissionManager.clearSession();
             actualizarVisibilidadBotones();
             actualizarInfoUsuario();
-            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Sesión cerrada", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void actualizarVisibilidadBotones() {
         boolean isLoggedIn = permissionManager.isLoggedIn();
-        btLogin.setVisibility(isLoggedIn ? View.GONE : View.VISIBLE);
         btRegister.setVisibility(View.GONE);
         btCerrarSesion.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
         actualizarInfoUsuario();
@@ -152,11 +150,9 @@ public class Dashboard extends AppCompatActivity {
 
     private void actualizarInfoUsuario() {
         boolean isLoggedIn = permissionManager.isLoggedIn();
-
         if (isLoggedIn) {
             String nombreUsuario = sharedPreferences.getString("user_name", "");
             String rolUsuario = sharedPreferences.getString("user_role", "PUBLICO");
-
             tvNombreUsuario.setText(nombreUsuario);
             tvRolUsuario.setText(rolUsuario != null ? rolUsuario : "PUBLICO");
             llEstadoUsuario.setVisibility(View.VISIBLE);
@@ -166,9 +162,11 @@ public class Dashboard extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        actualizarVisibilidadBotones();
-        cargarEstadisticas();
+        if (permissionManager != null) {
+            actualizarVisibilidadBotones();
+            cargarEstadisticas();
+        }
     }
 }
