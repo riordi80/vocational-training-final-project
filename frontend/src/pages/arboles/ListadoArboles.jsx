@@ -112,7 +112,7 @@
               id="filtro-centro"
               value={centroFiltro}
               onChange={handleFiltroChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-primary"
             >
               <option value="">Todos los centros</option>
               {centros.map((centro) => (
@@ -243,7 +243,7 @@
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-2">
                           <h3 className="text-lg font-semibold text-gray-900">{arbol.nombre}</h3>
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-brand-bg-green text-brand-primary">
                             #{arbol.id}
                           </span>
                         </div>

@@ -216,7 +216,7 @@ function DetalleUsuario() {
             <button
               onClick={handleToggleActivo}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                usuario.activo ? 'bg-green-500' : 'bg-gray-300'
+                usuario.activo ? 'bg-brand-secondary' : 'bg-gray-300'
               }`}
               title={usuario.activo ? 'Desactivar usuario' : 'Activar usuario'}
             >
@@ -225,7 +225,7 @@ function DetalleUsuario() {
               }`} />
             </button>
             <span className={`text-sm font-medium ${
-              usuario.activo ? 'text-green-700' : 'text-gray-400'
+              usuario.activo ? 'text-brand-primary' : 'text-gray-400'
             }`}>
               {usuario.activo ? 'Activo' : 'Inactivo'}
             </span>
@@ -271,7 +271,7 @@ function DetalleUsuario() {
             <select
               value={centroSeleccionado}
               onChange={(e) => setCentroSeleccionado(e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary"
             >
               <option value="">Selecciona un centro...</option>
               {centrosDisponibles.map(centro => (

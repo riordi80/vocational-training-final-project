@@ -21,21 +21,139 @@ const ComponentLibrary = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-          <h1 className="text-4xl font-bold text-gray-800 mb-3">
+          <h1 className="text-4xl font-bold text-brand-accent mb-3">
             Biblioteca de Componentes
           </h1>
-          <p className="text-gray-600">
+          <p className="text-brand-text">
             Referencia visual y documentación de los componentes comunes reutilizables del proyecto.
           </p>
         </div>
 
+        {/* Tipografía */}
+        <section className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-2xl font-semibold text-brand-primary mb-2">Tipografía</h2>
+          <p className="text-brand-text mb-6">
+            El proyecto utiliza la fuente <strong>Outfit</strong> en todos los tamaños. Definida como fuente <code className="bg-gray-100 px-2 py-1 rounded">sans</code> por defecto en <code className="bg-gray-100 px-2 py-1 rounded">tailwind.config.js</code>.
+          </p>
+          <div className="space-y-4 mb-6">
+            <div className="flex items-baseline gap-6 border-b border-gray-100 pb-4">
+              <span className="text-xs text-gray-400 w-24 shrink-0">font-light</span>
+              <p className="text-2xl font-light text-brand-text">Proyecto Árboles</p>
+            </div>
+            <div className="flex items-baseline gap-6 border-b border-gray-100 pb-4">
+              <span className="text-xs text-gray-400 w-24 shrink-0">font-normal</span>
+              <p className="text-2xl font-normal text-brand-text">Proyecto Árboles</p>
+            </div>
+            <div className="flex items-baseline gap-6 border-b border-gray-100 pb-4">
+              <span className="text-xs text-gray-400 w-24 shrink-0">font-medium</span>
+              <p className="text-2xl font-medium text-brand-text">Proyecto Árboles</p>
+            </div>
+            <div className="flex items-baseline gap-6 border-b border-gray-100 pb-4">
+              <span className="text-xs text-gray-400 w-24 shrink-0">font-semibold</span>
+              <p className="text-2xl font-semibold text-brand-text">Proyecto Árboles</p>
+            </div>
+            <div className="flex items-baseline gap-6 pb-2">
+              <span className="text-xs text-gray-400 w-24 shrink-0">font-bold</span>
+              <p className="text-2xl font-bold text-brand-text">Proyecto Árboles</p>
+            </div>
+          </div>
+          <h3 className="text-lg font-semibold text-brand-primary mb-3">Jerarquía de títulos</h3>
+          <div className="space-y-3 bg-brand-bg-warm p-6 rounded-lg">
+            <p className="text-4xl font-bold text-brand-accent">Título principal — text-4xl bold</p>
+            <p className="text-3xl font-bold text-brand-accent">Título de página — text-3xl bold</p>
+            <p className="text-2xl font-semibold text-brand-primary">Título de sección — text-2xl semibold</p>
+            <p className="text-xl font-semibold text-brand-primary">Subtítulo — text-xl semibold</p>
+            <p className="text-base text-brand-text">Texto de cuerpo — text-base</p>
+            <p className="text-sm text-brand-text">Texto secundario — text-sm</p>
+            <p className="text-xs text-brand-text/60">Texto auxiliar — text-xs</p>
+          </div>
+        </section>
+
+        {/* Paleta de Colores */}
+        <section className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-2xl font-semibold text-brand-primary mb-2">Paleta de Colores</h2>
+          <p className="text-brand-text mb-6">
+            Tokens de color definidos en <code className="bg-gray-100 px-2 py-1 rounded">tailwind.config.js</code>. Usar siempre estos tokens en lugar de colores directos de Tailwind.
+          </p>
+
+          {/* Colores de marca */}
+          <h3 className="text-lg font-semibold mb-3">Marca</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div className="rounded-lg overflow-hidden border border-gray-200">
+              <div className="h-20 bg-brand-primary"></div>
+              <div className="p-3">
+                <p className="font-mono text-sm font-semibold">brand-primary</p>
+                <p className="font-mono text-xs text-gray-500">#2F473D</p>
+                <p className="text-xs text-gray-600 mt-1">Header, footer izq., bloques oscuros</p>
+              </div>
+            </div>
+            <div className="rounded-lg overflow-hidden border border-gray-200">
+              <div className="h-20 bg-brand-secondary"></div>
+              <div className="p-3">
+                <p className="font-mono text-sm font-semibold">brand-secondary</p>
+                <p className="font-mono text-xs text-gray-500">#67BB6A</p>
+                <p className="text-xs text-gray-600 mt-1">Footer der., estado activo</p>
+              </div>
+            </div>
+            <div className="rounded-lg overflow-hidden border border-gray-200">
+              <div className="h-20 bg-brand-accent"></div>
+              <div className="p-3">
+                <p className="font-mono text-sm font-semibold">brand-accent</p>
+                <p className="font-mono text-xs text-gray-500">#FFB141</p>
+                <p className="text-xs text-gray-600 mt-1">Links, títulos, CTAs</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Colores de fondo */}
+          <h3 className="text-lg font-semibold mb-3">Fondos</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div className="rounded-lg overflow-hidden border border-gray-200">
+              <div className="h-20 bg-brand-bg-warm"></div>
+              <div className="p-3">
+                <p className="font-mono text-sm font-semibold">brand-bg-warm</p>
+                <p className="font-mono text-xs text-gray-500">#FFF6E9</p>
+                <p className="text-xs text-gray-600 mt-1">Fondo general de página</p>
+              </div>
+            </div>
+            <div className="rounded-lg overflow-hidden border border-gray-200">
+              <div className="h-20 bg-brand-bg-card"></div>
+              <div className="p-3">
+                <p className="font-mono text-sm font-semibold">brand-bg-card</p>
+                <p className="font-mono text-xs text-gray-500">#FFEBCF</p>
+                <p className="text-xs text-gray-600 mt-1">Interior de cards cálidas</p>
+              </div>
+            </div>
+            <div className="rounded-lg overflow-hidden border border-gray-200">
+              <div className="h-20 bg-brand-bg-green"></div>
+              <div className="p-3">
+                <p className="font-mono text-sm font-semibold">brand-bg-green</p>
+                <p className="font-mono text-xs text-gray-500">#E5F7E5</p>
+                <p className="text-xs text-gray-600 mt-1">Secciones alternativas verdes</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Texto */}
+          <h3 className="text-lg font-semibold mb-3">Texto</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+            <div className="rounded-lg overflow-hidden border border-gray-200">
+              <div className="h-20 bg-brand-text"></div>
+              <div className="p-3">
+                <p className="font-mono text-sm font-semibold">brand-text</p>
+                <p className="font-mono text-xs text-gray-500">#1D2F2A</p>
+                <p className="text-xs text-gray-600 mt-1">Texto cuerpo principal</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Buttons */}
         <section className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-2xl font-semibold mb-2">Button</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-2xl font-semibold text-brand-primary mb-2">Button</h2>
+          <p className="text-brand-text mb-4">
             Componente de botón reutilizable con múltiples variantes, tamaños y estados.
           </p>
 
@@ -87,8 +205,8 @@ const ComponentLibrary = () => {
 
         {/* Inputs */}
         <section className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-2xl font-semibold mb-2">Input</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-2xl font-semibold text-brand-primary mb-2">Input</h2>
+          <p className="text-brand-text mb-4">
             Campo de entrada reutilizable con label, validaciones y mensajes de error.
           </p>
 
@@ -168,8 +286,8 @@ const ComponentLibrary = () => {
 
         {/* Alerts */}
         <section className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-2xl font-semibold mb-2">Alert</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-2xl font-semibold text-brand-primary mb-2">Alert</h2>
+          <p className="text-brand-text mb-4">
             Componente para mostrar mensajes de éxito, error, advertencia e información.
           </p>
 
@@ -227,8 +345,8 @@ const ComponentLibrary = () => {
 
         {/* Spinners */}
         <section className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-2xl font-semibold mb-2">Spinner</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-2xl font-semibold text-brand-primary mb-2">Spinner</h2>
+          <p className="text-brand-text mb-4">
             Indicador de carga con diferentes tamaños y colores.
           </p>
 
@@ -295,15 +413,56 @@ return (
 );`} />
         </section>
 
+        {/* Cards */}
+        <section className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-2xl font-semibold text-brand-primary mb-2">Card</h2>
+          <p className="text-brand-text mb-6">
+            Patrón de card estándar del proyecto. Fondo blanco con sombra sobre el fondo general <code className="bg-gray-100 px-2 py-1 rounded">bg-brand-bg-warm</code>.
+          </p>
+
+          <h3 className="text-lg font-semibold mb-3">Card estática</h3>
+          <div className="bg-brand-bg-warm p-6 rounded-lg mb-4">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-2xl font-bold text-brand-accent mb-2">Título de la card</h2>
+              <p className="text-brand-text">Contenido descriptivo de la card.</p>
+            </div>
+          </div>
+          <CodeBlock code={`<div className="bg-white rounded-lg shadow-md p-6">
+  <h2 className="text-2xl font-bold text-brand-accent mb-2">Título</h2>
+  <p className="text-brand-text">Contenido.</p>
+</div>`} />
+
+          <h3 className="text-lg font-semibold mb-3 mt-6">Card navegable (con hover)</h3>
+          <div className="bg-brand-bg-warm p-6 rounded-lg mb-4">
+            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group cursor-pointer">
+              <div className="flex items-center mb-4">
+                <span className="text-4xl mr-4">🌳</span>
+                <h2 className="text-2xl font-bold text-brand-accent group-hover:text-brand-primary transition">
+                  Árboles
+                </h2>
+              </div>
+              <p className="text-brand-text">Descripción de la sección o contenido enlazado.</p>
+            </div>
+          </div>
+          <CodeBlock code={`<Link to="/ruta" className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group">
+  <div className="flex items-center mb-4">
+    <span className="text-4xl mr-4">🌳</span>
+    <h2 className="text-2xl font-bold text-brand-accent group-hover:text-brand-primary transition">
+      Título
+    </h2>
+  </div>
+  <p className="text-brand-text">Descripción.</p>
+</Link>`} />
+        </section>
+
         {/* Footer */}
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+        <div className="bg-brand-bg-green border border-brand-secondary rounded-lg p-6 text-center">
           <p className="text-gray-700">
             Estos componentes están diseñados para ser reutilizables en todo el proyecto.
             <br />
             Documentación actualizada: {new Date().toLocaleDateString('es-ES')}
           </p>
         </div>
-      </div>
     </div>
   );
 };

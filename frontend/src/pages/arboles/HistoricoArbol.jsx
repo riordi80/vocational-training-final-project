@@ -176,7 +176,7 @@ function HistoricoArbol() {
               onClick={() => handlePeriodoChange(p.key)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 periodoActivo === p.key
-                  ? 'bg-green-600 text-white shadow-sm'
+                  ? 'bg-brand-primary text-white shadow-sm'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >

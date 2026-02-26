@@ -126,7 +126,7 @@ function ListadoUsuarios() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                             usuario.activo
-                              ? 'bg-green-100 text-green-800'
+                              ? 'bg-brand-bg-green text-brand-primary'
                               : 'bg-red-100 text-red-800'
                           }`}>
                             {usuario.activo ? 'Sí' : 'No'}
