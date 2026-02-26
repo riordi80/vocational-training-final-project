@@ -10,7 +10,7 @@ const Spinner = ({
   };
 
   const colors = {
-    green: "border-green-600",
+    green: "border-brand-secondary",
     white: "border-white",
     gray: "border-gray-600"
   };
