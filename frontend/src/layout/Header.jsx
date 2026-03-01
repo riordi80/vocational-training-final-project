@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Button from "../components/common/Button";
 
@@ -18,61 +18,71 @@ const Header = () => {
         setMobileMenuOpen(false);
     };
 
+    const navLinkClass = ({ isActive }) =>
+        isActive
+            ? "text-brand-bg-green font-bold bg-white/10 rounded px-3 py-1 uppercase tracking-wide transition"
+            : "text-brand-accent font-semibold bg-transparent rounded px-3 py-1 uppercase tracking-wide hover:bg-white/5 transition";
+
     return (
-        <header className="bg-green-600 text-white shadow-md">
+        <header className="bg-brand-primary text-white shadow-md">
             <div className="container mx-auto px-4 py-4">
-                <div className="flex items-center justify-between">
-                    {/* Logo y título */}
-                    <Link to="/dashboard" className="flex items-center space-x-2">
-                        <span className="text-2xl">🌳</span>
-                        <h1 className="text-xl font-bold">Proyecto Árboles</h1>
-                    </Link>
+                <div className="flex items-center justify-between gap-8">
+                    {/* Logos */}
+                    <div className="flex items-center gap-4">
+                        <Link to="/dashboard">
+                            <img
+                                src="/Logotipo-Proy-arboles_color_v2.png"
+                                alt="Proyecto Árboles"
+                                className="h-12 w-auto shrink-0"
+                            />
+                        </Link>
+                        <div className="hidden xl:flex items-center gap-4 border-l border-white/30 pl-4">
+                            <img src="/pa-fsa-blanco.png"      alt="Fundación Sergio Alonso" className="h-5" />
+                            <img src="/pa-foresta-blanco.png"  alt="Foresta"                 className="h-5" />
+                            <img src="/pa-acuorum-blanco.png"  alt="Acuorum"                 className="h-5" />
+                        </div>
+                    </div>
 
                     {/* Navegación desktop */}
-                    <nav className="hidden md:flex items-center space-x-6">
-                        <Link
-                            to="/dashboard"
-                            className="hover:text-green-200 transition"
-                        >
+                    <nav className="hidden md:flex items-center space-x-4">
+                        <NavLink to="/dashboard" className={navLinkClass}>
                             Dashboard
-                        </Link>
-                        <Link
-                            to="/arboles"
-                            className="hover:text-green-200 transition"
-                        >
+                        </NavLink>
+                        <NavLink to="/arboles" className={navLinkClass}>
                             Árboles
-                        </Link>
-                        <Link
-                            to="/centros"
-                            className="hover:text-green-200 transition"
-                        >
+                        </NavLink>
+                        <NavLink to="/centros" className={navLinkClass}>
                             Centros
-                        </Link>
+                        </NavLink>
                         {user?.rol === 'ADMIN' && (
-                            <Link
-                                to="/usuarios"
-                                className="hover:text-green-200 transition"
-                            >
+                            <NavLink to="/usuarios" className={navLinkClass}>
                                 Usuarios
-                            </Link>
+                            </NavLink>
                         )}
 
                         {user ? (
                             <>
-                                {/* Info de usuario */}
-                                <div className="text-right">
+                                {/* Info de usuario — solo en xl */}
+                                <div className="hidden xl:block text-right">
                                     <p className="text-sm font-medium">{user.nombre}</p>
-                                    <p className="text-xs text-green-200">{user.rol}</p>
+                                    <p className="text-xs text-white/70">{user.rol}</p>
                                 </div>
 
-                                {/* Botón logout */}
-                                <Button
+                                {/* Logout: icono en md, texto en xl */}
+                                <button
                                     onClick={handleLogout}
-                                    variant="secondary"
-                                    size="sm"
+                                    className="xl:hidden bg-brand-accent hover:bg-brand-primary text-white p-1.5 rounded-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-accent"
+                                    aria-label="Cerrar sesión"
                                 >
-                                    Cerrar sesión
-                                </Button>
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                                    </svg>
+                                </button>
+                                <div className="hidden xl:block">
+                                    <Button onClick={handleLogout} variant="secondary" size="sm">
+                                        Cerrar sesión
+                                    </Button>
+                                </div>
                             </>
                         ) : (
                             <Button
@@ -88,7 +98,7 @@ const Header = () => {
                     {/* Botón hamburguesa móvil */}
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="md:hidden p-2 rounded-md hover:bg-green-700 transition focus:outline-none focus:ring-2 focus:ring-white"
+                        className="md:hidden p-2 rounded-md hover:bg-white/10 transition focus:outline-none focus:ring-2 focus:ring-white"
                         aria-label="Toggle menu"
                     >
                         {mobileMenuOpen ? (
@@ -105,46 +115,46 @@ const Header = () => {
 
                 {/* Menú móvil desplegable */}
                 {mobileMenuOpen && (
-                    <div className="md:hidden mt-4 pb-4 border-t border-green-500 pt-4">
+                    <div className="md:hidden mt-4 pb-4 border-t border-white/20 pt-4">
                         <nav className="flex flex-col space-y-3">
                             {/* Info de usuario */}
                             {user && (
-                                <div className="pb-3 border-b border-green-500">
+                                <div className="pb-3 border-b border-white/20">
                                     <p className="text-sm font-medium">{user.nombre}</p>
-                                    <p className="text-xs text-green-200">{user.rol}</p>
+                                    <p className="text-xs text-white/70">{user.rol}</p>
                                 </div>
                             )}
 
                             {/* Links de navegación */}
-                            <Link
+                            <NavLink
                                 to="/dashboard"
                                 onClick={closeMobileMenu}
-                                className="hover:text-green-200 transition py-2"
+                                className={({ isActive }) => `${navLinkClass({ isActive })} py-2`}
                             >
                                 Dashboard
-                            </Link>
-                            <Link
+                            </NavLink>
+                            <NavLink
                                 to="/arboles"
                                 onClick={closeMobileMenu}
-                                className="hover:text-green-200 transition py-2"
+                                className={({ isActive }) => `${navLinkClass({ isActive })} py-2`}
                             >
                                 Árboles
-                            </Link>
-                            <Link
+                            </NavLink>
+                            <NavLink
                                 to="/centros"
                                 onClick={closeMobileMenu}
-                                className="hover:text-green-200 transition py-2"
+                                className={({ isActive }) => `${navLinkClass({ isActive })} py-2`}
                             >
                                 Centros
-                            </Link>
+                            </NavLink>
                             {user?.rol === 'ADMIN' && (
-                                <Link
+                                <NavLink
                                     to="/usuarios"
                                     onClick={closeMobileMenu}
-                                    className="hover:text-green-200 transition py-2"
+                                    className={({ isActive }) => `${navLinkClass({ isActive })} py-2`}
                                 >
                                     Usuarios
-                                </Link>
+                                </NavLink>
                             )}
 
                             {user ? (

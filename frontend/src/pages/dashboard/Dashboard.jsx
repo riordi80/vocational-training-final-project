@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { TreePine, School } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -8,10 +9,10 @@ const Dashboard = () => {
     <div className="max-w-4xl mx-auto">
       {/* Bienvenida */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">
+        <h1 className="text-3xl font-bold text-brand-primary mb-2">
           {user ? `¡Bienvenido, ${user.nombre}!` : '¡Bienvenido a Proyecto Árboles!'}
         </h1>
-        <p className="text-gray-600">
+        <p className="text-brand-text">
           {user
             ? 'Gestiona los árboles y centros educativos desde tu panel de control.'
             : 'Explora los árboles y centros educativos. Inicia sesión para gestionar contenido.'}
@@ -26,12 +27,12 @@ const Dashboard = () => {
           className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group"
         >
           <div className="flex items-center mb-4">
-            <span className="text-4xl mr-4">🌳</span>
-            <h2 className="text-2xl font-bold text-gray-800 group-hover:text-green-600 transition">
+            <TreePine className="w-10 h-10 mr-4 text-brand-secondary shrink-0" />
+            <h2 className="text-2xl font-bold text-brand-primary transition">
               Árboles
             </h2>
           </div>
-          <p className="text-gray-600">
+          <p className="text-brand-text">
             Consulta, añade y gestiona los árboles monitorizados en los diferentes centros educativos.
           </p>
         </Link>
@@ -42,12 +43,12 @@ const Dashboard = () => {
           className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group"
         >
           <div className="flex items-center mb-4">
-            <span className="text-4xl mr-4">🏫</span>
-            <h2 className="text-2xl font-bold text-gray-800 group-hover:text-green-600 transition">
+            <School className="w-10 h-10 mr-4 text-brand-secondary shrink-0" />
+            <h2 className="text-2xl font-bold text-brand-primary transition">
               Centros Educativos
             </h2>
           </div>
-          <p className="text-gray-600">
+          <p className="text-brand-text">
             Administra los centros educativos y consulta los árboles asociados a cada uno.
           </p>
         </Link>
@@ -55,7 +56,7 @@ const Dashboard = () => {
 
       {/* Info del usuario */}
       {user && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-6 text-center">
+        <div className="bg-white rounded-lg shadow-md p-4 mt-6 text-center">
           <p className="text-sm text-gray-700">
             <span className="font-medium">Rol:</span> {user.rol} |
             <span className="font-medium ml-3">Email:</span> {user.email}

@@ -155,10 +155,7 @@ public class CrearArbol extends AppCompatActivity {
                     Log.d(TAG, "Árbol creado exitosamente: " + arbolCreado.getNombre());
                     Toast.makeText(CrearArbol.this, "Árbol creado: " + arbolCreado.getNombre(), Toast.LENGTH_SHORT).show();
 
-                    // Volver a ListarArboles pasando el centro_id
-                    Intent intent = new Intent(CrearArbol.this, ListarArboles.class);
-                    intent.putExtra("centro_id", centroId);
-                    startActivity(intent);
+                    // Volver a ListarArboles (onResume la recargará automáticamente)
                     finish();
 
                 } else {

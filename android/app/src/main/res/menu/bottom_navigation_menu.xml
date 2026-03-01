@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_dashboard"
+        android:icon="@drawable/ic_nav_home"
+        android:title="Inicio" />
+
+    <item
+        android:id="@+id/menu_centros"
+        android:icon="@drawable/ic_nav_centros"
+        android:title="Centros" />
+
+    <item
+        android:id="@+id/menu_arboles"
+        android:icon="@drawable/ic_nav_arboles"
+        android:title="Árboles" />
+
+    <item
+        android:id="@+id/menu_usuarios"
+        android:icon="@drawable/ic_nav_usuarios"
+        android:title="Usuarios"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/menu_login"
+        android:icon="@drawable/ic_nav_login"
+        android:title="Login" />
+</menu>

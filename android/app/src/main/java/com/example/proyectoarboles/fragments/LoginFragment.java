@@ -1,23 +1,29 @@
-package com.example.proyectoarboles.activities;
+package com.example.proyectoarboles.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
+import com.example.proyectoarboles.activities.MainActivity;
+import com.example.proyectoarboles.activities.Registrer;
 import com.example.proyectoarboles.api.AuthApi;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.dto.AuthResponse;
 import com.example.proyectoarboles.dto.LoginRequest;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,48 +31,48 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Login extends AppCompatActivity {
+public class LoginFragment extends Fragment {
 
-    private static final String TAG = "Login";
+    private static final String TAG = "LoginFragment";
 
     private EditText inputUsuario;
     private EditText inputPassword;
     private Button loginButton;
-    private SharedPreferences sharedPreferences;
     private Button registrerButton;
+    private SharedPreferences sharedPreferences;
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_login, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        // Inicializar SharedPreferences
-        sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        sharedPreferences = requireContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
 
-        // Inicializar vistas
-        inputUsuario = findViewById(R.id.editTextUsuario);
-        inputPassword = findViewById(R.id.editTextPassword);
-        loginButton = findViewById(R.id.buttonLogin);
-        registrerButton = findViewById(R.id.buttonRegistrer);
+        inputUsuario = view.findViewById(R.id.editTextUsuario);
+        inputPassword = view.findViewById(R.id.editTextPassword);
+        loginButton = view.findViewById(R.id.buttonLogin);
+        registrerButton = view.findViewById(R.id.buttonRegistrer);
 
         loginButton.setOnClickListener(v -> {
             String email = inputUsuario.getText().toString().trim();
             String password = inputPassword.getText().toString().trim();
 
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(Login.this, "Email y contraseña son requeridos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Email y contraseña son requeridos", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             realizarLogin(email, password);
         });
 
-        registrerButton.setOnClickListener(v -> {
-            Intent intent = new Intent(Login.this, Registrer.class);
-            startActivity(intent);
-        });
-
+        registrerButton.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), Registrer.class)));
     }
 
     private void realizarLogin(String email, String password) {
@@ -78,33 +84,31 @@ public class Login extends AppCompatActivity {
         call.enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     AuthResponse authResponse = response.body();
                     Log.d(TAG, "Login exitoso para: " + authResponse.getEmail());
 
-                    // Guardar datos de sesión en SharedPreferences
                     guardarSesion(authResponse);
 
-                    Toast.makeText(Login.this, "Bienvenido " + authResponse.getNombre(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Bienvenido " + authResponse.getNombre(), Toast.LENGTH_SHORT).show();
 
-                    // Navegar a la pantalla principal
-                    Intent intent = new Intent(Login.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    // Actualizar menú y navegar al Dashboard
+                    MainActivity activity = (MainActivity) requireActivity();
+                    activity.actualizarMenuSegunPermisos();
+                    activity.navigateToDashboard();
 
                 } else {
-                    // Manejar error de login (ej. credenciales incorrectas)
                     Log.e(TAG, "Error en login - Código: " + response.code());
-                    Toast.makeText(Login.this, "Credenciales incorrectas", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(), "Credenciales incorrectas", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<AuthResponse> call, Throwable t) {
-                // Manejar error de conexión
+                if (!isAdded()) return;
                 Log.e(TAG, "Error de conexión: " + t.getMessage());
-                Toast.makeText(Login.this, "Error de conexión. Inténtalo de nuevo.", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "Error de conexión. Inténtalo de nuevo.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -117,14 +121,12 @@ public class Login extends AppCompatActivity {
         editor.putString("user_name", authResponse.getNombre());
         editor.putString("user_email", authResponse.getEmail());
 
-        // Guardar rol (puede ser null si el backend lo permite)
         if (authResponse.getRol() != null) {
             editor.putString("user_role", authResponse.getRol());
         } else {
             editor.remove("user_role");
         }
 
-        // Guardar los IDs de los centros asignados
         if (authResponse.getCentros() != null && !authResponse.getCentros().isEmpty()) {
             Set<String> centrosSet = authResponse.getCentros().stream()
                     .map(centro -> String.valueOf(centro.getId()))

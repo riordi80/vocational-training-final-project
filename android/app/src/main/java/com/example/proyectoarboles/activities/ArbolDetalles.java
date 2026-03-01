@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -105,7 +104,7 @@ public class ArbolDetalles extends AppCompatActivity {
     }
 
     private void cargarDatosSesion() {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
         permissionManager = new PermissionManager(this);
         String roleString = sharedPreferences.getString("user_role", null);
         userRole = (roleString != null) ? Rol.valueOf(roleString) : null;
@@ -237,6 +236,12 @@ public class ArbolDetalles extends AppCompatActivity {
             return;
         }
 
+        // Validar formato de fecha (yyyy-MM-dd) y que sea en el pasado
+        if (!validarFecha(fecha)) {
+            etFecha.setError("Fecha inválida. Usa formato YYYY-MM-DD y debe ser en el pasado");
+            return;
+        }
+
         // Obtener el centro seleccionado del spinner
         CentroEducativo centroSeleccionado = (CentroEducativo) spinnerCentroEducativo.getSelectedItem();
         if (centroSeleccionado == null) {
@@ -260,6 +265,24 @@ public class ArbolDetalles extends AppCompatActivity {
     private void cancelarEdicion() {
         mostrarTextViews();
         verificarPermisosYActualizarUI();
+    }
+
+    private boolean validarFecha(String fechaStr) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+            sdf.setLenient(false);
+            Date fecha = sdf.parse(fechaStr);
+
+            // Verificar que la fecha sea en el pasado
+            if (fecha.after(new Date())) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Error al validar fecha: " + e.getMessage());
+            return false;
+        }
     }
 
     private void mostrarTextViews() {
