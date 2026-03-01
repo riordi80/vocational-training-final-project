@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Plus } from 'lucide-react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getCentroById, deleteCentro, getArbolesByCentro } from '../../services/centrosService';
 import Button from '../../components/common/Button';
@@ -284,7 +285,7 @@ function DetalleCentro() {
               size="sm"
               onClick={() => navigate('/arboles/nuevo', { state: { centroId: centro.id } })}
             >
-              + Añadir Árbol
+              <Plus className="w-4 h-4 mr-1 inline" /> Añadir Árbol
             </Button>
           )}
         </div>
@@ -294,28 +295,28 @@ function DetalleCentro() {
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-brand-bg-green">
+              <thead className="bg-brand-primary">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                     Nombre
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                     Especie
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                     Ubicación
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                     Acciones
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-brand-bg-green">
                 {arboles.map((arbol) => (
                   <tr
                     key={arbol.id}
-                    className="hover:bg-gray-50 cursor-pointer"
+                    className="hover:bg-brand-primary/5 cursor-pointer"
                     onClick={() => handleVerArbol(arbol.id)}
                   >
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
