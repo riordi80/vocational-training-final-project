@@ -296,20 +296,20 @@ function DetalleUsuario() {
             </p>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-brand-bg-green">
+                <thead className="bg-brand-primary">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                       Centro
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                       Acciones
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-brand-bg-green">
                   {centrosAsignados.map((asignacion) => (
-                    <tr key={asignacion.id} className="hover:bg-gray-50">
+                    <tr key={asignacion.id} className="hover:bg-brand-primary/5">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {asignacion.centroEducativo?.nombre || `Centro #${asignacion.centroEducativo?.id}`}
                       </td>

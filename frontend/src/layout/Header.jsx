@@ -20,8 +20,8 @@ const Header = () => {
 
     const navLinkClass = ({ isActive }) =>
         isActive
-            ? "text-brand-secondary uppercase tracking-wide font-semibold transition"
-            : "text-brand-accent uppercase tracking-wide font-semibold hover:text-brand-secondary transition";
+            ? "text-brand-bg-green font-bold bg-white/10 rounded px-3 py-1 uppercase tracking-wide transition"
+            : "text-brand-accent font-semibold bg-transparent rounded px-3 py-1 uppercase tracking-wide hover:bg-white/5 transition";
 
     return (
         <header className="bg-brand-primary text-white shadow-md">
