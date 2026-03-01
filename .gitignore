@@ -48,5 +48,9 @@ esp32/**/config.h
 # Dependencias (se gestionan en cada subcarpeta)
 node_modules/
 
+# Informes de Lighthouse (generados, no son código)
+lighthouse-*.html
+lighthouse-*.json
+
 # Documentación privada (no subir a GitHub)
 docs/private/
