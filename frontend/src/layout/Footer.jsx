@@ -22,10 +22,10 @@ const Footer = () => {
                 {/* Col 2 — Navegación + contacto */}
                 <div className="bg-brand-primary lg:w-4/12 flex flex-col justify-center px-10 py-6 gap-3 border-t lg:border-t-0 lg:border-l border-white/10 min-w-0">
                     <nav className="flex flex-row flex-wrap gap-x-5 gap-y-1">
-                        <a href="#" className="text-sm text-brand-accent hover:text-brand-secondary tracking-wide font-semibold transition">El proyecto</a>
-                        <a href="#" className="text-sm text-brand-accent hover:text-brand-secondary tracking-wide font-semibold transition">Plantaciones</a>
-                        <a href="#" className="text-sm text-brand-accent hover:text-brand-secondary tracking-wide font-semibold transition">Actualidad</a>
-                        <a href="#" className="text-sm text-brand-accent hover:text-brand-secondary tracking-wide font-semibold transition">Contacto</a>
+                        <a href="#" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">El proyecto</a>
+                        <a href="#" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">Plantaciones</a>
+                        <a href="#" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">Actualidad</a>
+                        <a href="#" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">Contacto</a>
                     </nav>
                     <div className="flex flex-wrap items-center gap-4">
                         <a href="tel:+34667894205" className="text-sm text-white/70 hover:text-brand-accent transition">
@@ -38,7 +38,7 @@ const Footer = () => {
                 </div>
 
                 {/* Col 3 — Impulsado por + logos */}
-                <div className="bg-brand-secondary lg:w-3/12 flex flex-col items-center justify-center px-10 py-6 gap-3">
+                <div className="bg-brand-primary lg:w-3/12 flex flex-col items-center justify-center px-10 py-6 gap-3 border-t lg:border-t-0 lg:border-l border-white/10">
                     <p className="text-sm font-semibold text-white tracking-wide">
                         Impulsado por
                     </p>
@@ -53,11 +53,11 @@ const Footer = () => {
 
             {/* Barra de copyright */}
             <div className="bg-brand-primary border-t border-white/20 px-10 py-2 flex flex-wrap items-center gap-3">
-                <p className="text-xs text-white/60">© 2025 – Fundación Sergio Alonso</p>
+                <p className="text-xs text-white/70">© 2025 – Fundación Sergio Alonso</p>
                 <span className="text-white/30">|</span>
-                <a href="#" className="text-xs text-white/60 hover:text-brand-accent transition">Aviso Legal</a>
+                <a href="#" className="text-xs text-white/70 hover:text-brand-accent transition">Aviso Legal</a>
                 <span className="text-white/30">|</span>
-                <a href="#" className="text-xs text-white/60 hover:text-brand-accent transition">Política de Privacidad</a>
+                <a href="#" className="text-xs text-white/70 hover:text-brand-accent transition">Política de Privacidad</a>
             </div>
 
         </footer>

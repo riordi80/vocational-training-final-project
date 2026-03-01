@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { TreePine, School } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -8,7 +9,7 @@ const Dashboard = () => {
     <div className="max-w-4xl mx-auto">
       {/* Bienvenida */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h1 className="text-3xl font-bold text-brand-accent mb-2">
+        <h1 className="text-3xl font-bold text-brand-primary mb-2">
           {user ? `¡Bienvenido, ${user.nombre}!` : '¡Bienvenido a Proyecto Árboles!'}
         </h1>
         <p className="text-brand-text">
@@ -26,8 +27,8 @@ const Dashboard = () => {
           className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group"
         >
           <div className="flex items-center mb-4">
-            <span className="text-4xl mr-4">🌳</span>
-            <h2 className="text-2xl font-bold text-brand-accent group-hover:text-brand-primary transition">
+            <TreePine className="w-10 h-10 mr-4 text-brand-secondary shrink-0" />
+            <h2 className="text-2xl font-bold text-brand-primary transition">
               Árboles
             </h2>
           </div>
@@ -42,8 +43,8 @@ const Dashboard = () => {
           className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group"
         >
           <div className="flex items-center mb-4">
-            <span className="text-4xl mr-4">🏫</span>
-            <h2 className="text-2xl font-bold text-brand-accent group-hover:text-brand-primary transition">
+            <School className="w-10 h-10 mr-4 text-brand-secondary shrink-0" />
+            <h2 className="text-2xl font-bold text-brand-primary transition">
               Centros Educativos
             </h2>
           </div>
