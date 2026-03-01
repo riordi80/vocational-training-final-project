@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Plus, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getUsuarios } from '../../services/usuariosService';
 import Button from '../../components/common/Button';
@@ -41,14 +42,17 @@ function ListadoUsuarios() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Gestión de Usuarios</h1>
+        <h1 className="text-3xl font-bold text-brand-primary mb-2 flex items-center gap-3">
+            <Users className="w-8 h-8 text-brand-secondary shrink-0" />
+            Gestión de Usuarios
+          </h1>
         <p className="text-gray-600">Listado de usuarios del sistema</p>
       </div>
 
       {/* Barra de acciones */}
       <div className="mb-6 flex justify-end">
         <Button variant="primary" onClick={handleNuevoUsuario}>
-          + Añadir Usuario
+          <Plus className="w-4 h-4 mr-1 inline" /> Añadir Usuario
         </Button>
       </div>
 
@@ -81,31 +85,31 @@ function ListadoUsuarios() {
             <div className="bg-white rounded-lg shadow overflow-hidden">
               {/* Tabla - versión desktop */}
               <div className="hidden md:block overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table className="min-w-full divide-y divide-brand-bg-green">
+                  <thead className="bg-brand-primary">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Nombre
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Email
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Rol
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Activo
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Acciones
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white divide-y divide-brand-bg-green">
                     {usuarios.map((usuario) => (
                       <tr
                         key={usuario.id}
-                        className="hover:bg-gray-50 cursor-pointer transition-colors"
+                        className="hover:bg-brand-primary/5 cursor-pointer transition-colors"
                         onClick={() => handleVerDetalle(usuario.id)}
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -126,7 +130,7 @@ function ListadoUsuarios() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                             usuario.activo
-                              ? 'bg-green-100 text-green-800'
+                              ? 'bg-brand-bg-green text-brand-primary'
                               : 'bg-red-100 text-red-800'
                           }`}>
                             {usuario.activo ? 'Sí' : 'No'}
@@ -156,7 +160,7 @@ function ListadoUsuarios() {
                   <div
                     key={usuario.id}
                     onClick={() => handleVerDetalle(usuario.id)}
-                    className="p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors"
+                    className="p-4 border-b border-gray-200 hover:bg-brand-primary/5 cursor-pointer transition-colors"
                   >
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="text-lg font-semibold text-gray-900">{usuario.nombre}</h3>

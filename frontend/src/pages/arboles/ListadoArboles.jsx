@@ -1,4 +1,5 @@
   import { useState, useEffect } from 'react';
+import { TreePine, Plus } from 'lucide-react';
   import { useNavigate } from 'react-router-dom';
   import { getArboles, getArbolesByCentro } from '../../services/arbolesService';
   import { getCentros } from '../../services/centrosService';
@@ -97,7 +98,10 @@
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Gestión de Árboles</h1>
+          <h1 className="text-3xl font-bold text-brand-primary mb-2 flex items-center gap-3">
+              <TreePine className="w-8 h-8 text-brand-secondary shrink-0" />
+              Gestión de Árboles
+            </h1>
           <p className="text-gray-600">Listado de árboles monitorizados en centros educativos</p>
         </div>
 
@@ -112,7 +116,7 @@
               id="filtro-centro"
               value={centroFiltro}
               onChange={handleFiltroChange}
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-primary"
             >
               <option value="">Todos los centros</option>
               {centros.map((centro) => (
@@ -129,7 +133,7 @@
             variant="primary"
             onClick={handleNuevoArbol}
           >
-            + Añadir Árbol
+            <Plus className="w-4 h-4 mr-1 inline" /> Añadir Árbol
           </Button> )}
         </div>
 
@@ -165,34 +169,34 @@
               <div className="bg-white rounded-lg shadow overflow-hidden">
                 {/* Tabla - versión desktop */}
                 <div className="hidden md:block overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                  <table className="min-w-full divide-y divide-brand-bg-green">
+                    <thead className="bg-brand-primary">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                           ID
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                           Nombre
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                           Especie
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                           Centro Educativo
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                           Fecha Plantación
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                           Acciones
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white divide-y divide-brand-bg-green">
                       {arboles.map((arbol) => (
                         <tr
                           key={arbol.id}
-                          className="hover:bg-gray-50 cursor-pointer transition-colors"
+                          className="hover:bg-brand-primary/5 cursor-pointer transition-colors"
                           onClick={() => handleVerDetalle(arbol.id)}
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
@@ -238,12 +242,12 @@
                     <div
                       key={arbol.id}
                       onClick={() => handleVerDetalle(arbol.id)}
-                      className="p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors"
+                      className="p-4 border-b border-gray-200 hover:bg-brand-primary/5 cursor-pointer transition-colors"
                     >
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-2">
                           <h3 className="text-lg font-semibold text-gray-900">{arbol.nombre}</h3>
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-brand-bg-green text-brand-primary">
                             #{arbol.id}
                           </span>
                         </div>

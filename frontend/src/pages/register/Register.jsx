@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import Button from "../../components/common/Button";
@@ -63,13 +64,23 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-brand-bg-warm flex items-center justify-center px-4">
             <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
+                {/* Botón volver */}
+                <div className="flex justify-end mb-6">
+                    <button
+                        onClick={() => navigate('/dashboard')}
+                        className="flex items-center gap-1 text-sm text-brand-text hover:text-brand-primary transition"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                        Volver
+                    </button>
+                </div>
+
                 {/* Logo y título */}
                 <div className="text-center mb-8">
-                    <span className="text-5xl">🌳</span>
-                    <h1 className="text-2xl font-bold text-gray-800 mt-2">Proyecto Árboles</h1>
-                    <p className="text-gray-600 mt-1">Crea tu cuenta</p>
+                    <h1 className="text-2xl font-bold text-brand-primary">Proyecto Árboles</h1>
+                    <p className="text-brand-text mt-1">Crea tu cuenta</p>
                 </div>
 
                 {/* Mensaje de error */}
@@ -135,7 +146,7 @@ const Register = () => {
                 {/* Link a Login */}
                 <p className="text-center text-sm text-gray-600 mt-6">
                     ¿Ya tienes cuenta?{" "}
-                    <Link to="/login" className="text-green-600 hover:text-green-700 font-medium">
+                    <Link to="/login" className="text-brand-primary hover:text-brand-secondary font-medium">
                         Inicia sesión aquí
                     </Link>
                 </p>

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
@@ -42,7 +42,7 @@ describe('Login', () => {
   });
 
   // Test 19
-  it('muestra el mensaje de error cuando el login falla', async () => {
+  it('muestra el mensaje de error cuando el hay un error de validacion de usuario', async () => {
     const user = userEvent.setup();
     login.mockRejectedValue(new Error('Usuario o contraseña incorrecta'));
     render(<MemoryRouter><Login /></MemoryRouter>);
@@ -80,7 +80,7 @@ describe('Login', () => {
     await user.type(screen.getByLabelText('Contraseña'), '123456');
     await user.click(screen.getByRole('button', { name: /iniciar sesión/i }));
     expect(await screen.findByRole('button', { name: /iniciando sesión/i })).toBeDisabled();
-    resolveLogin();
+    await act(async () => { resolveLogin(); });
   });
 
 });

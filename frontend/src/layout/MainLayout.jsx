@@ -1,13 +1,15 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
+import Footer from "./Footer";
 
 const MainLayout = () => {
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-brand-bg-warm flex flex-col">
             <Header />
-            <main className="container mx-auto px-4 py-8">
+            <main className="container mx-auto px-4 py-8 flex-1">
                 <Outlet />
             </main>
+            <Footer />
         </div>
     );
 };

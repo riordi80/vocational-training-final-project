@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { School, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getCentros } from '../../services/centrosService';
 import Button from '../../components/common/Button';
@@ -62,7 +63,10 @@ function ListadoCentros() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Gestión de Centros Educativos</h1>
+        <h1 className="text-3xl font-bold text-brand-primary mb-2 flex items-center gap-3">
+            <School className="w-8 h-8 text-brand-secondary shrink-0" />
+            Gestión de Centros Educativos
+          </h1>
         <p className="text-gray-600">Listado de centros educativos participantes en el proyecto</p>
       </div>
 
@@ -73,7 +77,7 @@ function ListadoCentros() {
             variant="primary"
             onClick={handleNuevoCentro}
           >
-            + Añadir Centro
+            <Plus className="w-4 h-4 mr-1 inline" /> Añadir Centro
           </Button>
         </div>
       )}
@@ -108,34 +112,34 @@ function ListadoCentros() {
             <div className="bg-white rounded-lg shadow overflow-hidden">
               {/* Tabla - versión desktop */}
               <div className="hidden md:block overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table className="min-w-full divide-y divide-brand-bg-green">
+                  <thead className="bg-brand-primary">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Nombre
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Isla
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Dirección
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Responsable
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Fecha Creación
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Acciones
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white divide-y divide-brand-bg-green">
                     {centros.map((centro) => (
                       <tr
                         key={centro.id}
-                        className="hover:bg-gray-50 cursor-pointer transition-colors"
+                        className="hover:bg-brand-primary/5 cursor-pointer transition-colors"
                         onClick={() => handleVerDetalle(centro.id)}
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -179,7 +183,7 @@ function ListadoCentros() {
                   <div
                     key={centro.id}
                     onClick={() => handleVerDetalle(centro.id)}
-                    className="p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors"
+                    className="p-4 border-b border-gray-200 hover:bg-brand-primary/5 cursor-pointer transition-colors"
                   >
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="text-lg font-semibold text-gray-900">{centro.nombre}</h3>

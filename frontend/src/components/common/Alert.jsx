@@ -6,9 +6,9 @@ const Alert = ({
 }) => {
   const types = {
     success: {
-      bg: "bg-green-50",
-      border: "border-green-400",
-      text: "text-green-800",
+      bg: "bg-brand-bg-green",
+      border: "border-brand-secondary",
+      text: "text-brand-primary",
       icon: "✓"
     },
     error: {
