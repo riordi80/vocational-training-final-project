@@ -401,6 +401,8 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 
 **Última actualización**: 2026-02-22
 
+**Proyectos similares**: [Solar Powered Weather Station](https://github.com/teamsuperpanda/Weather-Station), [Smart Plant Monitoring System](https://github.com/Shishir3D/PlantMonitoringSystem)
+
 ### Colaboradores
 
 [![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
