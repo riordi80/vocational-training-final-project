@@ -2,10 +2,10 @@ import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import Login from './Login';
-import { useAuth } from '../../context/AuthContext';
+import Login from '../pages/login/Login';
+import { useAuth } from '../context/AuthContext';
 
-vi.mock('../../context/AuthContext');
+vi.mock('../context/AuthContext');
 
 const login = vi.fn();
 
