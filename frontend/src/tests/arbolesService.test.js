@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
-import api from './api';
-import { getArboles, deleteArbol } from './arbolesService';
+import api from '../services/api';
+import { getArboles, deleteArbol } from '../services/arbolesService';
 
-vi.mock('./api');
+vi.mock('../services/api');
 
 describe('arbolesService', () => {
 

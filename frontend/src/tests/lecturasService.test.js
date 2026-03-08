@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
-import api from './api';
-import { getUltimaLectura, getLecturasParaGrafica } from './/lecturasService';
+import api from '../services/api';
+import { getUltimaLectura, getLecturasParaGrafica } from '../services/lecturasService';
 
-vi.mock('./api');
+vi.mock('../services/api');
 
 describe('lecturasService', () => {
 

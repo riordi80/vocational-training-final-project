@@ -2,15 +2,15 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import FormularioArbol from './FormularioArbol';
-import { getCentros } from '../../services/centrosService';
+import FormularioArbol from '../pages/arboles/FormularioArbol';
+import { getCentros } from '../services/centrosService';
 
-vi.mock('../../services/arbolesService');
-vi.mock('../../services/centrosService');
-vi.mock('../../hooks/usePermissions', () => ({
+vi.mock('../services/arbolesService');
+vi.mock('../services/centrosService');
+vi.mock('../hooks/usePermissions', () => ({
   usePermissions: () => ({ isAdmin: () => true }),
 }));
-vi.mock('../../context/AuthContext', () => ({
+vi.mock('../context/AuthContext', () => ({
   useAuth: () => ({ user: { id: 1, rol: 'ADMIN', centros: [] } }),
 }));
 
