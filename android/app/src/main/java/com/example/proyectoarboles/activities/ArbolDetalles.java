@@ -51,7 +51,7 @@ public class ArbolDetalles extends AppCompatActivity {
     private static final String TAG = "ArbolDetalles";
 
     // Vistas
-    private TextView tvNombre, tvEspecie, tvFecha, tvUbicacion, tvCentroEducativo, tvTemp, tvHumedad, tvCO2, tvHumedadSuelo, tvUltimaActualizacion;
+    private TextView tvNombre, tvEspecie, tvFecha, tvUbicacion, tvCentroEducativo, tvTemp, tvHumedad, tvCO2, tvHumedadSuelo, tvLuz1, tvLuz2, tvUltimaActualizacion;
     private EditText etNombre, etEspecie, etFecha, etUbicacion;
     private Spinner spinnerCentroEducativo;
     private Button btnEditar, btnGuardar, btnCancelar, btnEliminar, btnVolver;
@@ -121,6 +121,8 @@ public class ArbolDetalles extends AppCompatActivity {
         tvHumedad = findViewById(R.id.textViewHumedad);
         tvCO2 = findViewById(R.id.textViewCO2);
         tvHumedadSuelo = findViewById(R.id.textViewHumedadSuelo);
+        tvLuz1 = findViewById(R.id.textViewLuz1);
+        tvLuz2 = findViewById(R.id.textViewLuz2);
         tvUltimaActualizacion = findViewById(R.id.textViewUltimaActualizacion);
 
         etNombre = findViewById(R.id.editTextNombreDetalle);
@@ -193,6 +195,8 @@ public class ArbolDetalles extends AppCompatActivity {
         tvHumedad.setText("--");
         tvHumedadSuelo.setText("--");
         tvCO2.setText("--");
+        tvLuz1.setText("--");
+        tvLuz2.setText("--");
     }
 
     private void verificarPermisosYActualizarUI() {
@@ -504,6 +508,10 @@ public class ArbolDetalles extends AppCompatActivity {
                             String.format(Locale.getDefault(), "%.1f %%", lectura.getHumedadSuelo()) : "--");
                     tvCO2.setText(lectura.getCo2() != null ?
                             String.format(Locale.getDefault(), "%.0f ppm", lectura.getCo2()) : "--");
+                    tvLuz1.setText(lectura.getLuz1() != null ?
+                            String.format(Locale.getDefault(), "%.1f %%", lectura.getLuz1()) : "--");
+                    tvLuz2.setText(lectura.getLuz2() != null ?
+                            String.format(Locale.getDefault(), "%.1f %%", lectura.getLuz2()) : "--");
 
                     // Mostrar timestamp de última actualización
                     tvUltimaActualizacion.setText("Última actualización: " + lectura.getTimestamp());
