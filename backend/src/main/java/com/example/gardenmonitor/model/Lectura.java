@@ -103,6 +103,16 @@ public class Lectura {
     @Column(name = "diametro_tronco", precision = 6, scale = 2)
     private BigDecimal diametroTronco;
 
+    @DecimalMin(value = "0.00")
+    @DecimalMax(value = "100.00")
+    @Column(name = "luz1", precision = 5, scale = 2)
+    private BigDecimal luz1;
+
+    @DecimalMin(value = "0.00")
+    @DecimalMax(value = "100.00")
+    @Column(name = "luz2", precision = 5, scale = 2)
+    private BigDecimal luz2;
+
     /**
      * Constructor vacío requerido por JPA.
      */
@@ -117,6 +127,8 @@ public class Lectura {
     public BigDecimal getHumedadSuelo() { return humedadSuelo; }
     public BigDecimal getCo2() { return co2; }
     public BigDecimal getDiametroTronco() { return diametroTronco; }
+    public BigDecimal getLuz1() { return luz1; }
+    public BigDecimal getLuz2() { return luz2; }
 
     public void setId(Long id) { this.id = id; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
@@ -127,6 +139,8 @@ public class Lectura {
     public void setHumedadSuelo(BigDecimal humedadSuelo) { this.humedadSuelo = humedadSuelo; }
     public void setCo2(BigDecimal co2) { this.co2 = co2; }
     public void setDiametroTronco(BigDecimal diametroTronco) { this.diametroTronco = diametroTronco; }
+    public void setLuz1(BigDecimal luz1) { this.luz1 = luz1; }
+    public void setLuz2(BigDecimal luz2) { this.luz2 = luz2; }
 
     /**
      * @return representación en String de la lectura
