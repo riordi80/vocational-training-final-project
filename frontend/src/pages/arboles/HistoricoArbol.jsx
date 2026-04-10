@@ -63,6 +63,8 @@ function HistoricoArbol() {
 
   const [arbol, setArbol] = useState(null);
   const [error, setError] = useState('');
+  const [intervaloSeg, setIntervaloSeg] = useState(30);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Periodo activo (controla tanto la gráfica como la tabla)
   const [periodoActivo, setPeriodoActivo] = useState('SEMANA');
@@ -81,9 +83,21 @@ function HistoricoArbol() {
   // --- Carga del árbol (solo una vez) ---
   useEffect(() => {
     getArbolById(id)
-      .then(setArbol)
+      .then((data) => {
+        setArbol(data);
+        const seg = data?.dispositivoEsp32?.frecuenciaLecturaSeg;
+        if (seg && seg > 0) setIntervaloSeg(seg);
+      })
       .catch(() => setError('No se pudo cargar la información del árbol.'));
   }, [id]);
+
+  // --- Polling: incrementa refreshKey cada intervaloSeg segundos ---
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRefreshKey((k) => k + 1);
+    }, intervaloSeg * 1000);
+    return () => clearInterval(timer);
+  }, [intervaloSeg]);
 
   // --- Gráfica: recarga cuando cambia el árbol o el periodo ---
   useEffect(() => {
@@ -113,7 +127,7 @@ function HistoricoArbol() {
     };
     fetch();
     return () => { cancelled = true; };
-  }, [id, periodoActivo]);
+  }, [id, periodoActivo, refreshKey]);
 
   // --- Tabla: recarga cuando cambia el árbol, el periodo o la página ---
   useEffect(() => {
@@ -137,7 +151,7 @@ function HistoricoArbol() {
     };
     fetch();
     return () => { cancelled = true; };
-  }, [id, periodoActivo, currentPage]);
+  }, [id, periodoActivo, currentPage, refreshKey]);
 
   // Cuando el usuario cambia de periodo, reseteamos a página 0 en el mismo batch
   const handlePeriodoChange = (key) => {
