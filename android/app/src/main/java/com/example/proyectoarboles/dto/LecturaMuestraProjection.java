@@ -27,9 +27,6 @@ public class LecturaMuestraProjection {
     @SerializedName("co2")
     private Double co2;  // ppm (puede ser null)
 
-    @SerializedName("diametroTronco")
-    private Double diametroTronco;  // mm (puede ser null)
-
     @SerializedName("luz1")
     private Double luz1;  // % (puede ser null)
 
@@ -75,10 +72,6 @@ public class LecturaMuestraProjection {
         return co2;
     }
 
-    public Double getDiametroTronco() {
-        return diametroTronco;
-    }
-
     public Double getLuz1() {
         return luz1;
     }
@@ -110,10 +103,6 @@ public class LecturaMuestraProjection {
 
     public void setCo2(Double co2) {
         this.co2 = co2;
-    }
-
-    public void setDiametroTronco(Double diametroTronco) {
-        this.diametroTronco = diametroTronco;
     }
 
     public void setLuz1(Double luz1) {
