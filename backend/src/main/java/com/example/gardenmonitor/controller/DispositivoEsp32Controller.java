@@ -111,7 +111,7 @@ public class DispositivoEsp32Controller {
         dispositivo.setMacAddress(detalles.getMacAddress());
         dispositivo.setActivo(detalles.isActivo());
         dispositivo.setUltimaConexion(detalles.getUltimaConexion());
-        dispositivo.setFrecuenciaLecturaMin(detalles.getFrecuenciaLecturaMin());
+        dispositivo.setFrecuenciaLecturaSeg(detalles.getFrecuenciaLecturaSeg());
 
         return dispositivoRepository.save(dispositivo);
     }
