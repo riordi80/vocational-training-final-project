@@ -88,7 +88,8 @@ public class LecturaController {
         lectura.setHumedadAmbiente(request.getHumedadAmbiente());
         lectura.setHumedadSuelo(request.getHumedadSuelo());
         lectura.setCo2(request.getCo2());
-        lectura.setDiametroTronco(request.getDiametroTronco());
+        lectura.setLuz1(request.getLuz1());
+        lectura.setLuz2(request.getLuz2());
 
         // 4. Actualizar última conexión del dispositivo
         dispositivo.setUltimaConexion(LocalDateTime.now());

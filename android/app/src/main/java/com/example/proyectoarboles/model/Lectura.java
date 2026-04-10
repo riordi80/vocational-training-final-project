@@ -30,8 +30,11 @@ public class Lectura {
     @SerializedName("co2")
     private Double co2;  // En ppm (puede ser null)
 
-    @SerializedName("diametroTronco")
-    private Double diametroTronco;  // En mm (puede ser null)
+    @SerializedName("luz1")
+    private Double luz1;  // En % (puede ser null)
+
+    @SerializedName("luz2")
+    private Double luz2;  // En % (puede ser null)
 
     // Constructores
     public Lectura() {
@@ -76,8 +79,12 @@ public class Lectura {
         return co2;
     }
 
-    public Double getDiametroTronco() {
-        return diametroTronco;
+    public Double getLuz1() {
+        return luz1;
+    }
+
+    public Double getLuz2() {
+        return luz2;
     }
 
     // Setters
@@ -109,8 +116,12 @@ public class Lectura {
         this.co2 = co2;
     }
 
-    public void setDiametroTronco(Double diametroTronco) {
-        this.diametroTronco = diametroTronco;
+    public void setLuz1(Double luz1) {
+        this.luz1 = luz1;
+    }
+
+    public void setLuz2(Double luz2) {
+        this.luz2 = luz2;
     }
 
     @Override

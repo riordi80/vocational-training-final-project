@@ -1,170 +1,51 @@
-#include <ESP32Servo.h>
+#include <Arduino.h>
+#include <Wire.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
-#include <DHT.h>
-
-// ============================================
-// CONFIGURACIÓN PRIVADA (WiFi + Backend URL)
-// ============================================
-// Copia config.h.example como config.h y rellena tus datos.
-// config.h está en .gitignore y no se sube al repositorio.
 #include "config.h"
-
-// Intervalo de envío de lecturas (milisegundos)
-const unsigned long INTERVALO_LECTURA = 30000;  // 30s para testing (en producción: 900000 = 15 min)
 
 // ============================================
 // PINES
 // ============================================
-#define ledRojo 4
-#define ledAmarillo 16
-#define ledVerde 5
-#define servoPin 25
+#define RX_PIN 16
+#define TX_PIN 17
+#define SHT40_ADDR 0x44
+const int pinTierra = 4;
+const int pinLDR1   = 5;
+const int pinLDR2   = 35;  // TODO: verificar pin con el hardware final
 
-const int sensorAgua = 39;
-#define DHTPIN 33
-#define DHTTYPE DHT22
+// ============================================
+// CONSTANTES
+// ============================================
+const unsigned long INTERVALO_LECTURA = 30000;  // 30s para testing (en producción: 900000 = 15 min)
+const int SECO   = 3000;
+const int HUMEDO = 1000;
+#define UMBRAL_CO2 1100
 
-// =============================================
+// ============================================
 // VARIABLES GLOBALES
-  // ============================================
-int estadoAnterior = 0;  // 0 = sin agua, 1 = con agua
+// ============================================
 unsigned long ultimoEnvio = 0;
-String macAddress = "";
+float temperatura     = 0.0;
+float humedadAmbiente = 0.0;
+float humedadSuelo    = 0.0;
+int   co2             = 0;
+int   luz1            = 0;
+int   luz2            = 0;
 
-Servo miServo;
-DHT dht(DHTPIN, DHTTYPE);
-const int posicionSinAgua = 0;
-const int posicionConAgua = 90;
-
-// ============================================
-// FUNCIONES WiFi
-// ============================================
-
-/**
- * Conecta a la red WiFi configurada.
- * Parpadea el LED amarillo mientras intenta conectar.
- * Enciende verde brevemente al conectar, o rojo si falla.
- */
-void conectarWiFi() {
-  Serial.print("Conectando a WiFi: ");
-  Serial.println(WIFI_SSID);
-
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
-  int intentos = 0;
-  while (WiFi.status() != WL_CONNECTED && intentos < 20) {
-    // Parpadeo amarillo mientras conecta
-    digitalWrite(ledAmarillo, HIGH);
-    delay(250);
-    digitalWrite(ledAmarillo, LOW);
-    delay(250);
-    Serial.print(".");
-    intentos++;
-  }
-
-  if (WiFi.status() == WL_CONNECTED) {
-    Serial.println("\nWiFi conectado!");
-    Serial.print("IP: ");
-    Serial.println(WiFi.localIP());
-
-    macAddress = WiFi.macAddress();
-    Serial.print("MAC: ");
-    Serial.println(macAddress);
-
-    // Parpadeo verde para confirmar conexión
-    for (int i = 0; i < 3; i++) {
-      digitalWrite(ledVerde, HIGH);
-      delay(200);
-      digitalWrite(ledVerde, LOW);
-      delay(200);
-    }
-  } else {
-    Serial.println("\nError: No se pudo conectar a WiFi");
-    // Parpadeo rojo para indicar error
-    for (int i = 0; i < 5; i++) {
-      digitalWrite(ledRojo, HIGH);
-      delay(200);
-      digitalWrite(ledRojo, LOW);
-      delay(200);
-    }
-  }
-}
+byte cmdCO2[9]      = {0xFF, 0x01, 0x86, 0, 0, 0, 0, 0, 0x79};
+byte responseCO2[9] = {0};
 
 // ============================================
-// FUNCIONES de lectura y envío
+// PROTOTIPOS
 // ============================================
-
-/**
- * Normaliza el valor del sensor de agua (0-4095) a porcentaje (0-100).
- */
-float normalizarHumedadSuelo(int valorSensor) {
-  return map(valorSensor, 0, 4095, 0, 10000) / 100.0;
-}
-
-/**
- * Lee los sensores, construye el JSON y envía HTTP POST al backend.
- * - humedad_suelo: valor real del sensor de agua normalizado a %
- * - temperatura: valor real del DHT22 (°C)
- * - humedad_ambiente: valor real del DHT22 (%)
- */
-void enviarLectura() {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi desconectado. Reintentando...");
-    conectarWiFi();
-    if (WiFi.status() != WL_CONNECTED) {
-      return;  // No se pudo reconectar
-    }
-  }
-
-  // Leer sensor de agua
-  int valorAgua = analogRead(sensorAgua);
-  float humedadSuelo = normalizarHumedadSuelo(valorAgua);
-
-  // Leer DHT22 (temperatura y humedad ambiental)
-  float temperatura = dht.readTemperature();
-  float humedadAmbiente = dht.readHumidity();
-
-  if (isnan(temperatura) || isnan(humedadAmbiente)) {
-    Serial.println("Error leyendo DHT22. Saltando envío.");
-    return;
-  }
-
-  // Construir JSON
-  JsonDocument doc;
-  doc["macAddress"] = macAddress;
-  doc["temperatura"] = round(temperatura * 100) / 100.0;
-  doc["humedadAmbiente"] = round(humedadAmbiente * 100) / 100.0;
-  doc["humedadSuelo"] = round(humedadSuelo * 100) / 100.0;
-  doc["co2"] = (char*)NULL;           // Sin sensor CO2
-  doc["diametroTronco"] = (char*)NULL; // Sin dendrómetro
-
-  String jsonString;
-  serializeJson(doc, jsonString);
-
-  Serial.println("Enviando lectura:");
-  Serial.println(jsonString);
-
-  // Enviar HTTP POST
-  HTTPClient http;
-  http.begin(BACKEND_URL);
-  http.addHeader("Content-Type", "application/json");
-
-  int httpCode = http.POST(jsonString);
-
-  if (httpCode > 0) {
-    Serial.print("Respuesta: ");
-    Serial.print(httpCode);
-    Serial.print(" - ");
-    Serial.println(http.getString());
-  } else {
-    Serial.print("Error HTTP: ");
-    Serial.println(http.errorToString(httpCode));
-  }
-
-  http.end();
-}
+void conectarWiFi();
+void leerSHT40();
+void leerHumedadSuelo();
+void leerCO2();
+void leerLDR();
+void enviarLectura();
 
 // ============================================
 // SETUP
@@ -172,19 +53,14 @@ void enviarLectura() {
 void setup() {
   Serial.begin(115200);
 
-  // Inicializar pines
-  pinMode(ledRojo, OUTPUT);
-  pinMode(ledAmarillo, OUTPUT);
-  pinMode(ledVerde, OUTPUT);
-  pinMode(sensorAgua, INPUT);
+  Wire.begin(8, 9);                                    // SDA=8, SCL=9 para SHT40
+  Serial2.begin(9600, SERIAL_8N1, RX_PIN, TX_PIN);    // UART para MH-Z19D
+  analogReadResolution(12);                            // ADC 0-4095
 
-  miServo.attach(servoPin);
-  miServo.write(posicionSinAgua);
+  Serial.println("Sistema de sensores iniciado");
+  Serial.println("SHT40 + Humedad suelo + CO2 MH-Z19D");
+  Serial.println("=====================================");
 
-  // Inicializar DHT22
-  dht.begin();
-
-  // Conectar WiFi
   conectarWiFi();
 }
 
@@ -192,50 +68,196 @@ void setup() {
 // LOOP
 // ============================================
 void loop() {
-  int valorAgua = analogRead(sensorAgua);
+  leerSHT40();
+  leerHumedadSuelo();
+  leerCO2();
+  leerLDR();
+  Serial.println("=====================================");
 
-  // --- Lógica de LEDs y servo (existente) ---
-  if (valorAgua > 1000) {
-    // HAY AGUA - cambiar a verde
-    if (estadoAnterior == 0) {
-      digitalWrite(ledRojo, LOW);
-      for (int i = 0; i < 1; i++) {  // Parpadea 1 vez
-        digitalWrite(ledAmarillo, HIGH);
-        delay(500);
-        digitalWrite(ledAmarillo, LOW);
-        delay(500);
-      }
-      miServo.write(posicionConAgua);
-      estadoAnterior = 1;
-    }
-    digitalWrite(ledVerde, HIGH);
-    digitalWrite(ledAmarillo, LOW);
-    digitalWrite(ledRojo, LOW);
-
-  } else {
-    // NO HAY AGUA - cambiar a rojo
-    if (estadoAnterior == 1) {
-      digitalWrite(ledVerde, LOW);
-      for (int i = 0; i < 1; i++) {  // Parpadea 1 vez
-        digitalWrite(ledAmarillo, HIGH);
-        delay(500);
-        digitalWrite(ledAmarillo, LOW);
-        delay(500);
-      }
-      miServo.write(posicionSinAgua);
-      estadoAnterior = 0;
-    }
-    digitalWrite(ledRojo, HIGH);
-    digitalWrite(ledAmarillo, LOW);
-    digitalWrite(ledVerde, LOW);
-  }
-
-  // --- Envío periódico al backend ---
   unsigned long ahora = millis();
   if (ahora - ultimoEnvio >= INTERVALO_LECTURA) {
     enviarLectura();
     ultimoEnvio = ahora;
   }
 
-  delay(500);  // Leer sensor cada medio segundo
+  delay(5000);
+}
+
+// ============================================
+// WiFi
+// ============================================
+void conectarWiFi() {
+  Serial.print("Conectando a WiFi: ");
+  Serial.println(WIFI_SSID);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println();
+  Serial.print("WiFi conectado. IP: ");
+  Serial.println(WiFi.localIP());
+  Serial.print("MAC: ");
+  Serial.println(WiFi.macAddress());
+}
+
+// ============================================
+// LECTURA SHT40 (I2C)
+// Actualiza variables globales: temperatura, humedadAmbiente
+// ============================================
+void leerSHT40() {
+  Wire.beginTransmission(SHT40_ADDR);
+  Wire.write(0xFD);  // Medición de alta precisión
+
+  if (Wire.endTransmission() != 0) {
+    Serial.println("Error: no se pudo comunicar con el SHT40");
+    return;
+  }
+
+  delay(20);
+  Wire.requestFrom(SHT40_ADDR, 6);
+
+  if (Wire.available() == 6) {
+    uint16_t rawTemp = (Wire.read() << 8) | Wire.read();
+    Wire.read();  // CRC temperatura (ignorado)
+    uint16_t rawHum  = (Wire.read() << 8) | Wire.read();
+    Wire.read();  // CRC humedad (ignorado)
+
+    temperatura     = -45.0 + 175.0 * (rawTemp / 65535.0);
+    humedadAmbiente = -6.0  + 125.0 * (rawHum  / 65535.0);
+    humedadAmbiente = constrain(humedadAmbiente, 0.0, 100.0);
+
+    Serial.print("Temperatura: ");
+    Serial.print(temperatura, 2);
+    Serial.print(" °C | Humedad ambiente: ");
+    Serial.print(humedadAmbiente, 2);
+    Serial.println(" %");
+  } else {
+    Serial.println("Error: lectura incompleta del SHT40");
+  }
+}
+
+// ============================================
+// LECTURA HUMEDAD DE SUELO (ADC)
+// Actualiza variable global: humedadSuelo
+// ============================================
+void leerHumedadSuelo() {
+  int lecturaBruta = analogRead(pinTierra);
+  int porcentaje   = map(lecturaBruta, SECO, HUMEDO, 0, 100);
+  porcentaje       = constrain(porcentaje, 0, 100);
+  humedadSuelo     = (float)porcentaje;
+
+  Serial.print("ADC suelo: ");
+  Serial.print(lecturaBruta);
+  Serial.print(" | Humedad suelo: ");
+  Serial.print(porcentaje);
+  Serial.println(" %");
+}
+
+// ============================================
+// LECTURA CO2 MH-Z19D (UART manual)
+// Actualiza variable global: co2
+// ============================================
+void leerCO2() {
+  // Limpiar buffer
+  while (Serial2.available()) Serial2.read();
+
+  Serial2.write(cmdCO2, 9);
+  delay(50);
+
+  if (Serial2.available() >= 9) {
+    Serial2.readBytes(responseCO2, 9);
+
+    if (responseCO2[0] == 0xFF && responseCO2[1] == 0x86) {
+      co2 = (responseCO2[2] << 8) | responseCO2[3];
+
+      Serial.print("CO2: ");
+      Serial.print(co2);
+      Serial.println(" ppm");
+
+      if (co2 > UMBRAL_CO2) {
+        Serial.println("AVISO: concentracion de CO2 elevada");
+      }
+    } else {
+      Serial.println("Error: respuesta no valida del MH-Z19D");
+    }
+  } else {
+    Serial.println("Error: sin respuesta del MH-Z19D");
+  }
+}
+
+// ============================================
+// LECTURA LDR (ADC)
+// Actualiza variables globales: luz1, luz2
+// Devuelve porcentaje 0-100 (0=oscuro, 100=máxima luz)
+// ============================================
+void leerLDR() {
+  int rawLuz1 = analogRead(pinLDR1);
+  int rawLuz2 = analogRead(pinLDR2);
+
+  luz1 = map(rawLuz1, 0, 4095, 0, 100);
+  luz2 = map(rawLuz2, 0, 4095, 0, 100);
+  luz1 = constrain(luz1, 0, 100);
+  luz2 = constrain(luz2, 0, 100);
+
+  Serial.print("LDR1 (ADC=");
+  Serial.print(rawLuz1);
+  Serial.print("): ");
+  Serial.print(luz1);
+  Serial.print(" % | LDR2 (ADC=");
+  Serial.print(rawLuz2);
+  Serial.print("): ");
+  Serial.print(luz2);
+  Serial.println(" %");
+}
+
+// ============================================
+// ENVÍO AL BACKEND
+// ============================================
+void enviarLectura() {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi desconectado. Reintentando...");
+    conectarWiFi();
+    if (WiFi.status() != WL_CONNECTED) {
+      Serial.println("No se pudo reconectar. Envío cancelado.");
+      return;
+    }
+  }
+
+  JsonDocument doc;
+  doc["macAddress"]     = WiFi.macAddress();
+  doc["temperatura"]    = round(temperatura     * 100) / 100.0;
+  doc["humedadAmbiente"]= round(humedadAmbiente * 100) / 100.0;
+  doc["humedadSuelo"]   = round(humedadSuelo    * 100) / 100.0;
+  doc["co2"]            = co2;
+  doc["luz1"]           = luz1;
+  doc["luz2"]           = luz2;
+
+  String jsonString;
+  serializeJson(doc, jsonString);
+
+  Serial.println("Enviando lectura:");
+  Serial.println(jsonString);
+
+  HTTPClient http;
+  http.begin(BACKEND_URL);
+  http.addHeader("Content-Type", "application/json");
+
+  int httpCode = http.POST(jsonString);
+
+  if (httpCode == 201) {
+    Serial.println("[HTTP] Lectura registrada (201)");
+  } else if (httpCode > 0) {
+    Serial.print("[HTTP] Respuesta: ");
+    Serial.print(httpCode);
+    Serial.print(" - ");
+    Serial.println(http.getString());
+  } else {
+    Serial.print("[HTTP] Error: ");
+    Serial.println(http.errorToString(httpCode));
+  }
+
+  http.end();
 }

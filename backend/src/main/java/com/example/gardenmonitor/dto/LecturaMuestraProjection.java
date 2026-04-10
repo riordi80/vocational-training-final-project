@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * para que el resultado nunca supere ~400 puntos, independientemente del rango.
  *
  * Los nombres de los getters mapean con los alias de la query nativa:
- *   id, timestamp, temperatura, humedad_ambiente, humedad_suelo, co2, diametro_tronco
+ *   id, timestamp, temperatura, humedad_ambiente, humedad_suelo, co2, luz1, luz2
  */
 public interface LecturaMuestraProjection {
 
@@ -25,5 +25,7 @@ public interface LecturaMuestraProjection {
 
     BigDecimal getCo2();
 
-    BigDecimal getDiametroTronco();
+    BigDecimal getLuz1();
+
+    BigDecimal getLuz2();
 }
