@@ -15,27 +15,29 @@ Este componente implementa la parte IoT del sistema Proyecto Árboles. Realiza l
 - **Conectividad**: WiFi 2.4GHz
 - **Protocolo**: HTTP REST hacia el backend
 - **Formato de datos**: JSON
-- **Librerías**: ESP32Servo, WiFi, HTTPClient, ArduinoJson, DHT
+- **Librerías**: WiFi, HTTPClient, ArduinoJson, Wire (I2C para SHT40)
 
 ## Hardware Implementado
 
 | Componente | Pin | Función |
 |---|---|---|
-| DHT22 | GPIO 33 | Temperatura y humedad ambiente |
-| Sensor de agua analógico | GPIO 39 | Humedad de suelo (0-4095 normalizado a 0-100%) |
-| LED Rojo | GPIO 4 | Indicador de error |
-| LED Amarillo | GPIO 16 | Indicador de conexión WiFi en progreso |
-| LED Verde | GPIO 5 | Indicador de operación correcta |
-| Servo SG90 | GPIO 25 | Control de riego |
+| SHT40 (I2C) | SDA=GPIO 8, SCL=GPIO 9 | Temperatura (°C) y humedad ambiente (%) |
+| Sensor capacitivo analógico | GPIO 4 | Humedad del suelo (0-4095 → 0-100%) |
+| MH-Z19D (UART) | RX=GPIO 16, TX=GPIO 17 | CO2 en ppm |
+| LDR 1 | GPIO 5 | Nivel de luz 1 (0-4095 → 0-100%) |
+| LDR 2 | GPIO 35 | Nivel de luz 2 (0-4095 → 0-100%) — pin pendiente de confirmar |
 
 ## Funcionalidades Implementadas
 
-- Conexión a WiFi con reintentos (LED amarillo durante conexión)
+- Conexión a WiFi con reintentos y reconexión automática
 - Lectura periódica de sensores (intervalo configurable: 30 s en testing, 15 min en producción)
-- Construcción de payload JSON con `macAddress`, temperatura, humedad ambiente y humedad de suelo
+- Lectura de temperatura y humedad ambiente via I2C (SHT40)
+- Lectura de humedad del suelo via ADC analógico
+- Lectura de CO2 via UART manual (MH-Z19D)
+- Lectura de niveles de luz via ADC (LDR 1 y LDR 2)
+- Construcción de payload JSON con todos los campos de sensores
 - Envío HTTP POST a `POST /api/lecturas` del backend
-- Indicadores LED de estado (verde = ok, rojo = error)
-- Reconexión WiFi automática ante pérdida de señal
+- Identificación del dispositivo mediante MAC address WiFi
 
 ## Componentes Considerados
 
@@ -69,8 +71,8 @@ Se han evaluado los siguientes componentes para el sistema de monitoreo:
 
 ## Funcionalidades Pendientes
 
-- Sensor de CO2 (MH-Z19)
-- Dendómetro (medición de crecimiento de tronco)
+- Confirmar pin definitivo del LDR 2 (actualmente GPIO 35)
+- Calibrar sensores con valores de referencia reales
 - Modo de bajo consumo (Deep Sleep) para autonomía energética
 - Almacenamiento temporal local en caso de pérdida de conexión
 
@@ -148,8 +150,8 @@ Para referencia de componentes considerados, ver:
 
 El firmware básico está implementado y enviando lecturas al backend.
 
-- **Sensores operativos**: temperatura (DHT22), humedad ambiente (DHT22), humedad de suelo (sensor analógico)
-- **Sensores pendientes**: CO2 (MH-Z19), dendómetro
+- **Sensores operativos**: temperatura (SHT40), humedad ambiente (SHT40), humedad de suelo (capacitivo analógico), CO2 (MH-Z19D), luz 1 (LDR GPIO 5), luz 2 (LDR GPIO 35)
+- **Pendiente**: confirmar pin LDR 2 con el hardware físico
 
 ## Documentación Relacionada
 
@@ -171,7 +173,7 @@ El firmware básico está implementado y enviando lecturas al backend.
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-02-19
+**Última actualización**: 2026-04-10
 
 ### Colaboradores
 
