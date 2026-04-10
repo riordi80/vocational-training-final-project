@@ -58,7 +58,7 @@ CREATE TABLE dispositivo_esp32 (
     arbol_id BIGINT,
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     ultima_conexion TIMESTAMPTZ,
-    frecuencia_lectura_min INTEGER DEFAULT 15,
+    frecuencia_lectura_seg INTEGER DEFAULT 30,
     CONSTRAINT pk_dispositivo_esp32 PRIMARY KEY (id),
     CONSTRAINT uq_dispositivo_mac_address UNIQUE (mac_address)
 );

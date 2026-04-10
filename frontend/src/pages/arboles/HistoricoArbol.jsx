@@ -63,6 +63,8 @@ function HistoricoArbol() {
 
   const [arbol, setArbol] = useState(null);
   const [error, setError] = useState('');
+  const [intervaloSeg, setIntervaloSeg] = useState(30);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Periodo activo (controla tanto la gráfica como la tabla)
   const [periodoActivo, setPeriodoActivo] = useState('SEMANA');
@@ -81,9 +83,21 @@ function HistoricoArbol() {
   // --- Carga del árbol (solo una vez) ---
   useEffect(() => {
     getArbolById(id)
-      .then(setArbol)
+      .then((data) => {
+        setArbol(data);
+        const seg = data?.dispositivoEsp32?.frecuenciaLecturaSeg;
+        if (seg && seg > 0) setIntervaloSeg(seg);
+      })
       .catch(() => setError('No se pudo cargar la información del árbol.'));
   }, [id]);
+
+  // --- Polling: incrementa refreshKey cada intervaloSeg segundos ---
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRefreshKey((k) => k + 1);
+    }, intervaloSeg * 1000);
+    return () => clearInterval(timer);
+  }, [intervaloSeg]);
 
   // --- Gráfica: recarga cuando cambia el árbol o el periodo ---
   useEffect(() => {
@@ -98,6 +112,8 @@ function HistoricoArbol() {
               tiempo: formatTimestampShort(item.timestamp),
               temperatura: item.temperatura != null ? parseFloat(item.temperatura) : null,
               humedadAmbiente: item.humedadAmbiente != null ? parseFloat(item.humedadAmbiente) : null,
+              humedadSuelo: item.humedadSuelo != null ? parseFloat(item.humedadSuelo) : null,
+              co2: item.co2 != null ? parseFloat(item.co2) : null,
               luz1: item.luz1 != null ? parseFloat(item.luz1) : null,
               luz2: item.luz2 != null ? parseFloat(item.luz2) : null,
             }))
@@ -111,7 +127,7 @@ function HistoricoArbol() {
     };
     fetch();
     return () => { cancelled = true; };
-  }, [id, periodoActivo]);
+  }, [id, periodoActivo, refreshKey]);
 
   // --- Tabla: recarga cuando cambia el árbol, el periodo o la página ---
   useEffect(() => {
@@ -135,7 +151,7 @@ function HistoricoArbol() {
     };
     fetch();
     return () => { cancelled = true; };
-  }, [id, periodoActivo, currentPage]);
+  }, [id, periodoActivo, currentPage, refreshKey]);
 
   // Cuando el usuario cambia de periodo, reseteamos a página 0 en el mismo batch
   const handlePeriodoChange = (key) => {
@@ -192,7 +208,7 @@ function HistoricoArbol() {
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <div className="flex items-baseline gap-2 mb-1">
           <h2 className="text-lg font-semibold text-gray-800">
-            Temperatura y Humedad Ambiente
+            Temperatura, Humedad y Luz
           </h2>
         </div>
         <p className="text-xs text-gray-500 mb-4">
@@ -242,6 +258,14 @@ function HistoricoArbol() {
               />
               <Line
                 type="monotone"
+                dataKey="humedadSuelo"
+                name="Humedad Suelo (%)"
+                stroke="#22c55e"
+                dot={false}
+                connectNulls
+              />
+              <Line
+                type="monotone"
                 dataKey="luz1"
                 name="Luz 1 (%)"
                 stroke="#eab308"
@@ -253,6 +277,54 @@ function HistoricoArbol() {
                 dataKey="luz2"
                 name="Luz 2 (%)"
                 stroke="#a855f7"
+                dot={false}
+                connectNulls
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+      </div>
+
+      {/* Gráfica CO2 */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="flex items-baseline gap-2 mb-1">
+          <h2 className="text-lg font-semibold text-gray-800">
+            CO2
+          </h2>
+        </div>
+        <p className="text-xs text-gray-500 mb-4">
+          {periodoConfig.label} · {datosGrafica.filter(d => d.co2 != null).length} lecturas con datos
+        </p>
+
+        {loadingGrafica ? (
+          <div className="flex justify-center py-10">
+            <Spinner size="md" text="Cargando gráfica..." />
+          </div>
+        ) : datosGrafica.filter(d => d.co2 != null).length === 0 ? (
+          <p className="text-center text-gray-400 py-10 text-sm">
+            Sin datos de CO2 en este periodo.
+          </p>
+        ) : (
+          <ResponsiveContainer width="100%" height={200}>
+            <LineChart data={datosGrafica} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="tiempo"
+                tick={{ fontSize: 11 }}
+                interval="preserveStartEnd"
+              />
+              <YAxis tick={{ fontSize: 11 }} unit=" ppm" />
+              <Tooltip
+                formatter={(value, name) =>
+                  value != null ? [`${value} ppm`, name] : ['-', name]
+                }
+              />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="co2"
+                name="CO2 (ppm)"
+                stroke="#ef4444"
                 dot={false}
                 connectNulls
               />
