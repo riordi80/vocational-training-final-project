@@ -63,14 +63,15 @@ public class DispositivoEsp32 {
     private LocalDateTime ultimaConexion;
 
     /**
-     * Frecuencia de lectura de sensores en minutos.
+     * Frecuencia de lectura de sensores en segundos.
      * <p>
-     * Define cada cuántos minutos el ESP32 debe tomar mediciones.
-     * Por defecto: 15 minutos.
+     * Define cada cuántos segundos el ESP32 debe tomar mediciones.
+     * Por defecto: 30 segundos (fase de prototipo).
+     * En producción: 900 segundos (15 minutos).
      * </p>
      */
-    @Column(name = "frecuencia_lectura_min", columnDefinition = "INTEGER DEFAULT 15")
-    private int frecuenciaLecturaMin;
+    @Column(name = "frecuencia_lectura_seg", columnDefinition = "INTEGER DEFAULT 30")
+    private int frecuenciaLecturaSeg;
 
     /**
      * Constructor vacío requerido por JPA.
@@ -86,13 +87,13 @@ public class DispositivoEsp32 {
      * @param macAddress dirección MAC del dispositivo (formato XX:XX:XX:XX:XX:XX)
      * @param arbol árbol asociado al dispositivo (puede ser null)
      * @param activo indica si el dispositivo está activo
-     * @param frecuenciaLecturaMin frecuencia de lectura en minutos (por defecto 15)
+     * @param frecuenciaLecturaSeg frecuencia de lectura en segundos (por defecto 30)
      */
-    public DispositivoEsp32(String macAddress, Arbol arbol, boolean activo, int frecuenciaLecturaMin) {
+    public DispositivoEsp32(String macAddress, Arbol arbol, boolean activo, int frecuenciaLecturaSeg) {
         this.macAddress = macAddress;
         this.arbol = arbol;
         this.activo = activo;
-        this.frecuenciaLecturaMin = frecuenciaLecturaMin;
+        this.frecuenciaLecturaSeg = frecuenciaLecturaSeg;
     }
 
     public Long getId() {return id;}
@@ -100,14 +101,14 @@ public class DispositivoEsp32 {
     public Arbol getArbol() {return arbol;}
     public boolean isActivo() {return activo;}
     public LocalDateTime getUltimaConexion() {return ultimaConexion;}
-    public int getFrecuenciaLecturaMin() {return frecuenciaLecturaMin;}
+    public int getFrecuenciaLecturaSeg() {return frecuenciaLecturaSeg;}
 
     public void setId(Long id) {this.id = id;}
     public void setMacAddress(String macAddress) {this.macAddress = macAddress;}
     public void setArbol(Arbol arbol) {this.arbol = arbol;}
     public void setActivo(boolean activo) {this.activo = activo;}
     public void setUltimaConexion(LocalDateTime ultimaConexion) {this.ultimaConexion = ultimaConexion;}
-    public void setFrecuenciaLecturaMin(int frecuenciaLecturaMin) {this.frecuenciaLecturaMin = frecuenciaLecturaMin;}
+    public void setFrecuenciaLecturaSeg(int frecuenciaLecturaSeg) {this.frecuenciaLecturaSeg = frecuenciaLecturaSeg;}
 
     /**
      * Callback ejecutado antes de persistir un nuevo dispositivo ESP32 en la base de datos.
