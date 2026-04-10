@@ -115,7 +115,6 @@ CREATE TABLE lectura (
     humedad_suelo DECIMAL(5, 2) NOT NULL,
     -- Sensores opcionales (configuración avanzada)
     co2 DECIMAL(7, 2),                          -- NULL si no tiene sensor CO2
-    diametro_tronco DECIMAL(6, 2),              -- NULL si no tiene dendómetro
     luz1 DECIMAL(5, 2),                         -- NULL si no tiene sensor LDR 1
     luz2 DECIMAL(5, 2),                         -- NULL si no tiene sensor LDR 2
     CONSTRAINT pk_lectura PRIMARY KEY (id, timestamp),
@@ -126,7 +125,6 @@ CREATE TABLE lectura (
     CONSTRAINT chk_humedad_ambiente CHECK (humedad_ambiente BETWEEN 0.00 AND 100.00),
     CONSTRAINT chk_humedad_suelo CHECK (humedad_suelo BETWEEN 0.00 AND 100.00),
     CONSTRAINT chk_co2 CHECK (co2 IS NULL OR co2 BETWEEN 0.00 AND 10000.00),
-    CONSTRAINT chk_diametro_tronco CHECK (diametro_tronco IS NULL OR diametro_tronco BETWEEN 0.00 AND 5000.00),
     CONSTRAINT chk_luz1 CHECK (luz1 IS NULL OR luz1 BETWEEN 0.00 AND 100.00),
     CONSTRAINT chk_luz2 CHECK (luz2 IS NULL OR luz2 BETWEEN 0.00 AND 100.00)
 );
