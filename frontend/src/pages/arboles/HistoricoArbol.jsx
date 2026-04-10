@@ -312,9 +312,6 @@ function HistoricoArbol() {
                   <th className="px-4 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
                     Luz 2 (%)
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
-                    Diám. Tronco (mm)
-                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-brand-bg-green">
@@ -351,11 +348,6 @@ function HistoricoArbol() {
                     <td className="px-4 py-3 text-right text-gray-700">
                       {lectura.luz2 != null
                         ? parseFloat(lectura.luz2).toFixed(1)
-                        : '-'}
-                    </td>
-                    <td className="px-4 py-3 text-right text-gray-700">
-                      {lectura.diametroTronco != null
-                        ? parseFloat(lectura.diametroTronco).toFixed(1)
                         : '-'}
                     </td>
                   </tr>
