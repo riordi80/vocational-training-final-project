@@ -42,7 +42,6 @@ public interface LecturaRepository extends JpaRepository<Lectura, Long> {
                        l.humedad_ambiente,
                        l.humedad_suelo,
                        l.co2,
-                       l.diametro_tronco,
                        l.luz1,
                        l.luz2,
                        ROW_NUMBER() OVER (ORDER BY l.timestamp ASC) AS rn,
@@ -53,7 +52,7 @@ public interface LecturaRepository extends JpaRepository<Lectura, Long> {
                   AND l.timestamp <= :hasta
             )
             SELECT id, timestamp, temperatura, humedad_ambiente,
-                   humedad_suelo, co2, diametro_tronco, luz1, luz2
+                   humedad_suelo, co2, luz1, luz2
             FROM numbered
             WHERE MOD(rn - 1, GREATEST(1, CEIL(total_count::float / 400)::int)) = 0
                OR rn = total_count
