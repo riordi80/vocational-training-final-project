@@ -98,6 +98,8 @@ function HistoricoArbol() {
               tiempo: formatTimestampShort(item.timestamp),
               temperatura: item.temperatura != null ? parseFloat(item.temperatura) : null,
               humedadAmbiente: item.humedadAmbiente != null ? parseFloat(item.humedadAmbiente) : null,
+              luz1: item.luz1 != null ? parseFloat(item.luz1) : null,
+              luz2: item.luz2 != null ? parseFloat(item.luz2) : null,
             }))
           );
         }
@@ -238,6 +240,22 @@ function HistoricoArbol() {
                 dot={false}
                 connectNulls
               />
+              <Line
+                type="monotone"
+                dataKey="luz1"
+                name="Luz 1 (%)"
+                stroke="#eab308"
+                dot={false}
+                connectNulls
+              />
+              <Line
+                type="monotone"
+                dataKey="luz2"
+                name="Luz 2 (%)"
+                stroke="#a855f7"
+                dot={false}
+                connectNulls
+              />
             </LineChart>
           </ResponsiveContainer>
         )}
@@ -289,6 +307,12 @@ function HistoricoArbol() {
                     CO2 (ppm)
                   </th>
                   <th className="px-4 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
+                    Luz 1 (%)
+                  </th>
+                  <th className="px-4 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
+                    Luz 2 (%)
+                  </th>
+                  <th className="px-4 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
                     Diám. Tronco (mm)
                   </th>
                 </tr>
@@ -317,6 +341,16 @@ function HistoricoArbol() {
                     <td className="px-4 py-3 text-right text-gray-700">
                       {lectura.co2 != null
                         ? parseFloat(lectura.co2).toFixed(0)
+                        : '-'}
+                    </td>
+                    <td className="px-4 py-3 text-right text-gray-700">
+                      {lectura.luz1 != null
+                        ? parseFloat(lectura.luz1).toFixed(1)
+                        : '-'}
+                    </td>
+                    <td className="px-4 py-3 text-right text-gray-700">
+                      {lectura.luz2 != null
+                        ? parseFloat(lectura.luz2).toFixed(1)
                         : '-'}
                     </td>
                     <td className="px-4 py-3 text-right text-gray-700">
