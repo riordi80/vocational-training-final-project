@@ -30,6 +30,12 @@ public class LecturaMuestraProjection {
     @SerializedName("diametroTronco")
     private Double diametroTronco;  // mm (puede ser null)
 
+    @SerializedName("luz1")
+    private Double luz1;  // % (puede ser null)
+
+    @SerializedName("luz2")
+    private Double luz2;  // % (puede ser null)
+
     // Constructores
     public LecturaMuestraProjection() {
     }
@@ -73,6 +79,14 @@ public class LecturaMuestraProjection {
         return diametroTronco;
     }
 
+    public Double getLuz1() {
+        return luz1;
+    }
+
+    public Double getLuz2() {
+        return luz2;
+    }
+
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -100,6 +114,14 @@ public class LecturaMuestraProjection {
 
     public void setDiametroTronco(Double diametroTronco) {
         this.diametroTronco = diametroTronco;
+    }
+
+    public void setLuz1(Double luz1) {
+        this.luz1 = luz1;
+    }
+
+    public void setLuz2(Double luz2) {
+        this.luz2 = luz2;
     }
 
     @Override

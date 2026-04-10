@@ -26,4 +26,8 @@ public interface LecturaMuestraProjection {
     BigDecimal getCo2();
 
     BigDecimal getDiametroTronco();
+
+    BigDecimal getLuz1();
+
+    BigDecimal getLuz2();
 }

@@ -12,7 +12,8 @@
 #define TX_PIN 17
 #define SHT40_ADDR 0x44
 const int pinTierra = 4;
-const int pinLDR = 5;
+const int pinLDR1   = 5;
+const int pinLDR2   = 35;  // TODO: verificar pin con el hardware final
 
 // ============================================
 // CONSTANTES
@@ -30,6 +31,8 @@ float temperatura     = 0.0;
 float humedadAmbiente = 0.0;
 float humedadSuelo    = 0.0;
 int   co2             = 0;
+int   luz1            = 0;
+int   luz2            = 0;
 
 byte cmdCO2[9]      = {0xFF, 0x01, 0x86, 0, 0, 0, 0, 0, 0x79};
 byte responseCO2[9] = {0};
@@ -41,6 +44,7 @@ void conectarWiFi();
 void leerSHT40();
 void leerHumedadSuelo();
 void leerCO2();
+void leerLDR();
 void enviarLectura();
 
 // ============================================
@@ -67,6 +71,7 @@ void loop() {
   leerSHT40();
   leerHumedadSuelo();
   leerCO2();
+  leerLDR();
   Serial.println("=====================================");
 
   unsigned long ahora = millis();
@@ -184,6 +189,31 @@ void leerCO2() {
 }
 
 // ============================================
+// LECTURA LDR (ADC)
+// Actualiza variables globales: luz1, luz2
+// Devuelve porcentaje 0-100 (0=oscuro, 100=máxima luz)
+// ============================================
+void leerLDR() {
+  int rawLuz1 = analogRead(pinLDR1);
+  int rawLuz2 = analogRead(pinLDR2);
+
+  luz1 = map(rawLuz1, 0, 4095, 0, 100);
+  luz2 = map(rawLuz2, 0, 4095, 0, 100);
+  luz1 = constrain(luz1, 0, 100);
+  luz2 = constrain(luz2, 0, 100);
+
+  Serial.print("LDR1 (ADC=");
+  Serial.print(rawLuz1);
+  Serial.print("): ");
+  Serial.print(luz1);
+  Serial.print(" % | LDR2 (ADC=");
+  Serial.print(rawLuz2);
+  Serial.print("): ");
+  Serial.print(luz2);
+  Serial.println(" %");
+}
+
+// ============================================
 // ENVÍO AL BACKEND
 // ============================================
 void enviarLectura() {
@@ -202,6 +232,8 @@ void enviarLectura() {
   doc["humedadAmbiente"]= round(humedadAmbiente * 100) / 100.0;
   doc["humedadSuelo"]   = round(humedadSuelo    * 100) / 100.0;
   doc["co2"]            = co2;
+  doc["luz1"]           = luz1;
+  doc["luz2"]           = luz2;
 
   String jsonString;
   serializeJson(doc, jsonString);
