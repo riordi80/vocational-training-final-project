@@ -302,81 +302,6 @@ function DetalleCentro() {
         </div>
       </div>
 
-      {/* Árboles del Centro */}
-      <div className="mt-6 bg-white rounded-lg shadow p-6">
-        <div className="flex items-center justify-between mb-4 border-b pb-2">
-          <h2 className="text-xl font-semibold text-gray-800">
-            Árboles del Centro ({arboles.length})
-          </h2>
-          {canManageCenter(centro.id) && (
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => navigate('/arboles/nuevo', { state: { centroId: centro.id } })}
-            >
-              <Plus className="w-4 h-4 mr-1 inline" /> Añadir Árbol
-            </Button>
-          )}
-        </div>
-        {arboles.length === 0 ? (
-          <p className="text-gray-500 text-center py-4">
-            Este centro aún no tiene árboles registrados.
-          </p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-brand-bg-green">
-              <thead className="bg-brand-primary">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                    Nombre
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                    Especie
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                    Ubicación
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                    Acciones
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-brand-bg-green">
-                {arboles.map((arbol) => (
-                  <tr
-                    key={arbol.id}
-                    className="hover:bg-brand-primary/5 cursor-pointer"
-                    onClick={() => handleVerArbol(arbol.id)}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {arbol.nombre}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {arbol.especie}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {arbol.ubicacionEspecifica || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleVerArbol(arbol.id);
-                        }}
-                      >
-                        Ver Detalle
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-
       {/* Dispositivos del Centro */}
       <div className="mt-6 bg-white rounded-lg shadow p-6">
         <div className="flex items-center justify-between mb-4 border-b pb-2">
@@ -414,7 +339,7 @@ function DetalleCentro() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                     Última conexión
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
                     Acciones
                   </th>
                 </tr>
@@ -446,7 +371,7 @@ function DetalleCentro() {
                         : 'Nunca'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 justify-end">
                         <Button
                           variant="outline"
                           size="sm"
@@ -478,6 +403,82 @@ function DetalleCentro() {
                           </>
                         )}
                       </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+
+      {/* Árboles del Centro */}
+      <div className="mt-6 bg-white rounded-lg shadow p-6">
+        <div className="flex items-center justify-between mb-4 border-b pb-2">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Árboles del Centro ({arboles.length})
+          </h2>
+          {canManageCenter(centro.id) && (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => navigate('/arboles/nuevo', { state: { centroId: centro.id } })}
+            >
+              <Plus className="w-4 h-4 mr-1 inline" /> Añadir Árbol
+            </Button>
+          )}
+        </div>
+        {arboles.length === 0 ? (
+          <p className="text-gray-500 text-center py-4">
+            Este centro aún no tiene árboles registrados.
+          </p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-brand-bg-green">
+              <thead className="bg-brand-primary">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Nombre
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Especie
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Ubicación
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
+                    Acciones
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-brand-bg-green">
+                {arboles.map((arbol) => (
+                  <tr
+                    key={arbol.id}
+                    className="hover:bg-brand-primary/5 cursor-pointer"
+                    onClick={() => handleVerArbol(arbol.id)}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {arbol.nombre}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {arbol.especie}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {arbol.ubicacionEspecifica || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleVerArbol(arbol.id);
+                        }}
+                      >
+                        Ver Detalle
+                      </Button>
                     </td>
                   </tr>
                 ))}
