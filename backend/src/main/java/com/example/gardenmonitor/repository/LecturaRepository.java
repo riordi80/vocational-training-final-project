@@ -1,7 +1,6 @@
 package com.example.gardenmonitor.repository;
 
 import com.example.gardenmonitor.dto.LecturaMuestraProjection;
-import com.example.gardenmonitor.model.Arbol;
 import com.example.gardenmonitor.model.DispositivoEsp32;
 import com.example.gardenmonitor.model.Lectura;
 import org.springframework.data.domain.Page;
@@ -15,12 +14,10 @@ import java.util.List;
 
 public interface LecturaRepository extends JpaRepository<Lectura, Long> {
 
-    Page<Lectura> findByArbolOrderByTimestampDesc(Arbol arbol, Pageable pageable);
+    Page<Lectura> findByDispositivoOrderByTimestampDesc(DispositivoEsp32 dispositivo, Pageable pageable);
 
-    List<Lectura> findByDispositivoOrderByTimestampDesc(DispositivoEsp32 dispositivo);
-
-    Page<Lectura> findByArbolAndTimestampBetweenOrderByTimestampDesc(
-            Arbol arbol, LocalDateTime desde, LocalDateTime hasta, Pageable pageable);
+    Page<Lectura> findByDispositivoAndTimestampBetweenOrderByTimestampDesc(
+            DispositivoEsp32 dispositivo, LocalDateTime desde, LocalDateTime hasta, Pageable pageable);
 
     /**
      * Stride sampling: devuelve lecturas REALES (sin promedios) garantizando
@@ -47,7 +44,7 @@ public interface LecturaRepository extends JpaRepository<Lectura, Long> {
                        ROW_NUMBER() OVER (ORDER BY l.timestamp ASC) AS rn,
                        COUNT(*)     OVER ()                          AS total_count
                 FROM lectura l
-                WHERE l.arbol_id = :arbolId
+                WHERE l.dispositivo_id = :dispositivoId
                   AND l.timestamp >= :desde
                   AND l.timestamp <= :hasta
             )
@@ -58,8 +55,8 @@ public interface LecturaRepository extends JpaRepository<Lectura, Long> {
                OR rn = total_count
             ORDER BY timestamp ASC
             """, nativeQuery = true)
-    List<LecturaMuestraProjection> findMuestraByArbolAndRango(
-            @Param("arbolId") Long arbolId,
+    List<LecturaMuestraProjection> findMuestraByDispositivoAndRango(
+            @Param("dispositivoId") Long dispositivoId,
             @Param("desde") LocalDateTime desde,
             @Param("hasta") LocalDateTime hasta);
 }

@@ -42,19 +42,23 @@ frontend/
 │   │   │   └── ComponentLibrary.jsx
 │   │   ├── arboles/
 │   │   │   ├── ListadoArboles.jsx
-│   │   │   ├── DetalleArbol.jsx      # Incluye sección "Última Lectura" con umbrales
+│   │   │   ├── DetalleArbol.jsx      # Info general y absorción CO2; sin sección IoT
 │   │   │   ├── FormularioArbol.jsx
-│   │   │   └── HistoricoArbol.jsx    # Gráfica Recharts + tabla paginada de lecturas IoT
+│   │   │   └── HistoricoArbol.jsx    # (legacy) Historial por árbol
+│   │   ├── dispositivos/
+│   │   │   ├── FormularioDispositivo.jsx  # Crear/editar dispositivo (MAC, centro, frecuencia, umbrales)
+│   │   │   └── HistoricoDispositivo.jsx   # Gráfica Recharts + tabla paginada por dispositivoId
 │   │   ├── centros/
 │   │   ├── usuarios/        # Gestión de usuarios (solo ADMIN)
 │   │   └── ...
 │   ├── services/            # Llamadas a API
 │   │   ├── api.js           # Configuración axios
-│   │   ├── arbolesService.js # CRUD completo de árboles
-│   │   ├── centrosService.js # CRUD completo de centros
-│   │   ├── usuariosService.js # CRUD de usuarios (solo ADMIN)
-│   │   ├── usuarioCentroService.js # Asignación usuario-centro
-│   │   ├── lecturasService.js # Lecturas IoT (tabla, gráfica stride sampling, última lectura)
+│   │   ├── arbolesService.js
+│   │   ├── centrosService.js
+│   │   ├── usuariosService.js
+│   │   ├── usuarioCentroService.js
+│   │   ├── dispositivosService.js  # CRUD dispositivos ESP32
+│   │   ├── lecturasService.js      # Lecturas IoT (endpoints /dispositivo/)
 │   │   └── ...
 │   ├── context/             # Context API para estado global
 │   │   ├── AuthContext.jsx
@@ -155,30 +159,36 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Integración con arbolesService y centrosService
 
 ### 5. Detalle de Árbol (`/arboles/:id`)
-- Vista completa con información general y umbrales de monitorización
+- Vista con información general y absorción CO2 anual
 - Botones: Volver, Editar, Eliminar
 - Modal de confirmación antes de eliminar
-- Manejo de estados (loading, error, árbol no encontrado)
-- Formateo de fechas mejorado
-- Integración con getArbolById y deleteArbol
-- Navegación con state para feedback
+- Sin sección IoT (lecturas e histórico se acceden desde el dispositivo)
 
 ### 6. Formulario Árbol (`/arboles/nuevo` y `/arboles/:id/editar`)
-- Componente dual: crear Y editar en uno solo
-- Campos obligatorios: nombre, especie, fecha plantación, centro educativo
-- Campos opcionales: ubicación, umbrales de monitorización
-- Validaciones client-side completas (campos requeridos, fecha no futura, rangos de umbrales)
-- Carga de centros desde API para select
-- Detección automática de modo (crear/editar) con useParams
-- Navegación con state para mensajes de éxito
-- Integración con createArbol y updateArbol
+- Campos: nombre, especie, fecha plantación, centro educativo, ubicación, absorción CO2
+- Validaciones client-side (campos requeridos, fecha no futura)
+- Sin umbrales de monitorización (se configuran en el dispositivo)
 
-### 7. Histórico de Lecturas (`/arboles/:id/lecturas`)
-- Selector de período predefinido: Hoy / 7 días / 30 días / 6 meses / 1 año
-- Gráfica de series temporales con Recharts (stride sampling, máx. 400 puntos reales del rango)
-- Tabla de lecturas paginada server-side
-- Datos representados: temperatura, humedad ambiente, humedad suelo, CO2, diámetro de tronco
-- Integración con `lecturasService.js` (`getGraficaArbol`, `getLecturasArbol`, `getUltimaLectura`)
+### 7. Histórico de Lecturas por Dispositivo (`/dispositivos/:id/lecturas`)
+- Selector de período: Hoy / 7 días / 30 días / 6 meses / 1 año
+- Gráfica 1: temperatura, humedad ambiente, humedad suelo, luz1, luz2 (Recharts)
+- Gráfica 2: CO2 en ppm (escala separada)
+- Tabla de lecturas paginada server-side (stride sampling, máx. 400 puntos reales)
+- Polling automático según frecuenciaLecturaSeg del dispositivo
+- Muestra MAC address y centro del dispositivo en la cabecera
+
+### 8. Formulario Dispositivo (`/dispositivos/nuevo` y `/dispositivos/:id/editar`)
+- Campos obligatorios: MAC address (formato XX:XX:XX:XX:XX:XX), centro educativo
+- Campos: frecuencia de lectura (seg), activo
+- Sección de umbrales de monitorización: temp min/max, humedad amb min/max, humedad suelo min, CO2 max
+- Validación de formato MAC
+- Accesible desde DetalleCentro (botón "Añadir Dispositivo" / "Editar")
+
+### 9. Detalle Centro (`/centros/:id`)
+- Información general + mapa Leaflet
+- Tabla de árboles del centro
+- **Nueva sección**: Tabla de dispositivos ESP32 con MAC, estado (activo/inactivo), frecuencia, última conexión
+- Acciones por dispositivo: Ver Histórico, Editar, Eliminar (con modal confirmación)
 
 ## Requisitos Funcionales Adicionales
 
@@ -266,9 +276,9 @@ Todos los formularios incluyen validación client-side:
 
 - Email válido
 - Campos requeridos
-- Rangos numéricos (umbrales)
 - Fechas coherentes
 - Confirmación de contraseña
+- Rangos numéricos (umbrales) — en FormularioDispositivo
 
 ## Estilos y Componentes
 
@@ -435,8 +445,14 @@ Este proyecto usa:
 - [x] Sistema de roles y permisos (ADMIN, COORDINADOR, acceso público)
 - [x] CRUD completo de árboles:
   - ListadoArboles (listar, filtrar, buscar)
-  - DetalleArbol (ver detalles completos)
+  - DetalleArbol (info general y CO2; sin sección IoT)
   - FormularioArbol (crear y editar)
+- [x] CRUD completo de dispositivos ESP32:
+  - FormularioDispositivo (crear y editar, con umbrales)
+  - HistoricoDispositivo (gráficas + tabla paginada por dispositivoId)
+- [x] Lecturas IoT asociadas a dispositivo (no a árbol): endpoints /dispositivo/
+- [x] DetalleCentro muestra dispositivos del centro con acciones
+- [x] Umbrales de monitorización configurables por dispositivo
 - [x] Gestión de usuarios (solo ADMIN):
   - ListadoUsuarios, DetalleUsuario, FormularioUsuario
   - Asignación/desasignación de coordinadores a centros
@@ -469,7 +485,7 @@ Este proyecto usa:
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-02-19
+**Última actualización**: 2026-04-11
 
 ### Colaboradores
 

@@ -23,12 +23,6 @@
       fechaPlantacion: '',
       ubicacionEspecifica: '',
       centroEducativo: { id: centroIdDesdeState || '' },
-      umbralTempMin: '',
-      umbralTempMax: '',
-      umbralHumedadAmbienteMin: '',
-      umbralHumedadAmbienteMax: '',
-      umbralHumedadSueloMin: '',
-      umbralCO2Max: '',
       absorcionCo2Anual: ''
     });
 
@@ -70,12 +64,6 @@
             fechaPlantacion: fechaFormateada,
             ubicacionEspecifica: arbolData.ubicacionEspecifica || '',
             centroEducativo: { id: arbolData.centroEducativo?.id || '' },
-            umbralTempMin: arbolData.umbralTempMin || '',
-            umbralTempMax: arbolData.umbralTempMax || '',
-            umbralHumedadAmbienteMin: arbolData.umbralHumedadAmbienteMin || '',
-            umbralHumedadAmbienteMax: arbolData.umbralHumedadAmbienteMax || '',
-            umbralHumedadSueloMin: arbolData.umbralHumedadSueloMin || '',
-            umbralCO2Max: arbolData.umbralCO2Max || '',
             absorcionCo2Anual: arbolData.absorcionCo2Anual || ''
           });
         }
@@ -141,24 +129,6 @@
       }
 
       // Validaciones de umbrales (si están presentes)
-      if (formData.umbralTempMin !== '' && formData.umbralTempMax !== '') {
-        const tempMin = parseFloat(formData.umbralTempMin);
-        const tempMax = parseFloat(formData.umbralTempMax);
-
-        if (tempMin >= tempMax) {
-          nuevosErrores.umbralTempMin = 'La temperatura mínima debe ser menor que la máxima';
-        }
-      }
-
-      if (formData.umbralHumedadAmbienteMin !== '' && formData.umbralHumedadAmbienteMax !== '') {
-        const humMin = parseFloat(formData.umbralHumedadAmbienteMin);
-        const humMax = parseFloat(formData.umbralHumedadAmbienteMax);
-
-        if (humMin >= humMax) {
-          nuevosErrores.umbralHumedadAmbienteMin = 'La humedad mínima debe ser menor que la máxima';
-        }
-      }
-
       setErrors(nuevosErrores);
       return Object.keys(nuevosErrores).length === 0;
     };
@@ -182,12 +152,6 @@
           fechaPlantacion: formData.fechaPlantacion,
           ubicacionEspecifica: formData.ubicacionEspecifica.trim() || null,
           centroEducativo: { id: parseInt(formData.centroEducativo.id) },
-          umbralTempMin: formData.umbralTempMin !== '' ? parseFloat(formData.umbralTempMin) : null,
-          umbralTempMax: formData.umbralTempMax !== '' ? parseFloat(formData.umbralTempMax) : null,
-          umbralHumedadAmbienteMin: formData.umbralHumedadAmbienteMin !== '' ? parseFloat(formData.umbralHumedadAmbienteMin) : null,
-          umbralHumedadAmbienteMax: formData.umbralHumedadAmbienteMax !== '' ? parseFloat(formData.umbralHumedadAmbienteMax) : null,
-          umbralHumedadSueloMin: formData.umbralHumedadSueloMin !== '' ? parseFloat(formData.umbralHumedadSueloMin) : null,
-          umbralCO2Max: formData.umbralCO2Max !== '' ? parseFloat(formData.umbralCO2Max) : null,
           absorcionCo2Anual: formData.absorcionCo2Anual !== '' ? parseFloat(formData.absorcionCo2Anual) : null
         };
 
@@ -351,89 +315,6 @@
                     Estimación de kg de CO2 absorbidos al año
                   </p>
                 </div>
-              </div>
-            </div>
-
-            {/* Sección: Umbrales de Monitorización */}
-            <div className="mb-6 pt-6 border-t border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Umbrales de Monitorización (Opcional)
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Temperatura Mínima */}
-                <Input
-                  id="umbralTempMin"
-                  name="umbralTempMin"
-                  label="Temperatura Mínima (°C)"
-                  type="number"
-                  step="0.1"
-                  value={formData.umbralTempMin}
-                  onChange={handleChange}
-                  error={errors.umbralTempMin}
-                  placeholder="Ej: 10"
-                />
-
-                {/* Temperatura Máxima */}
-                <Input
-                  id="umbralTempMax"
-                  name="umbralTempMax"
-                  label="Temperatura Máxima (°C)"
-                  type="number"
-                  step="0.1"
-                  value={formData.umbralTempMax}
-                  onChange={handleChange}
-                  placeholder="Ej: 35"
-                />
-
-                {/* Humedad Ambiente Mínima */}
-                <Input
-                  id="umbralHumedadAmbienteMin"
-                  name="umbralHumedadAmbienteMin"
-                  label="Humedad Ambiente Mínima (%)"
-                  type="number"
-                  step="0.1"
-                  value={formData.umbralHumedadAmbienteMin}
-                  onChange={handleChange}
-                  error={errors.umbralHumedadAmbienteMin}
-                  placeholder="Ej: 30"
-                />
-
-                {/* Humedad Ambiente Máxima */}
-                <Input
-                  id="umbralHumedadAmbienteMax"
-                  name="umbralHumedadAmbienteMax"
-                  label="Humedad Ambiente Máxima (%)"
-                  type="number"
-                  step="0.1"
-                  value={formData.umbralHumedadAmbienteMax}
-                  onChange={handleChange}
-                  placeholder="Ej: 90"
-                />
-
-                {/* Humedad Suelo Mínima */}
-                <Input
-                  id="umbralHumedadSueloMin"
-                  name="umbralHumedadSueloMin"
-                  label="Humedad Suelo Mínima (%)"
-                  type="number"
-                  step="0.1"
-                  value={formData.umbralHumedadSueloMin}
-                  onChange={handleChange}
-                  placeholder="Ej: 20"
-                />
-
-                {/* CO2 Máximo */}
-                <Input
-                  id="umbralCO2Max"
-                  name="umbralCO2Max"
-                  label="CO2 Máximo (ppm)"
-                  type="number"
-                  step="0.01"
-                  value={formData.umbralCO2Max}
-                  onChange={handleChange}
-                  placeholder="Ej: 1000"
-                />
               </div>
             </div>
 
