@@ -14,7 +14,7 @@ Sistema de monitorización y gestión de árboles plantados en centros educativo
 
 ## Descripción
 
-Este proyecto permite recopilar datos ambientales (temperatura, humedad ambiente, humedad del suelo, CO2, luz) a través de dispositivos ESP32 con sensores, y visualizarlos en tiempo real mediante aplicaciones web y móvil. El sistema está diseñado para centros educativos que desean monitorizar el crecimiento y estado de sus árboles.
+Este proyecto permite recopilar datos ambientales (temperatura, humedad ambiente, humedad del suelo, CO2, luz) a través de dispositivos ESP32 con sensores, y visualizarlos en tiempo real mediante aplicaciones web y móvil. El sistema está diseñado para centros educativos que gestionan un inventario de árboles y monitorizan las condiciones ambientales de sus instalaciones mediante dispositivos IoT asignados por centro.
 
 ## Componentes del Proyecto
 
@@ -23,21 +23,23 @@ Este es un **monorepo** que contiene todos los componentes del sistema:
 ### `/backend`
 API REST con **Spring Boot (Java)**
 - CRUD completo para las 8 entidades: centros educativos, árboles, usuarios, dispositivos ESP32, lecturas IoT, alertas, notificaciones y asignación usuario-centro (N:M)
-- Relaciones 1:N y N:M con validaciones
+- Relaciones 1:N y N:M con validaciones; cada dispositivo ESP32 pertenece a un centro educativo
+- Umbrales de monitorización (temperatura, humedad, CO2) configurables por dispositivo; `PATCH /api/dispositivos/{id}/umbrales` para actualización parcial
 - PostgreSQL + TimescaleDB (hypertable para series temporales)
 - Sistema de roles (ADMIN / COORDINADOR) con autenticación real contra BD
 
 ### `/frontend`
 Aplicación web con **React**
 - Login/Register con persistencia (localStorage)
-- Dashboard + CRUD Árboles completo (listar, crear, editar, eliminar, detalle)
+- Dashboard + CRUD Árboles completo (listar, crear, editar, eliminar, detalle) — los árboles actúan como inventario del centro
+- CRUD Dispositivos ESP32 integrado en el detalle de cada centro (listar, crear, editar, eliminar, histórico)
 - React Router + navegación dinámica
 - Responsive con menú hamburguesa (Tailwind CSS)
 - Sistema de roles (ADMIN / COORDINADOR, autenticación real contra BD)
 - Componentes reutilizables (Button, Input, Alert, Spinner)
 - Feedback usuario (mensajes éxito/error, validaciones)
 - Visualización de lecturas IoT con gráficas (Recharts) y mapas (Leaflet): gráfica de sensores 0-100% y gráfica de CO2 (ppm) independiente
-- Polling automático en HistoricoArbol sincronizado con la frecuencia de lectura del dispositivo ESP32
+- Polling automático en HistoricoDispositivo sincronizado con la frecuencia de lectura del dispositivo ESP32
 - Suite de tests con Vitest: 21 tests en 7 archivos (ver [TESTING_VITEST.md](./docs/TESTING_VITEST.md))
 - Configurado para despliegue en Vercel
 
@@ -142,7 +144,7 @@ Cada componente tiene documentación técnica detallada:
 
 - [x] Modelo de datos (E/R, UML, Relacional)
 - [x] PostgreSQL 16 + TimescaleDB 2.23.1
-- [x] 8 Entidades JPA con validaciones completas
+- [x] 8 entidades JPA con validaciones completas; cada dispositivo ESP32 asociado a un centro educativo
 - [x] Repositorios JPA con queries derivadas
 - [x] ArbolController (GET, POST, PUT, DELETE con @Valid)
 - [x] CentroEducativoController (GET, POST, PUT, DELETE con @Valid)
@@ -158,7 +160,7 @@ Cada componente tiene documentación técnica detallada:
 - [x] Frontend React - CRUD Árboles (Fase 4 - 100% completada)
   - [x] Servicios API (arbolesService, centrosService)
   - [x] ListadoArboles (tabla responsive, filtros, cards móvil)
-  - [x] DetalleArbol (vista completa, eliminar con confirmación, última lectura IoT)
+  - [x] DetalleArbol (vista completa, información general del árbol, eliminar con confirmación)
   - [x] FormularioArbol (crear/editar, validaciones completas)
   - [x] Rutas configuradas y funcionando
   - [x] Refactorización Login/Register con componentes comunes
@@ -171,13 +173,13 @@ Cada componente tiene documentación técnica detallada:
   - [x] Manual de Usuario (Web + móvil)
   - [x] Manuales específicos de Android
 - [x] ESP32 Firmware (lectura sensores + envío al backend)
-- [x] Lecturas IoT en frontend (HistoricoArbol con gráfica Recharts + mapa Leaflet, DetalleArbol con última lectura)
+- [x] Lecturas IoT en frontend (HistoricoDispositivo con gráfica Recharts + mapa Leaflet)
 - [x] Testing frontend con Vitest — 21 tests en 7 archivos, cobertura ~60%
 - [x] CRUD completo para todas las entidades de la BD (Fase 14): DispositivoEsp32Controller, AlertaController, NotificacionController
 
 ## Estado del Proyecto
 
-**Fase actual**: Fases 1–11, 14 completadas | Fases 12, 13 y 15 pendientes (2ª evaluación)
+**Fase actual**: Fases 1–11, 14 completadas + refactor dispositivo-centro | Fases 12, 13 y 15 pendientes (2ª evaluación)
 
 ### Completado (Fase 0 - Configuración Inicial)
 - [x] Configuración de entornos de desarrollo
@@ -270,10 +272,9 @@ Cada componente tiene documentación técnica detallada:
 - [x] **DTOs de autenticación**: LoginRequest, RegisterRequest, AuthResponse
 
 ### Completado (Lecturas IoT + ESP32)
-- [x] **LecturaController**: GET (paginado, última lectura, stride sampling por período), POST `/api/lecturas`
+- [x] **LecturaController**: GET (paginado, última lectura, stride sampling por período), POST `/api/lecturas/dispositivo/{id}`
 - [x] **TimescaleDB hypertable**: tabla `lectura` configurada para series temporales
-- [x] **HistoricoArbol.jsx**: dos gráficas independientes (sensores 0-100% y CO2 en ppm) con stride sampling + tabla paginada + polling automático sincronizado con `frecuencia_lectura_seg` del ESP32
-- [x] **DetalleArbol.jsx**: sección "Última Lectura" con indicadores de umbrales
+- [x] **HistoricoDispositivo.jsx**: dos gráficas independientes (sensores 0-100% y CO2 en ppm) con stride sampling + tabla paginada + polling automático sincronizado con `frecuencia_lectura_seg` del ESP32
 - [x] **ESP32 firmware**: SHT40 (temperatura/humedad ambiente) + sensor capacitivo (humedad suelo) + MH-Z19D (CO2) + LDR x2 (luz1/luz2) + envío HTTP REST
 
 ### Completado (Fase 9 - Testing Frontend)
@@ -289,10 +290,20 @@ Cada componente tiene documentación técnica detallada:
 ### Completado (Fase 14 - CRUD Entidades Pendientes)
 - [x] **Entidades JPA nuevas**: Alerta (con TipoAlerta, EstadoAlerta) y Notificacion — con Javadoc completo
 - [x] **Repositorios JPA**: AlertaRepository y NotificacionRepository con queries derivadas
-- [x] **DispositivoEsp32Controller**: GET, POST, PUT, DELETE `/api/dispositivos` (+ GET /activos)
-- [x] **AlertaController**: GET, POST, PUT, DELETE `/api/alertas` (+ filtros por árbol y estado)
+- [x] **DispositivoEsp32Controller**: GET, POST, PUT, DELETE `/api/dispositivos` (+ GET /activos, GET /centro/{id}, PATCH /{id}/umbrales)
+- [x] **AlertaController**: GET, POST, PUT, DELETE `/api/alertas` (+ filtros por dispositivo y estado)
 - [x] **NotificacionController**: GET, POST, PUT, DELETE `/api/notificaciones` (+ filtros por usuario y no leídas)
 - [x] **Javadoc**: añadido a todos los modelos y controladores sin documentar (UsuarioCentro, Lectura, ArbolController, AuthController, LecturaController, UsuarioCentroController, UsuarioController)
+
+### Completado (Refactor Dispositivo-Centro)
+- [x] **Modelo dispositivo-centro**: cada `DispositivoEsp32` pertenece directamente a un `CentroEducativo` (relación N:1); migración SQL idempotente aplicada en local y producción
+- [x] **Umbrales en dispositivo**: campos `umbralTempMin/Max`, `umbralHumedadAmbienteMin/Max`, `umbralHumedadSueloMin`, `umbralCO2Max` trasladados a `DispositivoEsp32`
+- [x] **Frontend — DetalleCentro**: sección "Dispositivos ESP32" con tabla de dispositivos del centro, acciones Histórico/Editar/Eliminar y modal de confirmación
+- [x] **Frontend — FormularioDispositivo**: formulario de alta/edición con validación de MAC (`XX:XX:XX:XX:XX:XX`), frecuencia y umbrales opcionales
+- [x] **Frontend — HistoricoDispositivo**: gráficas + tabla paginada + polling; accesible desde `DetalleCentro`
+- [x] **Frontend — DetalleArbol**: muestra únicamente información de inventario del árbol (nombre, especie, fecha, ubicación, absorción CO2)
+- [x] **dispositivosService.js**: CRUD completo para `/api/dispositivos`
+- [x] **lecturasService.js**: endpoints actualizados a `/api/lecturas/dispositivo/{id}`
 
 ## Requisitos Académicos
 
