@@ -14,7 +14,7 @@ Sistema de monitorización y gestión de árboles plantados en centros educativo
 
 ## Descripción
 
-Este proyecto permite recopilar datos ambientales (temperatura, humedad ambiente, humedad del suelo, CO2, diámetro de tronco) a través de dispositivos ESP32 con sensores, y visualizarlos en tiempo real mediante aplicaciones web y móvil. El sistema está diseñado para centros educativos que desean monitorizar el crecimiento y estado de sus árboles.
+Este proyecto permite recopilar datos ambientales (temperatura, humedad ambiente, humedad del suelo, CO2, luz) a través de dispositivos ESP32 con sensores, y visualizarlos en tiempo real mediante aplicaciones web y móvil. El sistema está diseñado para centros educativos que desean monitorizar el crecimiento y estado de sus árboles.
 
 ## Componentes del Proyecto
 
@@ -36,7 +36,8 @@ Aplicación web con **React**
 - Sistema de roles (ADMIN / COORDINADOR, autenticación real contra BD)
 - Componentes reutilizables (Button, Input, Alert, Spinner)
 - Feedback usuario (mensajes éxito/error, validaciones)
-- Visualización de lecturas IoT con gráficas (Recharts) y mapas (Leaflet)
+- Visualización de lecturas IoT con gráficas (Recharts) y mapas (Leaflet): gráfica de sensores 0-100% y gráfica de CO2 (ppm) independiente
+- Polling automático en HistoricoArbol sincronizado con la frecuencia de lectura del dispositivo ESP32
 - Suite de tests con Vitest: 21 tests en 7 archivos (ver [TESTING_VITEST.md](./docs/TESTING_VITEST.md))
 - Configurado para despliegue en Vercel
 
@@ -51,8 +52,8 @@ Aplicación móvil con **Android (Java)**
 
 ### `/esp32`
 Firmware **ESP32 (C/C++)**
-- Implementado: lectura de DHT22 (temperatura/humedad) y sensor de humedad de suelo
-- Envío periódico al backend vía HTTP REST
+- Sensores: SHT40 (temperatura/humedad ambiente), sensor capacitivo (humedad suelo), MH-Z19D (CO2), LDR x2 (luz1/luz2)
+- Envío periódico al backend vía HTTP REST según `frecuencia_lectura_seg` configurada en BD
 
 ### `/docs`
 Documentación completa del proyecto
@@ -176,7 +177,7 @@ Cada componente tiene documentación técnica detallada:
 
 ## Estado del Proyecto
 
-**Fase actual**: Fases 1–9, 11 y 14 completadas | Fases 10, 12, 13 y 15 pendientes (2ª evaluación)
+**Fase actual**: Fases 1–11, 14 completadas | Fases 12, 13 y 15 pendientes (2ª evaluación)
 
 ### Completado (Fase 0 - Configuración Inicial)
 - [x] Configuración de entornos de desarrollo
@@ -271,9 +272,9 @@ Cada componente tiene documentación técnica detallada:
 ### Completado (Lecturas IoT + ESP32)
 - [x] **LecturaController**: GET (paginado, última lectura, stride sampling por período), POST `/api/lecturas`
 - [x] **TimescaleDB hypertable**: tabla `lectura` configurada para series temporales
-- [x] **HistoricoArbol.jsx**: gráfica Recharts con stride sampling + tabla paginada + mapa Leaflet
+- [x] **HistoricoArbol.jsx**: dos gráficas independientes (sensores 0-100% y CO2 en ppm) con stride sampling + tabla paginada + polling automático sincronizado con `frecuencia_lectura_seg` del ESP32
 - [x] **DetalleArbol.jsx**: sección "Última Lectura" con indicadores de umbrales
-- [x] **ESP32 firmware**: DHT22 (temperatura/humedad) + sensor humedad suelo + envío HTTP REST
+- [x] **ESP32 firmware**: SHT40 (temperatura/humedad ambiente) + sensor capacitivo (humedad suelo) + MH-Z19D (CO2) + LDR x2 (luz1/luz2) + envío HTTP REST
 
 ### Completado (Fase 9 - Testing Frontend)
 - [x] **Vitest 4.x** configurado con jsdom, coverage-v8 y scripts en package.json
@@ -399,7 +400,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-02-22
+**Última actualización**: 2026-04-15
 
 ### Colaboradores
 
