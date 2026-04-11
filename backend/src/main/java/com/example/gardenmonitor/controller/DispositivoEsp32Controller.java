@@ -131,6 +131,52 @@ public class DispositivoEsp32Controller {
         dispositivo.setActivo(detalles.isActivo());
         dispositivo.setUltimaConexion(detalles.getUltimaConexion());
         dispositivo.setFrecuenciaLecturaSeg(detalles.getFrecuenciaLecturaSeg());
+        dispositivo.setUmbralTempMin(detalles.getUmbralTempMin());
+        dispositivo.setUmbralTempMax(detalles.getUmbralTempMax());
+        dispositivo.setUmbralHumedadAmbienteMin(detalles.getUmbralHumedadAmbienteMin());
+        dispositivo.setUmbralHumedadAmbienteMax(detalles.getUmbralHumedadAmbienteMax());
+        dispositivo.setUmbralHumedadSueloMin(detalles.getUmbralHumedadSueloMin());
+        dispositivo.setUmbralCO2Max(detalles.getUmbralCO2Max());
+
+        return dispositivoRepository.save(dispositivo);
+    }
+
+    /**
+     * Actualiza parcialmente los umbrales de alerta de un dispositivo.
+     * <p>
+     * Solo actualiza los umbrales que estén presentes (no nulos) en el cuerpo de la petición.
+     * </p>
+     *
+     * @param id       identificador del dispositivo
+     * @param umbrales objeto con los umbrales a actualizar (los campos null se ignoran)
+     * @return el dispositivo con los umbrales actualizados
+     * @throws ResponseStatusException si no se encuentra el dispositivo (404)
+     */
+    @PatchMapping("/{id}/umbrales")
+    public DispositivoEsp32 actualizarUmbrales(@PathVariable("id") Long id,
+                                                @RequestBody DispositivoEsp32 umbrales) {
+        DispositivoEsp32 dispositivo = dispositivoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Dispositivo no encontrado"));
+
+        if (umbrales.getUmbralTempMin() != null) {
+            dispositivo.setUmbralTempMin(umbrales.getUmbralTempMin());
+        }
+        if (umbrales.getUmbralTempMax() != null) {
+            dispositivo.setUmbralTempMax(umbrales.getUmbralTempMax());
+        }
+        if (umbrales.getUmbralHumedadAmbienteMin() != null) {
+            dispositivo.setUmbralHumedadAmbienteMin(umbrales.getUmbralHumedadAmbienteMin());
+        }
+        if (umbrales.getUmbralHumedadAmbienteMax() != null) {
+            dispositivo.setUmbralHumedadAmbienteMax(umbrales.getUmbralHumedadAmbienteMax());
+        }
+        if (umbrales.getUmbralHumedadSueloMin() != null) {
+            dispositivo.setUmbralHumedadSueloMin(umbrales.getUmbralHumedadSueloMin());
+        }
+        if (umbrales.getUmbralCO2Max() != null) {
+            dispositivo.setUmbralCO2Max(umbrales.getUmbralCO2Max());
+        }
 
         return dispositivoRepository.save(dispositivo);
     }

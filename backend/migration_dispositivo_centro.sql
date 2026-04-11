@@ -78,4 +78,21 @@ DROP INDEX IF EXISTS idx_arbol_dispositivo_esp32;
 ALTER TABLE arbol
     DROP COLUMN IF EXISTS dispositivo_id;
 
+-- 10. Mover umbrales de alerta de arbol → dispositivo_esp32
+ALTER TABLE dispositivo_esp32
+    ADD COLUMN IF NOT EXISTS umbral_temp_min             DECIMAL(5,2) DEFAULT 5.00,
+    ADD COLUMN IF NOT EXISTS umbral_temp_max             DECIMAL(5,2) DEFAULT 40.00,
+    ADD COLUMN IF NOT EXISTS umbral_humedad_ambiente_min DECIMAL(5,2) DEFAULT 30.00,
+    ADD COLUMN IF NOT EXISTS umbral_humedad_ambiente_max DECIMAL(5,2) DEFAULT 90.00,
+    ADD COLUMN IF NOT EXISTS umbral_humedad_suelo_min    DECIMAL(5,2) DEFAULT 30.00,
+    ADD COLUMN IF NOT EXISTS umbral_co2_max              DECIMAL(7,2) DEFAULT 1000.00;
+
+ALTER TABLE arbol
+    DROP COLUMN IF EXISTS umbral_temp_min,
+    DROP COLUMN IF EXISTS umbral_temp_max,
+    DROP COLUMN IF EXISTS umbral_humedad_ambiente_min,
+    DROP COLUMN IF EXISTS umbral_humedad_ambiente_max,
+    DROP COLUMN IF EXISTS umbral_humedad_suelo_min,
+    DROP COLUMN IF EXISTS umbral_co2_max;
+
 COMMIT;

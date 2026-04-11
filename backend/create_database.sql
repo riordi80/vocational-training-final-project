@@ -59,6 +59,13 @@ CREATE TABLE dispositivo_esp32 (
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     ultima_conexion TIMESTAMPTZ,
     frecuencia_lectura_seg INTEGER DEFAULT 30,
+    -- Umbrales de alerta (zona del centro)
+    umbral_temp_min DECIMAL(5, 2) DEFAULT 5.00,
+    umbral_temp_max DECIMAL(5, 2) DEFAULT 40.00,
+    umbral_humedad_ambiente_min DECIMAL(5, 2) DEFAULT 30.00,
+    umbral_humedad_ambiente_max DECIMAL(5, 2) DEFAULT 90.00,
+    umbral_humedad_suelo_min DECIMAL(5, 2) DEFAULT 30.00,
+    umbral_co2_max DECIMAL(7, 2) DEFAULT 1000.00,
     CONSTRAINT pk_dispositivo_esp32 PRIMARY KEY (id),
     CONSTRAINT uq_dispositivo_mac_address UNIQUE (mac_address),
     CONSTRAINT fk_dispositivo_centro FOREIGN KEY (centro_id) REFERENCES centro_educativo(id) ON DELETE CASCADE
@@ -77,16 +84,6 @@ CREATE TABLE arbol (
     especie VARCHAR(150) NOT NULL,
     fecha_plantacion DATE NOT NULL,
     ubicacion_especifica VARCHAR(200),
-    -- Umbrales de temperatura
-    umbral_temp_min DECIMAL(5, 2) DEFAULT 5.00,
-    umbral_temp_max DECIMAL(5, 2) DEFAULT 40.00,
-    -- Umbrales de humedad ambiental
-    umbral_humedad_ambiente_min DECIMAL(5, 2) DEFAULT 30.00,
-    umbral_humedad_ambiente_max DECIMAL(5, 2) DEFAULT 90.00,
-    -- Umbrales de humedad del suelo
-    umbral_humedad_suelo_min DECIMAL(5, 2) DEFAULT 30.00,
-    -- Umbrales de CO2 (opcional, solo si tiene sensor)
-    umbral_co2_max DECIMAL(7, 2) DEFAULT 1000.00,
     -- Absorción de CO2 estimada al año (kg CO2/año)
     absorcion_co2_anual DECIMAL(8, 2),
     CONSTRAINT pk_arbol PRIMARY KEY (id),

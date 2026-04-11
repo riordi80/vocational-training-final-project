@@ -21,6 +21,12 @@ function FormularioDispositivo() {
     centroEducativo: { id: centroIdDesdeState || '' },
     activo: true,
     frecuenciaLecturaSeg: 30,
+    umbralTempMin: '',
+    umbralTempMax: '',
+    umbralHumedadAmbienteMin: '',
+    umbralHumedadAmbienteMax: '',
+    umbralHumedadSueloMin: '',
+    umbralCO2Max: '',
   });
 
   const [centros, setCentros] = useState([]);
@@ -52,6 +58,12 @@ function FormularioDispositivo() {
           centroEducativo: { id: dispositivoData.centroEducativo?.id || '' },
           activo: dispositivoData.activo ?? true,
           frecuenciaLecturaSeg: dispositivoData.frecuenciaLecturaSeg ?? 30,
+          umbralTempMin: dispositivoData.umbralTempMin ?? '',
+          umbralTempMax: dispositivoData.umbralTempMax ?? '',
+          umbralHumedadAmbienteMin: dispositivoData.umbralHumedadAmbienteMin ?? '',
+          umbralHumedadAmbienteMax: dispositivoData.umbralHumedadAmbienteMax ?? '',
+          umbralHumedadSueloMin: dispositivoData.umbralHumedadSueloMin ?? '',
+          umbralCO2Max: dispositivoData.umbralCO2Max ?? '',
         });
       }
     } catch (err) {
@@ -121,6 +133,12 @@ function FormularioDispositivo() {
         centroEducativo: { id: parseInt(formData.centroEducativo.id) },
         activo: formData.activo,
         frecuenciaLecturaSeg: parseInt(formData.frecuenciaLecturaSeg),
+        umbralTempMin: formData.umbralTempMin !== '' ? parseFloat(formData.umbralTempMin) : null,
+        umbralTempMax: formData.umbralTempMax !== '' ? parseFloat(formData.umbralTempMax) : null,
+        umbralHumedadAmbienteMin: formData.umbralHumedadAmbienteMin !== '' ? parseFloat(formData.umbralHumedadAmbienteMin) : null,
+        umbralHumedadAmbienteMax: formData.umbralHumedadAmbienteMax !== '' ? parseFloat(formData.umbralHumedadAmbienteMax) : null,
+        umbralHumedadSueloMin: formData.umbralHumedadSueloMin !== '' ? parseFloat(formData.umbralHumedadSueloMin) : null,
+        umbralCO2Max: formData.umbralCO2Max !== '' ? parseFloat(formData.umbralCO2Max) : null,
       };
 
       if (isEditMode) {
@@ -260,6 +278,76 @@ function FormularioDispositivo() {
               <label htmlFor="activo" className="text-sm font-medium text-gray-700">
                 Dispositivo activo
               </label>
+            </div>
+          </div>
+
+          {/* Umbrales de Monitorización */}
+          <div className="pt-6 mt-6 border-t border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-800 mb-1">Umbrales de Monitorización</h2>
+            <p className="text-sm text-gray-500 mb-4">
+              El sistema generará alertas cuando los valores del sensor superen estos rangos.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                id="umbralTempMin"
+                name="umbralTempMin"
+                label="Temperatura Mínima (°C)"
+                type="number"
+                step="0.1"
+                value={formData.umbralTempMin}
+                onChange={handleChange}
+                placeholder="Ej: 5"
+              />
+              <Input
+                id="umbralTempMax"
+                name="umbralTempMax"
+                label="Temperatura Máxima (°C)"
+                type="number"
+                step="0.1"
+                value={formData.umbralTempMax}
+                onChange={handleChange}
+                placeholder="Ej: 40"
+              />
+              <Input
+                id="umbralHumedadAmbienteMin"
+                name="umbralHumedadAmbienteMin"
+                label="Humedad Ambiente Mínima (%)"
+                type="number"
+                step="0.1"
+                value={formData.umbralHumedadAmbienteMin}
+                onChange={handleChange}
+                placeholder="Ej: 30"
+              />
+              <Input
+                id="umbralHumedadAmbienteMax"
+                name="umbralHumedadAmbienteMax"
+                label="Humedad Ambiente Máxima (%)"
+                type="number"
+                step="0.1"
+                value={formData.umbralHumedadAmbienteMax}
+                onChange={handleChange}
+                placeholder="Ej: 90"
+              />
+              <Input
+                id="umbralHumedadSueloMin"
+                name="umbralHumedadSueloMin"
+                label="Humedad Suelo Mínima (%)"
+                type="number"
+                step="0.1"
+                value={formData.umbralHumedadSueloMin}
+                onChange={handleChange}
+                placeholder="Ej: 30"
+              />
+              <Input
+                id="umbralCO2Max"
+                name="umbralCO2Max"
+                label="CO2 Máximo (ppm)"
+                type="number"
+                step="1"
+                value={formData.umbralCO2Max}
+                onChange={handleChange}
+                placeholder="Ej: 1000"
+              />
             </div>
           </div>
 
