@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getCentroById, deleteCentro, getArbolesByCentro } from '../../services/centrosService';
+import { getDispositivosByCentro, deleteDispositivo } from '../../services/dispositivosService';
 import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
 import Alert from '../../components/common/Alert';
@@ -26,15 +27,19 @@ function DetalleCentro() {
 
   const [centro, setCentro] = useState(null);
   const [arboles, setArboles] = useState([]);
+  const [dispositivos, setDispositivos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteDispositivoModal, setShowDeleteDispositivoModal] = useState(false);
+  const [dispositivoAEliminar, setDispositivoAEliminar] = useState(null);
   const { isAdmin, canManageCenter } = usePermissions();
 
   useEffect(() => {
     cargarCentro();
     cargarArboles();
+    cargarDispositivos();
 
     // Mostrar mensaje de éxito si viene del formulario
     if (location.state?.mensaje) {
@@ -65,6 +70,30 @@ function DetalleCentro() {
     } catch (err) {
       console.error('Error cargando árboles:', err);
       // No mostramos error aquí, puede ser que simplemente no tenga árboles
+    }
+  };
+
+  const cargarDispositivos = async () => {
+    try {
+      const dispositivosData = await getDispositivosByCentro(id);
+      setDispositivos(dispositivosData);
+    } catch (err) {
+      console.error('Error cargando dispositivos:', err);
+    }
+  };
+
+  const handleEliminarDispositivo = async () => {
+    if (!dispositivoAEliminar) return;
+    try {
+      await deleteDispositivo(dispositivoAEliminar.id);
+      setDispositivos(prev => prev.filter(d => d.id !== dispositivoAEliminar.id));
+      setSuccessMessage('Dispositivo eliminado correctamente');
+    } catch (err) {
+      console.error('Error eliminando dispositivo:', err);
+      setError('No se pudo eliminar el dispositivo.');
+    } finally {
+      setShowDeleteDispositivoModal(false);
+      setDispositivoAEliminar(null);
     }
   };
 
@@ -347,6 +376,144 @@ function DetalleCentro() {
           </div>
         )}
       </div>
+
+      {/* Dispositivos del Centro */}
+      <div className="mt-6 bg-white rounded-lg shadow p-6">
+        <div className="flex items-center justify-between mb-4 border-b pb-2">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Dispositivos ESP32 ({dispositivos.length})
+          </h2>
+          {canManageCenter(centro.id) && (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => navigate('/dispositivos/nuevo', { state: { centroId: centro.id } })}
+            >
+              <Plus className="w-4 h-4 mr-1 inline" /> Añadir Dispositivo
+            </Button>
+          )}
+        </div>
+        {dispositivos.length === 0 ? (
+          <p className="text-gray-500 text-center py-4">
+            Este centro aún no tiene dispositivos registrados.
+          </p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-brand-bg-green">
+              <thead className="bg-brand-primary">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Dirección MAC
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Estado
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Frecuencia (seg)
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Última conexión
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Acciones
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-brand-bg-green">
+                {dispositivos.map((dispositivo) => (
+                  <tr key={dispositivo.id} className="hover:bg-brand-primary/5">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono font-medium text-gray-900">
+                      {dispositivo.macAddress}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        dispositivo.activo
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {dispositivo.activo ? 'Activo' : 'Inactivo'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {dispositivo.frecuenciaLecturaSeg} s
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {dispositivo.ultimaConexion
+                        ? new Date(dispositivo.ultimaConexion).toLocaleString('es-ES', {
+                            day: '2-digit', month: '2-digit', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit',
+                          })
+                        : 'Nunca'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => navigate(`/dispositivos/${dispositivo.id}/lecturas`)}
+                        >
+                          Histórico
+                        </Button>
+                        {canManageCenter(centro.id) && (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => navigate(`/dispositivos/${dispositivo.id}/editar`)}
+                            >
+                              Editar
+                            </Button>
+                            {isAdmin() && (
+                              <Button
+                                variant="danger"
+                                size="sm"
+                                onClick={() => {
+                                  setDispositivoAEliminar(dispositivo);
+                                  setShowDeleteDispositivoModal(true);
+                                }}
+                              >
+                                Eliminar
+                              </Button>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Modal de confirmación para eliminar dispositivo */}
+      {showDeleteDispositivoModal && dispositivoAEliminar && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Confirmar Eliminación
+            </h3>
+            <p className="text-gray-600 mb-4">
+              ¿Estás seguro de que deseas eliminar el dispositivo{' '}
+              <strong className="font-mono">{dispositivoAEliminar.macAddress}</strong>?
+            </p>
+            <div className="bg-red-50 border border-red-200 rounded p-3 mb-4">
+              <p className="text-sm text-red-800">
+                Se eliminarán también todas sus lecturas y alertas asociadas.
+              </p>
+            </div>
+            <div className="flex gap-3 justify-end">
+              <Button onClick={() => { setShowDeleteDispositivoModal(false); setDispositivoAEliminar(null); }} variant="outline">
+                Cancelar
+              </Button>
+              <Button onClick={handleEliminarDispositivo} variant="danger">
+                Eliminar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal de confirmación para eliminar */}
       {showDeleteModal && (
