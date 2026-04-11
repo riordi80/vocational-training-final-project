@@ -1,10 +1,8 @@
 package com.example.gardenmonitor.controller;
 
 import com.example.gardenmonitor.dto.LecturaRequest;
-import com.example.gardenmonitor.model.Arbol;
 import com.example.gardenmonitor.model.DispositivoEsp32;
 import com.example.gardenmonitor.model.Lectura;
-import com.example.gardenmonitor.repository.ArbolRepository;
 import com.example.gardenmonitor.repository.DispositivoEsp32Repository;
 import com.example.gardenmonitor.repository.LecturaRepository;
 import com.example.gardenmonitor.dto.LecturaMuestraProjection;
@@ -24,7 +22,7 @@ import java.util.List;
  * Controlador REST para gestionar lecturas de sensores IoT.
  * <p>
  * Proporciona endpoints para recibir lecturas enviadas por dispositivos ESP32
- * y para consultar el histórico de lecturas de un árbol. Soporta paginación
+ * y para consultar el histórico de lecturas de un dispositivo. Soporta paginación
  * server-side y stride sampling para optimizar la carga de datos en gráficas.
  * </p>
  *
@@ -41,9 +39,6 @@ public class LecturaController {
     @Autowired
     private DispositivoEsp32Repository dispositivoEsp32Repository;
 
-    @Autowired
-    private ArbolRepository arbolRepository;
-
     /**
      * Recibe una lectura enviada por un dispositivo ESP32.
      * <p>
@@ -51,7 +46,7 @@ public class LecturaController {
      * </p>
      * <ol>
      *   <li>Busca el dispositivo por dirección MAC</li>
-     *   <li>Verifica que el dispositivo tiene un árbol asignado</li>
+     *   <li>Verifica que el dispositivo tiene un centro asignado</li>
      *   <li>Crea la lectura con timestamp actual</li>
      *   <li>Actualiza la fecha de última conexión del dispositivo</li>
      * </ol>
@@ -59,7 +54,7 @@ public class LecturaController {
      * @param request datos de la lectura enviada por el ESP32 (validado con @Valid)
      * @return la lectura registrada
      * @throws ResponseStatusException si el dispositivo no está registrado (404)
-     *                                 o no tiene árbol asignado (422)
+     *                                 o no tiene centro asignado (422)
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -71,18 +66,16 @@ public class LecturaController {
                         HttpStatus.NOT_FOUND,
                         "Dispositivo no registrado: " + request.getMacAddress()));
 
-        // 2. Verificar que tiene árbol asignado
-        Arbol arbol = dispositivo.getArbol();
-        if (arbol == null) {
+        // 2. Verificar que tiene centro asignado
+        if (dispositivo.getCentroEducativo() == null) {
             throw new ResponseStatusException(
                     HttpStatus.UNPROCESSABLE_ENTITY,
-                    "Dispositivo sin árbol asignado: " + request.getMacAddress());
+                    "Dispositivo sin centro asignado: " + request.getMacAddress());
         }
 
         // 3. Crear lectura
         Lectura lectura = new Lectura();
         lectura.setTimestamp(LocalDateTime.now());
-        lectura.setArbol(arbol);
         lectura.setDispositivo(dispositivo);
         lectura.setTemperatura(request.getTemperatura());
         lectura.setHumedadAmbiente(request.getHumedadAmbiente());
@@ -99,49 +92,49 @@ public class LecturaController {
     }
 
     /**
-     * Obtiene las lecturas de un árbol paginadas, ordenadas por timestamp descendente.
+     * Obtiene las lecturas de un dispositivo paginadas, ordenadas por timestamp descendente.
      *
-     * @param arbolId identificador del árbol
-     * @param page    número de página (0-indexed, por defecto 0)
-     * @param size    tamaño de página (por defecto 20)
-     * @return página de lecturas del árbol
-     * @throws ResponseStatusException si no se encuentra el árbol (404)
+     * @param dispositivoId identificador del dispositivo
+     * @param page          número de página (0-indexed, por defecto 0)
+     * @param size          tamaño de página (por defecto 20)
+     * @return página de lecturas del dispositivo
+     * @throws ResponseStatusException si no se encuentra el dispositivo (404)
      */
-    @GetMapping("/arbol/{arbolId}")
-    public Page<Lectura> obtenerLecturasPorArbol(
-            @PathVariable("arbolId") Long arbolId,
+    @GetMapping("/dispositivo/{dispositivoId}")
+    public Page<Lectura> obtenerLecturasPorDispositivo(
+            @PathVariable("dispositivoId") Long dispositivoId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        Arbol arbol = arbolRepository.findById(arbolId)
+        DispositivoEsp32 dispositivo = dispositivoEsp32Repository.findById(dispositivoId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Árbol no encontrado"));
-        return lecturaRepository.findByArbolOrderByTimestampDesc(
-                arbol, PageRequest.of(page, size));
+                        HttpStatus.NOT_FOUND, "Dispositivo no encontrado"));
+        return lecturaRepository.findByDispositivoOrderByTimestampDesc(
+                dispositivo, PageRequest.of(page, size));
     }
 
     /**
-     * Obtiene las lecturas de un árbol en un rango de fechas, paginadas.
+     * Obtiene las lecturas de un dispositivo en un rango de fechas, paginadas.
      *
-     * @param arbolId identificador del árbol
-     * @param desde   inicio del rango temporal (ISO 8601)
-     * @param hasta   fin del rango temporal (ISO 8601)
-     * @param page    número de página (0-indexed, por defecto 0)
-     * @param size    tamaño de página (por defecto 20)
-     * @return página de lecturas del árbol en el rango indicado
-     * @throws ResponseStatusException si no se encuentra el árbol (404)
+     * @param dispositivoId identificador del dispositivo
+     * @param desde         inicio del rango temporal (ISO 8601)
+     * @param hasta         fin del rango temporal (ISO 8601)
+     * @param page          número de página (0-indexed, por defecto 0)
+     * @param size          tamaño de página (por defecto 20)
+     * @return página de lecturas del dispositivo en el rango indicado
+     * @throws ResponseStatusException si no se encuentra el dispositivo (404)
      */
-    @GetMapping("/arbol/{arbolId}/rango")
+    @GetMapping("/dispositivo/{dispositivoId}/rango")
     public Page<Lectura> obtenerLecturasPorRango(
-            @PathVariable("arbolId") Long arbolId,
+            @PathVariable("dispositivoId") Long dispositivoId,
             @RequestParam("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime desde,
             @RequestParam("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime hasta,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        Arbol arbol = arbolRepository.findById(arbolId)
+        DispositivoEsp32 dispositivo = dispositivoEsp32Repository.findById(dispositivoId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Árbol no encontrado"));
-        return lecturaRepository.findByArbolAndTimestampBetweenOrderByTimestampDesc(
-                arbol, desde, hasta, PageRequest.of(page, size));
+                        HttpStatus.NOT_FOUND, "Dispositivo no encontrado"));
+        return lecturaRepository.findByDispositivoAndTimestampBetweenOrderByTimestampDesc(
+                dispositivo, desde, hasta, PageRequest.of(page, size));
     }
 
     /**
@@ -161,19 +154,19 @@ public class LecturaController {
      *   <li>ANIO — últimos 365 días</li>
      * </ul>
      *
-     * @param arbolId identificador del árbol
-     * @param periodo período de tiempo a consultar
+     * @param dispositivoId identificador del dispositivo
+     * @param periodo       período de tiempo a consultar
      * @return lista de lecturas muestreadas para la gráfica
-     * @throws ResponseStatusException si no se encuentra el árbol (404) o el período es inválido (400)
+     * @throws ResponseStatusException si no se encuentra el dispositivo (404) o el período es inválido (400)
      */
-    @GetMapping("/arbol/{arbolId}/grafica")
+    @GetMapping("/dispositivo/{dispositivoId}/grafica")
     public List<LecturaMuestraProjection> obtenerLecturasParaGrafica(
-            @PathVariable("arbolId") Long arbolId,
+            @PathVariable("dispositivoId") Long dispositivoId,
             @RequestParam("periodo") String periodo) {
 
-        Arbol arbol = arbolRepository.findById(arbolId)
+        DispositivoEsp32 dispositivo = dispositivoEsp32Repository.findById(dispositivoId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Árbol no encontrado"));
+                        HttpStatus.NOT_FOUND, "Dispositivo no encontrado"));
 
         LocalDateTime hasta = LocalDateTime.now();
         LocalDateTime desde = switch (periodo.toUpperCase()) {
@@ -187,6 +180,6 @@ public class LecturaController {
                     ". Valores aceptados: DIA, SEMANA, MES, SEMESTRE, ANIO");
         };
 
-        return lecturaRepository.findMuestraByArbolAndRango(arbol.getId(), desde, hasta);
+        return lecturaRepository.findMuestraByDispositivoAndRango(dispositivo.getId(), desde, hasta);
     }
 }

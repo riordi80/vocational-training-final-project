@@ -1,7 +1,9 @@
 package com.example.gardenmonitor.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
@@ -19,7 +21,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "dispositivo_esp32", indexes = {
-        @Index(name = "idx_dispositivo_esp32_activo", columnList = "activo")
+        @Index(name = "idx_dispositivo_esp32_activo", columnList = "activo"),
+        @Index(name = "idx_dispositivo_centro", columnList = "centro_id")
 })
 public class DispositivoEsp32 {
 
@@ -40,14 +43,17 @@ public class DispositivoEsp32 {
     private String macAddress;
 
     /**
-     * Árbol asociado al dispositivo ESP32.
+     * Centro educativo al que pertenece este dispositivo ESP32.
      * <p>
-     * Relación One-to-One bidireccional: un dispositivo monitoriza un único árbol.
+     * Relación Many-to-One: un centro puede tener varios dispositivos.
+     * Si se elimina el centro, se eliminan en cascada todos sus dispositivos.
      * </p>
      */
-    @JsonIgnore
-    @OneToOne(mappedBy = "dispositivoEsp32")
-    private Arbol arbol;
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "centro_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private CentroEducativo centroEducativo;
 
     @Column(name = "activo", nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
     private boolean activo;
@@ -85,27 +91,27 @@ public class DispositivoEsp32 {
      * </p>
      *
      * @param macAddress dirección MAC del dispositivo (formato XX:XX:XX:XX:XX:XX)
-     * @param arbol árbol asociado al dispositivo (puede ser null)
+     * @param centroEducativo centro educativo al que pertenece el dispositivo
      * @param activo indica si el dispositivo está activo
      * @param frecuenciaLecturaSeg frecuencia de lectura en segundos (por defecto 30)
      */
-    public DispositivoEsp32(String macAddress, Arbol arbol, boolean activo, int frecuenciaLecturaSeg) {
+    public DispositivoEsp32(String macAddress, CentroEducativo centroEducativo, boolean activo, int frecuenciaLecturaSeg) {
         this.macAddress = macAddress;
-        this.arbol = arbol;
+        this.centroEducativo = centroEducativo;
         this.activo = activo;
         this.frecuenciaLecturaSeg = frecuenciaLecturaSeg;
     }
 
     public Long getId() {return id;}
     public String getMacAddress() {return macAddress;}
-    public Arbol getArbol() {return arbol;}
+    public CentroEducativo getCentroEducativo() {return centroEducativo;}
     public boolean isActivo() {return activo;}
     public LocalDateTime getUltimaConexion() {return ultimaConexion;}
     public int getFrecuenciaLecturaSeg() {return frecuenciaLecturaSeg;}
 
     public void setId(Long id) {this.id = id;}
     public void setMacAddress(String macAddress) {this.macAddress = macAddress;}
-    public void setArbol(Arbol arbol) {this.arbol = arbol;}
+    public void setCentroEducativo(CentroEducativo centroEducativo) {this.centroEducativo = centroEducativo;}
     public void setActivo(boolean activo) {this.activo = activo;}
     public void setUltimaConexion(LocalDateTime ultimaConexion) {this.ultimaConexion = ultimaConexion;}
     public void setFrecuenciaLecturaSeg(int frecuenciaLecturaSeg) {this.frecuenciaLecturaSeg = frecuenciaLecturaSeg;}

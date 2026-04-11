@@ -28,7 +28,6 @@ import jakarta.validation.constraints.Past;
 @Entity
 @Table(name = "arbol", indexes = {
         @Index(name = "idx_arbol_centro", columnList = "centro_id"),
-        @Index(name = "idx_arbol_dispositivo_esp32", columnList = "dispositivo_id"),
         @Index(name = "idx_arbol_especie", columnList = "especie")
 })
 public class Arbol {
@@ -71,17 +70,6 @@ public class Arbol {
 
     @Column(name = "ubicacion_especifica", length = 200)
     private String ubicacionEspecifica;
-
-    /**
-     * Dispositivo ESP32 asociado al árbol para monitorización.
-     * <p>
-     * Relación One-to-One: un árbol tiene un único dispositivo.
-     * Si se elimina el dispositivo, se establece a NULL (ON DELETE SET NULL).
-     * </p>
-     */
-    @OneToOne
-    @JoinColumn(name = "dispositivo_id", foreignKey = @ForeignKey(name = "fk_dispositivo_esp32", foreignKeyDefinition = "FOREIGN KEY (dispositivo_id) REFERENCES dispositivo_esp32(id) ON DELETE SET NULL"))
-    private DispositivoEsp32 dispositivoEsp32;
 
     @Column(name = "umbral_temp_min", columnDefinition = "DECIMAL(5,2) DEFAULT 5.00")
     @DecimalMin(value = "-15")
@@ -130,7 +118,6 @@ public class Arbol {
      * @param especie especie del árbol (máx 150 caracteres)
      * @param fechaPlantacion fecha de plantación (debe ser en el pasado)
      * @param ubicacionEspecifica ubicación específica dentro del centro (máx 200 caracteres)
-     * @param dispositivoEsp32 dispositivo ESP32 asociado (puede ser null)
      * @param umbralTempMin temperatura mínima de alerta (rango: -15 a 45°C)
      * @param umbralTempMax temperatura máxima de alerta (rango: -15 a 45°C)
      * @param umbralHumedadAmbienteMin humedad ambiente mínima de alerta (rango: 0.01 a 100%)
@@ -144,7 +131,6 @@ public class Arbol {
             String especie,
             LocalDate fechaPlantacion,
             String ubicacionEspecifica,
-            DispositivoEsp32 dispositivoEsp32,
             BigDecimal umbralTempMin,
             BigDecimal umbralTempMax,
             BigDecimal umbralHumedadAmbienteMin,
@@ -157,7 +143,6 @@ public class Arbol {
         this.especie = especie;
         this.fechaPlantacion = fechaPlantacion;
         this.ubicacionEspecifica = ubicacionEspecifica;
-        this.dispositivoEsp32 = dispositivoEsp32;
         this.umbralTempMin = umbralTempMin;
         this.umbralTempMax = umbralTempMax;
         this.umbralHumedadAmbienteMin = umbralHumedadAmbienteMin;
@@ -188,10 +173,6 @@ public class Arbol {
 
     public String getUbicacionEspecifica() {
         return ubicacionEspecifica;
-    }
-
-    public DispositivoEsp32 getDispositivoEsp32() {
-        return dispositivoEsp32;
     }
 
     public BigDecimal getUmbralTempMin() {
@@ -240,10 +221,6 @@ public class Arbol {
 
     public void setUbicacionEspecifica(String ubicacionEspecifica) {
         this.ubicacionEspecifica = ubicacionEspecifica;
-    }
-
-    public void setDispositivoEsp32(DispositivoEsp32 dispositivoEsp32) {
-        this.dispositivoEsp32 = dispositivoEsp32;
     }
 
     public void setUmbralTempMin(BigDecimal umbralTempMin) {

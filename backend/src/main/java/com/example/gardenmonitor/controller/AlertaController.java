@@ -1,10 +1,10 @@
 package com.example.gardenmonitor.controller;
 
 import com.example.gardenmonitor.model.Alerta;
-import com.example.gardenmonitor.model.Arbol;
+import com.example.gardenmonitor.model.DispositivoEsp32;
 import com.example.gardenmonitor.model.EstadoAlerta;
 import com.example.gardenmonitor.repository.AlertaRepository;
-import com.example.gardenmonitor.repository.ArbolRepository;
+import com.example.gardenmonitor.repository.DispositivoEsp32Repository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +17,9 @@ import java.util.List;
  * Controlador REST para gestionar alertas del sistema de monitorización.
  * <p>
  * Proporciona endpoints para operaciones CRUD de alertas, así como
- * consultas filtradas por árbol y por estado.
+ * consultas filtradas por dispositivo y por estado.
  * Las alertas se generan cuando los valores de sensores superan los umbrales
- * configurados en cada árbol.
+ * configurados en cada dispositivo.
  * </p>
  *
  * @author Richard Ortiz y Enrique Pérez
@@ -33,7 +33,7 @@ public class AlertaController {
     private AlertaRepository alertaRepository;
 
     @Autowired
-    private ArbolRepository arbolRepository;
+    private DispositivoEsp32Repository dispositivoRepository;
 
     /**
      * Obtiene todas las alertas del sistema.
@@ -60,18 +60,18 @@ public class AlertaController {
     }
 
     /**
-     * Obtiene todas las alertas de un árbol específico.
+     * Obtiene todas las alertas de un dispositivo específico.
      *
-     * @param arbolId identificador del árbol
-     * @return lista de alertas del árbol
-     * @throws ResponseStatusException si no se encuentra el árbol (404)
+     * @param dispositivoId identificador del dispositivo
+     * @return lista de alertas del dispositivo
+     * @throws ResponseStatusException si no se encuentra el dispositivo (404)
      */
-    @GetMapping("/arbol/{arbolId}")
-    public List<Alerta> obtenerAlertasPorArbol(@PathVariable("arbolId") Long arbolId) {
-        if (!arbolRepository.existsById(arbolId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Árbol no encontrado");
+    @GetMapping("/dispositivo/{dispositivoId}")
+    public List<Alerta> obtenerAlertasPorDispositivo(@PathVariable("dispositivoId") Long dispositivoId) {
+        if (!dispositivoRepository.existsById(dispositivoId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Dispositivo no encontrado");
         }
-        return alertaRepository.findByArbol_Id(arbolId);
+        return alertaRepository.findByDispositivo_Id(dispositivoId);
     }
 
     /**
@@ -86,43 +86,43 @@ public class AlertaController {
     }
 
     /**
-     * Obtiene las alertas de un árbol filtradas por estado.
+     * Obtiene las alertas de un dispositivo filtradas por estado.
      *
-     * @param arbolId identificador del árbol
-     * @param estado  estado de las alertas a filtrar (ACTIVA, RESUELTA, IGNORADA)
-     * @return lista de alertas del árbol con el estado indicado
-     * @throws ResponseStatusException si no se encuentra el árbol (404)
+     * @param dispositivoId identificador del dispositivo
+     * @param estado        estado de las alertas a filtrar (ACTIVA, RESUELTA, IGNORADA)
+     * @return lista de alertas del dispositivo con el estado indicado
+     * @throws ResponseStatusException si no se encuentra el dispositivo (404)
      */
-    @GetMapping("/arbol/{arbolId}/estado/{estado}")
-    public List<Alerta> obtenerAlertasPorArbolYEstado(
-            @PathVariable("arbolId") Long arbolId,
+    @GetMapping("/dispositivo/{dispositivoId}/estado/{estado}")
+    public List<Alerta> obtenerAlertasPorDispositivoYEstado(
+            @PathVariable("dispositivoId") Long dispositivoId,
             @PathVariable("estado") EstadoAlerta estado) {
-        if (!arbolRepository.existsById(arbolId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Árbol no encontrado");
+        if (!dispositivoRepository.existsById(dispositivoId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Dispositivo no encontrado");
         }
-        return alertaRepository.findByArbol_IdAndEstado(arbolId, estado);
+        return alertaRepository.findByDispositivo_IdAndEstado(dispositivoId, estado);
     }
 
     /**
-     * Crea una nueva alerta para un árbol.
+     * Crea una nueva alerta para un dispositivo.
      * <p>
-     * Verifica que el árbol indicado exista antes de crear la alerta.
+     * Verifica que el dispositivo indicado exista antes de crear la alerta.
      * El estado inicial es ACTIVA y el timestamp se establece automáticamente.
      * </p>
      *
      * @param alerta datos de la alerta a crear (validado con @Valid)
      * @return la alerta creada
-     * @throws ResponseStatusException si no se encuentra el árbol (404)
+     * @throws ResponseStatusException si no se encuentra el dispositivo (404)
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Alerta crearAlerta(@Valid @RequestBody Alerta alerta) {
-        Long arbolId = alerta.getArbol() != null ? alerta.getArbol().getId() : null;
-        if (arbolId == null || !arbolRepository.existsById(arbolId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Árbol no encontrado");
+        Long dispositivoId = alerta.getDispositivo() != null ? alerta.getDispositivo().getId() : null;
+        if (dispositivoId == null || !dispositivoRepository.existsById(dispositivoId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Dispositivo no encontrado");
         }
-        Arbol arbol = arbolRepository.findById(arbolId).get();
-        alerta.setArbol(arbol);
+        DispositivoEsp32 dispositivo = dispositivoRepository.findById(dispositivoId).get();
+        alerta.setDispositivo(dispositivo);
         return alertaRepository.save(alerta);
     }
 
@@ -130,7 +130,7 @@ public class AlertaController {
      * Actualiza una alerta existente.
      * <p>
      * Permite modificar el tipo, mensaje, estado y fecha de resolución.
-     * El árbol asociado no se puede cambiar una vez creada la alerta.
+     * El dispositivo asociado no se puede cambiar una vez creada la alerta.
      * </p>
      *
      * @param id      identificador de la alerta a actualizar

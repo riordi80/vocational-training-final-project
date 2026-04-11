@@ -55,15 +55,17 @@ CREATE INDEX idx_centro_educativo_nombre ON centro_educativo(nombre);
 CREATE TABLE dispositivo_esp32 (
     id BIGSERIAL,
     mac_address VARCHAR(17) NOT NULL,
-    arbol_id BIGINT,
+    centro_id BIGINT NOT NULL,
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     ultima_conexion TIMESTAMPTZ,
     frecuencia_lectura_seg INTEGER DEFAULT 30,
     CONSTRAINT pk_dispositivo_esp32 PRIMARY KEY (id),
-    CONSTRAINT uq_dispositivo_mac_address UNIQUE (mac_address)
+    CONSTRAINT uq_dispositivo_mac_address UNIQUE (mac_address),
+    CONSTRAINT fk_dispositivo_centro FOREIGN KEY (centro_id) REFERENCES centro_educativo(id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_dispositivo_activo ON dispositivo_esp32(activo);
+CREATE INDEX idx_dispositivo_centro ON dispositivo_esp32(centro_id);
 
 -- ============================================
 -- 4. TABLA: arbol
@@ -75,7 +77,6 @@ CREATE TABLE arbol (
     especie VARCHAR(150) NOT NULL,
     fecha_plantacion DATE NOT NULL,
     ubicacion_especifica VARCHAR(200),
-    dispositivo_id BIGINT,
     -- Umbrales de temperatura
     umbral_temp_min DECIMAL(5, 2) DEFAULT 5.00,
     umbral_temp_max DECIMAL(5, 2) DEFAULT 40.00,
@@ -89,17 +90,11 @@ CREATE TABLE arbol (
     -- Absorción de CO2 estimada al año (kg CO2/año)
     absorcion_co2_anual DECIMAL(8, 2),
     CONSTRAINT pk_arbol PRIMARY KEY (id),
-    CONSTRAINT fk_arbol_centro FOREIGN KEY (centro_id) REFERENCES centro_educativo(id) ON DELETE CASCADE,
-    CONSTRAINT fk_arbol_dispositivo FOREIGN KEY (dispositivo_id) REFERENCES dispositivo_esp32(id) ON DELETE SET NULL,
-    CONSTRAINT uq_arbol_dispositivo UNIQUE (dispositivo_id)
+    CONSTRAINT fk_arbol_centro FOREIGN KEY (centro_id) REFERENCES centro_educativo(id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_arbol_centro ON arbol(centro_id);
 CREATE INDEX idx_arbol_especie ON arbol(especie);
-
--- Actualizar foreign key en dispositivo_esp32
-ALTER TABLE dispositivo_esp32
-ADD CONSTRAINT fk_dispositivo_arbol FOREIGN KEY (arbol_id) REFERENCES arbol(id) ON DELETE SET NULL;
 
 -- ============================================
 -- 5. TABLA: lectura (HYPERTABLE)
@@ -107,7 +102,6 @@ ADD CONSTRAINT fk_dispositivo_arbol FOREIGN KEY (arbol_id) REFERENCES arbol(id) 
 CREATE TABLE lectura (
     id BIGSERIAL NOT NULL,
     timestamp TIMESTAMPTZ NOT NULL,
-    arbol_id BIGINT NOT NULL,
     dispositivo_id BIGINT NOT NULL,
     -- Sensores obligatorios (configuración básica)
     temperatura DECIMAL(5, 2) NOT NULL,
@@ -118,7 +112,6 @@ CREATE TABLE lectura (
     luz1 DECIMAL(5, 2),                         -- NULL si no tiene sensor LDR 1
     luz2 DECIMAL(5, 2),                         -- NULL si no tiene sensor LDR 2
     CONSTRAINT pk_lectura PRIMARY KEY (id, timestamp),
-    CONSTRAINT fk_lectura_arbol FOREIGN KEY (arbol_id) REFERENCES arbol(id) ON DELETE CASCADE,
     CONSTRAINT fk_lectura_dispositivo FOREIGN KEY (dispositivo_id) REFERENCES dispositivo_esp32(id) ON DELETE CASCADE,
     -- Validaciones de rangos razonables
     CONSTRAINT chk_temperatura CHECK (temperatura BETWEEN -50.00 AND 80.00),
@@ -132,7 +125,6 @@ CREATE TABLE lectura (
 -- Convertir a hypertable (TimescaleDB)
 SELECT create_hypertable('lectura', 'timestamp');
 
-CREATE INDEX idx_lectura_arbol_timestamp ON lectura(arbol_id, timestamp DESC);
 CREATE INDEX idx_lectura_dispositivo_timestamp ON lectura(dispositivo_id, timestamp DESC);
 
 -- ============================================
@@ -140,14 +132,14 @@ CREATE INDEX idx_lectura_dispositivo_timestamp ON lectura(dispositivo_id, timest
 -- ============================================
 CREATE TABLE alerta (
     id BIGSERIAL,
-    arbol_id BIGINT NOT NULL,
+    dispositivo_id BIGINT,
     tipo_alerta VARCHAR(50) NOT NULL,
     timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     mensaje TEXT NOT NULL,
     estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVA',
     fecha_resolucion TIMESTAMPTZ,
     CONSTRAINT pk_alerta PRIMARY KEY (id),
-    CONSTRAINT fk_alerta_arbol FOREIGN KEY (arbol_id) REFERENCES arbol(id) ON DELETE CASCADE,
+    CONSTRAINT fk_alerta_dispositivo FOREIGN KEY (dispositivo_id) REFERENCES dispositivo_esp32(id) ON DELETE CASCADE,
     CONSTRAINT chk_alerta_tipo CHECK (tipo_alerta IN (
         'TEMPERATURA_ALTA',
         'TEMPERATURA_BAJA',
@@ -160,7 +152,7 @@ CREATE TABLE alerta (
     CONSTRAINT chk_alerta_estado CHECK (estado IN ('ACTIVA', 'RESUELTA', 'IGNORADA'))
 );
 
-CREATE INDEX idx_alerta_arbol ON alerta(arbol_id);
+CREATE INDEX idx_alerta_dispositivo ON alerta(dispositivo_id);
 CREATE INDEX idx_alerta_estado ON alerta(estado);
 CREATE INDEX idx_alerta_timestamp ON alerta(timestamp DESC);
 

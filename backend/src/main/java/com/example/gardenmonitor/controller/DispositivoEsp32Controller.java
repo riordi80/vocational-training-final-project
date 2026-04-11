@@ -2,6 +2,7 @@ package com.example.gardenmonitor.controller;
 
 import com.example.gardenmonitor.model.DispositivoEsp32;
 import com.example.gardenmonitor.repository.DispositivoEsp32Repository;
+import com.example.gardenmonitor.repository.CentroEducativoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,9 @@ public class DispositivoEsp32Controller {
 
     @Autowired
     private DispositivoEsp32Repository dispositivoRepository;
+
+    @Autowired
+    private CentroEducativoRepository centroRepository;
 
     /**
      * Obtiene todos los dispositivos ESP32 registrados.
@@ -62,6 +66,21 @@ public class DispositivoEsp32Controller {
     }
 
     /**
+     * Obtiene todos los dispositivos ESP32 de un centro educativo.
+     *
+     * @param centroId identificador del centro educativo
+     * @return lista de dispositivos del centro
+     * @throws ResponseStatusException si no se encuentra el centro (404)
+     */
+    @GetMapping("/centro/{centroId}")
+    public List<DispositivoEsp32> obtenerDispositivosPorCentro(@PathVariable("centroId") Long centroId) {
+        if (!centroRepository.existsById(centroId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Centro educativo no encontrado");
+        }
+        return dispositivoRepository.findByCentroEducativo_Id(centroId);
+    }
+
+    /**
      * Registra un nuevo dispositivo ESP32.
      * <p>
      * Valida que no exista otro dispositivo con la misma dirección MAC.
@@ -85,7 +104,7 @@ public class DispositivoEsp32Controller {
      * Actualiza un dispositivo ESP32 existente.
      * <p>
      * Valida que la nueva dirección MAC no esté ya registrada en otro dispositivo.
-     * La relación con el árbol se gestiona desde ArbolController (PATCH /api/arboles/{id}/dispositivo).
+     * La relación con el centro se gestiona mediante el campo centroEducativo del cuerpo de la petición.
      * </p>
      *
      * @param id      identificador del dispositivo a actualizar
@@ -119,9 +138,8 @@ public class DispositivoEsp32Controller {
     /**
      * Elimina un dispositivo ESP32 por su ID.
      * <p>
-     * IMPORTANTE: Al eliminar un dispositivo, la FK en arbol.dispositivo_id
-     * se establece a NULL (ON DELETE SET NULL) y se eliminan sus lecturas asociadas
-     * (ON DELETE CASCADE en la tabla lectura).
+     * IMPORTANTE: Al eliminar un dispositivo, se eliminan en cascada todas sus
+     * lecturas y alertas asociadas (ON DELETE CASCADE).
      * </p>
      *
      * @param id identificador del dispositivo a eliminar

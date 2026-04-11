@@ -29,7 +29,6 @@ import jakarta.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "lectura", indexes = {
-        @Index(name = "idx_lectura_arbol_timestamp", columnList = "arbol_id, timestamp DESC"),
         @Index(name = "idx_lectura_dispositivo_timestamp", columnList = "dispositivo_id, timestamp DESC")
 })
 public class Lectura {
@@ -50,18 +49,6 @@ public class Lectura {
     @NotNull
     @Column(name = "timestamp", nullable = false, columnDefinition = "TIMESTAMPTZ")
     private LocalDateTime timestamp;
-
-    /**
-     * Árbol asociado a esta lectura.
-     * <p>
-     * Relación Many-to-One: un árbol genera muchas lecturas.
-     * Si se elimina el árbol, se eliminan en cascada todas sus lecturas.
-     * </p>
-     */
-    @ManyToOne
-    @JoinColumn(name = "arbol_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Arbol arbol;
 
     /**
      * Dispositivo ESP32 que envió esta lectura.
@@ -115,7 +102,6 @@ public class Lectura {
 
     public Long getId() { return id; }
     public LocalDateTime getTimestamp() { return timestamp; }
-    public Arbol getArbol() { return arbol; }
     public DispositivoEsp32 getDispositivo() { return dispositivo; }
     public BigDecimal getTemperatura() { return temperatura; }
     public BigDecimal getHumedadAmbiente() { return humedadAmbiente; }
@@ -126,7 +112,6 @@ public class Lectura {
 
     public void setId(Long id) { this.id = id; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
-    public void setArbol(Arbol arbol) { this.arbol = arbol; }
     public void setDispositivo(DispositivoEsp32 dispositivo) { this.dispositivo = dispositivo; }
     public void setTemperatura(BigDecimal temperatura) { this.temperatura = temperatura; }
     public void setHumedadAmbiente(BigDecimal humedadAmbiente) { this.humedadAmbiente = humedadAmbiente; }
@@ -143,7 +128,6 @@ public class Lectura {
         return "Lectura{" +
                 "id=" + id +
                 ", timestamp=" + timestamp +
-                ", arbolId=" + (arbol != null ? arbol.getId() : null) +
                 ", dispositivoId=" + (dispositivo != null ? dispositivo.getId() : null) +
                 ", temperatura=" + temperatura +
                 ", humedadAmbiente=" + humedadAmbiente +
