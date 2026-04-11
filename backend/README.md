@@ -73,7 +73,7 @@ psql -U postgres -f create_database.sql
 El archivo [`create_database.sql`](./create_database.sql) contiene:
 - Creación de base de datos
 - Habilitación de extensión TimescaleDB
-- Creación de todas las tablas (8 entidades)
+- Creación de todas las tablas (9 entidades)
 - Configuración de hypertable para series temporales
 - Todos los índices y constraints
 
@@ -152,10 +152,13 @@ El servidor estará disponible en: `http://localhost:8080`
 - `PUT /api/centros/{id}` - Actualizar centro
 - `DELETE /api/centros/{id}` - Eliminar centro
 
-### Árboles (Relación 1:N)
-- `GET /api/centros/{id}/arboles` - Listar árboles de un centro
+### Árboles (Relación 1:N con CentroEducativo)
 - `GET /api/arboles` - Listar todos los árboles
 - `GET /api/arboles/{id}` - Obtener árbol
+- `GET /api/arboles/centro/{centroId}` - Árboles de un centro
+- `GET /api/arboles/especie/{especie}` - Árboles por especie
+- `GET /api/arboles/buscar/{nombre}` - Búsqueda por nombre (parcial, case-insensitive)
+- `GET /api/arboles/ordenados` - Todos los árboles ordenados por nombre
 - `POST /api/arboles` - Crear árbol
 - `PUT /api/arboles/{id}` - Actualizar árbol
 - `DELETE /api/arboles/{id}` - Eliminar árbol
@@ -175,26 +178,28 @@ El servidor estará disponible en: `http://localhost:8080`
 - `DELETE /api/usuario-centro/{id}` - Desasignar coordinador
 
 ### Lecturas IoT
-- `GET /api/lecturas/arbol/{id}` - Listar lecturas de un árbol (paginado)
-- `GET /api/lecturas/arbol/{id}/ultima` - Obtener la última lectura del árbol
-- `GET /api/lecturas/arbol/{id}/grafica?periodo={DIA|SEMANA|MES|SEMESTRE|ANIO}` - Stride sampling: hasta 400 lecturas reales del rango, sin promedios
-- `POST /api/lecturas` - Crear lectura (usado por el firmware ESP32)
+- `POST /api/lecturas` - Recibir lectura desde ESP32 (busca dispositivo por MAC, verifica que tenga centro asignado)
+- `GET /api/lecturas/dispositivo/{id}` - Lecturas de un dispositivo (paginado, DESC)
+- `GET /api/lecturas/dispositivo/{id}/rango?desde=&hasta=` - Lecturas en rango de fechas (paginado)
+- `GET /api/lecturas/dispositivo/{id}/grafica?periodo={DIA|SEMANA|MES|SEMESTRE|ANIO}` - Stride sampling: hasta 400 lecturas reales del rango, sin promedios
 
 ### Dispositivos ESP32
 - `GET /api/dispositivos` - Listar todos los dispositivos
 - `GET /api/dispositivos/{id}` - Obtener dispositivo
 - `GET /api/dispositivos/activos` - Listar dispositivos activos
-- `POST /api/dispositivos` - Registrar dispositivo (valida MAC única)
-- `PUT /api/dispositivos/{id}` - Actualizar dispositivo
-- `DELETE /api/dispositivos/{id}` - Eliminar dispositivo
+- `GET /api/dispositivos/centro/{centroId}` - Listar dispositivos de un centro educativo
+- `POST /api/dispositivos` - Registrar dispositivo (valida MAC única; requiere centroEducativo.id)
+- `PUT /api/dispositivos/{id}` - Actualizar dispositivo (MAC, activo, frecuencia, centro, umbrales)
+- `PATCH /api/dispositivos/{id}/umbrales` - Actualizar solo los umbrales de alerta
+- `DELETE /api/dispositivos/{id}` - Eliminar dispositivo (cascada: lecturas y alertas)
 
 ### Alertas
 - `GET /api/alertas` - Listar todas las alertas
 - `GET /api/alertas/{id}` - Obtener alerta
-- `GET /api/alertas/arbol/{arbolId}` - Alertas de un árbol
+- `GET /api/alertas/dispositivo/{dispositivoId}` - Alertas de un dispositivo
 - `GET /api/alertas/estado/{estado}` - Alertas por estado (ACTIVA, RESUELTA, IGNORADA)
-- `GET /api/alertas/arbol/{arbolId}/estado/{estado}` - Alertas de un árbol por estado
-- `POST /api/alertas` - Crear alerta
+- `GET /api/alertas/dispositivo/{dispositivoId}/estado/{estado}` - Alertas de un dispositivo por estado
+- `POST /api/alertas` - Crear alerta (requiere dispositivo.id)
 - `PUT /api/alertas/{id}` - Actualizar alerta (tipo, mensaje, estado, fechaResolucion)
 - `DELETE /api/alertas/{id}` - Eliminar alerta
 
@@ -268,7 +273,7 @@ Ver sección "Despliegue en Render" más abajo para detalles completos.
 
 ### [AED] Acceso a Datos
 - [x] Modelo de datos documentado
-- [x] Mapeo ORM con JPA completado (8 entidades JPA)
+- [x] Mapeo ORM con JPA completado (9 entidades JPA)
 - [x] Repositorios JPA con queries derivadas
 - [x] Relaciones bidireccionales implementadas
 
@@ -276,10 +281,12 @@ Ver sección "Despliegue en Render" más abajo para detalles completos.
 
 **API REST completada y desplegada en producción**
 
-- [x] 8 Entidades JPA con anotaciones completas, Javadoc y validaciones
+- [x] 9 Entidades JPA con anotaciones completas, Javadoc y validaciones
 - [x] Repositorios JPA con queries derivadas
 - [x] Relaciones bidireccionales (CentroEducativo ↔ Arbol)
 - [x] Relación N:M (Usuario ↔ CentroEducativo via UsuarioCentro)
+- [x] Modelo dispositivo-centro (1:N): un centro puede tener varios dispositivos ESP32
+- [x] Umbrales de alerta en DispositivoEsp32 (movidos desde Arbol)
 - [x] CRUD completo para Árboles, Centros Educativos y Usuarios
 - [x] Autenticación real contra BD (login/register via AuthController)
 - [x] Sistema de roles (ADMIN, COORDINADOR)
@@ -292,7 +299,7 @@ Ver sección "Despliegue en Render" más abajo para detalles completos.
 ## Archivos Importantes del Backend
 
 ### Scripts SQL
-- [`create_database.sql`](./create_database.sql) - Script completo de creación de base de datos (8 tablas)
+- [`create_database.sql`](./create_database.sql) - Script completo de creación de base de datos (9 tablas)
 - [`drop_tables.sql`](./drop_tables.sql) - Script para eliminar todas las tablas (resetear BD)
 
 ### Configuración
@@ -463,7 +470,7 @@ Ver [Manual de Instalación](../docs/MANUAL_DE_INSTALACION.md) para más detalle
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-02-22
+**Última actualización**: 2026-04-11
 
 ### Colaboradores
 

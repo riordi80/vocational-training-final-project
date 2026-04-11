@@ -53,7 +53,7 @@ const Footer = () => {
 
             {/* Barra de copyright */}
             <div className="bg-brand-primary border-t border-white/20 px-10 py-2 flex flex-wrap items-center gap-3">
-                <p className="text-xs text-white/70">© 2025 – Fundación Sergio Alonso</p>
+                <p className="text-xs text-white/70">© 2026 – Fundación Sergio Alonso</p>
                 <span className="text-white/30">|</span>
                 <a href="#" className="text-xs text-white/70 hover:text-brand-accent transition">Aviso Legal</a>
                 <span className="text-white/30">|</span>

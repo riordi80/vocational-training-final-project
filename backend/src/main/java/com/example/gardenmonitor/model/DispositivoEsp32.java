@@ -1,8 +1,13 @@
 package com.example.gardenmonitor.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -19,7 +24,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "dispositivo_esp32", indexes = {
-        @Index(name = "idx_dispositivo_esp32_activo", columnList = "activo")
+        @Index(name = "idx_dispositivo_esp32_activo", columnList = "activo"),
+        @Index(name = "idx_dispositivo_centro", columnList = "centro_id")
 })
 public class DispositivoEsp32 {
 
@@ -40,14 +46,17 @@ public class DispositivoEsp32 {
     private String macAddress;
 
     /**
-     * Árbol asociado al dispositivo ESP32.
+     * Centro educativo al que pertenece este dispositivo ESP32.
      * <p>
-     * Relación One-to-One bidireccional: un dispositivo monitoriza un único árbol.
+     * Relación Many-to-One: un centro puede tener varios dispositivos.
+     * Si se elimina el centro, se eliminan en cascada todos sus dispositivos.
      * </p>
      */
-    @JsonIgnore
-    @OneToOne(mappedBy = "dispositivoEsp32")
-    private Arbol arbol;
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "centro_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private CentroEducativo centroEducativo;
 
     @Column(name = "activo", nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
     private boolean activo;
@@ -73,6 +82,32 @@ public class DispositivoEsp32 {
     @Column(name = "frecuencia_lectura_seg", columnDefinition = "INTEGER DEFAULT 30")
     private int frecuenciaLecturaSeg;
 
+    @Column(name = "umbral_temp_min", columnDefinition = "DECIMAL(5,2) DEFAULT 5.00")
+    @DecimalMin(value = "-15")
+    private BigDecimal umbralTempMin;
+
+    @Column(name = "umbral_temp_max", columnDefinition = "DECIMAL(5,2) DEFAULT 40.00")
+    @DecimalMax(value = "45")
+    private BigDecimal umbralTempMax;
+
+    @Column(name = "umbral_humedad_ambiente_min", columnDefinition = "DECIMAL(5,2) DEFAULT 30.00")
+    @DecimalMin(value = "0.01")
+    @DecimalMax(value = "100")
+    private BigDecimal umbralHumedadAmbienteMin;
+
+    @Column(name = "umbral_humedad_ambiente_max", columnDefinition = "DECIMAL(5,2) DEFAULT 90.00")
+    @DecimalMin(value = "0.01")
+    @DecimalMax(value = "100")
+    private BigDecimal umbralHumedadAmbienteMax;
+
+    @Column(name = "umbral_humedad_suelo_min", columnDefinition = "DECIMAL(5,2) DEFAULT 30.00")
+    @DecimalMin(value = "0.01")
+    @DecimalMax(value = "100")
+    private BigDecimal umbralHumedadSueloMin;
+
+    @Column(name = "umbral_co2_max", columnDefinition = "DECIMAL(7,2) DEFAULT 1000.00")
+    private BigDecimal umbralCO2Max;
+
     /**
      * Constructor vacío requerido por JPA.
      */
@@ -85,30 +120,43 @@ public class DispositivoEsp32 {
      * </p>
      *
      * @param macAddress dirección MAC del dispositivo (formato XX:XX:XX:XX:XX:XX)
-     * @param arbol árbol asociado al dispositivo (puede ser null)
+     * @param centroEducativo centro educativo al que pertenece el dispositivo
      * @param activo indica si el dispositivo está activo
      * @param frecuenciaLecturaSeg frecuencia de lectura en segundos (por defecto 30)
      */
-    public DispositivoEsp32(String macAddress, Arbol arbol, boolean activo, int frecuenciaLecturaSeg) {
+    public DispositivoEsp32(String macAddress, CentroEducativo centroEducativo, boolean activo, int frecuenciaLecturaSeg) {
         this.macAddress = macAddress;
-        this.arbol = arbol;
+        this.centroEducativo = centroEducativo;
         this.activo = activo;
         this.frecuenciaLecturaSeg = frecuenciaLecturaSeg;
     }
 
     public Long getId() {return id;}
     public String getMacAddress() {return macAddress;}
-    public Arbol getArbol() {return arbol;}
+    public CentroEducativo getCentroEducativo() {return centroEducativo;}
     public boolean isActivo() {return activo;}
     public LocalDateTime getUltimaConexion() {return ultimaConexion;}
     public int getFrecuenciaLecturaSeg() {return frecuenciaLecturaSeg;}
 
+    public BigDecimal getUmbralTempMin() {return umbralTempMin;}
+    public BigDecimal getUmbralTempMax() {return umbralTempMax;}
+    public BigDecimal getUmbralHumedadAmbienteMin() {return umbralHumedadAmbienteMin;}
+    public BigDecimal getUmbralHumedadAmbienteMax() {return umbralHumedadAmbienteMax;}
+    public BigDecimal getUmbralHumedadSueloMin() {return umbralHumedadSueloMin;}
+    public BigDecimal getUmbralCO2Max() {return umbralCO2Max;}
+
     public void setId(Long id) {this.id = id;}
     public void setMacAddress(String macAddress) {this.macAddress = macAddress;}
-    public void setArbol(Arbol arbol) {this.arbol = arbol;}
+    public void setCentroEducativo(CentroEducativo centroEducativo) {this.centroEducativo = centroEducativo;}
     public void setActivo(boolean activo) {this.activo = activo;}
     public void setUltimaConexion(LocalDateTime ultimaConexion) {this.ultimaConexion = ultimaConexion;}
     public void setFrecuenciaLecturaSeg(int frecuenciaLecturaSeg) {this.frecuenciaLecturaSeg = frecuenciaLecturaSeg;}
+    public void setUmbralTempMin(BigDecimal umbralTempMin) {this.umbralTempMin = umbralTempMin;}
+    public void setUmbralTempMax(BigDecimal umbralTempMax) {this.umbralTempMax = umbralTempMax;}
+    public void setUmbralHumedadAmbienteMin(BigDecimal umbralHumedadAmbienteMin) {this.umbralHumedadAmbienteMin = umbralHumedadAmbienteMin;}
+    public void setUmbralHumedadAmbienteMax(BigDecimal umbralHumedadAmbienteMax) {this.umbralHumedadAmbienteMax = umbralHumedadAmbienteMax;}
+    public void setUmbralHumedadSueloMin(BigDecimal umbralHumedadSueloMin) {this.umbralHumedadSueloMin = umbralHumedadSueloMin;}
+    public void setUmbralCO2Max(BigDecimal umbralCO2Max) {this.umbralCO2Max = umbralCO2Max;}
 
     /**
      * Callback ejecutado antes de persistir un nuevo dispositivo ESP32 en la base de datos.

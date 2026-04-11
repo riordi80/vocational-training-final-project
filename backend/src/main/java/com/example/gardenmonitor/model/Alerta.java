@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "alerta", indexes = {
-        @Index(name = "idx_alerta_arbol", columnList = "arbol_id"),
+        @Index(name = "idx_alerta_dispositivo", columnList = "dispositivo_id"),
         @Index(name = "idx_alerta_estado", columnList = "estado"),
         @Index(name = "idx_alerta_timestamp", columnList = "timestamp")
 })
@@ -33,17 +33,17 @@ public class Alerta {
     private Long id;
 
     /**
-     * Árbol al que pertenece esta alerta.
+     * Dispositivo ESP32 al que pertenece esta alerta.
      * <p>
-     * Relación Many-to-One: un árbol puede generar múltiples alertas.
-     * Si se elimina el árbol, se eliminan en cascada todas sus alertas.
+     * Relación Many-to-One: un dispositivo puede generar múltiples alertas.
+     * Si se elimina el dispositivo, se eliminan en cascada todas sus alertas.
+     * Nullable para preservar alertas históricas sin dispositivo asignado.
      * </p>
      */
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "arbol_id", nullable = false)
+    @JoinColumn(name = "dispositivo_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Arbol arbol;
+    private DispositivoEsp32 dispositivo;
 
     /**
      * Tipo de alerta según el sensor o condición que la originó.
@@ -109,8 +109,8 @@ public class Alerta {
      * @param tipoAlerta tipo de condición que disparó la alerta
      * @param mensaje    descripción detallada de la alerta
      */
-    public Alerta(Arbol arbol, TipoAlerta tipoAlerta, String mensaje) {
-        this.arbol = arbol;
+    public Alerta(DispositivoEsp32 dispositivo, TipoAlerta tipoAlerta, String mensaje) {
+        this.dispositivo = dispositivo;
         this.tipoAlerta = tipoAlerta;
         this.mensaje = mensaje;
         this.estado = EstadoAlerta.ACTIVA;
@@ -133,7 +133,7 @@ public class Alerta {
     }
 
     public Long getId() { return id; }
-    public Arbol getArbol() { return arbol; }
+    public DispositivoEsp32 getDispositivo() { return dispositivo; }
     public TipoAlerta getTipoAlerta() { return tipoAlerta; }
     public LocalDateTime getTimestamp() { return timestamp; }
     public String getMensaje() { return mensaje; }
@@ -141,7 +141,7 @@ public class Alerta {
     public LocalDateTime getFechaResolucion() { return fechaResolucion; }
 
     public void setId(Long id) { this.id = id; }
-    public void setArbol(Arbol arbol) { this.arbol = arbol; }
+    public void setDispositivo(DispositivoEsp32 dispositivo) { this.dispositivo = dispositivo; }
     public void setTipoAlerta(TipoAlerta tipoAlerta) { this.tipoAlerta = tipoAlerta; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
     public void setMensaje(String mensaje) { this.mensaje = mensaje; }
@@ -155,7 +155,7 @@ public class Alerta {
     public String toString() {
         return "Alerta{" +
                 "id=" + id +
-                ", arbolId=" + (arbol != null ? arbol.getId() : null) +
+                ", dispositivoId=" + (dispositivo != null ? dispositivo.getId() : null) +
                 ", tipoAlerta=" + tipoAlerta +
                 ", timestamp=" + timestamp +
                 ", estado=" + estado +

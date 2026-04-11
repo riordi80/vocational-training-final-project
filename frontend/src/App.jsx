@@ -16,6 +16,8 @@ import DetalleUsuario from './pages/usuarios/DetalleUsuario';
 import FormularioUsuario from './pages/usuarios/FormularioUsuario';
 import AccessDenied from './pages/access-denied/AccessDenied';
 import HistoricoArbol from './pages/arboles/HistoricoArbol';
+import HistoricoDispositivo from './pages/dispositivos/HistoricoDispositivo';
+import FormularioDispositivo from './pages/dispositivos/FormularioDispositivo';
 import './App.css';
 
 function App() {
@@ -38,6 +40,7 @@ function App() {
           <Route path="/arboles" element={<ListadoArboles />} />
           <Route path="/arboles/:id" element={<DetalleArbol />} />
           <Route path="/arboles/:id/lecturas" element={<HistoricoArbol />} />
+          <Route path="/dispositivos/:id/lecturas" element={<HistoricoDispositivo />} />
           <Route path="/centros" element={<ListadoCentros />} />
           <Route path="/centros/:id" element={<DetalleCentro />} />
           <Route path="/access-denied" element={<AccessDenied />} />
@@ -51,6 +54,16 @@ function App() {
           <Route path="/arboles/:id/editar" element={
             <ProtectedRoute requiredRoles={['ADMIN', 'COORDINADOR']}>
               <FormularioArbol />
+            </ProtectedRoute>
+          } />
+          <Route path="/dispositivos/nuevo" element={
+            <ProtectedRoute requiredRoles={['ADMIN', 'COORDINADOR']}>
+              <FormularioDispositivo />
+            </ProtectedRoute>
+          } />
+          <Route path="/dispositivos/:id/editar" element={
+            <ProtectedRoute requiredRoles={['ADMIN', 'COORDINADOR']}>
+              <FormularioDispositivo />
             </ProtectedRoute>
           } />
           <Route path="/centros/nuevo" element={
