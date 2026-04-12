@@ -1,11 +1,11 @@
 package com.example.proyectoarboles.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectoarboles.R;
+import com.example.proyectoarboles.activities.FormularioCentroActivity;
 import com.example.proyectoarboles.activities.MainActivity;
 import com.example.proyectoarboles.adapter.CentroEducativoAdapter;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.CentroEducativo;
 import com.example.proyectoarboles.util.PermissionManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class ListarCentrosFragment extends Fragment implements CentroEducativoAd
     private RecyclerView recyclerViewCentros;
     private CentroEducativoAdapter adapter;
     private List<CentroEducativo> listaCentros = new ArrayList<>();
-    private Button btRegister, btCerrarSesion;
+    private FloatingActionButton fabAnadirCentro;
     private PermissionManager permissionManager;
 
     @Nullable
@@ -50,38 +52,23 @@ public class ListarCentrosFragment extends Fragment implements CentroEducativoAd
         super.onViewCreated(view, savedInstanceState);
 
         permissionManager = new PermissionManager(requireContext());
-
         recyclerViewCentros = view.findViewById(R.id.RecyclerViewCentros);
-        btRegister = view.findViewById(R.id.btRegister);
-        btCerrarSesion = view.findViewById(R.id.btCerrarS);
-
-        btRegister.setVisibility(View.GONE);
+        fabAnadirCentro = view.findViewById(R.id.fabAnadirCentro);
 
         configurarRecyclerView();
         cargarCentrosDesdeAPI();
-        configurarListeners();
-        actualizarVisibilidadBotones();
+        configurarFab();
     }
 
     private void configurarRecyclerView() {
         recyclerViewCentros.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new CentroEducativoAdapter(listaCentros, this, permissionManager);
+        adapter = new CentroEducativoAdapter(listaCentros, this);
         recyclerViewCentros.setAdapter(adapter);
     }
 
     @Override
-    public void onVerArbolesClick(CentroEducativo centro) {
-        ((MainActivity) requireActivity()).navigateToListarArboles(centro.getId());
-    }
-
-    @Override
-    public void onEditarCentroClick(CentroEducativo centro) {
-        Toast.makeText(requireContext(), "Editar centro: " + centro.getNombre(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onEliminarCentroClick(CentroEducativo centro) {
-        Toast.makeText(requireContext(), "Eliminar centro: " + centro.getNombre(), Toast.LENGTH_SHORT).show();
+    public void onVerDetalleClick(CentroEducativo centro) {
+        ((MainActivity) requireActivity()).navigateToDetalleCentro(centro.getId());
     }
 
     private void cargarCentrosDesdeAPI() {
@@ -97,9 +84,6 @@ public class ListarCentrosFragment extends Fragment implements CentroEducativoAd
                     listaCentros.addAll(response.body());
                     adapter.notifyDataSetChanged();
                     Log.d(TAG, "Centros cargados: " + listaCentros.size());
-                    if (listaCentros.isEmpty()) {
-                        Log.d(TAG, "No hay centros registrados");
-                    }
                 } else {
                     String errorBody = "";
                     try {
@@ -121,26 +105,20 @@ public class ListarCentrosFragment extends Fragment implements CentroEducativoAd
         });
     }
 
-    private void configurarListeners() {
-        btCerrarSesion.setOnClickListener(v -> {
-            permissionManager.clearSession();
-            actualizarVisibilidadBotones();
-            Toast.makeText(requireContext(), "Sesión cerrada", Toast.LENGTH_SHORT).show();
-        });
-    }
-
-    private void actualizarVisibilidadBotones() {
-        boolean isLoggedIn = permissionManager.isLoggedIn();
-        btRegister.setVisibility(View.GONE);
-        btCerrarSesion.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
+    private void configurarFab() {
+        if (permissionManager.puedeCrearCentro()) {
+            fabAnadirCentro.setVisibility(View.VISIBLE);
+            fabAnadirCentro.setOnClickListener(v ->
+                    startActivity(new Intent(requireContext(), FormularioCentroActivity.class)));
+        } else {
+            fabAnadirCentro.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (permissionManager != null) {
-            actualizarVisibilidadBotones();
-            cargarCentrosDesdeAPI();
-        }
+        cargarCentrosDesdeAPI();
+        if (permissionManager != null) configurarFab();
     }
 }

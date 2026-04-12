@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
+import com.example.proyectoarboles.fragments.ArbolDetallesFragment;
 import com.example.proyectoarboles.fragments.DashboardFragment;
+import com.example.proyectoarboles.fragments.DetalleCentroFragment;
 import com.example.proyectoarboles.fragments.ListarArbolesFragment;
 import com.example.proyectoarboles.fragments.ListarCentrosFragment;
 import com.example.proyectoarboles.fragments.LoginFragment;
@@ -100,21 +102,38 @@ public class MainActivity extends AppCompatActivity {
 
     public void navigateToDashboard() {
         showFragment(new DashboardFragment());
-        bottomNavigation.setSelectedItemId(R.id.menu_dashboard);
+        setNavSelected(R.id.menu_dashboard);
     }
 
     public void navigateToListarCentros() {
         showFragment(new ListarCentrosFragment());
-        bottomNavigation.setSelectedItemId(R.id.menu_centros);
+        setNavSelected(R.id.menu_centros);
+    }
+
+    public void navigateToDetalleCentro(long centroId) {
+        showFragment(DetalleCentroFragment.newInstance(centroId));
+        setNavSelected(R.id.menu_centros);
     }
 
     public void navigateToListarArboles(long centroId) {
         showFragment(ListarArbolesFragment.newInstance(centroId));
-        bottomNavigation.setSelectedItemId(R.id.menu_arboles);
+        setNavSelected(R.id.menu_arboles);
     }
 
     public void navigateToLogin() {
         showFragment(new LoginFragment());
-        bottomNavigation.setSelectedItemId(R.id.menu_login);
+        setNavSelected(R.id.menu_login);
+    }
+
+    public void navigateToArbolDetalles(long arbolId) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, ArbolDetallesFragment.newInstance(arbolId))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void setNavSelected(int itemId) {
+        bottomNavigation.getMenu().findItem(itemId).setChecked(true);
     }
 }
