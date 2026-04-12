@@ -28,9 +28,6 @@
 
         <!-- Activities independientes (sin bottom nav) -->
         <activity
-            android:name=".activities.ArbolDetalles"
-            android:exported="false" />
-        <activity
             android:name=".activities.CrearArbol"
             android:exported="false" />
         <activity
@@ -38,6 +35,15 @@
             android:exported="false" />
         <activity
             android:name=".activities.Registrer"
+            android:exported="false" />
+        <activity
+            android:name=".activities.HistoricoDispositivoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.FormularioCentroActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.FormularioDispositivoActivity"
             android:exported="false" />
 
     </application>

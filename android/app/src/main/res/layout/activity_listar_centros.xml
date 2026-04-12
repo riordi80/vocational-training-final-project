@@ -9,16 +9,44 @@
     android:padding="16dp"
     tools:context=".activities.ListarCentros">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Centros Educativos"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/green_primary"
-        android:gravity="center"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="24dp"/>
+        android:orientation="vertical"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_school"
+                android:layout_marginEnd="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Centros Educativos"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/green_primary"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Listado de centros educativos participantes en el proyecto"
+            android:textSize="13sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RecyclerViewCentros"
@@ -27,27 +55,16 @@
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAnadirCentro"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="16dp">
-
-        <Button
-            android:id="@+id/btRegister"
-            style="@style/ButtonSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Registrar"/>
-
-        <Button
-            android:id="@+id/btCerrarS"
-            style="@style/ButtonDanger"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cerrar Sesión"
-            android:visibility="gone"/>
-    </LinearLayout>
+        android:layout_gravity="end"
+        android:layout_margin="16dp"
+        android:contentDescription="Añadir centro"
+        android:src="@android:drawable/ic_input_add"
+        android:visibility="gone"
+        app:backgroundTint="@color/accent"
+        app:tint="@color/text_primary" />
 
 </LinearLayout>

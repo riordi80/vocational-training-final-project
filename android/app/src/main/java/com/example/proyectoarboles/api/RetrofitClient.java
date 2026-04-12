@@ -23,6 +23,7 @@ public class RetrofitClient {
     private static UsuarioApi usuarioApi = null;
     private static UsuarioCentroApi usuarioCentroApi = null;
     private static LecturaApi lecturaApi = null;
+    private static DispositivoApi dispositivoApi = null;
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
@@ -95,5 +96,13 @@ public class RetrofitClient {
             lecturaApi = getRetrofitInstance().create(LecturaApi.class);
         }
         return lecturaApi;
+    }
+
+    // Método para obtener la instancia de DispositivoApi
+    public static DispositivoApi getDispositivoApi() {
+        if (dispositivoApi == null) {
+            dispositivoApi = getRetrofitInstance().create(DispositivoApi.class);
+        }
+        return dispositivoApi;
     }
 }

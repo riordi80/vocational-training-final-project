@@ -25,5 +25,5 @@ public interface CentroEducativoApi {
     Call<CentroEducativo> actualizarCentro(@Path("id") Long id, @Body CentroEducativo centro);
 
     @DELETE("api/centros/{id}")
-    Call<CentroEducativo> eliminarCentro(@Path("id") Long id);
+    Call<Void> eliminarCentro(@Path("id") Long id);
 }

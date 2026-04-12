@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_app">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textViewTituloFormularioCentro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/green_primary"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/white"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/gray_200"
+            app:strokeWidth="1dp"
+            app:cardCornerRadius="12dp"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Nombre -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre del Centro *"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"/>
+                <EditText
+                    android:id="@+id/editTextNombreCentro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ej: IES El Rincón"
+                    android:inputType="text"
+                    android:maxLength="200"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Dirección -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dirección *"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"/>
+                <EditText
+                    android:id="@+id/editTextDireccionCentro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ej: Calle Principal 123"
+                    android:inputType="text"
+                    android:maxLength="300"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Responsable -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Responsable *"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"/>
+                <EditText
+                    android:id="@+id/editTextResponsableCentro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ej: Juan Pérez García"
+                    android:inputType="textPersonName"
+                    android:maxLength="100"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Isla -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Isla"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"/>
+                <Spinner
+                    android:id="@+id/spinnerIsla"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Población y Provincia -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Población"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+                        <EditText
+                            android:id="@+id/editTextPoblacion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Ej: Las Palmas"
+                            android:inputType="text"
+                            android:layout_marginBottom="12dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Código Postal"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+                        <EditText
+                            android:id="@+id/editTextCodigoPostal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Ej: 35001"
+                            android:inputType="number"
+                            android:layout_marginBottom="12dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Teléfono y Email -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Teléfono"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+                        <EditText
+                            android:id="@+id/editTextTelefonoCentro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Ej: 928 123 456"
+                            android:inputType="phone"
+                            android:layout_marginBottom="12dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Email"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+                        <EditText
+                            android:id="@+id/editTextEmailCentro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="centro@ejemplo.es"
+                            android:inputType="textEmailAddress"
+                            android:layout_marginBottom="12dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Latitud y Longitud -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Latitud *"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+                        <EditText
+                            android:id="@+id/editTextLatitudCentro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Ej: 28.4636"
+                            android:inputType="numberDecimal|numberSigned"
+                            android:layout_marginBottom="12dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Longitud *"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+                        <EditText
+                            android:id="@+id/editTextLongitudCentro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Ej: -16.2518"
+                            android:inputType="numberDecimal|numberSigned"
+                            android:layout_marginBottom="12dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Botones -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/buttonCancelarFormularioCentro"
+                style="@style/ButtonSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancelar"/>
+
+            <Button
+                android:id="@+id/buttonGuardarCentro"
+                style="@style/ButtonPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guardar"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

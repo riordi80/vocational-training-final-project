@@ -7,8 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
+import com.google.android.material.card.MaterialCardView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +34,7 @@ public class DashboardFragment extends Fragment {
     private static final String TAG = "DashboardFragment";
 
     private TextView tvNumeroCentros, tvNumeroArboles, tvNombreUsuario, tvRolUsuario;
-    private Button btVerCentros, btVerArboles, btRegister, btCerrarSesion;
+    private MaterialCardView btVerCentros, btVerArboles;
     private LinearLayout llEstadoUsuario;
     private SharedPreferences sharedPreferences;
     private PermissionManager permissionManager;
@@ -58,14 +58,11 @@ public class DashboardFragment extends Fragment {
         tvNombreUsuario = view.findViewById(R.id.tvNombreUsuario);
         tvRolUsuario = view.findViewById(R.id.tvRolUsuario);
         llEstadoUsuario = view.findViewById(R.id.llEstadoUsuario);
-
-        btVerCentros = view.findViewById(R.id.btVerCentros);
-        btVerArboles = view.findViewById(R.id.btVerArboles);
-        btRegister = view.findViewById(R.id.btRegister);
-        btCerrarSesion = view.findViewById(R.id.btCerrarSesion);
+        btVerCentros = (MaterialCardView) view.findViewById(R.id.btVerCentros);
+        btVerArboles = (MaterialCardView) view.findViewById(R.id.btVerArboles);
 
         configurarListeners();
-        actualizarVisibilidadBotones();
+        actualizarInfoUsuario();
         cargarEstadisticas();
     }
 
@@ -75,18 +72,14 @@ public class DashboardFragment extends Fragment {
     }
 
     private void cargarNumeroCentros() {
-        Log.d(TAG, "Cargando número de centros...");
         Call<List<CentroEducativo>> call = RetrofitClient.getCentroEducativoApi().obtenerTodosLosCentros();
-
         call.enqueue(new Callback<List<CentroEducativo>>() {
             @Override
             public void onResponse(Call<List<CentroEducativo>> call, Response<List<CentroEducativo>> response) {
                 if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     tvNumeroCentros.setText(String.valueOf(response.body().size()));
-                    Log.d(TAG, "Centros cargados: " + response.body().size());
                 } else {
-                    Log.e(TAG, "Error al cargar centros: " + response.code());
                     tvNumeroCentros.setText("Error");
                 }
             }
@@ -94,25 +87,20 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onFailure(Call<List<CentroEducativo>> call, Throwable t) {
                 if (!isAdded()) return;
-                Log.e(TAG, "Error de conexión al cargar centros", t);
                 tvNumeroCentros.setText("Error");
             }
         });
     }
 
     private void cargarNumeroArboles() {
-        Log.d(TAG, "Cargando número de árboles...");
         Call<List<Arbol>> call = RetrofitClient.getArbolApi().obtenerTodosLosArboles();
-
         call.enqueue(new Callback<List<Arbol>>() {
             @Override
             public void onResponse(Call<List<Arbol>> call, Response<List<Arbol>> response) {
                 if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     tvNumeroArboles.setText(String.valueOf(response.body().size()));
-                    Log.d(TAG, "Árboles cargados: " + response.body().size());
                 } else {
-                    Log.e(TAG, "Error al cargar árboles: " + response.code());
                     tvNumeroArboles.setText("Error");
                 }
             }
@@ -120,7 +108,6 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Arbol>> call, Throwable t) {
                 if (!isAdded()) return;
-                Log.e(TAG, "Error de conexión al cargar árboles", t);
                 tvNumeroArboles.setText("Error");
             }
         });
@@ -132,20 +119,6 @@ public class DashboardFragment extends Fragment {
 
         btVerArboles.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).navigateToListarArboles(-1L));
-
-        btCerrarSesion.setOnClickListener(v -> {
-            permissionManager.clearSession();
-            actualizarVisibilidadBotones();
-            actualizarInfoUsuario();
-            Toast.makeText(requireContext(), "Sesión cerrada", Toast.LENGTH_SHORT).show();
-        });
-    }
-
-    private void actualizarVisibilidadBotones() {
-        boolean isLoggedIn = permissionManager.isLoggedIn();
-        btRegister.setVisibility(View.GONE);
-        btCerrarSesion.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
-        actualizarInfoUsuario();
     }
 
     private void actualizarInfoUsuario() {
@@ -165,7 +138,7 @@ public class DashboardFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (permissionManager != null) {
-            actualizarVisibilidadBotones();
+            actualizarInfoUsuario();
             cargarEstadisticas();
         }
     }

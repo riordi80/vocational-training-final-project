@@ -4,8 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Modelo de Lectura correspondiente al backend.
- * Representa una lectura de sensores de un árbol en un momento específico.
- * Los datos vienen de sensores IoT ESP32 asociados al árbol.
+ * Representa una lectura de sensores de un DispositivoEsp32 en un momento específico.
  */
 public class Lectura {
 
@@ -14,9 +13,6 @@ public class Lectura {
 
     @SerializedName("timestamp")
     private String timestamp;  // ISO 8601 format: "2025-02-20T14:30:45"
-
-    @SerializedName("arbol")
-    private Arbol arbol;
 
     @SerializedName("temperatura")
     private Double temperatura;  // En °C
@@ -59,10 +55,6 @@ public class Lectura {
         return timestamp;
     }
 
-    public Arbol getArbol() {
-        return arbol;
-    }
-
     public Double getTemperatura() {
         return temperatura;
     }
@@ -94,10 +86,6 @@ public class Lectura {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public void setArbol(Arbol arbol) {
-        this.arbol = arbol;
     }
 
     public void setTemperatura(Double temperatura) {

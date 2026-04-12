@@ -41,6 +41,9 @@ public class CentroEducativo {
     @SerializedName("email")
     private String email;
 
+    @SerializedName("fechaCreacion")
+    private String fechaCreacion;
+
     // Getters
     public Long getId() { return id; }
     public String getNombre() { return nombre; }
@@ -54,6 +57,7 @@ public class CentroEducativo {
     public String getCodigoPostal() { return codigoPostal; }
     public String getTelefono() { return telefono; }
     public String getEmail() { return email; }
+    public String getFechaCreacion() { return fechaCreacion; }
 
     // Setters
     public void setId(Long id) { this.id = id; }
@@ -68,6 +72,7 @@ public class CentroEducativo {
     public void setCodigoPostal(String codigoPostal) { this.codigoPostal = codigoPostal; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
     public void setEmail(String email) { this.email = email; }
+    public void setFechaCreacion(String fechaCreacion) { this.fechaCreacion = fechaCreacion; }
 
     @Override
     public String toString() {
