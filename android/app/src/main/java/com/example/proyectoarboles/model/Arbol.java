@@ -22,18 +22,6 @@ public class Arbol {
     @SerializedName("centroEducativo")
     private CentroEducativo centroEducativo;
 
-    @SerializedName("temperatura")
-    private String temperatura;
-
-    @SerializedName("humedad")
-    private String humedad;
-
-    @SerializedName("humedadSuelo")
-    private String humedadSuelo;
-
-    @SerializedName("co2")
-    private String co2;
-
     @SerializedName("absorcionCo2Anual")
     private Double absorcionCo2Anual;
 
@@ -43,21 +31,6 @@ public class Arbol {
         this.nombre = nombre;
         this.especie = especie;
         this.fechaPlantacion = fechaPlantacion;
-    }
-
-    // Constructor completo
-    public Arbol(Long id, String nombre, String especie, String fechaPlantacion,
-                 String ubicacion, String temperatura, String humedad,
-                 String humedadSuelo, String co2){
-        this.id = id;
-        this.nombre = nombre;
-        this.especie = especie;
-        this.fechaPlantacion = fechaPlantacion;
-        this.ubicacion = ubicacion;
-        this.temperatura = temperatura;
-        this.humedad = humedad;
-        this.humedadSuelo = humedadSuelo;
-        this.co2 = co2;
     }
 
     // Constructor vacío (necesario para Gson)
@@ -88,22 +61,6 @@ public class Arbol {
         return centroEducativo;
     }
 
-    public String getTemperatura() {
-        return temperatura;
-    }
-
-    public String getHumedad() {
-        return humedad;
-    }
-
-    public String getHumedadSuelo() {
-        return humedadSuelo;
-    }
-
-    public String getCo2() {
-        return co2;
-    }
-
     public Double getAbsorcionCo2Anual() {
         return absorcionCo2Anual;
     }
@@ -131,22 +88,6 @@ public class Arbol {
 
     public void setCentroEducativo(CentroEducativo centroEducativo) {
         this.centroEducativo = centroEducativo;
-    }
-
-    public void setTemperatura(String temperatura) {
-        this.temperatura = temperatura;
-    }
-
-    public void setHumedad(String humedad) {
-        this.humedad = humedad;
-    }
-
-    public void setHumedadSuelo(String humedadSuelo) {
-        this.humedadSuelo = humedadSuelo;
-    }
-
-    public void setCo2(String co2) {
-        this.co2 = co2;
     }
 
     public void setAbsorcionCo2Anual(Double absorcionCo2Anual) {

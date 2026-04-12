@@ -1,90 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Botón Primario Button (Verde) -->
+    <!-- Botón Primario (Verde bosque — confirmaciones, guardar) -->
     <style name="ButtonPrimary" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/green_primary</item>
         <item name="android:textColor">@color/white</item>
         <item name="cornerRadius">8dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <!-- Botón Secundario (Gris) -->
-    <style name="ButtonSecondary" parent="Widget.Material3.Button">
-        <item name="backgroundTint">@color/gray_200</item>
-        <item name="android:textColor">@color/gray_800</item>
+    <!-- Botón Acento (Ámbar — CTAs destacados) -->
+    <style name="ButtonAccent" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/accent</item>
+        <item name="android:textColor">@color/text_primary</item>
         <item name="cornerRadius">8dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <!-- Boton Danger (Rojo) -->
+    <!-- Botón Secundario (borde verde bosque — cancelar, volver) -->
+    <style name="ButtonSecondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/green_primary</item>
+        <item name="android:textColor">@color/green_primary</item>
+        <item name="strokeWidth">1.5dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- Botón Outline (alias de ButtonSecondary — compatibilidad) -->
+    <style name="ButtonOutline" parent="ButtonSecondary" />
+
+    <!-- Botón Danger (rojo — eliminar) -->
     <style name="ButtonDanger" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/red_primary</item>
         <item name="android:textColor">@color/white</item>
         <item name="cornerRadius">8dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
-    <!-- Boton con borde (Borde verde) -->
-    <style name="ButtonOutline" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="strokeColor">@color/green_primary</item>
-        <item name="android:textColor">@color/green_primary</item>
-        <item name="strokeWidth">2dp</item>
-        <item name="cornerRadius">8dp</item>
-        <item name="android:paddingStart">16dp</item>
-        <item name="android:paddingEnd">16dp</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
     <!-- Card -->
-    <style name="CardStyle" parent="Widget.Material3.CardView.Elevated">
-        <item name="cardBackgroundColor">@color/background_card</item>
+    <style name="CardStyle" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/white</item>
         <item name="cardCornerRadius">12dp</item>
-        <item name="cardElevation">4dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/gray_200</item>
+        <item name="strokeWidth">1dp</item>
         <item name="contentPadding">16dp</item>
         <item name="android:layout_margin">8dp</item>
     </style>
 
-    <!-- Header -->
+    <!-- Section Header -->
     <style name="SectionHeader">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColor">@color/green_primary</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
     </style>
 
     <!-- Field Label -->
     <style name="FieldLabel">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColor">@color/text_secondary</item>
         <item name="android:paddingTop">4dp</item>
     </style>
 
-    <!-- Field Value Style -->
+    <!-- Field Value -->
     <style name="FieldValue">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/text_secondary</item>
-        <item name="android:paddingTop">4dp</item>
-        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">10dp</item>
     </style>
+
 </resources>

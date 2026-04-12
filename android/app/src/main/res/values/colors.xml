@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base colors -->
+    <!-- Base -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Primary colors (Green) -->
-    <color name="green_primary">#16a34a</color>
-    <color name="green_primary_dark">#15803d</color>
-    <color name="green_primary_light">#22c55e</color>
-    <color name="green_50">#f0fdf4</color>
-    <color name="green_100">#dcfce7</color>
+    <!-- Brand: Verde bosque (color principal — headers, toolbar, bottom nav activo) -->
+    <color name="green_primary">#2F473D</color>
+    <color name="green_primary_dark">#1a2e25</color>
 
-    <!-- Secondary colors (Gray) -->
-    <color name="gray_50">#f9fafb</color>
-    <color name="gray_100">#f3f4f6</color>
+    <!-- Brand: Verde medio (estados activos, badges, FAB) -->
+    <color name="green_secondary">#67BB6A</color>
+    <color name="green_secondary_light">#E5F7E5</color>
+
+    <!-- Brand: Ámbar (botones primarios de acción, CTAs) -->
+    <color name="accent">#FFB141</color>
+    <color name="accent_dark">#e69a2a</color>
+
+    <!-- Brand: Fondos cálidos -->
+    <color name="background_app">#FFF6E9</color>
+    <color name="background_card">#FFFFFF</color>
+
+    <!-- Grises (bordes, separadores) -->
     <color name="gray_200">#e5e7eb</color>
     <color name="gray_300">#d1d5db</color>
     <color name="gray_600">#4b5563</color>
     <color name="gray_800">#1f2937</color>
 
-    <!-- Danger colors (Red) -->
+    <!-- Texto -->
+    <color name="text_primary">#1D2F2A</color>
+    <color name="text_secondary">#4b5563</color>
+    <color name="text_hint">#9E9E9E</color>
+
+    <!-- Danger (rojo — eliminar, alertas) -->
     <color name="red_primary">#dc2626</color>
     <color name="red_primary_dark">#b91c1c</color>
 
-    <!-- Accent colors -->
+    <!-- Azul (gráficas) -->
     <color name="blue_primary">#3b82f6</color>
-    <color name="blue_50">#eff6ff</color>
-
-    <!-- Text colors -->
-    <color name="text_primary">#111827</color>
-    <color name="text_secondary">#6b7280</color>
-
-    <!-- Background colors -->
-    <color name="background_app">#f3f4f6</color>
-    <color name="background_card">#ffffff</color>
-
-    <color name="purple_500">#6200EE</color>
-    <color name="text_hint">#9E9E9E</color>
-
-    <color name="gray">#CDCDCD</color>
-
 </resources>
