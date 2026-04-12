@@ -79,7 +79,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Columna Derecha: Datos de Sensores -->
+            <!-- Columna Derecha: Información Adicional -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardSensores"
                 android:layout_width="0dp"
@@ -101,22 +101,26 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Datos de Sensores"
+                        android:text="Información Adicional"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp"/>
 
-                    <!-- Contenido de Datos de Sensores -->
-                    <TextView android:id="@+id/textViewTemp" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp"/>
-                    <EditText android:id="@+id/editTextTemp" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="🌿 Absorción CO2 Anual:"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginTop="8dp"/>
 
-                    <TextView android:id="@+id/textViewHumedad" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp"/>
-                    <EditText android:id="@+id/editTextHumedad" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"/>
-
-                    <TextView android:id="@+id/textViewHumedadSuelo" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp"/>
-                    <EditText android:id="@+id/editTextHumedadSuelo" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"/>
-
-                    <TextView android:id="@+id/textViewCO2" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp"/>
-                    <EditText android:id="@+id/editTextCO2" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/textViewAbsorcionCo2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_secondary"
+                        android:padding="8dp"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

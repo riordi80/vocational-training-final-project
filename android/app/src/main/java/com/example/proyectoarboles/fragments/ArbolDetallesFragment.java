@@ -1,10 +1,12 @@
-package com.example.proyectoarboles.activities;
+package com.example.proyectoarboles.fragments;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +16,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.api.RetrofitClient;
@@ -36,11 +40,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ArbolDetalles extends AppCompatActivity {
+public class ArbolDetallesFragment extends Fragment {
 
-    private static final String TAG = "ArbolDetalles";
+    private static final String TAG = "ArbolDetallesFragment";
+    private static final String ARG_ARBOL_ID = "arbol_id";
 
-    // Vistas
     private TextView tvNombre, tvEspecie, tvFecha, tvUbicacion, tvCentroEducativo, tvAbsorcionCo2;
     private EditText etNombre, etEspecie, etFecha, etUbicacion;
     private Spinner spinnerCentroEducativo;
@@ -48,103 +52,120 @@ public class ArbolDetalles extends AppCompatActivity {
     private ImageButton btnEditar, btnEliminar, btnVolver;
     private Button btnGuardar, btnCancelar;
 
-    // Datos del árbol y estado
     private Arbol arbolActual;
-    private Long arbolId;
+    private long arbolId = -1;
 
-    // Datos de sesión
     private SharedPreferences sharedPreferences;
     private PermissionManager permissionManager;
     private Rol userRole;
     private Set<String> userCentrosIds;
 
-    // Adapter para Spinner
     private List<CentroEducativo> listaCentros = new ArrayList<>();
     private ArrayAdapter<CentroEducativo> centrosAdapter;
 
+    public static ArbolDetallesFragment newInstance(long arbolId) {
+        ArbolDetallesFragment fragment = new ArbolDetallesFragment();
+        Bundle args = new Bundle();
+        args.putLong(ARG_ARBOL_ID, arbolId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_arbol_detalles);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_arbol_detalles, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         cargarDatosSesion();
-        inicializarVistas();
+        inicializarVistas(view);
         configurarListeners();
 
-        arbolId = getIntent().getLongExtra("arbol_id", -1);
+        if (getArguments() != null) {
+            arbolId = getArguments().getLong(ARG_ARBOL_ID, -1);
+        }
+
         if (arbolId != -1) {
             cargarDetallesDesdeAPI(arbolId);
         } else {
-            Toast.makeText(this, "Error: ID de árbol no válido", Toast.LENGTH_LONG).show();
-            finish();
+            Toast.makeText(requireContext(), "Error: ID de árbol no válido", Toast.LENGTH_LONG).show();
+            requireActivity().getSupportFragmentManager().popBackStack();
         }
     }
 
     private void cargarDatosSesion() {
-        sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
-        permissionManager = new PermissionManager(this);
+        sharedPreferences = requireContext().getSharedPreferences("app_prefs", android.content.Context.MODE_PRIVATE);
+        permissionManager = new PermissionManager(requireContext());
         String roleString = sharedPreferences.getString("user_role", null);
         userRole = (roleString != null) ? Rol.valueOf(roleString) : null;
         userCentrosIds = sharedPreferences.getStringSet("user_centros", Collections.emptySet());
     }
 
-    private void inicializarVistas() {
-        tvNombre = findViewById(R.id.textViewNombreDetalle);
-        tvEspecie = findViewById(R.id.textViewEspecieDetalle);
-        tvFecha = findViewById(R.id.textViewFechaDetalle);
-        tvUbicacion = findViewById(R.id.textViewUbicacion);
-        tvCentroEducativo = findViewById(R.id.textViewCentroEducativo);
-        tvAbsorcionCo2 = findViewById(R.id.textViewAbsorcionCo2);
+    private void inicializarVistas(View view) {
+        tvNombre = view.findViewById(R.id.textViewNombreDetalle);
+        tvEspecie = view.findViewById(R.id.textViewEspecieDetalle);
+        tvFecha = view.findViewById(R.id.textViewFechaDetalle);
+        tvUbicacion = view.findViewById(R.id.textViewUbicacion);
+        tvCentroEducativo = view.findViewById(R.id.textViewCentroEducativo);
+        tvAbsorcionCo2 = view.findViewById(R.id.textViewAbsorcionCo2);
 
-        etNombre = findViewById(R.id.editTextNombreDetalle);
-        etEspecie = findViewById(R.id.editTextEspecieDetalle);
-        etFecha = findViewById(R.id.editTextFechaDetalle);
-        etUbicacion = findViewById(R.id.editTextUbicacion);
+        etNombre = view.findViewById(R.id.editTextNombreDetalle);
+        etEspecie = view.findViewById(R.id.editTextEspecieDetalle);
+        etFecha = view.findViewById(R.id.editTextFechaDetalle);
+        etUbicacion = view.findViewById(R.id.editTextUbicacion);
 
-        spinnerCentroEducativo = findViewById(R.id.spinnerCentroEducativo);
-        centrosAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listaCentros);
+        spinnerCentroEducativo = view.findViewById(R.id.spinnerCentroEducativo);
+        centrosAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, listaCentros);
         centrosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCentroEducativo.setAdapter(centrosAdapter);
 
-        llNombreView = findViewById(R.id.llNombreView);
-        llEspecieView = findViewById(R.id.llEspecieView);
-        llFechaView = findViewById(R.id.llFechaView);
-        llCentroView = findViewById(R.id.llCentroView);
-        llUbicacionView = findViewById(R.id.llUbicacionView);
+        llNombreView = view.findViewById(R.id.llNombreView);
+        llEspecieView = view.findViewById(R.id.llEspecieView);
+        llFechaView = view.findViewById(R.id.llFechaView);
+        llCentroView = view.findViewById(R.id.llCentroView);
+        llUbicacionView = view.findViewById(R.id.llUbicacionView);
 
-        btnEditar = findViewById(R.id.buttonEditar);
-        btnGuardar = findViewById(R.id.buttonGuardar);
-        btnCancelar = findViewById(R.id.buttonCancelar);
-        btnEliminar = findViewById(R.id.buttonEliminar);
-        btnVolver = findViewById(R.id.buttonVolver);
+        btnEditar = view.findViewById(R.id.buttonEditar);
+        btnGuardar = view.findViewById(R.id.buttonGuardar);
+        btnCancelar = view.findViewById(R.id.buttonCancelar);
+        btnEliminar = view.findViewById(R.id.buttonEliminar);
+        btnVolver = view.findViewById(R.id.buttonVolver);
     }
 
     private void configurarListeners() {
+        btnVolver.setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager().popBackStack());
         btnEditar.setOnClickListener(v -> activarModoEdicion());
         btnGuardar.setOnClickListener(v -> guardarCambios());
         btnCancelar.setOnClickListener(v -> cancelarEdicion());
         btnEliminar.setOnClickListener(v -> mostrarDialogoEliminar());
-        btnVolver.setOnClickListener(v -> finish()); // Más eficiente que iniciar una nueva actividad
     }
 
-    private void cargarDetallesDesdeAPI(Long id) {
+    private void cargarDetallesDesdeAPI(long id) {
         Call<Arbol> call = RetrofitClient.getArbolApi().obtenerArbolPorId(id);
         call.enqueue(new Callback<Arbol>() {
             @Override
             public void onResponse(Call<Arbol> call, Response<Arbol> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     arbolActual = response.body();
                     mostrarDatosDelArbol(arbolActual);
                     verificarPermisosYActualizarUI();
                 } else {
-                    Toast.makeText(ArbolDetalles.this, "Error al cargar detalles del árbol", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Error al cargar detalles del árbol", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Arbol> call, Throwable t) {
+                if (!isAdded()) return;
                 Log.e(TAG, "Error de conexión: " + t.getMessage());
-                Toast.makeText(ArbolDetalles.this, "Error de conexión", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -152,16 +173,10 @@ public class ArbolDetalles extends AppCompatActivity {
     private void mostrarDatosDelArbol(Arbol arbol) {
         tvNombre.setText(arbol.getNombre());
         tvEspecie.setText(arbol.getEspecie());
-        String fechaISO = arbol.getFechaPlantacion();
-        tvFecha.setText(formatearFechaEspanol(fechaISO));
+        tvFecha.setText(formatearFechaEspanol(arbol.getFechaPlantacion()));
         tvUbicacion.setText(arbol.getUbicacion() != null ? arbol.getUbicacion() : "No disponible");
-
-        if (arbol.getCentroEducativo() != null) {
-            tvCentroEducativo.setText(arbol.getCentroEducativo().getNombre());
-        } else {
-            tvCentroEducativo.setText("Sin centro asignado");
-        }
-
+        tvCentroEducativo.setText(arbol.getCentroEducativo() != null
+                ? arbol.getCentroEducativo().getNombre() : "Sin centro asignado");
         if (arbol.getAbsorcionCo2Anual() != null) {
             tvAbsorcionCo2.setText(String.format(Locale.getDefault(), "%.2f kg/año", arbol.getAbsorcionCo2Anual()));
         } else {
@@ -171,59 +186,36 @@ public class ArbolDetalles extends AppCompatActivity {
 
     private void verificarPermisosYActualizarUI() {
         if (arbolActual == null || arbolActual.getCentroEducativo() == null) return;
-
         Long centroId = arbolActual.getCentroEducativo().getId();
-
-        // Usar PermissionManager para validar permisos
-        boolean puedeEditar = permissionManager.puedeEditarArbol(centroId);
-        boolean puedeEliminar = permissionManager.puedeEliminarArbol(centroId);
-
-        btnEditar.setVisibility(puedeEditar ? View.VISIBLE : View.GONE);
-        btnEliminar.setVisibility(puedeEliminar ? View.VISIBLE : View.GONE);
+        btnEditar.setVisibility(permissionManager.puedeEditarArbol(centroId) ? View.VISIBLE : View.GONE);
+        btnEliminar.setVisibility(permissionManager.puedeEliminarArbol(centroId) ? View.VISIBLE : View.GONE);
     }
 
     private void activarModoEdicion() {
-        // Cargar lista de centros en el spinner
         cargarCentrosEnSpinner();
         mostrarEditTexts();
     }
 
     private void guardarCambios() {
-        // Validar campos
         String nombre = etNombre.getText().toString().trim();
         String especie = etEspecie.getText().toString().trim();
         String fecha = etFecha.getText().toString().trim();
         String ubicacion = etUbicacion.getText().toString().trim();
 
-        if (nombre.isEmpty()) {
-            etNombre.setError("El nombre es requerido");
-            return;
-        }
-
-        if (especie.isEmpty()) {
-            etEspecie.setError("La especie es requerida");
-            return;
-        }
-
-        if (fecha.isEmpty()) {
-            etFecha.setError("La fecha es requerida");
-            return;
-        }
-
-        // Validar formato de fecha (yyyy-MM-dd) y que sea en el pasado
+        if (nombre.isEmpty()) { etNombre.setError("El nombre es requerido"); return; }
+        if (especie.isEmpty()) { etEspecie.setError("La especie es requerida"); return; }
+        if (fecha.isEmpty()) { etFecha.setError("La fecha es requerida"); return; }
         if (!validarFecha(fecha)) {
             etFecha.setError("Fecha inválida. Usa formato YYYY-MM-DD y debe ser en el pasado");
             return;
         }
 
-        // Obtener el centro seleccionado del spinner
         CentroEducativo centroSeleccionado = (CentroEducativo) spinnerCentroEducativo.getSelectedItem();
         if (centroSeleccionado == null) {
-            Toast.makeText(this, "Debe seleccionar un centro", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Debe seleccionar un centro", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Crear objeto Arbol con los cambios
         Arbol arbolActualizado = new Arbol();
         arbolActualizado.setId(arbolActual.getId());
         arbolActualizado.setNombre(nombre);
@@ -232,7 +224,6 @@ public class ArbolDetalles extends AppCompatActivity {
         arbolActualizado.setUbicacion(ubicacion);
         arbolActualizado.setCentroEducativo(centroSeleccionado);
 
-        // Llamar a la API para actualizar
         actualizarArbolEnAPI(arbolActual.getId(), arbolActualizado);
     }
 
@@ -243,18 +234,11 @@ public class ArbolDetalles extends AppCompatActivity {
 
     private boolean validarFecha(String fechaStr) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             sdf.setLenient(false);
             Date fecha = sdf.parse(fechaStr);
-
-            // Verificar que la fecha sea en el pasado
-            if (fecha.after(new Date())) {
-                return false;
-            }
-
-            return true;
+            return !fecha.after(new Date());
         } catch (Exception e) {
-            Log.e(TAG, "Error al validar fecha: " + e.getMessage());
             return false;
         }
     }
@@ -262,19 +246,14 @@ public class ArbolDetalles extends AppCompatActivity {
     private void mostrarTextViews() {
         llNombreView.setVisibility(View.VISIBLE);
         etNombre.setVisibility(View.GONE);
-
         llEspecieView.setVisibility(View.VISIBLE);
         etEspecie.setVisibility(View.GONE);
-
         llFechaView.setVisibility(View.VISIBLE);
         etFecha.setVisibility(View.GONE);
-
         llUbicacionView.setVisibility(View.VISIBLE);
         etUbicacion.setVisibility(View.GONE);
-
         llCentroView.setVisibility(View.VISIBLE);
         spinnerCentroEducativo.setVisibility(View.GONE);
-
         btnGuardar.setVisibility(View.GONE);
         btnCancelar.setVisibility(View.GONE);
         verificarPermisosYActualizarUI();
@@ -284,44 +263,33 @@ public class ArbolDetalles extends AppCompatActivity {
         llNombreView.setVisibility(View.GONE);
         etNombre.setVisibility(View.VISIBLE);
         etNombre.setText(tvNombre.getText());
-
         llEspecieView.setVisibility(View.GONE);
         etEspecie.setVisibility(View.VISIBLE);
         etEspecie.setText(tvEspecie.getText());
-
         llFechaView.setVisibility(View.GONE);
         etFecha.setVisibility(View.VISIBLE);
-        if (arbolActual != null) {
-            etFecha.setText(arbolActual.getFechaPlantacion());
-        }
-
+        if (arbolActual != null) etFecha.setText(arbolActual.getFechaPlantacion());
         llUbicacionView.setVisibility(View.GONE);
         etUbicacion.setVisibility(View.VISIBLE);
         etUbicacion.setText(tvUbicacion.getText());
-
         llCentroView.setVisibility(View.GONE);
         spinnerCentroEducativo.setVisibility(View.VISIBLE);
-
         btnEditar.setVisibility(View.GONE);
         btnEliminar.setVisibility(View.GONE);
         btnGuardar.setVisibility(View.VISIBLE);
         btnCancelar.setVisibility(View.VISIBLE);
     }
 
-    /**
-     * Carga la lista de centros educativos en el spinner
-     */
     private void cargarCentrosEnSpinner() {
         Call<List<CentroEducativo>> call = RetrofitClient.getCentroEducativoApi().obtenerTodosLosCentros();
         call.enqueue(new Callback<List<CentroEducativo>>() {
             @Override
             public void onResponse(Call<List<CentroEducativo>> call, Response<List<CentroEducativo>> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     listaCentros.clear();
                     listaCentros.addAll(response.body());
                     centrosAdapter.notifyDataSetChanged();
-
-                    // Seleccionar el centro actual del árbol
                     if (arbolActual != null && arbolActual.getCentroEducativo() != null) {
                         for (int i = 0; i < listaCentros.size(); i++) {
                             if (listaCentros.get(i).getId().equals(arbolActual.getCentroEducativo().getId())) {
@@ -330,75 +298,53 @@ public class ArbolDetalles extends AppCompatActivity {
                             }
                         }
                     }
-
-                    Log.d(TAG, "Centros cargados: " + listaCentros.size());
                 } else {
-                    Toast.makeText(ArbolDetalles.this, "Error al cargar centros", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Error al cargar centros - Código: " + response.code());
+                    Toast.makeText(requireContext(), "Error al cargar centros", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<CentroEducativo>> call, Throwable t) {
-                Log.e(TAG, "Error de conexión al cargar centros: " + t.getMessage());
-                Toast.makeText(ArbolDetalles.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    /**
-     * Actualiza el árbol en la API mediante PUT
-     */
-    private void actualizarArbolEnAPI(Long arbolId, Arbol arbolActualizado) {
-        Call<Arbol> call = RetrofitClient.getArbolApi().actualizarArbol(arbolId, arbolActualizado);
+    private void actualizarArbolEnAPI(Long id, Arbol arbolActualizado) {
+        Call<Arbol> call = RetrofitClient.getArbolApi().actualizarArbol(id, arbolActualizado);
         call.enqueue(new Callback<Arbol>() {
             @Override
             public void onResponse(Call<Arbol> call, Response<Arbol> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
-                    Arbol arbolGuardado = response.body();
-                    Log.d(TAG, "Árbol actualizado: " + arbolGuardado.getNombre());
-
-                    // Actualizar el árbol actual con los datos guardados
-                    arbolActual = arbolGuardado;
+                    arbolActual = response.body();
                     mostrarDatosDelArbol(arbolActual);
-
-                    Toast.makeText(ArbolDetalles.this, "Árbol actualizado exitosamente", Toast.LENGTH_SHORT).show();
-
-                    // Volver a modo lectura
+                    Toast.makeText(requireContext(), "Árbol actualizado", Toast.LENGTH_SHORT).show();
                     mostrarTextViews();
                     verificarPermisosYActualizarUI();
-
                 } else {
-                    // Manejar errores específicos
-                    String errorMsg = "Error al actualizar el árbol";
-
-                    if (response.code() == 409) {
-                        errorMsg = "Ya existe un árbol con ese nombre en este centro";
-                    } else if (response.code() == 400) {
-                        errorMsg = "Datos inválidos. Verifica los campos.";
-                    } else if (response.code() == 403) {
-                        errorMsg = "No tienes permiso para editar este árbol";
-                    } else if (response.code() == 404) {
-                        errorMsg = "Árbol no encontrado";
-                    }
-
-                    Log.e(TAG, "Error al actualizar - Código: " + response.code());
-                    Toast.makeText(ArbolDetalles.this, errorMsg, Toast.LENGTH_LONG).show();
+                    String msg = "Error al actualizar el árbol";
+                    if (response.code() == 409) msg = "Ya existe un árbol con ese nombre en este centro";
+                    else if (response.code() == 400) msg = "Datos inválidos. Verifica los campos.";
+                    else if (response.code() == 403) msg = "No tienes permiso para editar este árbol";
+                    else if (response.code() == 404) msg = "Árbol no encontrado";
+                    Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Arbol> call, Throwable t) {
-                Log.e(TAG, "Error de conexión: " + t.getMessage());
-                Toast.makeText(ArbolDetalles.this, "Error de conexión. Inténtalo de nuevo.", Toast.LENGTH_LONG).show();
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void mostrarDialogoEliminar() {
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(requireContext())
                 .setTitle("Eliminar árbol")
-                .setMessage("¿Estás seguro de que deseas eliminar '" + tvNombre.getText().toString() + "'?")
+                .setMessage("¿Eliminar '" + tvNombre.getText().toString() + "'?")
                 .setPositiveButton("Eliminar", (dialog, which) -> eliminarArbolAPI())
                 .setNegativeButton("Cancelar", null)
                 .show();
@@ -409,17 +355,19 @@ public class ArbolDetalles extends AppCompatActivity {
         call.enqueue(new Callback<Arbol>() {
             @Override
             public void onResponse(Call<Arbol> call, Response<Arbol> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful()) {
-                    Toast.makeText(ArbolDetalles.this, "Árbol eliminado", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Toast.makeText(requireContext(), "Árbol eliminado", Toast.LENGTH_SHORT).show();
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 } else {
-                    Toast.makeText(ArbolDetalles.this, "Error al eliminar", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Error al eliminar", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Arbol> call, Throwable t) {
-                Toast.makeText(ArbolDetalles.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -427,14 +375,12 @@ public class ArbolDetalles extends AppCompatActivity {
     private String formatearFechaEspanol(String fechaISO) {
         if (fechaISO == null || fechaISO.isEmpty()) return "Fecha no disponible";
         try {
-            SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            Date date = formatoEntrada.parse(fechaISO);
-            SimpleDateFormat formatoSalida = new SimpleDateFormat("d MMM yyyy", new Locale("es", "ES"));
-            return formatoSalida.format(date);
+            SimpleDateFormat entrada = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date date = entrada.parse(fechaISO);
+            SimpleDateFormat salida = new SimpleDateFormat("d MMM yyyy", new Locale("es", "ES"));
+            return salida.format(date);
         } catch (ParseException e) {
-            Log.e(TAG, "Error al parsear fecha: " + fechaISO, e);
-            return fechaISO; // Devolver fecha original si el formato es inesperado
+            return fechaISO;
         }
     }
-
 }
