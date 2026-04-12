@@ -29,6 +29,7 @@ function DetalleCentro() {
   const [arboles, setArboles] = useState([]);
   const [dispositivos, setDispositivos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingDispositivos, setLoadingDispositivos] = useState(true);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -75,10 +76,13 @@ function DetalleCentro() {
 
   const cargarDispositivos = async () => {
     try {
+      setLoadingDispositivos(true);
       const dispositivosData = await getDispositivosByCentro(id);
       setDispositivos(dispositivosData);
     } catch (err) {
       console.error('Error cargando dispositivos:', err);
+    } finally {
+      setLoadingDispositivos(false);
     }
   };
 
@@ -306,7 +310,7 @@ function DetalleCentro() {
       <div className="mt-6 bg-white rounded-lg shadow p-6">
         <div className="flex items-center justify-between mb-4 border-b pb-2">
           <h2 className="text-xl font-semibold text-gray-800">
-            Dispositivos ESP32 ({dispositivos.length})
+            Dispositivos ESP32 {!loadingDispositivos && `(${dispositivos.length})`}
           </h2>
           {canManageCenter(centro.id) && (
             <Button
@@ -318,7 +322,11 @@ function DetalleCentro() {
             </Button>
           )}
         </div>
-        {dispositivos.length === 0 ? (
+        {loadingDispositivos ? (
+          <div className="flex justify-center py-6">
+            <Spinner size="sm" text="Cargando dispositivos..." />
+          </div>
+        ) : dispositivos.length === 0 ? (
           <p className="text-gray-500 text-center py-4">
             Este centro aún no tiene dispositivos registrados.
           </p>
