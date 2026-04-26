@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
+import com.example.proyectoarboles.fragments.AdminUsuariosFragment;
 import com.example.proyectoarboles.fragments.ArbolDetallesFragment;
 import com.example.proyectoarboles.fragments.DashboardFragment;
 import com.example.proyectoarboles.fragments.DetalleCentroFragment;
@@ -41,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
                 showFragment(ListarArbolesFragment.newInstance(-1L));
                 return true;
             } else if (itemId == R.id.menu_usuarios) {
-                Toast.makeText(this, "Próximamente", Toast.LENGTH_SHORT).show();
-                return false;
+                // Solo visible para ADMIN, cargar fragment de administración de usuarios
+                showFragment(new AdminUsuariosFragment());
+                return true;
             } else if (itemId == R.id.menu_login) {
                 if (permissionManager.isLoggedIn()) {
                     permissionManager.clearSession();
@@ -59,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             showFragment(new DashboardFragment());
             bottomNavigation.setSelectedItemId(R.id.menu_dashboard);
+        }
+
+        // Verificar si debemos mostrar el fragment de Login
+        if (getIntent() != null && getIntent().getBooleanExtra("SHOW_LOGIN_FRAGMENT", false)) {
+            showFragment(new LoginFragment());
+            bottomNavigation.setSelectedItemId(R.id.menu_login);
         }
 
         actualizarMenuSegunPermisos();
@@ -135,5 +143,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void setNavSelected(int itemId) {
         bottomNavigation.getMenu().findItem(itemId).setChecked(true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Si hay fragmentos en el back stack, pop el último
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            // Si estamos en el fragment de Login, ir al Dashboard
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if (currentFragment instanceof LoginFragment) {
+                showFragment(new DashboardFragment());
+                bottomNavigation.setSelectedItemId(R.id.menu_dashboard);
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 }

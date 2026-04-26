@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import com.example.proyectoarboles.api.AuthApi;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.dto.AuthResponse;
 import com.example.proyectoarboles.dto.LoginRequest;
+import com.example.proyectoarboles.util.PermissionManager;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +37,13 @@ public class Login extends AppCompatActivity {
     private Button loginButton;
     private SharedPreferences sharedPreferences;
     private Button registrerButton;
+    private PermissionManager permissionManager;
+    
+    // Vistas para modo logout
+    private LinearLayout layoutLoginForm;
+    private LinearLayout layoutLogout;
+    private TextView textViewUsuarioLogueado;
+    private Button buttonCerrarSesion;
 
 
     @Override
@@ -41,14 +51,24 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Inicializar SharedPreferences
+        // Inicializar SharedPreferences y PermissionManager
         sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        permissionManager = new PermissionManager(this);
 
-        // Inicializar vistas
+        // Inicializar vistas del formulario de login
         inputUsuario = findViewById(R.id.editTextUsuario);
         inputPassword = findViewById(R.id.editTextPassword);
         loginButton = findViewById(R.id.buttonLogin);
         registrerButton = findViewById(R.id.buttonRegistrer);
+        
+        // Inicializar vistas del modo logout
+        layoutLoginForm = findViewById(R.id.layoutLoginForm);
+        layoutLogout = findViewById(R.id.layoutLogout);
+        textViewUsuarioLogueado = findViewById(R.id.textViewUsuarioLogueado);
+        buttonCerrarSesion = findViewById(R.id.buttonCerrarSesion);
+
+        // Verificar estado de sesión y mostrar UI apropiada
+        verificarEstadoSesion();
 
         loginButton.setOnClickListener(v -> {
             String email = inputUsuario.getText().toString().trim();
@@ -67,6 +87,45 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
         });
 
+    }
+
+    /**
+     * Verifica si hay una sesión activa y muestra la UI apropiada.
+     * Si hay sesión y el usuario NO es admin, muestra botón de cerrar sesión.
+     * Si no hay sesión, muestra formulario de login.
+     */
+    private void verificarEstadoSesion() {
+        boolean isLoggedIn = permissionManager.isLoggedIn();
+        boolean isAdmin = permissionManager.isAdmin();
+        
+        if (isLoggedIn && !isAdmin) {
+            // Usuario logueado pero NO es admin: mostrar opción de cerrar sesión
+            layoutLoginForm.setVisibility(View.GONE);
+            layoutLogout.setVisibility(View.VISIBLE);
+            
+            String nombreUsuario = sharedPreferences.getString("user_name", "Usuario");
+            textViewUsuarioLogueado.setText("Sesión activa como: " + nombreUsuario);
+            
+            buttonCerrarSesion.setOnClickListener(v -> cerrarSesion());
+        } else {
+            // No hay sesión o es admin: mostrar formulario de login
+            layoutLoginForm.setVisibility(View.VISIBLE);
+            layoutLogout.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Cierra la sesión del usuario y redirige al login
+     */
+    private void cerrarSesion() {
+        permissionManager.clearSession();
+        Toast.makeText(Login.this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
+        
+        // Ir al Dashboard (MainActivity) en lugar de a la actividad Login
+        Intent intent = new Intent(Login.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void realizarLogin(String email, String password) {
