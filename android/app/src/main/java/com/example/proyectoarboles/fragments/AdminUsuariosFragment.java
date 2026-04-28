@@ -156,24 +156,28 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
 
     private void mostrarDialogoEditarUsuario(Usuario usuario) {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_usuario, null);
-        
+
         EditText editNombre = dialogView.findViewById(R.id.editTextNombre);
         EditText editEmail = dialogView.findViewById(R.id.editTextEmail);
         EditText editPassword = dialogView.findViewById(R.id.editTextPassword);
         Spinner spinnerRol = dialogView.findViewById(R.id.spinnerRol);
-        
+        View labelPassword = dialogView.findViewById(R.id.labelPassword);
+
         // Preencher campos
         editNombre.setText(usuario.getNombre());
         editEmail.setText(usuario.getEmail());
         editPassword.setVisibility(View.GONE);
-        
+        if (labelPassword != null) {
+            labelPassword.setVisibility(View.GONE);
+        }
+
         // Configurar spinner de roles
         String[] roles = {"ADMIN", "COORDINADOR"};
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(), 
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_spinner_item, roles);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRol.setAdapter(spinnerAdapter);
-        
+
         // Seleccionar rol actual
         if (usuario.getRol() != null) {
             for (int i = 0; i < roles.length; i++) {
