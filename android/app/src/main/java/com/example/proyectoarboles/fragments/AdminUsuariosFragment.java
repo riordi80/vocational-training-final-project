@@ -108,12 +108,9 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
 
     @Override
     public void onEliminarClick(Usuario usuario) {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Eliminar Usuario")
-                .setMessage("¿Estás seguro de eliminar a " + usuario.getNombre() + "?")
-                .setPositiveButton("Eliminar", (dialog, which) -> eliminarUsuario(usuario))
-                .setNegativeButton("Cancelar", null)
-                .show();
+        // El método onEliminarClick ya no se usa directamente desde el adapter 
+        // porque el botón eliminar está en el diálogo de edición.
+        // Se implementa para cumplir con la interfaz UsuarioAdapter.OnItemClickListener.
     }
 
     private void mostrarDialogoCrearUsuario() {
@@ -225,6 +222,14 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
                     actualizarUsuario(usuario.getId(), nombre, email, rol, activo);
                 })
                 .setNegativeButton("Cancelar", null)
+                .setNeutralButton("Eliminar", (dialog, which) -> {
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle("Eliminar Usuario")
+                            .setMessage("¿Estás seguro de eliminar a " + usuario.getNombre() + "?")
+                            .setPositiveButton("Eliminar", (dialogConfirm, whichConfirm) -> eliminarUsuario(usuario))
+                            .setNegativeButton("Cancelar", null)
+                            .show();
+                })
                 .show();
     }
 

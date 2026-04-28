@@ -95,20 +95,14 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.UsuarioV
             } else {
                 colorActivo = ContextCompat.getColor(itemView.getContext(), R.color.red_primary);
             }
-            
+
             GradientDrawable drawable = (GradientDrawable) viewActivo.getBackground();
             if (drawable != null) {
                 drawable.setColor(colorActivo);
             }
 
-            // Click para editar
+            // Click para editar (el botón eliminar está en el diálogo de edición)
             itemView.setOnClickListener(v -> listener.onEditarClick(usuario));
-            
-            // Click largo para eliminar
-            itemView.setOnLongClickListener(v -> {
-                listener.onEliminarClick(usuario);
-                return true;
-            });
         }
     }
 }
