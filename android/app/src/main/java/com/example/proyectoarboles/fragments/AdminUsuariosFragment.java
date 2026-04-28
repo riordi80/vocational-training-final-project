@@ -118,21 +118,27 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
 
     private void mostrarDialogoCrearUsuario() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_usuario, null);
-        
+
         EditText editNombre = dialogView.findViewById(R.id.editTextNombre);
         EditText editEmail = dialogView.findViewById(R.id.editTextEmail);
         EditText editPassword = dialogView.findViewById(R.id.editTextPassword);
         Spinner spinnerRol = dialogView.findViewById(R.id.spinnerRol);
-        
+        androidx.appcompat.widget.SwitchCompat switchActivo = dialogView.findViewById(R.id.switchActivo);
+
         // Configurar spinner de roles
         String[] roles = {"ADMIN", "COORDINADOR"};
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(), 
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_spinner_item, roles);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRol.setAdapter(spinnerAdapter);
-        
+
         // Ocultar campo password para edición
         editPassword.setVisibility(View.VISIBLE);
+
+        // Por defecto, nuevos usuarios están activos
+        if (switchActivo != null) {
+            switchActivo.setChecked(true);
+        }
 
         new AlertDialog.Builder(requireContext())
                 .setTitle("Crear Usuario")
@@ -142,13 +148,17 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
                     String email = editEmail.getText().toString().trim();
                     String password = editPassword.getText().toString().trim();
                     String rol = spinnerRol.getSelectedItem().toString();
+                    boolean activo = true;
+                    if (switchActivo != null) {
+                        activo = switchActivo.isChecked();
+                    }
 
                     if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()) {
                         Toast.makeText(requireContext(), "Todos los campos son requeridos", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    crearUsuario(nombre, email, password, rol);
+                    crearUsuario(nombre, email, password, rol, activo);
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
@@ -162,6 +172,7 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
         EditText editPassword = dialogView.findViewById(R.id.editTextPassword);
         Spinner spinnerRol = dialogView.findViewById(R.id.spinnerRol);
         View labelPassword = dialogView.findViewById(R.id.labelPassword);
+        androidx.appcompat.widget.SwitchCompat switchActivo = dialogView.findViewById(R.id.switchActivo);
 
         // Preencher campos
         editNombre.setText(usuario.getNombre());
@@ -169,6 +180,9 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
         editPassword.setVisibility(View.GONE);
         if (labelPassword != null) {
             labelPassword.setVisibility(View.GONE);
+        }
+        if (switchActivo != null) {
+            switchActivo.setChecked(usuario.getActivo());
         }
 
         // Configurar spinner de roles
@@ -195,22 +209,29 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
                     String nombre = editNombre.getText().toString().trim();
                     String email = editEmail.getText().toString().trim();
                     String rol = spinnerRol.getSelectedItem().toString();
+                    boolean activo = false;
+
+                    if (switchActivo != null) {
+                        activo = switchActivo.isChecked();
+                    } else {
+                        activo = usuario.getActivo();
+                    }
 
                     if (nombre.isEmpty() || email.isEmpty()) {
                         Toast.makeText(requireContext(), "Nombre y email son requeridos", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    actualizarUsuario(usuario.getId(), nombre, email, rol, usuario.isActivo());
+                    actualizarUsuario(usuario.getId(), nombre, email, rol, activo);
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
     }
 
-    private void crearUsuario(String nombre, String email, String password, String rol) {
+    private void crearUsuario(String nombre, String email, String password, String rol, boolean activo) {
         Usuario nuevoUsuario = new Usuario(nombre, email, rol);
         nuevoUsuario.setPasswordHash(password);
-        nuevoUsuario.setActivo(true);
+        nuevoUsuario.setActivo(activo);
 
         Call<Usuario> call = usuarioApi.crear(nuevoUsuario);
         call.enqueue(new Callback<Usuario>() {

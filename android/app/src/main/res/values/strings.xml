@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Proyecto Arboles</string>
+    <string name="label_activo">Usuario activo</string>
 </resources>
