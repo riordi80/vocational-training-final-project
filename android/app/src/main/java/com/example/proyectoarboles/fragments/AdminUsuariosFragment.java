@@ -201,7 +201,7 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
                         return;
                     }
 
-                    actualizarUsuario(usuario.getId(), nombre, email, rol);
+                    actualizarUsuario(usuario.getId(), nombre, email, rol, usuario.isActivo());
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
@@ -234,10 +234,10 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
         });
     }
 
-    private void actualizarUsuario(Long id, String nombre, String email, String rol) {
+    private void actualizarUsuario(Long id, String nombre, String email, String rol, boolean activo) {
         Usuario usuarioActualizado = new Usuario(nombre, email, rol);
         usuarioActualizado.setId(id);
-        usuarioActualizado.setActivo(true);
+        usuarioActualizado.setActivo(activo);
 
         Call<Usuario> call = usuarioApi.actualizar(id, usuarioActualizado);
         call.enqueue(new Callback<Usuario>() {
