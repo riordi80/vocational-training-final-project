@@ -20,8 +20,6 @@
         android:layout_height="wrap_content"
         android:hint="Introduzca el nombre"
         android:inputType="textPersonName"
-        android:background="@drawable/edit_text_background"
-        android:padding="12dp"
         android:layout_marginBottom="16dp"/>
 
     <!-- Email -->
@@ -39,8 +37,6 @@
         android:layout_height="wrap_content"
         android:hint="Introduzca el email"
         android:inputType="textEmailAddress"
-        android:background="@drawable/edit_text_background"
-        android:padding="12dp"
         android:layout_marginBottom="16dp"/>
 
     <!-- Password -->
@@ -59,8 +55,6 @@
         android:layout_height="wrap_content"
         android:hint="Introduzca la contraseña"
         android:inputType="textPassword"
-        android:background="@drawable/edit_text_background"
-        android:padding="12dp"
         android:layout_marginBottom="16dp"/>
 
     <!-- Switch Activo -->
@@ -95,8 +89,6 @@
     <Spinner
         android:id="@+id/spinnerRol"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/spinner_background"
-        android:padding="8dp"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

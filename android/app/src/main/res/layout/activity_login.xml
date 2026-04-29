@@ -63,9 +63,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:hint="Introduzca su usuario"
-            android:inputType="text"
-            android:background="@drawable/edit_text_background"
-            android:padding="12dp"/>
+            android:inputType="text"/>
 
         <!-- Label Contraseña -->
         <TextView
@@ -85,9 +83,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:hint="Introduzca su contraseña"
-            android:inputType="textPassword"
-            android:background="@drawable/edit_text_background"
-            android:padding="12dp"/>
+            android:inputType="textPassword"/>
 
         <!-- Botón Iniciar Sesión -->
         <Button
