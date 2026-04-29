@@ -58,7 +58,9 @@ public class Registrer extends AppCompatActivity {
         volverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Registrer.this, Login.class);
+                // Volver al Login del fragment en MainActivity
+                Intent intent = new Intent(Registrer.this, MainActivity.class);
+                intent.putExtra("SHOW_LOGIN_FRAGMENT", true);
                 startActivity(intent);
                 finish();
             }

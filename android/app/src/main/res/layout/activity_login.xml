@@ -35,81 +35,131 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewLogo" />
 
-    <!-- Label Usuario -->
-    <TextView
-        android:id="@+id/textViewUsuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Usuario"
-        app:layout_constraintStart_toStartOf="@+id/editTextUsuario"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
-
-    <!-- Campo Usuario -->
-    <EditText
-        android:id="@+id/editTextUsuario"
+    <!-- Layout del formulario de login -->
+    <LinearLayout
+        android:id="@+id/layoutLoginForm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:hint="Introduzca su usuario"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUsuario" />
-
-    <!-- Label Contraseña -->
-    <TextView
-        android:id="@+id/textViewPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Contraseña"
-        app:layout_constraintStart_toStartOf="@+id/editTextPassword"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUsuario" />
-
-    <!-- Campo Contraseña -->
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:hint="Introduzca su contraseña"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPassword" />
-
-    <!-- Botón Iniciar Sesión -->
-    <Button
-        android:id="@+id/buttonLogin"
-        style="@style/ButtonPrimary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:orientation="vertical"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:text="Iniciar Sesión"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo">
 
-    <!-- Botón Registrarse -->
-    <Button
-        android:id="@+id/buttonRegistrer"
-        style="@style/ButtonOutline"
+        <!-- Label Usuario -->
+        <TextView
+            android:id="@+id/textViewUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Usuario"
+            android:layout_marginStart="32dp"/>
+
+        <!-- Campo Usuario -->
+        <EditText
+            android:id="@+id/editTextUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Introduzca su usuario"
+            android:inputType="text"/>
+
+        <!-- Label Contraseña -->
+        <TextView
+            android:id="@+id/textViewPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Contraseña"
+            android:layout_marginStart="32dp"/>
+
+        <!-- Campo Contraseña -->
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Introduzca su contraseña"
+            android:inputType="textPassword"/>
+
+        <!-- Botón Iniciar Sesión -->
+        <Button
+            android:id="@+id/buttonLogin"
+            style="@style/ButtonPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:text="Iniciar Sesión" />
+
+        <!-- Botón Registrarse -->
+        <Button
+            android:id="@+id/buttonRegistrer"
+            style="@style/ButtonOutline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:text="Registrarse" />
+
+    </LinearLayout>
+
+    <!-- Layout de logout (visible cuando hay sesión activa y no es admin) -->
+    <LinearLayout
+        android:id="@+id/layoutLogout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:text="Registrarse"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo">
 
+        <!-- Icono de usuario -->
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_nav_usuarios"
+            android:background="@drawable/circle_background"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Mensaje de usuario logueado -->
+        <TextView
+            android:id="@+id/textViewUsuarioLogueado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sesión activa"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary"
+            android:textAlignment="center"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¿Desea cerrar sesión?"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:textAlignment="center"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Botón Cerrar Sesión -->
+        <Button
+            android:id="@+id/buttonCerrarSesion"
+            style="@style/ButtonPrimary"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Cerrar Sesión"
+            android:backgroundTint="@color/red_primary"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
