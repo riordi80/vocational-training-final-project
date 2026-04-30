@@ -2,7 +2,6 @@ package com.example.proyectoarboles.fragments;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +19,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.activities.CrearArbol;
-import com.example.proyectoarboles.activities.FormularioCentroActivity;
-import com.example.proyectoarboles.activities.FormularioDispositivoActivity;
 import com.example.proyectoarboles.activities.HistoricoDispositivoActivity;
 import com.example.proyectoarboles.activities.MainActivity;
 import com.example.proyectoarboles.api.RetrofitClient;
@@ -122,19 +119,13 @@ public class DetalleCentroFragment extends Fragment {
         btnVolver.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).navigateToListarCentros());
 
-        btnEditarCentro.setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), FormularioCentroActivity.class);
-            intent.putExtra("centro_id", centroId);
-            startActivity(intent);
-        });
+        btnEditarCentro.setOnClickListener(v ->
+                ((MainActivity) requireActivity()).navigateToFormularioCentro(centroId));
 
         btnEliminarCentro.setOnClickListener(v -> mostrarDialogoEliminarCentro());
 
-        btnAnadirDispositivo.setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), FormularioDispositivoActivity.class);
-            intent.putExtra("centro_id", centroId);
-            startActivity(intent);
-        });
+        btnAnadirDispositivo.setOnClickListener(v ->
+                ((MainActivity) requireActivity()).navigateToFormularioDispositivo(-1, centroId));
 
         btnAnadirArbol.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), CrearArbol.class);
@@ -270,11 +261,8 @@ public class DetalleCentroFragment extends Fragment {
 
         if (puedeEditar) {
             btnEditar.setVisibility(View.VISIBLE);
-            btnEditar.setOnClickListener(v -> {
-                Intent intent = new Intent(requireContext(), FormularioDispositivoActivity.class);
-                intent.putExtra("dispositivo_id", dispositivo.getId());
-                startActivity(intent);
-            });
+            btnEditar.setOnClickListener(v ->
+                    ((MainActivity) requireActivity()).navigateToFormularioDispositivo(dispositivo.getId(), -1));
         }
         if (puedeEliminar) {
             btnEliminar.setVisibility(View.VISIBLE);
@@ -427,6 +415,7 @@ public class DetalleCentroFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (centroId != -1) {
+            cargarCentro(centroId);
             cargarDispositivos(centroId);
             cargarArboles(centroId);
         }

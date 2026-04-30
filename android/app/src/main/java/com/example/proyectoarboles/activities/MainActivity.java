@@ -3,6 +3,7 @@ package com.example.proyectoarboles.activities;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -11,9 +12,13 @@ import com.example.proyectoarboles.fragments.AdminUsuariosFragment;
 import com.example.proyectoarboles.fragments.ArbolDetallesFragment;
 import com.example.proyectoarboles.fragments.DashboardFragment;
 import com.example.proyectoarboles.fragments.DetalleCentroFragment;
+import com.example.proyectoarboles.fragments.FormularioCentroFragment;
+import com.example.proyectoarboles.fragments.FormularioDispositivoFragment;
+import com.example.proyectoarboles.fragments.FormularioUsuarioFragment;
 import com.example.proyectoarboles.fragments.ListarArbolesFragment;
 import com.example.proyectoarboles.fragments.ListarCentrosFragment;
 import com.example.proyectoarboles.fragments.LoginFragment;
+import com.example.proyectoarboles.model.Usuario;
 import com.example.proyectoarboles.util.PermissionManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -21,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
     private PermissionManager permissionManager;
+    private OnBackPressedCallback onBackPressedCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +48,13 @@ public class MainActivity extends AppCompatActivity {
                 showFragment(ListarArbolesFragment.newInstance(-1L));
                 return true;
             } else if (itemId == R.id.menu_usuarios) {
-                // Solo visible para ADMIN, cargar fragment de administración de usuarios
                 showFragment(new AdminUsuariosFragment());
                 return true;
             } else if (itemId == R.id.menu_login) {
                 if (permissionManager.isLoggedIn()) {
                     permissionManager.clearSession();
                     actualizarMenuSegunPermisos();
-                    Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Sesion cerrada", Toast.LENGTH_SHORT).show();
                 } else {
                     showFragment(new LoginFragment());
                 }
@@ -63,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigation.setSelectedItemId(R.id.menu_dashboard);
         }
 
-        // Verificar si debemos mostrar el fragment de Login
         if (getIntent() != null && getIntent().getBooleanExtra("SHOW_LOGIN_FRAGMENT", false)) {
             showFragment(new LoginFragment());
             bottomNavigation.setSelectedItemId(R.id.menu_login);
         }
 
         actualizarMenuSegunPermisos();
+        configurarBackPressCallback();
     }
 
     @Override
@@ -78,19 +83,13 @@ public class MainActivity extends AppCompatActivity {
         actualizarMenuSegunPermisos();
     }
 
-    /**
-     * Actualiza los ítems del menú según el estado de sesión y el rol del usuario.
-     * Público para que LoginFragment pueda llamarlo tras un login exitoso.
-     */
     public void actualizarMenuSegunPermisos() {
         boolean loggedIn = permissionManager.isLoggedIn();
 
-        // Usuarios: solo visible para ADMIN
         bottomNavigation.getMenu()
                 .findItem(R.id.menu_usuarios)
                 .setVisible(permissionManager.isAdmin());
 
-        // Login / Logout: cambia título e icono según estado de sesión
         android.view.MenuItem loginItem = bottomNavigation.getMenu().findItem(R.id.menu_login);
         if (loggedIn) {
             loginItem.setTitle("Logout");
@@ -106,6 +105,15 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit();
+    }
+
+    private void showFragmentWithBackStack(Fragment fragment, int menuItemId) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+        setNavSelected(menuItemId);
     }
 
     public void navigateToDashboard() {
@@ -134,31 +142,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateToArbolDetalles(long arbolId) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, ArbolDetallesFragment.newInstance(arbolId))
-                .addToBackStack(null)
-                .commit();
+        showFragmentWithBackStack(ArbolDetallesFragment.newInstance(arbolId), R.id.menu_arboles);
+    }
+
+    public void navigateToFormularioCentro() {
+        showFragmentWithBackStack(FormularioCentroFragment.newInstance(), R.id.menu_centros);
+    }
+
+    public void navigateToFormularioCentro(long centroId) {
+        if (centroId == -1) {
+            navigateToFormularioCentro();
+            return;
+        }
+        showFragmentWithBackStack(FormularioCentroFragment.newInstance(centroId), R.id.menu_centros);
+    }
+
+    public void navigateToFormularioDispositivo(long dispositivoId, long centroId) {
+        if (dispositivoId == -1 && centroId == -1) {
+            showFragmentWithBackStack(FormularioDispositivoFragment.newInstance(), R.id.menu_centros);
+            return;
+        }
+        showFragmentWithBackStack(
+                FormularioDispositivoFragment.newInstance(dispositivoId, centroId),
+                R.id.menu_centros
+        );
+    }
+
+    public void navigateToFormularioUsuario() {
+        showFragmentWithBackStack(FormularioUsuarioFragment.newInstance(), R.id.menu_usuarios);
+    }
+
+    public void navigateToFormularioUsuario(Usuario usuario) {
+        if (usuario == null || usuario.getId() == null) {
+            navigateToFormularioUsuario();
+            return;
+        }
+        showFragmentWithBackStack(FormularioUsuarioFragment.newInstance(usuario), R.id.menu_usuarios);
     }
 
     private void setNavSelected(int itemId) {
         bottomNavigation.getMenu().findItem(itemId).setChecked(true);
     }
 
-    @Override
-    public void onBackPressed() {
-        // Si hay fragmentos en el back stack, pop el último
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
-        } else {
-            // Si estamos en el fragment de Login, ir al Dashboard
-            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-            if (currentFragment instanceof LoginFragment) {
-                showFragment(new DashboardFragment());
-                bottomNavigation.setSelectedItemId(R.id.menu_dashboard);
-            } else {
-                super.onBackPressed();
+    private void configurarBackPressCallback() {
+        onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
+                    return;
+                }
+
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (currentFragment instanceof LoginFragment) {
+                    showFragment(new DashboardFragment());
+                    bottomNavigation.setSelectedItemId(R.id.menu_dashboard);
+                    return;
+                }
+
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+                setEnabled(true);
             }
-        }
+        };
+        getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
     }
 }

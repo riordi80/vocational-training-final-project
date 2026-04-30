@@ -39,12 +39,6 @@
         <activity
             android:name=".activities.HistoricoDispositivoActivity"
             android:exported="false" />
-        <activity
-            android:name=".activities.FormularioCentroActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.FormularioDispositivoActivity"
-            android:exported="false" />
 
     </application>
 
