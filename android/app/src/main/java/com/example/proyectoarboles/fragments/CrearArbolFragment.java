@@ -39,6 +39,7 @@ public class CrearArbolFragment extends Fragment {
     private TextInputEditText inputFechaPlantacion;
     private TextInputEditText inputUbicacion;
     private Button btnCrear;
+    private Button btnCancelar;
     private ImageButton btnVolver;
     private ProgressBar progressBar;
 
@@ -73,6 +74,7 @@ public class CrearArbolFragment extends Fragment {
         inputFechaPlantacion = view.findViewById(R.id.inputFechaPlantacion);
         inputUbicacion = view.findViewById(R.id.inputUbicacion);
         btnCrear = view.findViewById(R.id.btnCrearArbol);
+        btnCancelar = view.findViewById(R.id.btnCancelarCrearArbol);
         btnVolver = view.findViewById(R.id.buttonVolverCrearArbol);
         progressBar = view.findViewById(R.id.progressBarCrear);
 
@@ -83,6 +85,8 @@ public class CrearArbolFragment extends Fragment {
         }
 
         btnCrear.setOnClickListener(v -> validarYCrearArbol());
+        btnCancelar.setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager().popBackStack());
         btnVolver.setOnClickListener(v ->
                 requireActivity().getSupportFragmentManager().popBackStack());
     }
