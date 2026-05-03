@@ -1,6 +1,5 @@
 package com.example.proyectoarboles.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectoarboles.R;
-import com.example.proyectoarboles.activities.FormularioCentroActivity;
 import com.example.proyectoarboles.activities.MainActivity;
 import com.example.proyectoarboles.adapter.CentroEducativoAdapter;
 import com.example.proyectoarboles.api.RetrofitClient;
@@ -109,7 +107,7 @@ public class ListarCentrosFragment extends Fragment implements CentroEducativoAd
         if (permissionManager.puedeCrearCentro()) {
             fabAnadirCentro.setVisibility(View.VISIBLE);
             fabAnadirCentro.setOnClickListener(v ->
-                    startActivity(new Intent(requireContext(), FormularioCentroActivity.class)));
+                    ((MainActivity) requireActivity()).navigateToFormularioCentro());
         } else {
             fabAnadirCentro.setVisibility(View.GONE);
         }

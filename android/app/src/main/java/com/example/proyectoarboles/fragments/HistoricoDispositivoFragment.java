@@ -1,16 +1,20 @@
-package com.example.proyectoarboles.activities;
+package com.example.proyectoarboles.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.api.RetrofitClient;
@@ -36,10 +40,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HistoricoDispositivoActivity extends AppCompatActivity {
+public class HistoricoDispositivoFragment extends Fragment {
 
     private static final String TAG = "HistoricoDispositivo";
     private static final int PAGE_SIZE = 20;
+    private static final String ARG_DISPOSITIVO_ID = "dispositivo_id";
+    private static final String ARG_DISPOSITIVO_NOMBRE = "dispositivo_nombre";
 
     private Long dispositivoId;
     private String periodoActivo = "SEMANA";
@@ -53,7 +59,15 @@ public class HistoricoDispositivoActivity extends AppCompatActivity {
     private Button btnVolver, btnPaginaAnterior, btnPaginaSiguiente;
     private LinearLayout layoutTablaLecturas;
 
-    // Días por periodo
+    public static HistoricoDispositivoFragment newInstance(long dispositivoId, String dispositivoNombre) {
+        HistoricoDispositivoFragment fragment = new HistoricoDispositivoFragment();
+        Bundle args = new Bundle();
+        args.putLong(ARG_DISPOSITIVO_ID, dispositivoId);
+        args.putString(ARG_DISPOSITIVO_NOMBRE, dispositivoNombre != null ? dispositivoNombre : "");
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private int getDias(String periodo) {
         switch (periodo) {
             case "DIA": return 1;
@@ -65,40 +79,46 @@ public class HistoricoDispositivoActivity extends AppCompatActivity {
         }
     }
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_historico_dispositivo);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_historico_dispositivo, container, false);
+    }
 
-        inicializarVistas();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        inicializarVistas(view);
         configurarCharts();
         configurarListeners();
 
-        dispositivoId = getIntent().getLongExtra("dispositivo_id", -1);
+        dispositivoId = getArguments() != null ? getArguments().getLong(ARG_DISPOSITIVO_ID, -1) : -1;
         if (dispositivoId != -1) {
             cargarInfoDispositivo();
             cargarGrafica();
             cargarTabla();
         } else {
-            Toast.makeText(this, "Error: ID de dispositivo no válido", Toast.LENGTH_LONG).show();
-            finish();
+            Toast.makeText(requireContext(), "Error: ID de dispositivo no válido", Toast.LENGTH_LONG).show();
+            requireActivity().getSupportFragmentManager().popBackStack();
         }
     }
 
-    private void inicializarVistas() {
-        tvInfoDispositivo = findViewById(R.id.textViewInfoDispositivo);
-        tvInfoGrafica1 = findViewById(R.id.textViewInfoGrafica1);
-        tvInfoGraficaCO2 = findViewById(R.id.textViewInfoGraficaCO2);
-        tvTituloTabla = findViewById(R.id.textViewTituloTabla);
-        tvPaginaInfo = findViewById(R.id.textViewPaginaInfo);
-        tvNoLecturas = findViewById(R.id.textViewNoLecturas);
-        radioGroupPeriodo = findViewById(R.id.radioGroupPeriodoHistorico);
-        lineChartSensores = findViewById(R.id.lineChartSensores);
-        lineChartCO2 = findViewById(R.id.lineChartCO2);
-        btnVolver = findViewById(R.id.buttonVolverHistorico);
-        btnPaginaAnterior = findViewById(R.id.buttonPaginaAnterior);
-        btnPaginaSiguiente = findViewById(R.id.buttonPaginaSiguiente);
-        layoutTablaLecturas = findViewById(R.id.layoutTablaLecturas);
+    private void inicializarVistas(View view) {
+        tvInfoDispositivo = view.findViewById(R.id.textViewInfoDispositivo);
+        tvInfoGrafica1 = view.findViewById(R.id.textViewInfoGrafica1);
+        tvInfoGraficaCO2 = view.findViewById(R.id.textViewInfoGraficaCO2);
+        tvTituloTabla = view.findViewById(R.id.textViewTituloTabla);
+        tvPaginaInfo = view.findViewById(R.id.textViewPaginaInfo);
+        tvNoLecturas = view.findViewById(R.id.textViewNoLecturas);
+        radioGroupPeriodo = view.findViewById(R.id.radioGroupPeriodoHistorico);
+        lineChartSensores = view.findViewById(R.id.lineChartSensores);
+        lineChartCO2 = view.findViewById(R.id.lineChartCO2);
+        btnVolver = view.findViewById(R.id.buttonVolverHistorico);
+        btnPaginaAnterior = view.findViewById(R.id.buttonPaginaAnterior);
+        btnPaginaSiguiente = view.findViewById(R.id.buttonPaginaSiguiente);
+        layoutTablaLecturas = view.findViewById(R.id.layoutTablaLecturas);
     }
 
     private void configurarCharts() {
@@ -109,17 +129,18 @@ public class HistoricoDispositivoActivity extends AppCompatActivity {
             chart.setScaleEnabled(true);
             chart.setPinchZoom(true);
             chart.getLegend().setEnabled(true);
-            chart.getLegend().setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
+            chart.getLegend().setTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray));
             XAxis xAxis = chart.getXAxis();
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setDrawGridLines(false);
-            xAxis.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
+            xAxis.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray));
             xAxis.setLabelCount(5, true);
         }
     }
 
     private void configurarListeners() {
-        btnVolver.setOnClickListener(v -> finish());
+        btnVolver.setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager().popBackStack());
 
         btnPaginaAnterior.setOnClickListener(v -> {
             if (paginaActual > 0) {
@@ -152,6 +173,7 @@ public class HistoricoDispositivoActivity extends AppCompatActivity {
         call.enqueue(new Callback<DispositivoEsp32>() {
             @Override
             public void onResponse(Call<DispositivoEsp32> call, Response<DispositivoEsp32> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     DispositivoEsp32 d = response.body();
                     String info = "Dispositivo: " + d.getMacAddress();
@@ -180,6 +202,7 @@ public class HistoricoDispositivoActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<LecturaMuestraProjection>>() {
             @Override
             public void onResponse(Call<List<LecturaMuestraProjection>> call, Response<List<LecturaMuestraProjection>> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     List<LecturaMuestraProjection> lecturas = response.body();
                     tvInfoGrafica1.setText(lecturas.size() + " lecturas");
@@ -205,6 +228,7 @@ public class HistoricoDispositivoActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<LecturaMuestraProjection>> call, Throwable t) {
+                if (!isAdded()) return;
                 Log.e(TAG, "Error de conexión gráfica: " + t.getMessage());
                 lineChartSensores.setNoDataText("Error de conexión");
                 lineChartCO2.setNoDataText("Error de conexión");
@@ -288,6 +312,7 @@ public class HistoricoDispositivoActivity extends AppCompatActivity {
         call.enqueue(new Callback<PageResponse<Lectura>>() {
             @Override
             public void onResponse(Call<PageResponse<Lectura>> call, Response<PageResponse<Lectura>> response) {
+                if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     PageResponse<Lectura> page = response.body();
                     totalPaginas = page.getTotalPages();
@@ -314,13 +339,13 @@ public class HistoricoDispositivoActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PageResponse<Lectura>> call, Throwable t) {
+                if (!isAdded()) return;
                 Log.e(TAG, "Error de conexión tabla: " + t.getMessage());
             }
         });
     }
 
     private void construirTabla(List<Lectura> lecturas) {
-        // Cabecera de la tabla
         LinearLayout cabecera = crearFilaTabla(
                 "Fecha/Hora", "Temp.", "Hum.Amb.", "Hum.Suelo", "CO2", "Luz1", "Luz2", true);
         layoutTablaLecturas.addView(cabecera);
@@ -340,13 +365,9 @@ public class HistoricoDispositivoActivity extends AppCompatActivity {
 
     private LinearLayout crearFilaTabla(String ts, String temp, String humAmb, String humSuelo,
                                          String co2, String luz1, String luz2, boolean esHeader) {
-        LinearLayout fila = new LinearLayout(this);
+        LinearLayout fila = new LinearLayout(requireContext());
         fila.setOrientation(LinearLayout.HORIZONTAL);
-        if (esHeader) {
-            fila.setBackgroundColor(0xFF16a34a);
-        } else {
-            fila.setBackgroundColor(0xFFFFFFFF);
-        }
+        fila.setBackgroundColor(esHeader ? 0xFF16a34a : 0xFFFFFFFF);
 
         int textColor = esHeader ? 0xFFFFFFFF : 0xFF374151;
         int textStyle = esHeader ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL;
@@ -355,7 +376,7 @@ public class HistoricoDispositivoActivity extends AppCompatActivity {
         float[] pesos = {2f, 1f, 1f, 1f, 1f, 1f, 1f};
 
         for (int i = 0; i < valores.length; i++) {
-            TextView tv = new TextView(this);
+            TextView tv = new TextView(requireContext());
             tv.setText(valores[i]);
             tv.setTextSize(11);
             tv.setTextColor(textColor);
