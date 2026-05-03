@@ -46,7 +46,7 @@ public class FormularioUsuarioFragment extends Fragment {
     private EditText editNombre;
     private EditText editEmail;
     private EditText editPassword;
-    private TextView labelPassword;
+    private View labelPassword;
     private Spinner spinnerRol;
     private SwitchCompat switchActivo;
     private ImageButton btnVolver;

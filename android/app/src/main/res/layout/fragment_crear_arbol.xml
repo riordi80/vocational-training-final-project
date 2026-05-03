@@ -48,7 +48,16 @@
             style="@style/ButtonPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crear Árbol"
+            android:text="Guardar"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnCancelarCrearArbol"
+            style="@style/ButtonSecondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Cancelar"
             android:textSize="12sp" />
 
     </LinearLayout>
