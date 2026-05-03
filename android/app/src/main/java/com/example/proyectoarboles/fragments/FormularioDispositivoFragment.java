@@ -77,7 +77,7 @@ public class FormularioDispositivoFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_formulario_dispositivo, container, false);
+        return inflater.inflate(R.layout.fragment_formulario_dispositivo, container, false);
     }
 
     @Override

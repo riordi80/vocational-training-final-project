@@ -104,11 +104,7 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
 
     @Override
     public void onEditarClick(Usuario usuario) {
-        ((MainActivity) requireActivity()).navigateToFormularioUsuario(usuario);
-    }
-
-    @Override
-    public void onEliminarClick(Usuario usuario) {
+        ((MainActivity) requireActivity()).navigateToDetalleUsuario(usuario);
     }
 
     @Override

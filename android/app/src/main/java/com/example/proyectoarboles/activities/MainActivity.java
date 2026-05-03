@@ -14,6 +14,9 @@ import com.example.proyectoarboles.fragments.DashboardFragment;
 import com.example.proyectoarboles.fragments.DetalleCentroFragment;
 import com.example.proyectoarboles.fragments.FormularioCentroFragment;
 import com.example.proyectoarboles.fragments.FormularioDispositivoFragment;
+import com.example.proyectoarboles.fragments.CrearArbolFragment;
+import com.example.proyectoarboles.fragments.HistoricoDispositivoFragment;
+import com.example.proyectoarboles.fragments.DetalleUsuarioFragment;
 import com.example.proyectoarboles.fragments.FormularioUsuarioFragment;
 import com.example.proyectoarboles.fragments.ListarArbolesFragment;
 import com.example.proyectoarboles.fragments.ListarCentrosFragment;
@@ -178,6 +181,24 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         showFragmentWithBackStack(FormularioUsuarioFragment.newInstance(usuario), R.id.menu_usuarios);
+    }
+
+    public void navigateToDetalleUsuario(Usuario usuario) {
+        showFragmentWithBackStack(DetalleUsuarioFragment.newInstance(usuario), R.id.menu_usuarios);
+    }
+
+    public void navigateToCrearArbol(long centroId, String centroNombre) {
+        showFragmentWithBackStack(
+                CrearArbolFragment.newInstance(centroId, centroNombre),
+                R.id.menu_centros
+        );
+    }
+
+    public void navigateToHistoricoDispositivo(long dispositivoId, String dispositivoNombre) {
+        showFragmentWithBackStack(
+                HistoricoDispositivoFragment.newInstance(dispositivoId, dispositivoNombre),
+                R.id.menu_centros
+        );
     }
 
     private void setNavSelected(int itemId) {

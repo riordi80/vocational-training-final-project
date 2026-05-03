@@ -1,7 +1,6 @@
 package com.example.proyectoarboles.fragments;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
-import com.example.proyectoarboles.activities.CrearArbol;
-import com.example.proyectoarboles.activities.HistoricoDispositivoActivity;
 import com.example.proyectoarboles.activities.MainActivity;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.Arbol;
@@ -127,11 +124,9 @@ public class DetalleCentroFragment extends Fragment {
         btnAnadirDispositivo.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).navigateToFormularioDispositivo(-1, centroId));
 
-        btnAnadirArbol.setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), CrearArbol.class);
-            intent.putExtra("centro_id", centroId);
-            startActivity(intent);
-        });
+        btnAnadirArbol.setOnClickListener(v ->
+                ((MainActivity) requireActivity()).navigateToCrearArbol(
+                        centroId, centroActual != null ? centroActual.getNombre() : ""));
     }
 
     private void cargarCentro(long id) {
@@ -250,11 +245,9 @@ public class DetalleCentroFragment extends Fragment {
         tvFrecuencia.setText("Frecuencia: " + (freq != null ? freq + " s" : "-"));
         tvUltimaConexion.setText(formatearFechaHora(dispositivo.getUltimaConexion()));
 
-        btnHistorico.setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), HistoricoDispositivoActivity.class);
-            intent.putExtra("dispositivo_id", dispositivo.getId());
-            startActivity(intent);
-        });
+        btnHistorico.setOnClickListener(v ->
+                ((MainActivity) requireActivity()).navigateToHistoricoDispositivo(
+                        dispositivo.getId(), dispositivo.getMacAddress()));
 
         boolean puedeEditar = centroActual != null && permissionManager.puedeEditarCentro(centroActual.getId());
         boolean puedeEliminar = centroActual != null && permissionManager.puedeEliminarCentro(centroActual.getId());
