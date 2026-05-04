@@ -9,12 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,7 +48,8 @@ public class ArbolDetallesFragment extends Fragment {
     private static final String ARG_ARBOL_ID = "arbol_id";
 
     private TextView tvNombre, tvEspecie, tvFecha, tvUbicacion, tvCentroEducativo, tvAbsorcionCo2;
-    private EditText etNombre, etEspecie, etFecha, etUbicacion;
+    private TextInputEditText etNombre, etEspecie, etFecha, etUbicacion;
+    private TextInputLayout tilNombre, tilEspecie, tilFecha, tilUbicacion;
     private Spinner spinnerCentroEducativo;
     private LinearLayout llNombreView, llEspecieView, llFechaView, llCentroView, llUbicacionView;
     private ImageButton btnEditar, btnEliminar, btnVolver;
@@ -118,6 +121,10 @@ public class ArbolDetallesFragment extends Fragment {
         etEspecie = view.findViewById(R.id.editTextEspecieDetalle);
         etFecha = view.findViewById(R.id.editTextFechaDetalle);
         etUbicacion = view.findViewById(R.id.editTextUbicacion);
+        tilNombre = view.findViewById(R.id.tilNombreDetalle);
+        tilEspecie = view.findViewById(R.id.tilEspecieDetalle);
+        tilFecha = view.findViewById(R.id.tilFechaDetalle);
+        tilUbicacion = view.findViewById(R.id.tilUbicacion);
 
         spinnerCentroEducativo = view.findViewById(R.id.spinnerCentroEducativo);
         centrosAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, listaCentros);
@@ -245,13 +252,13 @@ public class ArbolDetallesFragment extends Fragment {
 
     private void mostrarTextViews() {
         llNombreView.setVisibility(View.VISIBLE);
-        etNombre.setVisibility(View.GONE);
+        tilNombre.setVisibility(View.GONE);
         llEspecieView.setVisibility(View.VISIBLE);
-        etEspecie.setVisibility(View.GONE);
+        tilEspecie.setVisibility(View.GONE);
         llFechaView.setVisibility(View.VISIBLE);
-        etFecha.setVisibility(View.GONE);
+        tilFecha.setVisibility(View.GONE);
         llUbicacionView.setVisibility(View.VISIBLE);
-        etUbicacion.setVisibility(View.GONE);
+        tilUbicacion.setVisibility(View.GONE);
         llCentroView.setVisibility(View.VISIBLE);
         spinnerCentroEducativo.setVisibility(View.GONE);
         btnGuardar.setVisibility(View.GONE);
@@ -261,16 +268,16 @@ public class ArbolDetallesFragment extends Fragment {
 
     private void mostrarEditTexts() {
         llNombreView.setVisibility(View.GONE);
-        etNombre.setVisibility(View.VISIBLE);
+        tilNombre.setVisibility(View.VISIBLE);
         etNombre.setText(tvNombre.getText());
         llEspecieView.setVisibility(View.GONE);
-        etEspecie.setVisibility(View.VISIBLE);
+        tilEspecie.setVisibility(View.VISIBLE);
         etEspecie.setText(tvEspecie.getText());
         llFechaView.setVisibility(View.GONE);
-        etFecha.setVisibility(View.VISIBLE);
+        tilFecha.setVisibility(View.VISIBLE);
         if (arbolActual != null) etFecha.setText(arbolActual.getFechaPlantacion());
         llUbicacionView.setVisibility(View.GONE);
-        etUbicacion.setVisibility(View.VISIBLE);
+        tilUbicacion.setVisibility(View.VISIBLE);
         etUbicacion.setText(tvUbicacion.getText());
         llCentroView.setVisibility(View.GONE);
         spinnerCentroEducativo.setVisibility(View.VISIBLE);

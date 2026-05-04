@@ -37,6 +37,7 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
     private UsuarioAdapter adapter;
     private final List<Usuario> listaUsuarios = new ArrayList<>();
     private FloatingActionButton fabAnadirUsuario;
+    private android.widget.Button btnAnadir;
     private UsuarioApi usuarioApi;
 
     @Nullable
@@ -58,6 +59,7 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
 
         recyclerViewUsuarios = view.findViewById(R.id.recyclerViewUsuarios);
         fabAnadirUsuario = view.findViewById(R.id.fabAnadirUsuario);
+        btnAnadir = view.findViewById(R.id.buttonHeaderAnadir);
 
         configurarRecyclerView();
         configurarFab();
@@ -71,8 +73,19 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
     }
 
     private void configurarFab() {
-        fabAnadirUsuario.setOnClickListener(v ->
-                ((MainActivity) requireActivity()).navigateToFormularioUsuario());
+        boolean landscape = getResources().getConfiguration().orientation
+                == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+        if (landscape) {
+            fabAnadirUsuario.setVisibility(View.GONE);
+            btnAnadir.setVisibility(View.VISIBLE);
+            btnAnadir.setOnClickListener(v ->
+                    ((MainActivity) requireActivity()).navigateToFormularioUsuario());
+        } else {
+            btnAnadir.setVisibility(View.GONE);
+            fabAnadirUsuario.setVisibility(View.VISIBLE);
+            fabAnadirUsuario.setOnClickListener(v ->
+                    ((MainActivity) requireActivity()).navigateToFormularioUsuario());
+        }
     }
 
     private void cargarUsuariosDesdeAPI() {
