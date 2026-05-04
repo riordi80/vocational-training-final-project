@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Forma compartida para todos los botones de la app -->
+    <style name="ShapeAppearance.App.Button" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
     <!-- Botón Primario (Verde bosque — confirmaciones, guardar) -->
     <style name="ButtonPrimary" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/green_primary</item>
@@ -12,6 +18,7 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:minHeight">0dp</item>
     </style>
 
     <!-- Botón Acento (Ámbar — CTAs destacados) -->
@@ -39,6 +46,7 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:minHeight">0dp</item>
     </style>
 
     <!-- Botón Outline (alias de ButtonSecondary — compatibilidad) -->
@@ -55,6 +63,14 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- Icono en cards de listado -->
+    <style name="IconoCard">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:tint">@color/green_secondary</item>
     </style>
 
     <!-- Card -->
