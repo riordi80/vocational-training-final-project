@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 import api from '../services/api';
-import { getUltimaLectura, getLecturasParaGrafica } from '../services/lecturasService';
+import { getUltimaLectura } from '../services/lecturasService';
 
 vi.mock('../services/api');
 
