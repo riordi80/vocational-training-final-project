@@ -26,13 +26,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Activities independientes (sin bottom nav) -->
-        <activity
-            android:name=".activities.Login"
-            android:exported="false" />
-        <activity
-            android:name=".activities.Registrer"
-            android:exported="false" />
 
     </application>
 

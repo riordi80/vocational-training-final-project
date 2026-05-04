@@ -1,6 +1,5 @@
 package com.example.proyectoarboles.fragments;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +49,6 @@ public class FormularioUsuarioFragment extends Fragment {
     private Spinner spinnerRol;
     private SwitchCompat switchActivo;
     private ImageButton btnVolver;
-    private ImageButton btnEliminar;
     private Button btnGuardar;
     private Button btnCancelar;
 
@@ -100,7 +98,6 @@ public class FormularioUsuarioFragment extends Fragment {
         spinnerRol = view.findViewById(R.id.spinnerRol);
         switchActivo = view.findViewById(R.id.switchActivo);
         btnVolver = view.findViewById(R.id.buttonVolverFormularioUsuario);
-        btnEliminar = view.findViewById(R.id.buttonEliminarUsuario);
         btnGuardar = view.findViewById(R.id.buttonGuardarUsuario);
         btnCancelar = view.findViewById(R.id.buttonCancelarFormularioUsuario);
     }
@@ -115,7 +112,6 @@ public class FormularioUsuarioFragment extends Fragment {
     private void configurarModo() {
         if (esEdicion) {
             tvTitulo.setText("Editar Usuario");
-            btnEliminar.setVisibility(View.VISIBLE);
 
             editNombre.setText(getArguments() != null ? getArguments().getString(ARG_NOMBRE, "") : "");
             editEmail.setText(getArguments() != null ? getArguments().getString(ARG_EMAIL, "") : "");
@@ -135,7 +131,6 @@ public class FormularioUsuarioFragment extends Fragment {
             }
         } else {
             tvTitulo.setText("Crear Usuario");
-            btnEliminar.setVisibility(View.GONE);
             if (switchActivo != null) {
                 switchActivo.setChecked(true);
             }
@@ -146,7 +141,6 @@ public class FormularioUsuarioFragment extends Fragment {
         btnVolver.setOnClickListener(v -> volverAtras());
         btnCancelar.setOnClickListener(v -> volverAtras());
         btnGuardar.setOnClickListener(v -> guardarUsuario());
-        btnEliminar.setOnClickListener(v -> mostrarConfirmacionEliminar());
     }
 
     private void volverAtras() {
@@ -243,43 +237,4 @@ public class FormularioUsuarioFragment extends Fragment {
         });
     }
 
-    private void mostrarConfirmacionEliminar() {
-        String nombre = editNombre.getText().toString().trim();
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Eliminar Usuario")
-                .setMessage("¿Estas seguro de eliminar a " + nombre + "?")
-                .setPositiveButton("Eliminar", (dialog, which) -> eliminarUsuario())
-                .setNegativeButton("Cancelar", null)
-                .show();
-    }
-
-    private void eliminarUsuario() {
-        if (usuarioId == null || usuarioId == -1) {
-            return;
-        }
-
-        Call<Void> call = usuarioApi.eliminar(usuarioId);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (!isAdded()) {
-                    return;
-                }
-                if (response.isSuccessful()) {
-                    Toast.makeText(requireContext(), "Usuario eliminado correctamente", Toast.LENGTH_SHORT).show();
-                    volverAtras();
-                } else {
-                    Toast.makeText(requireContext(), "Error al eliminar usuario", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                if (!isAdded()) {
-                    return;
-                }
-                Toast.makeText(requireContext(), "Error de conexion", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 }

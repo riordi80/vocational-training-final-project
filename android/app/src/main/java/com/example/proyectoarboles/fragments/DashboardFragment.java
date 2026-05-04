@@ -3,14 +3,12 @@ package com.example.proyectoarboles.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import com.google.android.material.card.MaterialCardView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,10 +29,8 @@ import retrofit2.Response;
 
 public class DashboardFragment extends Fragment {
 
-    private static final String TAG = "DashboardFragment";
-
     private TextView tvNumeroCentros, tvNumeroArboles, tvNombreUsuario, tvRolUsuario;
-    private MaterialCardView btVerCentros, btVerArboles;
+    private MaterialCardView btVerCentros;
     private LinearLayout llEstadoUsuario;
     private SharedPreferences sharedPreferences;
     private PermissionManager permissionManager;
@@ -43,7 +39,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_dashboard, container, false);
+        return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
     @Override
@@ -59,14 +55,9 @@ public class DashboardFragment extends Fragment {
         tvRolUsuario = view.findViewById(R.id.tvRolUsuario);
         llEstadoUsuario = view.findViewById(R.id.llEstadoUsuario);
         btVerCentros = (MaterialCardView) view.findViewById(R.id.btVerCentros);
-        btVerArboles = (MaterialCardView) view.findViewById(R.id.btVerArboles);
 
         configurarListeners();
         actualizarInfoUsuario();
-        cargarEstadisticas();
-    }
-
-    private void cargarEstadisticas() {
         cargarNumeroCentros();
         cargarNumeroArboles();
     }
@@ -116,9 +107,6 @@ public class DashboardFragment extends Fragment {
     private void configurarListeners() {
         btVerCentros.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).navigateToListarCentros());
-
-        btVerArboles.setOnClickListener(v ->
-                ((MainActivity) requireActivity()).navigateToListarArboles(-1L));
     }
 
     private void actualizarInfoUsuario() {
@@ -139,7 +127,8 @@ public class DashboardFragment extends Fragment {
         super.onResume();
         if (permissionManager != null) {
             actualizarInfoUsuario();
-            cargarEstadisticas();
+            cargarNumeroCentros();
+            cargarNumeroArboles();
         }
     }
 }

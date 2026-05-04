@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,7 +43,7 @@ public class ListarCentrosFragment extends Fragment implements CentroEducativoAd
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_listar_centros, container, false);
+        return inflater.inflate(R.layout.fragment_listar_centros, container, false);
     }
 
     @Override
@@ -50,6 +51,11 @@ public class ListarCentrosFragment extends Fragment implements CentroEducativoAd
         super.onViewCreated(view, savedInstanceState);
 
         permissionManager = new PermissionManager(requireContext());
+
+        ((android.widget.ImageView) view.findViewById(R.id.imageViewHeaderIcon)).setImageResource(R.drawable.ic_school);
+        ((TextView) view.findViewById(R.id.textViewHeaderTitle)).setText("Centros Educativos");
+        ((TextView) view.findViewById(R.id.textViewHeaderSubtitle)).setText("Listado de centros educativos participantes en el proyecto");
+
         recyclerViewCentros = view.findViewById(R.id.RecyclerViewCentros);
         fabAnadirCentro = view.findViewById(R.id.fabAnadirCentro);
 
