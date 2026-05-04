@@ -21,11 +21,14 @@ export const AuthProvider = ({ children }) => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             try {
+                const parsed = JSON.parse(storedUser);
                 // eslint-disable-next-line react-hooks/set-state-in-effect
-                setUser(JSON.parse(storedUser));
+                setUser(parsed);
+                if (parsed.token) localStorage.setItem('token', parsed.token);
             } catch (error) {
                 console.error('Error parsing user from localStorage:', error);
                 localStorage.removeItem('user');
+                localStorage.removeItem('token');
             }
         }
         setLoading(false);
@@ -40,6 +43,7 @@ export const AuthProvider = ({ children }) => {
             const response = await api.post('/auth/login', { email, password });
             const userData = response.data;
             localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('token', userData.token);
             setUser(userData);
             return userData;
         } catch (error) {
@@ -53,9 +57,9 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Logout - elimina usuario del localStorage
     const logout = () => {
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
         setUser(null);
     };
 
@@ -68,6 +72,7 @@ export const AuthProvider = ({ children }) => {
             const response = await api.post('/auth/register', { nombre, email, password });
             const userData = response.data;
             localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('token', userData.token);
             setUser(userData);
             return userData;
         } catch (error) {
