@@ -20,6 +20,9 @@ public class AuthResponse {
     @SerializedName("centros")
     private List<CentroRef> centros;
 
+    @SerializedName("token")
+    private String token;
+
     // Getters
     public Long getId() {
         return id;
@@ -39,6 +42,10 @@ public class AuthResponse {
 
     public List<CentroRef> getCentros() {
         return centros;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     /**

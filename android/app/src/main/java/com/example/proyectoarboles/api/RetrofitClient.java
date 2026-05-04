@@ -1,5 +1,7 @@
 package com.example.proyectoarboles.api;
 
+import android.content.Context;
+
 import com.example.proyectoarboles.BuildConfig;
 import com.example.proyectoarboles.adapter.BigDecimalStringAdapter;
 import com.google.gson.Gson;
@@ -25,14 +27,44 @@ public class RetrofitClient {
     private static LecturaApi lecturaApi = null;
     private static DispositivoApi dispositivoApi = null;
 
+    public static void init(Context context) {
+        AuthInterceptor authInterceptor = new AuthInterceptor(context.getApplicationContext());
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(authInterceptor)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(String.class, new BigDecimalStringAdapter())
+                .setLenient()
+                .create();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        arbolApi = null;
+        centroEducativoApi = null;
+        authApi = null;
+        usuarioApi = null;
+        usuarioCentroApi = null;
+        lecturaApi = null;
+        dispositivoApi = null;
+    }
+
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
 
-            // OKHTTP CLIENT CON TIMEOUT
+            // OKHTTP CLIENT CON TIMEOUT (sin AuthInterceptor — usar init(context) en su lugar)
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(60, TimeUnit.SECONDS)  // tiempo para conectar
-                    .readTimeout(60, TimeUnit.SECONDS)     // tiempo para recibir datos
-                    .writeTimeout(60, TimeUnit.SECONDS)    // tiempo para enviar datos
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
                     .build();
 
             // CONFIGURAR GSON
