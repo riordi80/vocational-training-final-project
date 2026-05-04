@@ -1,23 +1,26 @@
-package com.example.proyectoarboles.activities;
+package com.example.proyectoarboles.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.Arbol;
 import com.example.proyectoarboles.model.CentroEducativo;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -25,57 +28,75 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CrearArbol extends AppCompatActivity {
+public class CrearArbolFragment extends Fragment {
 
-    private static final String TAG = "CrearArbol";
+    private static final String TAG = "CrearArbolFragment";
+    private static final String ARG_CENTRO_ID = "centro_id";
+    private static final String ARG_CENTRO_NOMBRE = "centro_nombre";
 
-    private EditText inputNombre;
-    private EditText inputEspecie;
-    private EditText inputFechaPlantacion;
-    private EditText inputUbicacion;
+    private TextInputEditText inputNombre;
+    private TextInputEditText inputEspecie;
+    private TextInputEditText inputFechaPlantacion;
+    private TextInputEditText inputUbicacion;
     private Button btnCrear;
     private Button btnCancelar;
+    private ImageButton btnVolver;
     private ProgressBar progressBar;
 
     private long centroId = -1;
-    private String centrNombre = "";
+    private String centroNombre = "";
+
+    public static CrearArbolFragment newInstance(long centroId, String centroNombre) {
+        CrearArbolFragment fragment = new CrearArbolFragment();
+        Bundle args = new Bundle();
+        args.putLong(ARG_CENTRO_ID, centroId);
+        args.putString(ARG_CENTRO_NOMBRE, centroNombre != null ? centroNombre : "");
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_crear_arbol, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crear_arbol);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        // Obtener el ID del centro desde el Intent
-        centroId = getIntent().getLongExtra("centro_id", -1);
-        centrNombre = getIntent().getStringExtra("centro_nombre");
+        centroId = getArguments() != null ? getArguments().getLong(ARG_CENTRO_ID, -1) : -1;
+        centroNombre = getArguments() != null ? getArguments().getString(ARG_CENTRO_NOMBRE, "") : "";
 
-        // Inicializar vistas
-        inputNombre = findViewById(R.id.inputNombreArbol);
-        inputEspecie = findViewById(R.id.inputEspecieArbol);
-        inputFechaPlantacion = findViewById(R.id.inputFechaPlantacion);
-        inputUbicacion = findViewById(R.id.inputUbicacion);
-        btnCrear = findViewById(R.id.btnCrearArbol);
-        btnCancelar = findViewById(R.id.btnCancelarCrear);
-        progressBar = findViewById(R.id.progressBarCrear);
+        inputNombre = view.findViewById(R.id.inputNombreArbol);
+        inputEspecie = view.findViewById(R.id.inputEspecieArbol);
+        inputFechaPlantacion = view.findViewById(R.id.inputFechaPlantacion);
+        inputUbicacion = view.findViewById(R.id.inputUbicacion);
+        btnCrear = view.findViewById(R.id.btnCrearArbol);
+        btnCancelar = view.findViewById(R.id.btnCancelarCrearArbol);
+        btnVolver = view.findViewById(R.id.buttonVolverCrearArbol);
+        progressBar = view.findViewById(R.id.progressBarCrear);
 
         if (centroId == -1) {
-            Toast.makeText(this, "Error: Centro no especificado", Toast.LENGTH_SHORT).show();
-            finish();
+            Toast.makeText(requireContext(), "Error: Centro no especificado", Toast.LENGTH_SHORT).show();
+            requireActivity().getSupportFragmentManager().popBackStack();
             return;
         }
 
-        // Configurar listeners
         btnCrear.setOnClickListener(v -> validarYCrearArbol());
-        btnCancelar.setOnClickListener(v -> finish());
+        btnCancelar.setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager().popBackStack());
+        btnVolver.setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager().popBackStack());
     }
 
     private void validarYCrearArbol() {
-        String nombre = inputNombre.getText().toString().trim();
-        String especie = inputEspecie.getText().toString().trim();
-        String fechaStr = inputFechaPlantacion.getText().toString().trim();
-        String ubicacion = inputUbicacion.getText().toString().trim();
+        String nombre = inputNombre.getText() != null ? inputNombre.getText().toString().trim() : "";
+        String especie = inputEspecie.getText() != null ? inputEspecie.getText().toString().trim() : "";
+        String fechaStr = inputFechaPlantacion.getText() != null ? inputFechaPlantacion.getText().toString().trim() : "";
+        String ubicacion = inputUbicacion.getText() != null ? inputUbicacion.getText().toString().trim() : "";
 
-        // Validar campos requeridos
         if (nombre.isEmpty()) {
             inputNombre.setError("El nombre es requerido");
             inputNombre.requestFocus();
@@ -94,14 +115,12 @@ public class CrearArbol extends AppCompatActivity {
             return;
         }
 
-        // Validar formato de fecha (yyyy-MM-dd) y que sea en el pasado
         if (!validarFecha(fechaStr)) {
             inputFechaPlantacion.setError("Fecha inválida. Usa formato YYYY-MM-DD y debe ser en el pasado");
             inputFechaPlantacion.requestFocus();
             return;
         }
 
-        // Si todo es válido, crear el árbol
         crearArbol(nombre, especie, fechaStr, ubicacion);
     }
 
@@ -110,13 +129,7 @@ public class CrearArbol extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             sdf.setLenient(false);
             Date fecha = sdf.parse(fechaStr);
-
-            // Verificar que la fecha sea en el pasado
-            if (fecha.after(new Date())) {
-                return false;
-            }
-
-            return true;
+            return !fecha.after(new Date());
         } catch (Exception e) {
             Log.e(TAG, "Error al validar fecha: " + e.getMessage());
             return false;
@@ -124,16 +137,13 @@ public class CrearArbol extends AppCompatActivity {
     }
 
     private void crearArbol(String nombre, String especie, String fechaPlantacion, String ubicacion) {
-        // Mostrar progress bar
         progressBar.setVisibility(View.VISIBLE);
         btnCrear.setEnabled(false);
 
-        // Crear objeto CentroEducativo con solo el ID (el backend lo validará)
         CentroEducativo centro = new CentroEducativo();
         centro.setId(centroId);
-        centro.setNombre(centrNombre);
+        centro.setNombre(centroNombre);
 
-        // Crear objeto Arbol
         Arbol nuevoArbol = new Arbol();
         nuevoArbol.setNombre(nombre);
         nuevoArbol.setEspecie(especie);
@@ -141,27 +151,21 @@ public class CrearArbol extends AppCompatActivity {
         nuevoArbol.setUbicacion(ubicacion);
         nuevoArbol.setCentroEducativo(centro);
 
-        // Realizar la llamada POST a la API
         Call<Arbol> call = RetrofitClient.getArbolApi().crearArbol(nuevoArbol);
-
         call.enqueue(new Callback<Arbol>() {
             @Override
             public void onResponse(Call<Arbol> call, Response<Arbol> response) {
+                if (!isAdded()) return;
                 progressBar.setVisibility(View.GONE);
                 btnCrear.setEnabled(true);
 
                 if (response.isSuccessful() && response.body() != null) {
                     Arbol arbolCreado = response.body();
                     Log.d(TAG, "Árbol creado exitosamente: " + arbolCreado.getNombre());
-                    Toast.makeText(CrearArbol.this, "Árbol creado: " + arbolCreado.getNombre(), Toast.LENGTH_SHORT).show();
-
-                    // Volver a ListarArboles (onResume la recargará automáticamente)
-                    finish();
-
+                    Toast.makeText(requireContext(), "Árbol creado: " + arbolCreado.getNombre(), Toast.LENGTH_SHORT).show();
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 } else {
-                    // Manejar errores específicos
                     String errorMsg = "Error al crear el árbol";
-
                     if (response.code() == 409) {
                         errorMsg = "Ya existe un árbol con ese nombre en este centro";
                     } else if (response.code() == 400) {
@@ -171,19 +175,18 @@ public class CrearArbol extends AppCompatActivity {
                     } else if (response.code() == 404) {
                         errorMsg = "Centro educativo no encontrado";
                     }
-
                     Log.e(TAG, "Error al crear árbol - Código: " + response.code());
-                    Toast.makeText(CrearArbol.this, errorMsg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Arbol> call, Throwable t) {
+                if (!isAdded()) return;
                 progressBar.setVisibility(View.GONE);
                 btnCrear.setEnabled(true);
-
                 Log.e(TAG, "Error de conexión: " + t.getMessage());
-                Toast.makeText(CrearArbol.this, "Error de conexión. Inténtalo de nuevo.", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "Error de conexión. Inténtalo de nuevo.", Toast.LENGTH_LONG).show();
             }
         });
     }

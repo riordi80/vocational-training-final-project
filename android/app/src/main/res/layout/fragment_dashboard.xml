@@ -6,21 +6,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_app"
-    android:padding="16dp"
     tools:context=".activities.Dashboard">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="🌳 Proyecto Árboles"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/green_primary"
-        android:gravity="center"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="24dp" />
-
     <ScrollView
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -36,8 +29,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:background="@color/white">
+                app:cardElevation="0dp"
+                app:strokeColor="@color/gray_200"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -175,52 +170,64 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Botones de Acción Principal -->
-            <Button
+            <!-- Card Centros -->
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btVerCentros"
-                style="@style/ButtonPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Centros Educativos"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/gray_200"
+                app:strokeWidth="1dp"
+                app:cardCornerRadius="12dp"
+                app:rippleColor="@color/green_secondary">
 
-            <Button
-                android:id="@+id/btVerArboles"
-                style="@style/ButtonPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Árboles"
-                android:layout_marginBottom="12dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        style="@style/IconoCard"
+                        android:src="@drawable/ic_school" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Centros Educativos"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/green_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Administra los centros y sus dispositivos de monitorización."
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginTop="4dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
 
         </LinearLayout>
 
     </ScrollView>
 
-    <!-- Botones de Sesión al Pie -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="16dp">
-
-        <Button
-            android:id="@+id/btRegister"
-            style="@style/ButtonSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="Registrar"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btCerrarSesion"
-            style="@style/ButtonDanger"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cerrar Sesión"
-            android:visibility="gone" />
-
-    </LinearLayout>
 
 </LinearLayout>

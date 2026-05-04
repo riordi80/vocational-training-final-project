@@ -7,13 +7,8 @@
 
     <item
         android:id="@+id/menu_centros"
-        android:icon="@drawable/ic_nav_centros"
+        android:icon="@drawable/ic_school"
         android:title="Centros" />
-
-    <item
-        android:id="@+id/menu_arboles"
-        android:icon="@drawable/ic_nav_arboles"
-        android:title="Árboles" />
 
     <item
         android:id="@+id/menu_usuarios"

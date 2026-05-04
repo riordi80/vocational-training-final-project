@@ -45,12 +45,15 @@ Aplicación web con **React**
 
 ### `/android`
 Aplicación móvil con **Android (Java)**
-- 4 Activities (Login, Register, Listar, Detalles)
-- RecyclerView con listado completo de árboles
-- Visualización de detalles con datos de sensores
-- Modo edición para modificar árboles
-- Eliminar árboles con confirmación
-- Conectado a backend en Render
+- Arquitectura single-activity + fragments (`MainActivity` + 13 fragments)
+- Navegación portrait: `BottomNavigationView` | landscape: `NavigationRailView`
+- Login / Register con autenticación real y gestión de sesión (SharedPreferences)
+- Roles: ADMIN, COORDINADOR y público — `PermissionManager` centralizado
+- Listar centros → listar árboles por centro → detalle del árbol
+- Datos de sensores en tiempo real (polling cada 30 s)
+- Gráfica histórica MPAndroidChart (temperatura, humedad) con selector DÍA/SEMANA/MES
+- CRUD árbol: crear, editar (con validación de fecha), eliminar con confirmación
+- Conectado al backend en Render
 
 ### `/esp32`
 Firmware **ESP32 (C/C++)**
@@ -176,10 +179,17 @@ Cada componente tiene documentación técnica detallada:
 - [x] Lecturas IoT en frontend (HistoricoDispositivo con gráfica Recharts + mapa Leaflet)
 - [x] Testing frontend con Vitest — 21 tests en 7 archivos, cobertura ~60%
 - [x] CRUD completo para todas las entidades de la BD (Fase 14): DispositivoEsp32Controller, AlertaController, NotificacionController
+- [x] Android refactorizado a single-activity + fragments con `NavigationRailView` en landscape (Fase 10, PR #275)
+- [x] Gráfica histórica MPAndroidChart en ArbolDetallesFragment — selector DÍA/SEMANA/MES (Fase 10)
+- [x] ESLint sin errores — 0 errores en `npm run lint` (Fase 12.3, PR #276)
+- [x] Análisis Lighthouse completado y entregado en PDF (Fase 13)
+- [ ] Historias de usuario / ERS formales documentadas (Fase 12.1)
+- [ ] Mockups de pantallas principales (Fase 12.2)
+- [ ] JWT + BCrypt (Fase 15)
 
 ## Estado del Proyecto
 
-**Fase actual**: Fases 1–11, 14 completadas + refactor dispositivo-centro | Fases 12, 13 y 15 pendientes (2ª evaluación)
+**Fase actual**: Fases 1–11, 13, 14 completadas + Fase 10 Android + Fase 12.3 Linting | Pendientes: Fase 12.1 (historias usuario), Fase 12.2 (mockups), Fase 15 (JWT+BCrypt)
 
 ### Completado (Fase 0 - Configuración Inicial)
 - [x] Configuración de entornos de desarrollo
@@ -238,18 +248,15 @@ Cada componente tiene documentación técnica detallada:
 - [x] **Responsive verificado**: Todas las páginas funcionan en móvil/tablet/desktop
 - [x] **Configuración Vercel**: vercel.json, documentación de despliegue lista
 
-### Completado (Fase 5 - App Android)
-- [x] **4 Activities implementadas**: Login, Register, ListarArboles, ArbolDetalles
-- [x] **Retrofit configurado**: Conectado a backend en Render
-- [x] **RecyclerView**: Listado de árboles con adapter optimizado
-- [x] **CRUD funcional**:
-  - Listar todos los árboles desde API
-  - Ver detalles de árbol con sensores
-  - Editar árbol (modo edición en ArbolDetalles)
-  - Eliminar árbol con confirmación
-- [x] **Modelos**: Arbol.java, CentroEducativo.java
-- [x] **Permisos configurados**: INTERNET, ACCESS_NETWORK_STATE
-- [x] **Manejo de errores**: Toast, Logs, fallback a datos locales
+### Completado (Fase 5 + Refactor Android)
+- [x] **Single-activity + fragments**: `MainActivity` gestiona navegación con 13 fragments (Login, Register, Dashboard, ListarCentros, DetalleCentro, ArbolDetalles, CrearArbol, HistoricoDispositivo, FormularioCentro, FormularioDispositivo, AdminUsuarios, DetalleUsuario, FormularioUsuario)
+- [x] **Landscape**: `NavigationRailView` lateral en `layout-land/activity_main.xml` — cubre todas las pantallas
+- [x] **Autenticación real**: Login y Register contra `POST /api/auth/login` y `POST /api/auth/register`
+- [x] **Roles**: `PermissionManager` centralizado — ADMIN, COORDINADOR, público (lectura sin cuenta)
+- [x] **CRUD árbol**: crear, editar (validación de fecha), eliminar con confirmación
+- [x] **Datos en tiempo real**: polling de sensores cada 30 s con `Handler.postDelayed`
+- [x] **Histórico**: gráfica MPAndroidChart en `ArbolDetallesFragment`, selector DÍA/SEMANA/MES
+- [x] **Retrofit**: conectado a backend en Render con timeouts de 60 s
 
 ### Completado (Despliegue)
 - [x] **Frontend**: Desplegado en Vercel → https://vocational-training-final-project.vercel.app/
@@ -294,6 +301,29 @@ Cada componente tiene documentación técnica detallada:
 - [x] **AlertaController**: GET, POST, PUT, DELETE `/api/alertas` (+ filtros por dispositivo y estado)
 - [x] **NotificacionController**: GET, POST, PUT, DELETE `/api/notificaciones` (+ filtros por usuario y no leídas)
 - [x] **Javadoc**: añadido a todos los modelos y controladores sin documentar (UsuarioCentro, Lectura, ArbolController, AuthController, LecturaController, UsuarioCentroController, UsuarioController)
+
+### Completado (Fase 10 - Android Landscape + Histórico)
+- [x] **Landscape**: `layout-land/activity_main.xml` con `NavigationRailView` — aplica a todas las pantallas (arquitectura single-activity)
+- [x] **Histórico MPAndroidChart**: gráfica de temperatura, humedad ambiente y humedad suelo integrada en `ArbolDetallesFragment`
+- [x] **Selector de período**: DÍA / SEMANA / MES — llama a `GET /api/lecturas/arbol/{id}/grafica?periodo=X`
+
+### Completado (Fase 12.3 - Linting)
+- [x] **ESLint sin errores**: `npm run lint` → 0 errores (PR #276)
+- [x] Globales de Vitest (`jest` env) declarados para archivos de test
+- [x] `coverage/` excluida del linting
+- [x] `CodeBlock` movido fuera del render en `ComponentLibrary.jsx`
+
+### Completado (Fase 13 - Lighthouse SOJ)
+- [x] **Análisis Lighthouse** ejecutado en producción (https://vocational-training-final-project.vercel.app/)
+- [x] **PDF entregado**: `SOJ_Lighthouse_RicardoOrtiz_EnriquePerez.pdf`
+
+### Pendiente (Fase 12 - Calidad del Software)
+- [ ] **12.1 Historias de usuario / ERS** [AED]: documento con historias por rol (ADMIN, COORDINADOR) en formato "Como [rol], quiero [acción] para [objetivo]"
+- [ ] **12.2 Mockups** [AED]: bocetos de las 6+ pantallas principales (Figma, draw.io, excalidraw...)
+
+### Pendiente (Fase 15 - JWT + BCrypt)
+- [ ] **BCrypt**: hashear contraseñas en register, verificar en login (`spring-security-crypto`)
+- [ ] **JWT**: generar token en login, filtro de validación en requests protegidos, actualizar frontend y Android
 
 ### Completado (Refactor Dispositivo-Centro)
 - [x] **Modelo dispositivo-centro**: cada `DispositivoEsp32` pertenece directamente a un `CentroEducativo` (relación N:1); migración SQL idempotente aplicada en local y producción
@@ -411,7 +441,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-04-15
+**Última actualización**: 2026-05-04
 
 ### Colaboradores
 

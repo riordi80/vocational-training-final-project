@@ -9,15 +9,18 @@ public class AuthResponse {
     private String email;
     private String rol;
     private List<CentroRef> centros;
+    private String token;
 
     public AuthResponse() {}
 
-    public AuthResponse(Long id, String nombre, String email, String rol, List<CentroRef> centros) {
+    public AuthResponse(Long id, String nombre, String email, String rol,
+                        List<CentroRef> centros, String token) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.rol = rol;
         this.centros = centros;
+        this.token = token;
     }
 
     public Long getId() { return id; }
@@ -34,6 +37,9 @@ public class AuthResponse {
 
     public List<CentroRef> getCentros() { return centros; }
     public void setCentros(List<CentroRef> centros) { this.centros = centros; }
+
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
 
     public static class CentroRef {
         private Long centroId;

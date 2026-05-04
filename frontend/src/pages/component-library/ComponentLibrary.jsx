@@ -5,6 +5,12 @@ import Input from "../../components/common/Input";
 import Alert from "../../components/common/Alert";
 import Spinner from "../../components/common/Spinner";
 
+const CodeBlock = ({ code }) => (
+  <pre className="bg-gray-800 text-gray-100 p-4 rounded-md overflow-x-auto text-sm">
+    <code>{code}</code>
+  </pre>
+);
+
 const ComponentLibrary = () => {
   const [inputValue, setInputValue] = useState("");
   const [showSuccessAlert, setShowSuccessAlert] = useState(true);
@@ -14,12 +20,6 @@ const ComponentLibrary = () => {
     setLoading(true);
     setTimeout(() => setLoading(false), 2000);
   };
-
-  const CodeBlock = ({ code }) => (
-    <pre className="bg-gray-800 text-gray-100 p-4 rounded-md overflow-x-auto text-sm">
-      <code>{code}</code>
-    </pre>
-  );
 
   return (
     <div className="max-w-6xl mx-auto">

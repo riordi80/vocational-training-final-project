@@ -6,14 +6,14 @@
 #include "config.h"
 
 // ============================================
-// PINES
+// PINES. Conectados a la placa
 // ============================================
-#define RX_PIN 16
-#define TX_PIN 17
-#define SHT40_ADDR 0x44
+#define RX_PIN 16 
+#define TX_PIN 17 //Pines del MH-Z19D (lector CO2)
+#define SHT40_ADDR 0x44 //Pin sensor de humedad SHT40
 const int pinTierra = 4;
-const int pinLDR1   = 5;
-const int pinLDR2   = 35;  // TODO: verificar pin con el hardware final
+const int pinLDR1   = 5; 
+const int pinLDR2   = 7;  
 
 // ============================================
 // CONSTANTES

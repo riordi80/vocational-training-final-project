@@ -1,7 +1,6 @@
 package com.example.proyectoarboles.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,8 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.activities.MainActivity;
-import com.example.proyectoarboles.activities.Registrer;
 import com.example.proyectoarboles.api.AuthApi;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.dto.AuthResponse;
@@ -35,8 +34,8 @@ public class LoginFragment extends Fragment {
 
     private static final String TAG = "LoginFragment";
 
-    private EditText inputUsuario;
-    private EditText inputPassword;
+    private TextInputEditText inputUsuario;
+    private TextInputEditText inputPassword;
     private Button loginButton;
     private Button registrerButton;
     private SharedPreferences sharedPreferences;
@@ -45,7 +44,7 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_login, container, false);
+        return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class LoginFragment extends Fragment {
         });
 
         registrerButton.setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), Registrer.class)));
+                ((MainActivity) requireActivity()).navigateToRegistrer());
     }
 
     private void realizarLogin(String email, String password) {

@@ -4,68 +4,49 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/background_card"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    android:clickable="true">
+    app:cardElevation="0dp"
+    app:rippleColor="@color/green_primary"
+    app:strokeColor="@color/gray_200"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/textViewNombreCentro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nombre del Centro"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_primary"
-            android:layout_marginBottom="4dp" />
-
-        <TextView
-            android:id="@+id/textViewDireccionCentro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dirección del centro"
-            android:textSize="14sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Fila de botones de acción -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="end"
-            android:spacing="8dp">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/buttonVerArboles"
-                style="@style/ButtonPrimary"
+            <TextView
+                android:id="@+id/textViewNombreCentro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ver Árboles"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/buttonEditarCentro"
-                style="@style/ButtonSecondary"
+            <TextView
+                android:id="@+id/textViewPoblacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Editar"
-                android:visibility="gone"
-                android:layout_marginEnd="8dp" />
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
 
-            <Button
-                android:id="@+id/buttonEliminarCentro"
-                style="@style/ButtonDanger"
+            <TextView
+                android:id="@+id/textViewIsla"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Eliminar"
-                android:visibility="gone" />
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
