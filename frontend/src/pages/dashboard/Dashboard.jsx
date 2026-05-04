@@ -12,7 +12,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getCentros().then(data => setNumCentros(data.length)).catch(() => setNumCentros('—'));
-    getArboles().then(data => setNumArboles(data.length)).catch(() => setNumArboles('—'));
+    getArboles().then(data => setNumArboles(data.reduce((sum, a) => sum + (a.cantidad ?? 1), 0))).catch(() => setNumArboles('—'));
   }, []);
 
   return (

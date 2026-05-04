@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -73,6 +74,11 @@ public class Arbol {
     @Column(name = "absorcion_co2_anual", columnDefinition = "DECIMAL(8,2)")
     @DecimalMin(value = "0")
     private BigDecimal absorcionCo2Anual;
+
+    @NotNull
+    @Min(1)
+    @Column(name = "cantidad", nullable = false, columnDefinition = "INTEGER DEFAULT 1")
+    private Integer cantidad = 1;
 
     /**
      * Constructor vacío requerido por JPA.
@@ -156,6 +162,14 @@ public class Arbol {
 
     public void setAbsorcionCo2Anual(BigDecimal absorcionCo2Anual) {
         this.absorcionCo2Anual = absorcionCo2Anual;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 
     /**

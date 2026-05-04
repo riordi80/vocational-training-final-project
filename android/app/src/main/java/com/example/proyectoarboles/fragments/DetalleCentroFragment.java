@@ -288,10 +288,12 @@ public class DetalleCentroFragment extends Fragment {
 
         TextView tvNombre = itemView.findViewById(R.id.textViewNombreArbolFila);
         TextView tvEspecie = itemView.findViewById(R.id.textViewEspecieArbolFila);
+        TextView tvCantidad = itemView.findViewById(R.id.textViewCantidadArbolFila);
         Button btnVer = itemView.findViewById(R.id.buttonVerArbol);
 
         tvNombre.setText(arbol.getNombre());
         tvEspecie.setText(arbol.getEspecie());
+        tvCantidad.setText("Cantidad: " + arbol.getCantidad());
         btnVer.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).navigateToArbolDetalles(arbol.getId()));
 

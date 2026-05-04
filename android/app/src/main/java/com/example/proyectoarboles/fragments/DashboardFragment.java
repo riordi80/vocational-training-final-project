@@ -90,7 +90,11 @@ public class DashboardFragment extends Fragment {
             public void onResponse(Call<List<Arbol>> call, Response<List<Arbol>> response) {
                 if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
-                    tvNumeroArboles.setText(String.valueOf(response.body().size()));
+                    int total = 0;
+                    for (Arbol a : response.body()) {
+                        total += a.getCantidad();
+                    }
+                    tvNumeroArboles.setText(String.valueOf(total));
                 } else {
                     tvNumeroArboles.setText("Error");
                 }

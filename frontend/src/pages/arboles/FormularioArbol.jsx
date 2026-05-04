@@ -23,7 +23,8 @@
       fechaPlantacion: '',
       ubicacionEspecifica: '',
       centroEducativo: { id: centroIdDesdeState || '' },
-      absorcionCo2Anual: ''
+      absorcionCo2Anual: '',
+      cantidad: 1
     });
 
     const [centros, setCentros] = useState([]);
@@ -64,7 +65,8 @@
             fechaPlantacion: fechaFormateada,
             ubicacionEspecifica: arbolData.ubicacionEspecifica || '',
             centroEducativo: { id: arbolData.centroEducativo?.id || '' },
-            absorcionCo2Anual: arbolData.absorcionCo2Anual || ''
+            absorcionCo2Anual: arbolData.absorcionCo2Anual || '',
+            cantidad: arbolData.cantidad ?? 1
           });
         }
       } catch (err) {
@@ -128,6 +130,11 @@
         nuevosErrores.centroEducativo = 'Debes seleccionar un centro educativo';
       }
 
+      const cantidadNum = parseInt(formData.cantidad);
+      if (!cantidadNum || cantidadNum < 1) {
+        nuevosErrores.cantidad = 'La cantidad debe ser al menos 1';
+      }
+
       // Validaciones de umbrales (si están presentes)
       setErrors(nuevosErrores);
       return Object.keys(nuevosErrores).length === 0;
@@ -152,7 +159,8 @@
           fechaPlantacion: formData.fechaPlantacion,
           ubicacionEspecifica: formData.ubicacionEspecifica.trim() || null,
           centroEducativo: { id: parseInt(formData.centroEducativo.id) },
-          absorcionCo2Anual: formData.absorcionCo2Anual !== '' ? parseFloat(formData.absorcionCo2Anual) : null
+          absorcionCo2Anual: formData.absorcionCo2Anual !== '' ? parseFloat(formData.absorcionCo2Anual) : null,
+          cantidad: parseInt(formData.cantidad) || 1
         };
 
         if (isEditMode) {
@@ -296,6 +304,25 @@
                     onChange={handleChange}
                     placeholder="Ej: Patio principal, junto a la entrada"
                   />
+                </div>
+
+                {/* Cantidad */}
+                <div>
+                  <Input
+                    id="cantidad"
+                    name="cantidad"
+                    label="Cantidad de árboles"
+                    type="number"
+                    min="1"
+                    value={formData.cantidad}
+                    onChange={handleChange}
+                    error={errors.cantidad}
+                    required
+                    placeholder="1"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Número de árboles de esta familia en el centro
+                  </p>
                 </div>
 
                 {/* Absorción CO2 Anual */}
