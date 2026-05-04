@@ -23,11 +23,12 @@ import com.example.proyectoarboles.fragments.LoginFragment;
 import com.example.proyectoarboles.fragments.RegistrerFragment;
 import com.example.proyectoarboles.model.Usuario;
 import com.example.proyectoarboles.util.PermissionManager;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigationrail.NavigationRailView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BottomNavigationView bottomNavigation;
+    private NavigationBarView activeNavigation;
     private PermissionManager permissionManager;
     private OnBackPressedCallback onBackPressedCallback;
 
@@ -37,9 +38,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         permissionManager = new PermissionManager(this);
-        bottomNavigation = findViewById(R.id.bottom_navigation);
 
-        bottomNavigation.setOnNavigationItemSelectedListener(item -> {
+        NavigationRailView rail = findViewById(R.id.navigation_rail);
+        activeNavigation = rail != null ? rail : findViewById(R.id.bottom_navigation);
+
+        activeNavigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.menu_dashboard) {
                 showFragment(new DashboardFragment());
@@ -65,12 +68,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             showFragment(new DashboardFragment());
-            bottomNavigation.setSelectedItemId(R.id.menu_dashboard);
+            activeNavigation.setSelectedItemId(R.id.menu_dashboard);
         }
 
         if (getIntent() != null && getIntent().getBooleanExtra("SHOW_LOGIN_FRAGMENT", false)) {
             showFragment(new LoginFragment());
-            bottomNavigation.setSelectedItemId(R.id.menu_login);
+            activeNavigation.setSelectedItemId(R.id.menu_login);
         }
 
         actualizarMenuSegunPermisos();
@@ -86,11 +89,11 @@ public class MainActivity extends AppCompatActivity {
     public void actualizarMenuSegunPermisos() {
         boolean loggedIn = permissionManager.isLoggedIn();
 
-        bottomNavigation.getMenu()
+        activeNavigation.getMenu()
                 .findItem(R.id.menu_usuarios)
                 .setVisible(permissionManager.isAdmin());
 
-        android.view.MenuItem loginItem = bottomNavigation.getMenu().findItem(R.id.menu_login);
+        android.view.MenuItem loginItem = activeNavigation.getMenu().findItem(R.id.menu_login);
         if (loggedIn) {
             loginItem.setTitle("Logout");
             loginItem.setIcon(R.drawable.ic_nav_logout);
@@ -198,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setNavSelected(int itemId) {
-        bottomNavigation.getMenu().findItem(itemId).setChecked(true);
+        activeNavigation.getMenu().findItem(itemId).setChecked(true);
     }
 
     private void configurarBackPressCallback() {
@@ -213,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 if (currentFragment instanceof LoginFragment) {
                     showFragment(new DashboardFragment());
-                    bottomNavigation.setSelectedItemId(R.id.menu_dashboard);
+                    activeNavigation.setSelectedItemId(R.id.menu_dashboard);
                     return;
                 }
 
