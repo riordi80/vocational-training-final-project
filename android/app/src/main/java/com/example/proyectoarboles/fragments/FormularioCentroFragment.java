@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.CentroEducativo;
+import com.example.proyectoarboles.util.IslaUtils;
 
 import java.math.BigDecimal;
 
@@ -32,15 +33,6 @@ public class FormularioCentroFragment extends Fragment {
     private static final String TAG = "FormularioCentro";
     private static final String ARG_CENTRO_ID = "centro_id";
 
-    private static final String[] ISLAS = {
-            "-- Seleccionar isla --",
-            "Gran Canaria", "Tenerife", "Lanzarote", "Fuerteventura",
-            "La Palma", "La Gomera", "El Hierro"
-    };
-    private static final String[] ISLAS_VALUES = {
-            "", "GRAN_CANARIA", "TENERIFE", "LANZAROTE", "FUERTEVENTURA",
-            "LA_PALMA", "LA_GOMERA", "EL_HIERRO"
-    };
 
     private Long centroId;
     private boolean esEdicion;
@@ -117,7 +109,7 @@ public class FormularioCentroFragment extends Fragment {
 
     private void configurarSpinnerIsla() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_spinner_item, ISLAS);
+                android.R.layout.simple_spinner_item, IslaUtils.ETIQUETAS);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerIsla.setAdapter(adapter);
     }
@@ -153,8 +145,8 @@ public class FormularioCentroFragment extends Fragment {
                     etLongitud.setText(centro.getLongitud() != null ? centro.getLongitud().toPlainString() : "");
 
                     if (centro.getIsla() != null) {
-                        for (int index = 0; index < ISLAS_VALUES.length; index++) {
-                            if (ISLAS_VALUES[index].equals(centro.getIsla())) {
+                        for (int index = 0; index < IslaUtils.VALORES.length; index++) {
+                            if (IslaUtils.VALORES[index].equals(centro.getIsla())) {
                                 spinnerIsla.setSelection(index);
                                 break;
                             }
@@ -254,7 +246,7 @@ public class FormularioCentroFragment extends Fragment {
         }
         int islaPosicion = spinnerIsla.getSelectedItemPosition();
         if (islaPosicion > 0) {
-            centro.setIsla(ISLAS_VALUES[islaPosicion]);
+            centro.setIsla(IslaUtils.VALORES[islaPosicion]);
         }
 
         btnGuardar.setEnabled(false);

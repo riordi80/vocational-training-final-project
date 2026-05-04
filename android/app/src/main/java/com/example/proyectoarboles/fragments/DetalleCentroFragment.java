@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.activities.MainActivity;
+import com.example.proyectoarboles.util.IslaUtils;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.Arbol;
 import com.example.proyectoarboles.model.CentroEducativo;
@@ -64,7 +65,7 @@ public class DetalleCentroFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_detalle_centro, container, false);
+        return inflater.inflate(R.layout.fragment_detalle_centro, container, false);
     }
 
     @Override
@@ -154,23 +155,9 @@ public class DetalleCentroFragment extends Fragment {
         });
     }
 
-    private static String formatearIsla(String valor) {
-        if (valor == null || valor.isEmpty()) return "-";
-        switch (valor) {
-            case "GRAN_CANARIA":   return "Gran Canaria";
-            case "TENERIFE":       return "Tenerife";
-            case "LANZAROTE":      return "Lanzarote";
-            case "FUERTEVENTURA":  return "Fuerteventura";
-            case "LA_PALMA":       return "La Palma";
-            case "LA_GOMERA":      return "La Gomera";
-            case "EL_HIERRO":      return "El Hierro";
-            default:               return valor;
-        }
-    }
-
     private void mostrarDatosCentro(CentroEducativo centro) {
         String titulo = centro.getNombre() != null ? centro.getNombre() : "Centro";
-        String islaLabel = formatearIsla(centro.getIsla());
+        String islaLabel = IslaUtils.formatear(centro.getIsla());
         if (!islaLabel.equals("-")) {
             titulo += " · " + islaLabel;
         }

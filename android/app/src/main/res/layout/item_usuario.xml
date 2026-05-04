@@ -23,12 +23,11 @@
         <!-- Avatar/Icono de usuario -->
         <ImageView
             android:id="@+id/imageViewAvatar"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            style="@style/IconoCard"
             android:src="@drawable/ic_nav_usuarios"
             android:background="@drawable/circle_background"
             android:padding="8dp"
-            android:layout_marginEnd="12dp"/>
+            android:tint="@color/green_primary" />
 
         <!-- Información del usuario -->
         <LinearLayout

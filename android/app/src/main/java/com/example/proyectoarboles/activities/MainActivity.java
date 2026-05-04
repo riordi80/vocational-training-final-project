@@ -18,9 +18,9 @@ import com.example.proyectoarboles.fragments.CrearArbolFragment;
 import com.example.proyectoarboles.fragments.HistoricoDispositivoFragment;
 import com.example.proyectoarboles.fragments.DetalleUsuarioFragment;
 import com.example.proyectoarboles.fragments.FormularioUsuarioFragment;
-import com.example.proyectoarboles.fragments.ListarArbolesFragment;
 import com.example.proyectoarboles.fragments.ListarCentrosFragment;
 import com.example.proyectoarboles.fragments.LoginFragment;
+import com.example.proyectoarboles.fragments.RegistrerFragment;
 import com.example.proyectoarboles.model.Usuario;
 import com.example.proyectoarboles.util.PermissionManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -46,9 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             } else if (itemId == R.id.menu_centros) {
                 showFragment(new ListarCentrosFragment());
-                return true;
-            } else if (itemId == R.id.menu_arboles) {
-                showFragment(ListarArbolesFragment.newInstance(-1L));
                 return true;
             } else if (itemId == R.id.menu_usuarios) {
                 showFragment(new AdminUsuariosFragment());
@@ -134,18 +131,17 @@ public class MainActivity extends AppCompatActivity {
         setNavSelected(R.id.menu_centros);
     }
 
-    public void navigateToListarArboles(long centroId) {
-        showFragment(ListarArbolesFragment.newInstance(centroId));
-        setNavSelected(R.id.menu_arboles);
-    }
-
     public void navigateToLogin() {
         showFragment(new LoginFragment());
         setNavSelected(R.id.menu_login);
     }
 
+    public void navigateToRegistrer() {
+        showFragmentWithBackStack(new RegistrerFragment(), R.id.menu_login);
+    }
+
     public void navigateToArbolDetalles(long arbolId) {
-        showFragmentWithBackStack(ArbolDetallesFragment.newInstance(arbolId), R.id.menu_arboles);
+        showFragmentWithBackStack(ArbolDetallesFragment.newInstance(arbolId), R.id.menu_centros);
     }
 
     public void navigateToFormularioCentro() {

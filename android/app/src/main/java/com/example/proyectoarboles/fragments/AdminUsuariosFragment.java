@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,6 +51,11 @@ public class AdminUsuariosFragment extends Fragment implements UsuarioAdapter.On
         super.onViewCreated(view, savedInstanceState);
 
         usuarioApi = RetrofitClient.getUsuarioApi();
+
+        ((android.widget.ImageView) view.findViewById(R.id.imageViewHeaderIcon)).setImageResource(R.drawable.ic_nav_usuarios);
+        ((TextView) view.findViewById(R.id.textViewHeaderTitle)).setText("Usuarios");
+        ((TextView) view.findViewById(R.id.textViewHeaderSubtitle)).setText("Gestiona los usuarios del sistema");
+
         recyclerViewUsuarios = view.findViewById(R.id.recyclerViewUsuarios);
         fabAnadirUsuario = view.findViewById(R.id.fabAnadirUsuario);
 

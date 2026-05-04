@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectoarboles.R;
 import com.example.proyectoarboles.model.CentroEducativo;
+import com.example.proyectoarboles.util.IslaUtils;
 
 import java.util.List;
 
@@ -46,21 +47,22 @@ public class CentroEducativoAdapter extends RecyclerView.Adapter<CentroEducativo
 
     public static class CentroEducativoViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewNombre;
-        private TextView textViewDireccion;
+        private TextView textViewPoblacion;
+        private TextView textViewIsla;
 
         public CentroEducativoViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewNombre = itemView.findViewById(R.id.textViewNombreCentro);
-            textViewDireccion = itemView.findViewById(R.id.textViewDireccionCentro);
+            textViewPoblacion = itemView.findViewById(R.id.textViewPoblacion);
+            textViewIsla = itemView.findViewById(R.id.textViewIsla);
         }
 
         public void bind(CentroEducativo centro, OnItemClickListener listener) {
             textViewNombre.setText(centro.getNombre() != null ? centro.getNombre() : "Nombre no disponible");
-            textViewDireccion.setText(
-                    centro.getDireccion() != null && !centro.getDireccion().isEmpty()
-                            ? centro.getDireccion()
-                            : "Dirección no disponible"
-            );
+            String poblacion = centro.getPoblacion() != null ? centro.getPoblacion() : "";
+            String isla = IslaUtils.formatear(centro.getIsla());
+            textViewPoblacion.setText(poblacion);
+            textViewIsla.setText(isla.equals("-") ? "" : isla);
             itemView.setOnClickListener(v -> listener.onVerDetalleClick(centro));
         }
     }
