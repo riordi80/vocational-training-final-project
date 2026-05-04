@@ -8,9 +8,11 @@ import com.example.gardenmonitor.model.Usuario;
 import com.example.gardenmonitor.model.UsuarioCentro;
 import com.example.gardenmonitor.repository.UsuarioCentroRepository;
 import com.example.gardenmonitor.repository.UsuarioRepository;
+import com.example.gardenmonitor.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -38,6 +40,12 @@ public class AuthController {
     @Autowired
     private UsuarioCentroRepository usuarioCentroRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtService jwtService;
+
     /**
      * Autentica a un usuario con email y contraseña.
      * <p>
@@ -56,8 +64,7 @@ public class AuthController {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED, "Credenciales incorrectas"));
 
-        // Plain text comparison for now — BCrypt will be added with JWT
-        if (!usuario.getPasswordHash().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), usuario.getPasswordHash())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales incorrectas");
         }
 
@@ -70,12 +77,16 @@ public class AuthController {
                 .map(uc -> new AuthResponse.CentroRef(uc.getCentroEducativo().getId()))
                 .toList();
 
+        String token = jwtService.generateToken(
+                usuario.getEmail(), usuario.getRol().name(), usuario.getId());
+
         AuthResponse response = new AuthResponse(
                 usuario.getId(),
                 usuario.getNombre(),
                 usuario.getEmail(),
                 usuario.getRol().name(),
-                centros
+                centros,
+                token
         );
 
         return ResponseEntity.ok(response);
@@ -101,18 +112,22 @@ public class AuthController {
         Usuario usuario = new Usuario(
                 request.getNombre(),
                 request.getEmail(),
-                request.getPassword(), // Plain text for now — BCrypt with JWT
+                passwordEncoder.encode(request.getPassword()),
                 Rol.COORDINADOR
         );
 
         usuario = usuarioRepository.save(usuario);
+
+        String token = jwtService.generateToken(
+                usuario.getEmail(), usuario.getRol().name(), usuario.getId());
 
         AuthResponse response = new AuthResponse(
                 usuario.getId(),
                 usuario.getNombre(),
                 usuario.getEmail(),
                 usuario.getRol().name(),
-                Collections.emptyList()
+                Collections.emptyList(),
+                token
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
