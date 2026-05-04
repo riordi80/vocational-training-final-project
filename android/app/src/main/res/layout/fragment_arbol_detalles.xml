@@ -20,7 +20,6 @@
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/green_primary"
-            android:gravity="center"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"/>
 
@@ -137,14 +136,23 @@
                         android:textSize="14sp"
                         android:textColor="@color/text_secondary"/>
                 </LinearLayout>
-                <EditText
-                    android:id="@+id/editTextNombreDetalle"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilNombreDetalle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nombre del árbol"
-                    android:visibility="gone"
                     android:layout_marginBottom="8dp"
-                    android:inputType="text"/>
+                    android:visibility="gone"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxStrokeColor="@color/green_primary">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextNombreDetalle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nombre del árbol"
+                        android:inputType="text"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_hint"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Especie -->
                 <LinearLayout
@@ -169,14 +177,23 @@
                         android:textSize="14sp"
                         android:textColor="@color/text_secondary"/>
                 </LinearLayout>
-                <EditText
-                    android:id="@+id/editTextEspecieDetalle"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilEspecieDetalle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Especie"
-                    android:visibility="gone"
                     android:layout_marginBottom="8dp"
-                    android:inputType="text"/>
+                    android:visibility="gone"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxStrokeColor="@color/green_primary">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextEspecieDetalle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Especie"
+                        android:inputType="text"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_hint"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Fecha de Plantación -->
                 <LinearLayout
@@ -201,14 +218,23 @@
                         android:textSize="14sp"
                         android:textColor="@color/text_secondary"/>
                 </LinearLayout>
-                <EditText
-                    android:id="@+id/editTextFechaDetalle"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilFechaDetalle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Fecha (YYYY-MM-DD)"
-                    android:visibility="gone"
                     android:layout_marginBottom="8dp"
-                    android:inputType="date"/>
+                    android:visibility="gone"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxStrokeColor="@color/green_primary">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextFechaDetalle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Fecha (YYYY-MM-DD)"
+                        android:inputType="date"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_hint"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Centro Educativo -->
                 <LinearLayout
@@ -263,14 +289,23 @@
                         android:textSize="14sp"
                         android:textColor="@color/text_secondary"/>
                 </LinearLayout>
-                <EditText
-                    android:id="@+id/editTextUbicacion"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilUbicacion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ubicación"
-                    android:visibility="gone"
                     android:layout_marginBottom="8dp"
-                    android:inputType="text"/>
+                    android:visibility="gone"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxStrokeColor="@color/green_primary">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextUbicacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ubicación"
+                        android:inputType="text"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_hint"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Absorción CO2 (solo lectura) -->
                 <LinearLayout

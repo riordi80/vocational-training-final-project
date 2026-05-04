@@ -19,7 +19,6 @@
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <!-- FAB para añadir usuario -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAnadirUsuario"
         android:layout_width="wrap_content"

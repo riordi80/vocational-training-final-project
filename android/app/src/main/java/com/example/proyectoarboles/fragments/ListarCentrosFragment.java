@@ -37,6 +37,7 @@ public class ListarCentrosFragment extends Fragment implements CentroEducativoAd
     private CentroEducativoAdapter adapter;
     private List<CentroEducativo> listaCentros = new ArrayList<>();
     private FloatingActionButton fabAnadirCentro;
+    private android.widget.Button btnAnadir;
     private PermissionManager permissionManager;
 
     @Nullable
@@ -58,6 +59,7 @@ public class ListarCentrosFragment extends Fragment implements CentroEducativoAd
 
         recyclerViewCentros = view.findViewById(R.id.RecyclerViewCentros);
         fabAnadirCentro = view.findViewById(R.id.fabAnadirCentro);
+        btnAnadir = view.findViewById(R.id.buttonHeaderAnadir);
 
         configurarRecyclerView();
         cargarCentrosDesdeAPI();
@@ -110,12 +112,23 @@ public class ListarCentrosFragment extends Fragment implements CentroEducativoAd
     }
 
     private void configurarFab() {
-        if (permissionManager.puedeCrearCentro()) {
+        if (!permissionManager.puedeCrearCentro()) {
+            fabAnadirCentro.setVisibility(View.GONE);
+            btnAnadir.setVisibility(View.GONE);
+            return;
+        }
+        boolean landscape = getResources().getConfiguration().orientation
+                == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+        if (landscape) {
+            fabAnadirCentro.setVisibility(View.GONE);
+            btnAnadir.setVisibility(View.VISIBLE);
+            btnAnadir.setOnClickListener(v ->
+                    ((MainActivity) requireActivity()).navigateToFormularioCentro());
+        } else {
+            btnAnadir.setVisibility(View.GONE);
             fabAnadirCentro.setVisibility(View.VISIBLE);
             fabAnadirCentro.setOnClickListener(v ->
                     ((MainActivity) requireActivity()).navigateToFormularioCentro());
-        } else {
-            fabAnadirCentro.setVisibility(View.GONE);
         }
     }
 
