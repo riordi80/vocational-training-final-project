@@ -1,4 +1,7 @@
-/*package com.example.proyectoarboles.api;
+package com.example.proyectoarboles.api;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import java.io.IOException;
 
@@ -7,27 +10,25 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class AuthInterceptor implements Interceptor {
+
+    private final SharedPreferences sharedPreferences;
+
+    public AuthInterceptor(Context context) {
+        this.sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+    }
+
     @Override
     public Response intercept(Chain chain) throws IOException {
+        String token = sharedPreferences.getString("token", null);
         Request original = chain.request();
-
-        // Obtener token de SharedPreferences
-        // (Necesita contexto, se puede pasar en constructor)
-        String token = getTokenFromPreferences();
 
         if (token != null) {
             Request request = original.newBuilder()
-                .header("Authorization", "Bearer " + token)
-                .build();
+                    .header("Authorization", "Bearer " + token)
+                    .build();
             return chain.proceed(request);
         }
 
         return chain.proceed(original);
     }
-
-    private String getTokenFromPreferences() {
-        // Implementar acceso a SharedPreferences
-        return null; // Placeholder
-    }
 }
-*/

@@ -22,6 +22,7 @@ import com.example.proyectoarboles.fragments.ListarCentrosFragment;
 import com.example.proyectoarboles.fragments.LoginFragment;
 import com.example.proyectoarboles.fragments.RegistrerFragment;
 import com.example.proyectoarboles.model.Usuario;
+import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.util.PermissionManager;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigationrail.NavigationRailView;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        RetrofitClient.init(this);
         permissionManager = new PermissionManager(this);
 
         NavigationRailView rail = findViewById(R.id.navigation_rail);

@@ -119,6 +119,7 @@ public class LoginFragment extends Fragment {
         editor.putLong("user_id", authResponse.getId());
         editor.putString("user_name", authResponse.getNombre());
         editor.putString("user_email", authResponse.getEmail());
+        editor.putString("token", authResponse.getToken());
 
         if (authResponse.getRol() != null) {
             editor.putString("user_role", authResponse.getRol());
