@@ -47,11 +47,11 @@ public class ArbolDetallesFragment extends Fragment {
     private static final String TAG = "ArbolDetallesFragment";
     private static final String ARG_ARBOL_ID = "arbol_id";
 
-    private TextView tvNombre, tvEspecie, tvFecha, tvUbicacion, tvCentroEducativo, tvAbsorcionCo2;
-    private TextInputEditText etNombre, etEspecie, etFecha, etUbicacion;
-    private TextInputLayout tilNombre, tilEspecie, tilFecha, tilUbicacion;
+    private TextView tvNombre, tvEspecie, tvFecha, tvUbicacion, tvCentroEducativo, tvAbsorcionCo2, tvCantidad;
+    private TextInputEditText etNombre, etEspecie, etFecha, etUbicacion, etCantidad;
+    private TextInputLayout tilNombre, tilEspecie, tilFecha, tilUbicacion, tilCantidad;
     private Spinner spinnerCentroEducativo;
-    private LinearLayout llNombreView, llEspecieView, llFechaView, llCentroView, llUbicacionView;
+    private LinearLayout llNombreView, llEspecieView, llFechaView, llCentroView, llUbicacionView, llCantidadView;
     private ImageButton btnEditar, btnEliminar, btnVolver;
     private Button btnGuardar, btnCancelar;
 
@@ -121,10 +121,12 @@ public class ArbolDetallesFragment extends Fragment {
         etEspecie = view.findViewById(R.id.editTextEspecieDetalle);
         etFecha = view.findViewById(R.id.editTextFechaDetalle);
         etUbicacion = view.findViewById(R.id.editTextUbicacion);
+        etCantidad = view.findViewById(R.id.editTextCantidad);
         tilNombre = view.findViewById(R.id.tilNombreDetalle);
         tilEspecie = view.findViewById(R.id.tilEspecieDetalle);
         tilFecha = view.findViewById(R.id.tilFechaDetalle);
         tilUbicacion = view.findViewById(R.id.tilUbicacion);
+        tilCantidad = view.findViewById(R.id.tilCantidad);
 
         spinnerCentroEducativo = view.findViewById(R.id.spinnerCentroEducativo);
         centrosAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, listaCentros);
@@ -136,6 +138,8 @@ public class ArbolDetallesFragment extends Fragment {
         llFechaView = view.findViewById(R.id.llFechaView);
         llCentroView = view.findViewById(R.id.llCentroView);
         llUbicacionView = view.findViewById(R.id.llUbicacionView);
+        llCantidadView = view.findViewById(R.id.llCantidadView);
+        tvCantidad = view.findViewById(R.id.textViewCantidad);
 
         btnEditar = view.findViewById(R.id.buttonEditar);
         btnGuardar = view.findViewById(R.id.buttonGuardar);
@@ -184,6 +188,7 @@ public class ArbolDetallesFragment extends Fragment {
         tvUbicacion.setText(arbol.getUbicacion() != null ? arbol.getUbicacion() : "No disponible");
         tvCentroEducativo.setText(arbol.getCentroEducativo() != null
                 ? arbol.getCentroEducativo().getNombre() : "Sin centro asignado");
+        tvCantidad.setText(String.valueOf(arbol.getCantidad()));
         if (arbol.getAbsorcionCo2Anual() != null) {
             tvAbsorcionCo2.setText(String.format(Locale.getDefault(), "%.2f kg/año", arbol.getAbsorcionCo2Anual()));
         } else {
@@ -208,12 +213,23 @@ public class ArbolDetallesFragment extends Fragment {
         String especie = etEspecie.getText().toString().trim();
         String fecha = etFecha.getText().toString().trim();
         String ubicacion = etUbicacion.getText().toString().trim();
+        String cantidadStr = etCantidad.getText() != null ? etCantidad.getText().toString().trim() : "1";
 
         if (nombre.isEmpty()) { etNombre.setError("El nombre es requerido"); return; }
         if (especie.isEmpty()) { etEspecie.setError("La especie es requerida"); return; }
         if (fecha.isEmpty()) { etFecha.setError("La fecha es requerida"); return; }
         if (!validarFecha(fecha)) {
             etFecha.setError("Fecha inválida. Usa formato YYYY-MM-DD y debe ser en el pasado");
+            return;
+        }
+
+        int cantidad;
+        try {
+            cantidad = Integer.parseInt(cantidadStr);
+            if (cantidad < 1) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            etCantidad.setError("La cantidad debe ser al menos 1");
+            etCantidad.requestFocus();
             return;
         }
 
@@ -230,6 +246,7 @@ public class ArbolDetallesFragment extends Fragment {
         arbolActualizado.setFechaPlantacion(fecha);
         arbolActualizado.setUbicacion(ubicacion);
         arbolActualizado.setCentroEducativo(centroSeleccionado);
+        arbolActualizado.setCantidad(cantidad);
 
         actualizarArbolEnAPI(arbolActual.getId(), arbolActualizado);
     }
@@ -261,6 +278,8 @@ public class ArbolDetallesFragment extends Fragment {
         tilUbicacion.setVisibility(View.GONE);
         llCentroView.setVisibility(View.VISIBLE);
         spinnerCentroEducativo.setVisibility(View.GONE);
+        llCantidadView.setVisibility(View.VISIBLE);
+        tilCantidad.setVisibility(View.GONE);
         btnGuardar.setVisibility(View.GONE);
         btnCancelar.setVisibility(View.GONE);
         verificarPermisosYActualizarUI();
@@ -281,6 +300,9 @@ public class ArbolDetallesFragment extends Fragment {
         etUbicacion.setText(tvUbicacion.getText());
         llCentroView.setVisibility(View.GONE);
         spinnerCentroEducativo.setVisibility(View.VISIBLE);
+        llCantidadView.setVisibility(View.GONE);
+        tilCantidad.setVisibility(View.VISIBLE);
+        if (arbolActual != null) etCantidad.setText(String.valueOf(arbolActual.getCantidad()));
         btnEditar.setVisibility(View.GONE);
         btnEliminar.setVisibility(View.GONE);
         btnGuardar.setVisibility(View.VISIBLE);
