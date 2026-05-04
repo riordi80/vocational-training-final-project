@@ -48,9 +48,6 @@ const Header = () => {
                         <NavLink to="/dashboard" className={navLinkClass}>
                             Dashboard
                         </NavLink>
-                        <NavLink to="/arboles" className={navLinkClass}>
-                            Árboles
-                        </NavLink>
                         <NavLink to="/centros" className={navLinkClass}>
                             Centros
                         </NavLink>
@@ -132,13 +129,6 @@ const Header = () => {
                                 className={({ isActive }) => `${navLinkClass({ isActive })} py-2`}
                             >
                                 Dashboard
-                            </NavLink>
-                            <NavLink
-                                to="/arboles"
-                                onClick={closeMobileMenu}
-                                className={({ isActive }) => `${navLinkClass({ isActive })} py-2`}
-                            >
-                                Árboles
                             </NavLink>
                             <NavLink
                                 to="/centros"

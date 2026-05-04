@@ -5,7 +5,6 @@ import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Dashboard from './pages/dashboard/Dashboard';
 import ComponentLibrary from './pages/component-library/ComponentLibrary';
-import ListadoArboles from './pages/arboles/ListadoArboles';
 import DetalleArbol from './pages/arboles/DetalleArbol';
 import FormularioArbol from './pages/arboles/FormularioArbol';
 import ListadoCentros from './pages/centros/ListadoCentros';
@@ -36,7 +35,6 @@ function App() {
         {/* Rutas públicas de lectura con layout */}
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/arboles" element={<ListadoArboles />} />
           <Route path="/arboles/:id" element={<DetalleArbol />} />
           <Route path="/dispositivos/:id/lecturas" element={<HistoricoDispositivo />} />
           <Route path="/centros" element={<ListadoCentros />} />

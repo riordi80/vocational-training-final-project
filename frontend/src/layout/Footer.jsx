@@ -22,10 +22,10 @@ const Footer = () => {
                 {/* Col 2 — Navegación + contacto */}
                 <div className="bg-brand-primary lg:w-4/12 flex flex-col justify-center px-10 py-6 gap-3 border-t lg:border-t-0 lg:border-l border-white/10 min-w-0">
                     <nav className="flex flex-row flex-wrap gap-x-5 gap-y-1">
-                        <a href="#" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">El proyecto</a>
-                        <a href="#" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">Plantaciones</a>
-                        <a href="#" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">Actualidad</a>
-                        <a href="#" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">Contacto</a>
+                        <a href="https://proyectoarboles.org" target="proyecto-arboles" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">El proyecto</a>
+                        <a href="https://proyectoarboles.org/#plantaciones" target="proyecto-arboles" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">Plantaciones</a>
+                        <a href="https://proyectoarboles.org/#actualidad" target="proyecto-arboles" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">Actualidad</a>
+                        <a href="https://proyectoarboles.org/#contacto" target="proyecto-arboles" className="text-sm text-brand-accent hover:text-brand-bg-green tracking-wide font-semibold transition">Contacto</a>
                     </nav>
                     <div className="flex flex-wrap items-center gap-4">
                         <a href="tel:+34667894205" className="text-sm text-white/70 hover:text-brand-accent transition">
