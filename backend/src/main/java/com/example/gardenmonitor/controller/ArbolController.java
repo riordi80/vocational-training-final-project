@@ -151,6 +151,7 @@ public class ArbolController {
         arbol.setFechaPlantacion(detallesArbol.getFechaPlantacion());
         arbol.setUbicacionEspecifica(detallesArbol.getUbicacionEspecifica());
         arbol.setAbsorcionCo2Anual(detallesArbol.getAbsorcionCo2Anual());
+        arbol.setCantidad(detallesArbol.getCantidad());
 
         return arbolRepository.save(arbol);
     }

@@ -307,6 +307,47 @@
                         android:textColorHint="@color/text_hint"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Cantidad -->
+                <LinearLayout
+                    android:id="@+id/llCantidadView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cantidad: "
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"/>
+                    <TextView
+                        android:id="@+id/textViewCantidad"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary"/>
+                </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCantidad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxStrokeColor="@color/green_primary">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextCantidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Cantidad de árboles"
+                        android:inputType="number"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_hint"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <!-- Absorción CO2 (solo lectura) -->
                 <LinearLayout
                     android:layout_width="match_parent"

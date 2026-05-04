@@ -1,9 +1,19 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { TreePine, School } from "lucide-react";
+import { School, TreePine } from "lucide-react";
+import { getCentros } from "../../services/centrosService";
+import { getArboles } from "../../services/arbolesService";
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const [numCentros, setNumCentros] = useState(null);
+  const [numArboles, setNumArboles] = useState(null);
+
+  useEffect(() => {
+    getCentros().then(data => setNumCentros(data.length)).catch(() => setNumCentros('—'));
+    getArboles().then(data => setNumArboles(data.reduce((sum, a) => sum + (a.cantidad ?? 1), 0))).catch(() => setNumArboles('—'));
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -19,24 +29,30 @@ const Dashboard = () => {
         </p>
       </div>
 
-      {/* Tarjetas de acceso rápido */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Tarjeta Árboles */}
-        <Link
-          to="/arboles"
-          className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition group"
-        >
-          <div className="flex items-center mb-4">
-            <TreePine className="w-10 h-10 mr-4 text-brand-secondary shrink-0" />
-            <h2 className="text-2xl font-bold text-brand-primary transition">
-              Árboles
-            </h2>
+      {/* Métricas */}
+      <div className="bg-brand-primary rounded-lg shadow-md px-8 py-5 mb-6 flex divide-x divide-white/20">
+        <div className="flex items-center gap-3 pr-8">
+          <School className="w-7 h-7 text-brand-bg-green shrink-0" />
+          <div>
+            <p className="text-2xl font-bold text-white leading-none">
+              {numCentros ?? '…'}
+            </p>
+            <p className="text-xs text-white/60 mt-1">Centros educativos</p>
           </div>
-          <p className="text-brand-text">
-            Consulta, añade y gestiona los árboles monitorizados en los diferentes centros educativos.
-          </p>
-        </Link>
+        </div>
+        <div className="flex items-center gap-3 pl-8">
+          <TreePine className="w-7 h-7 text-brand-bg-green shrink-0" />
+          <div>
+            <p className="text-2xl font-bold text-white leading-none">
+              {numArboles ?? '…'}
+            </p>
+            <p className="text-xs text-white/60 mt-1">Árboles plantados</p>
+          </div>
+        </div>
+      </div>
 
+      {/* Tarjetas de acceso rápido */}
+      <div className="grid grid-cols-1 gap-6">
         {/* Tarjeta Centros */}
         <Link
           to="/centros"

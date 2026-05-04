@@ -25,6 +25,9 @@ public class Arbol {
     @SerializedName("absorcionCo2Anual")
     private Double absorcionCo2Anual;
 
+    @SerializedName("cantidad")
+    private Integer cantidad;
+
     // Constructor básico (para XML/fallback)
     public Arbol(Long id, String nombre, String especie, String fechaPlantacion){
         this.id = id;
@@ -65,6 +68,10 @@ public class Arbol {
         return absorcionCo2Anual;
     }
 
+    public Integer getCantidad() {
+        return cantidad != null ? cantidad : 1;
+    }
+
     // Setters
     public void setId(Long id) {
         this.id = id;
@@ -92,6 +99,10 @@ public class Arbol {
 
     public void setAbsorcionCo2Anual(Double absorcionCo2Anual) {
         this.absorcionCo2Anual = absorcionCo2Anual;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 
     @Override

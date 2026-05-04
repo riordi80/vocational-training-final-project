@@ -43,9 +43,7 @@
       try {
         setDeleting(true);
         await deleteArbol(id);
-        navigate('/arboles', {
-          state: { message: 'Árbol eliminado correctamente' }
-        });
+        navigate(-1);
       } catch (err) {
         console.error('Error eliminando árbol:', err);
         setError('Error al eliminar el árbol. Por favor, intenta de nuevo.');
@@ -86,7 +84,7 @@
             onClose={() => setError('')}
           />
           <div className="mt-4">
-            <Button onClick={() => navigate('/arboles')}>Volver al listado</Button>
+            <Button onClick={() => navigate(-1)}>Volver</Button>
           </div>
         </div>
       );
@@ -100,7 +98,7 @@
             message="No se encontró el árbol solicitado."
           />
           <div className="mt-4">
-            <Button onClick={() => navigate('/arboles')}>Volver al listado</Button>
+            <Button onClick={() => navigate(-1)}>Volver</Button>
           </div>
         </div>
       );
@@ -171,6 +169,11 @@
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-600 mb-1">Ubicación Específica</label>
                 <p className="text-gray-900">{arbol.ubicacionEspecifica || 'No especificada'}</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Cantidad de árboles</label>
+                <p className="text-gray-900">{arbol.cantidad ?? 1}</p>
               </div>
 
               <div>

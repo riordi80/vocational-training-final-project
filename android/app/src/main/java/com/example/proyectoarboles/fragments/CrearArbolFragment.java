@@ -38,6 +38,7 @@ public class CrearArbolFragment extends Fragment {
     private TextInputEditText inputEspecie;
     private TextInputEditText inputFechaPlantacion;
     private TextInputEditText inputUbicacion;
+    private TextInputEditText inputCantidad;
     private Button btnCrear;
     private Button btnCancelar;
     private ImageButton btnVolver;
@@ -73,6 +74,7 @@ public class CrearArbolFragment extends Fragment {
         inputEspecie = view.findViewById(R.id.inputEspecieArbol);
         inputFechaPlantacion = view.findViewById(R.id.inputFechaPlantacion);
         inputUbicacion = view.findViewById(R.id.inputUbicacion);
+        inputCantidad = view.findViewById(R.id.inputCantidad);
         btnCrear = view.findViewById(R.id.btnCrearArbol);
         btnCancelar = view.findViewById(R.id.btnCancelarCrearArbol);
         btnVolver = view.findViewById(R.id.buttonVolverCrearArbol);
@@ -96,6 +98,7 @@ public class CrearArbolFragment extends Fragment {
         String especie = inputEspecie.getText() != null ? inputEspecie.getText().toString().trim() : "";
         String fechaStr = inputFechaPlantacion.getText() != null ? inputFechaPlantacion.getText().toString().trim() : "";
         String ubicacion = inputUbicacion.getText() != null ? inputUbicacion.getText().toString().trim() : "";
+        String cantidadStr = inputCantidad.getText() != null ? inputCantidad.getText().toString().trim() : "1";
 
         if (nombre.isEmpty()) {
             inputNombre.setError("El nombre es requerido");
@@ -121,7 +124,17 @@ public class CrearArbolFragment extends Fragment {
             return;
         }
 
-        crearArbol(nombre, especie, fechaStr, ubicacion);
+        int cantidad;
+        try {
+            cantidad = Integer.parseInt(cantidadStr);
+            if (cantidad < 1) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            inputCantidad.setError("La cantidad debe ser al menos 1");
+            inputCantidad.requestFocus();
+            return;
+        }
+
+        crearArbol(nombre, especie, fechaStr, ubicacion, cantidad);
     }
 
     private boolean validarFecha(String fechaStr) {
@@ -136,7 +149,7 @@ public class CrearArbolFragment extends Fragment {
         }
     }
 
-    private void crearArbol(String nombre, String especie, String fechaPlantacion, String ubicacion) {
+    private void crearArbol(String nombre, String especie, String fechaPlantacion, String ubicacion, int cantidad) {
         progressBar.setVisibility(View.VISIBLE);
         btnCrear.setEnabled(false);
 
@@ -150,6 +163,7 @@ public class CrearArbolFragment extends Fragment {
         nuevoArbol.setFechaPlantacion(fechaPlantacion);
         nuevoArbol.setUbicacion(ubicacion);
         nuevoArbol.setCentroEducativo(centro);
+        nuevoArbol.setCantidad(cantidad);
 
         Call<Arbol> call = RetrofitClient.getArbolApi().crearArbol(nuevoArbol);
         call.enqueue(new Callback<Arbol>() {

@@ -455,6 +455,9 @@ function DetalleCentro() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                     Ubicación
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                    Cantidad
+                  </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
                     Acciones
                   </th>
@@ -475,6 +478,9 @@ function DetalleCentro() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {arbol.ubicacionEspecifica || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {arbol.cantidad ?? 1}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
                       <Button

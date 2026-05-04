@@ -86,7 +86,9 @@ CREATE TABLE arbol (
     ubicacion_especifica VARCHAR(200),
     -- Absorción de CO2 estimada al año (kg CO2/año)
     absorcion_co2_anual DECIMAL(8, 2),
+    cantidad INTEGER NOT NULL DEFAULT 1,
     CONSTRAINT pk_arbol PRIMARY KEY (id),
+    CONSTRAINT chk_arbol_cantidad CHECK (cantidad >= 1),
     CONSTRAINT fk_arbol_centro FOREIGN KEY (centro_id) REFERENCES centro_educativo(id) ON DELETE CASCADE
 );
 
