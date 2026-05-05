@@ -42,8 +42,9 @@
     const handleEliminar = async () => {
       try {
         setDeleting(true);
+        const centroId = arbol?.centroEducativo?.id;
         await deleteArbol(id);
-        navigate(-1);
+        centroId ? navigate(`/centros/${centroId}`) : navigate('/centros');
       } catch (err) {
         console.error('Error eliminando árbol:', err);
         setError('Error al eliminar el árbol. Por favor, intenta de nuevo.');
@@ -54,7 +55,8 @@
     };
 
     const handleVolver = () => {
-      navigate(-1);
+      const centroId = arbol?.centroEducativo?.id;
+      centroId ? navigate(`/centros/${centroId}`) : navigate('/centros');
     };
 
     const formatearFecha = (fecha) => {

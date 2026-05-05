@@ -32,6 +32,7 @@ public class DetalleUsuarioFragment extends Fragment {
     private static final String ARG_ACTIVO = "activo";
 
     private long usuarioId = -1;
+    private Usuario usuarioActual;
 
     private TextView tvNombre, tvEmail, tvRol, tvActivo;
     private ImageButton btnVolver, btnEditar, btnEliminar;
@@ -73,13 +74,48 @@ public class DetalleUsuarioFragment extends Fragment {
         configurarListeners();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (usuarioId != -1) cargarUsuario();
+    }
+
+    private void cargarUsuario() {
+        RetrofitClient.getUsuarioApi().obtenerPorId(usuarioId).enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                if (!isAdded()) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    usuarioActual = response.body();
+                    mostrarUsuario(usuarioActual);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                // datos del bundle siguen visibles, no hacemos nada
+            }
+        });
+    }
+
     private void mostrarDatos() {
         if (getArguments() == null) return;
 
-        tvNombre.setText(getArguments().getString(ARG_NOMBRE, "-"));
-        tvEmail.setText(getArguments().getString(ARG_EMAIL, "-"));
+        usuarioActual = new Usuario();
+        usuarioActual.setId(usuarioId);
+        usuarioActual.setNombre(getArguments().getString(ARG_NOMBRE));
+        usuarioActual.setEmail(getArguments().getString(ARG_EMAIL));
+        usuarioActual.setRol(getArguments().getString(ARG_ROL));
+        usuarioActual.setActivo(getArguments().getBoolean(ARG_ACTIVO, true));
 
-        String rol = getArguments().getString(ARG_ROL, "-");
+        mostrarUsuario(usuarioActual);
+    }
+
+    private void mostrarUsuario(Usuario u) {
+        tvNombre.setText(u.getNombre() != null ? u.getNombre() : "-");
+        tvEmail.setText(u.getEmail() != null ? u.getEmail() : "-");
+
+        String rol = u.getRol() != null ? u.getRol() : "-";
         tvRol.setText(rol);
         int colorRol;
         if ("ADMIN".equals(rol)) {
@@ -91,7 +127,7 @@ public class DetalleUsuarioFragment extends Fragment {
         }
         tvRol.setTextColor(colorRol);
 
-        boolean activo = getArguments().getBoolean(ARG_ACTIVO, true);
+        boolean activo = Boolean.TRUE.equals(u.getActivo());
         tvActivo.setText(activo ? "Activo" : "Inactivo");
         tvActivo.setTextColor(ContextCompat.getColor(requireContext(),
                 activo ? R.color.green_secondary : R.color.red_primary));
@@ -102,15 +138,9 @@ public class DetalleUsuarioFragment extends Fragment {
                 requireActivity().getSupportFragmentManager().popBackStack());
 
         btnEditar.setOnClickListener(v -> {
-            Usuario usuario = new Usuario();
-            usuario.setId(usuarioId);
-            if (getArguments() != null) {
-                usuario.setNombre(getArguments().getString(ARG_NOMBRE));
-                usuario.setEmail(getArguments().getString(ARG_EMAIL));
-                usuario.setRol(getArguments().getString(ARG_ROL));
-                usuario.setActivo(getArguments().getBoolean(ARG_ACTIVO, true));
+            if (usuarioActual != null) {
+                ((MainActivity) requireActivity()).navigateToFormularioUsuario(usuarioActual);
             }
-            ((MainActivity) requireActivity()).navigateToFormularioUsuario(usuario);
         });
 
         btnEliminar.setOnClickListener(v -> mostrarConfirmacionEliminar());
