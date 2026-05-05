@@ -19,6 +19,7 @@ import com.example.proyectoarboles.activities.MainActivity;
 import com.example.proyectoarboles.api.RetrofitClient;
 import com.example.proyectoarboles.model.Arbol;
 import com.example.proyectoarboles.model.CentroEducativo;
+import com.example.proyectoarboles.model.DispositivoEsp32;
 import com.example.proyectoarboles.util.PermissionManager;
 
 import java.util.List;
@@ -29,7 +30,7 @@ import retrofit2.Response;
 
 public class DashboardFragment extends Fragment {
 
-    private TextView tvNumeroCentros, tvNumeroArboles, tvNombreUsuario, tvRolUsuario;
+    private TextView tvNumeroCentros, tvNumeroArboles, tvDispositivosActivos, tvCo2Total, tvNombreUsuario, tvRolUsuario;
     private MaterialCardView btVerCentros;
     private LinearLayout llEstadoUsuario;
     private SharedPreferences sharedPreferences;
@@ -51,6 +52,8 @@ public class DashboardFragment extends Fragment {
 
         tvNumeroCentros = view.findViewById(R.id.tvNumeroCentros);
         tvNumeroArboles = view.findViewById(R.id.tvNumeroArboles);
+        tvDispositivosActivos = view.findViewById(R.id.tvDispositivosActivos);
+        tvCo2Total = view.findViewById(R.id.tvCo2Total);
         tvNombreUsuario = view.findViewById(R.id.tvNombreUsuario);
         tvRolUsuario = view.findViewById(R.id.tvRolUsuario);
         llEstadoUsuario = view.findViewById(R.id.llEstadoUsuario);
@@ -60,6 +63,7 @@ public class DashboardFragment extends Fragment {
         actualizarInfoUsuario();
         cargarNumeroCentros();
         cargarNumeroArboles();
+        cargarDispositivosActivos();
     }
 
     private void cargarNumeroCentros() {
@@ -90,20 +94,53 @@ public class DashboardFragment extends Fragment {
             public void onResponse(Call<List<Arbol>> call, Response<List<Arbol>> response) {
                 if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
-                    int total = 0;
+                    int totalArboles = 0;
+                    double totalCo2 = 0;
                     for (Arbol a : response.body()) {
-                        total += a.getCantidad();
+                        int cantidad = a.getCantidad();
+                        totalArboles += cantidad;
+                        if (a.getAbsorcionCo2Anual() != null) {
+                            totalCo2 += a.getAbsorcionCo2Anual() * cantidad;
+                        }
                     }
-                    tvNumeroArboles.setText(String.valueOf(total));
+                    tvNumeroArboles.setText(String.valueOf(totalArboles));
+                    tvCo2Total.setText(String.format("%.1f", totalCo2));
                 } else {
-                    tvNumeroArboles.setText("Error");
+                    tvNumeroArboles.setText("—");
+                    tvCo2Total.setText("—");
                 }
             }
 
             @Override
             public void onFailure(Call<List<Arbol>> call, Throwable t) {
                 if (!isAdded()) return;
-                tvNumeroArboles.setText("Error");
+                tvNumeroArboles.setText("—");
+                tvCo2Total.setText("—");
+            }
+        });
+    }
+
+    private void cargarDispositivosActivos() {
+        Call<List<DispositivoEsp32>> call = RetrofitClient.getDispositivoApi().obtenerTodosLosDispositivos();
+        call.enqueue(new Callback<List<DispositivoEsp32>>() {
+            @Override
+            public void onResponse(Call<List<DispositivoEsp32>> call, Response<List<DispositivoEsp32>> response) {
+                if (!isAdded()) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    int activos = 0;
+                    for (DispositivoEsp32 d : response.body()) {
+                        if (Boolean.TRUE.equals(d.getActivo())) activos++;
+                    }
+                    tvDispositivosActivos.setText(String.valueOf(activos));
+                } else {
+                    tvDispositivosActivos.setText("—");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DispositivoEsp32>> call, Throwable t) {
+                if (!isAdded()) return;
+                tvDispositivosActivos.setText("—");
             }
         });
     }
@@ -133,6 +170,7 @@ public class DashboardFragment extends Fragment {
             actualizarInfoUsuario();
             cargarNumeroCentros();
             cargarNumeroArboles();
+            cargarDispositivosActivos();
         }
     }
 }

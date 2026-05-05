@@ -1,18 +1,29 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { School, TreePine } from "lucide-react";
+import { School, TreePine, Leaf, Cpu } from "lucide-react";
 import { getCentros } from "../../services/centrosService";
 import { getArboles } from "../../services/arbolesService";
+import { getDispositivos } from "../../services/dispositivosService";
 
 const Dashboard = () => {
   const { user } = useAuth();
   const [numCentros, setNumCentros] = useState(null);
   const [numArboles, setNumArboles] = useState(null);
+  const [co2Total, setCo2Total] = useState(null);
+  const [dispositivosActivos, setDispositivosActivos] = useState(null);
 
   useEffect(() => {
     getCentros().then(data => setNumCentros(data.length)).catch(() => setNumCentros('—'));
-    getArboles().then(data => setNumArboles(data.reduce((sum, a) => sum + (a.cantidad ?? 1), 0))).catch(() => setNumArboles('—'));
+    getDispositivos().then(data => setDispositivosActivos(data.filter(d => d.activo).length)).catch(() => setDispositivosActivos('—'));
+    getArboles().then(data => {
+      setNumArboles(data.reduce((sum, a) => sum + (a.cantidad ?? 1), 0));
+      const co2 = data.reduce((sum, a) => sum + ((a.absorcionCo2Anual ?? 0) * (a.cantidad ?? 1)), 0);
+      setCo2Total(co2.toFixed(1));
+    }).catch(() => {
+      setNumArboles('—');
+      setCo2Total('—');
+    });
   }, []);
 
   return (
@@ -22,11 +33,22 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold text-brand-primary mb-2">
           {user ? `¡Bienvenido, ${user.nombre}!` : '¡Bienvenido a Proyecto Árboles!'}
         </h1>
-        <p className="text-brand-text">
+        <p className="text-brand-text mb-4">
           {user
             ? 'Gestiona los árboles y centros educativos desde tu panel de control.'
             : 'Explora los árboles y centros educativos. Inicia sesión para gestionar contenido.'}
         </p>
+        <div className="border-t border-gray-100 pt-4 space-y-3 text-brand-text leading-relaxed font-light">
+          <p>
+            El <span className="font-medium text-brand-primary">Proyecto Árboles</span> es una iniciativa impulsada por la <span className="font-medium">Fundación Sergio Alonso</span>, la <span className="font-medium">Fundación Acuorum</span> y la <span className="font-medium">Fundación Foresta</span> que promueve la educación ambiental y la acción climática a través de la plantación de árboles en centros educativos de Canarias.
+          </p>
+          <p>
+            Mediante la creación de espacios de sombra en colegios e institutos, el proyecto mejora el bienestar de la comunidad educativa, transforma los entornos escolares y refuerza valores como el respeto por el medioambiente y la sostenibilidad.
+          </p>
+          <p>
+            La iniciativa se completa con talleres de educación ambiental dirigidos al alumnado, donde docentes y estudiantes descubren el papel clave de los árboles frente al cambio climático, su capacidad para absorber CO₂ y las prácticas necesarias para su cuidado y conservación.
+          </p>
+        </div>
       </div>
 
       {/* Métricas */}
@@ -40,13 +62,31 @@ const Dashboard = () => {
             <p className="text-xs text-white/60 mt-1">Centros educativos</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 pl-8">
+        <div className="flex items-center gap-3 px-8">
           <TreePine className="w-7 h-7 text-brand-bg-green shrink-0" />
           <div>
             <p className="text-2xl font-bold text-white leading-none">
               {numArboles ?? '…'}
             </p>
             <p className="text-xs text-white/60 mt-1">Árboles plantados</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 px-8">
+          <Cpu className="w-7 h-7 text-brand-bg-green shrink-0" />
+          <div>
+            <p className="text-2xl font-bold text-white leading-none">
+              {dispositivosActivos ?? '…'}
+            </p>
+            <p className="text-xs text-white/60 mt-1">Dispositivos activos</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 pl-8">
+          <Leaf className="w-7 h-7 text-brand-bg-green shrink-0" />
+          <div>
+            <p className="text-2xl font-bold text-white leading-none">
+              {co2Total ?? '…'}
+            </p>
+            <p className="text-xs text-white/60 mt-1">kg CO₂ absorbidos/año</p>
           </div>
         </div>
       </div>
