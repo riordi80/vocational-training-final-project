@@ -182,4 +182,23 @@ public class LecturaController {
 
         return lecturaRepository.findMuestraByDispositivoAndRango(dispositivo.getId(), desde, hasta);
     }
+
+    /**
+     * Elimina una lectura por su identificador.
+     * <p>
+     * Permite borrar lecturas erróneas o corruptas registradas por un dispositivo.
+     * </p>
+     *
+     * @param id identificador de la lectura a eliminar
+     * @return la lectura eliminada
+     * @throws ResponseStatusException si no se encuentra la lectura (404)
+     */
+    @DeleteMapping("/{id}")
+    public Lectura eliminarLectura(@PathVariable("id") Long id) {
+        Lectura lectura = lecturaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Lectura no encontrada"));
+        lecturaRepository.deleteById(id);
+        return lectura;
+    }
 }
