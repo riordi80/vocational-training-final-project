@@ -42,7 +42,7 @@ Si la app no carga datos, revisa primero la sección de Build Variants del manua
 
 ## 2. Inicio de sesión y registro
 
-![captura de login](img/captura-login.png)
+![captura de login](img/captura-login.jpg)
 
 Desde **Login**:
 
@@ -90,7 +90,7 @@ En horizontal (landscape) la navegación pasa a **Navigation Rail** lateral con 
 
 ## 4. Pantalla Inicio (Dashboard)
 
-![captura de login](img/captura-dashboard.png)
+![captura de login](img/captura-dashboard.jpg)
 
 La pantalla Inicio muestra:
 
@@ -109,7 +109,7 @@ Además:
 
 ## 5. Centros educativos
 
- ![captura lista centros](img/captura-lista-centros.png)
+ ![captura lista centros](img/captura-lista-centros.jpg)
 
 En **Centros** se muestra el listado con:
 
@@ -126,7 +126,7 @@ Acciones:
 
 ## 6. Detalle de centro
 
-![captura de login](img/captura-detalle-centro.png)
+![captura de login](img/captura-detalles-centro.jpg)
 
 Incluye:
 
@@ -145,11 +145,11 @@ En la misma pantalla aparecen:
 - Lista de dispositivos ESP32 del centro.
 - Lista de árboles del centro.
 
-![captura dialogo eliminar](img/captura-dialog-eliminar.png)
+![captura dialogo eliminar centro](img/captura-eliminar-centro.jpg)
 
 Al eliminar centro se solicita confirmación (acción irreversible).
 
-![captura crear centro](img/capturas-crear-centro.png)
+![captura crear centro](img/captura-crear-centro.jpg)
 
 Formulario de centro (crear/editar):
 
@@ -165,7 +165,7 @@ La app gestiona árboles dentro de cada centro.
 
 ### 7.1 Crear árbol
 
-![captura crear arbol](img/captura-crear-arbol.png)
+![captura crear arbol](img/captura-crear-arbol.jpg)
 
 Campos del formulario:
 
@@ -178,7 +178,7 @@ Campos del formulario:
 
 ### 7.2 Ver detalle del árbol
 
-![captura arbol detalles](img/captura-arbol-detalles.png)
+![captura arbol detalles](img/captura-detalles-arbol.jpg)
 
 Se muestra:
 
@@ -190,7 +190,7 @@ Se muestra:
 
 ### 7.3 Editar árbol
 
-![captura editar arbol](img/captura-editar-arbol.png)
+![captura editar arbol](img/captura-editar-arbol.jpg)
 
 En modo edición:
 
@@ -199,7 +199,7 @@ En modo edición:
 
 ### 7.4 Eliminar árbol
 
-![captura dialog eliminar arbol](img/captura-dialog-eliminar-arbol.png)
+![captura dialog eliminar arbol](img/captura-dialog-eliminar-arbol.jpg)
 
 La app solicita confirmación antes de borrar.
 
@@ -219,7 +219,7 @@ Campos:
 - Activo (sí/no)
 - Umbrales: temperatura, humedad ambiente/suelo y CO₂
 
- ![captura dialog eliminar esp32](img/captura-dialog-eliminar-esp32.png)
+ ![captura dialog eliminar esp32](img/captura-eliminar-esp32.jpg)
 
 Al eliminar dispositivo se confirma y se avisa que se eliminan lecturas/alertas asociadas.
 
@@ -229,7 +229,7 @@ Al eliminar dispositivo se confirma y se avisa que se eliminan lecturas/alertas 
 
 Se accede desde el botón **Histórico** de cada dispositivo.
 
-![captura historico](img/captura-historico.png)
+![captura historico](img/captura-historico.jpg)
 
 Incluye:
 
@@ -237,7 +237,7 @@ Incluye:
 - Gráfica 1: temperatura, humedad ambiente, humedad suelo y luz.
 - Gráfica 2: CO₂.
 
-![captura historico tabla](img/captura-historico-tabla.png)
+![captura historico tabla](img/captura-historico-tabla.jpg)
 
 Tabla de lecturas:
 
@@ -252,7 +252,7 @@ El menú **Usuarios** solo aparece para usuarios ADMIN.
 
 ### 10.1 Lista de usuarios
 
-![captura lista usuarios](img/captura-usuario.png)
+![captura lista usuarios](img/captura-lista-usuarios.jpg)
 
 Muestra en cada tarjeta:
 
@@ -263,7 +263,7 @@ Muestra en cada tarjeta:
 
 ### 10.2 Detalle de usuario
 
-![captura detalles usuario](img/captura-detalles-usuario.png)
+![captura detalles usuario](img/captura-detalles-usuario.jpg)
 
 Permite:
 
@@ -274,7 +274,7 @@ Permite:
 
 ### 10.3 Editar usuario
 
-![captura editar usuario](img/captura-editar%20usuario.png)
+![captura editar usuario](img/captura-editar-usuario.jpg)
 
 En edición:
 
