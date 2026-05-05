@@ -33,22 +33,11 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold text-brand-primary mb-2">
           {user ? `¡Bienvenido, ${user.nombre}!` : '¡Bienvenido a Proyecto Árboles!'}
         </h1>
-        <p className="text-brand-text mb-4">
+        <p className="text-brand-text">
           {user
             ? 'Gestiona los árboles y centros educativos desde tu panel de control.'
             : 'Explora los árboles y centros educativos. Inicia sesión para gestionar contenido.'}
         </p>
-        <div className="border-t border-gray-100 pt-4 space-y-3 text-brand-text leading-relaxed font-light">
-          <p>
-            El <span className="font-medium text-brand-primary">Proyecto Árboles</span> es una iniciativa impulsada por la <span className="font-medium">Fundación Sergio Alonso</span>, la <span className="font-medium">Fundación Acuorum</span> y la <span className="font-medium">Fundación Foresta</span> que promueve la educación ambiental y la acción climática a través de la plantación de árboles en centros educativos de Canarias.
-          </p>
-          <p>
-            Mediante la creación de espacios de sombra en colegios e institutos, el proyecto mejora el bienestar de la comunidad educativa, transforma los entornos escolares y refuerza valores como el respeto por el medioambiente y la sostenibilidad.
-          </p>
-          <p>
-            La iniciativa se completa con talleres de educación ambiental dirigidos al alumnado, donde docentes y estudiantes descubren el papel clave de los árboles frente al cambio climático, su capacidad para absorber CO₂ y las prácticas necesarias para su cuidado y conservación.
-          </p>
-        </div>
       </div>
 
       {/* Métricas */}
@@ -145,6 +134,19 @@ const Dashboard = () => {
             </p>
           </a>
         </div>
+      </div>
+
+      {/* Descripción del proyecto */}
+      <div className="bg-white rounded-lg shadow-md p-6 mt-6 space-y-3 text-brand-text leading-relaxed font-light">
+        <p>
+          El <span className="font-medium text-brand-primary">Proyecto Árboles</span> es una iniciativa impulsada por la <span className="font-medium">Fundación Sergio Alonso</span>, la <span className="font-medium">Fundación Acuorum</span> y la <span className="font-medium">Fundación Foresta</span> que promueve la educación ambiental y la acción climática a través de la plantación de árboles en centros educativos de Canarias.
+        </p>
+        <p>
+          Mediante la creación de espacios de sombra en colegios e institutos, el proyecto mejora el bienestar de la comunidad educativa, transforma los entornos escolares y refuerza valores como el respeto por el medioambiente y la sostenibilidad.
+        </p>
+        <p>
+          La iniciativa se completa con talleres de educación ambiental dirigidos al alumnado, donde docentes y estudiantes descubren el papel clave de los árboles frente al cambio climático, su capacidad para absorber CO₂ y las prácticas necesarias para su cuidado y conservación.
+        </p>
       </div>
 
       {/* Info del usuario */}
