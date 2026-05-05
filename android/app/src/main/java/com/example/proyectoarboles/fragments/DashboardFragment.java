@@ -1,7 +1,9 @@
 package com.example.proyectoarboles.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +61,7 @@ public class DashboardFragment extends Fragment {
         llEstadoUsuario = view.findViewById(R.id.llEstadoUsuario);
         btVerCentros = (MaterialCardView) view.findViewById(R.id.btVerCentros);
 
-        configurarListeners();
+        configurarListeners(view);
         actualizarInfoUsuario();
         cargarNumeroCentros();
         cargarNumeroArboles();
@@ -145,9 +147,17 @@ public class DashboardFragment extends Fragment {
         });
     }
 
-    private void configurarListeners() {
+    private void configurarListeners(View view) {
         btVerCentros.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).navigateToListarCentros());
+
+        String urlContacto = "https://proyectoarboles.org/#contacto";
+        view.findViewById(R.id.btSumate).setOnClickListener(v -> abrirUrl(urlContacto));
+        view.findViewById(R.id.btApadrina).setOnClickListener(v -> abrirUrl(urlContacto));
+    }
+
+    private void abrirUrl(String url) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
     private void actualizarInfoUsuario() {
