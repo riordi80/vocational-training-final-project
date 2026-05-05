@@ -51,7 +51,7 @@ Aplicación móvil con **Android (Java)**
 - Roles: ADMIN, COORDINADOR y público — `PermissionManager` centralizado
 - Listar centros → listar árboles por centro → detalle del árbol
 - Datos de sensores en tiempo real (polling cada 30 s)
-- Gráfica histórica MPAndroidChart (temperatura, humedad) con selector DÍA/SEMANA/MES
+- Gráfica histórica MPAndroidChart (temperatura, humedad) en `HistoricoDispositivoFragment` con selector DÍA/SEMANA/MES/SEMESTRE/AÑO
 - CRUD árbol: crear, editar (con validación de fecha), eliminar con confirmación
 - Conectado al backend en Render
 
@@ -87,9 +87,11 @@ proyecto-arboles/
 │   ├── 00. INDICE.md                     # Índice de toda la documentación
 │   ├── 01. GIT_WORKFLOW.md               # Flujo de trabajo Git (feature branches)
 │   ├── 02. HOJA_DE_RUTA.md               # Planificación por fases
+│   ├── 02b. HOJA_RUTA_ROLES.md           # Hoja de ruta de roles y permisos
 │   ├── 03. ESPECIFICACION_TECNICA.md     # Arquitectura y requisitos
 │   ├── 04. MODELO_DATOS.md               # Diagramas E/R, UML, Relacional
 │   ├── 04b. CONFIGURACION_POSTGRESQL.md  # Instalación PostgreSQL
+│   ├── 05. ROADMAP_IOT_ESP32.md          # Roadmap del módulo IoT / ESP32
 │   ├── REQUISITOS.md                     # Requisitos académicos por módulo
 │   ├── TESTING_POSTMAN_RESULTS.md        # Resultados testing API REST
 │   ├── TESTING_VITEST.md                 # Suite de tests frontend: setup, comandos, cobertura y guía
@@ -97,8 +99,7 @@ proyecto-arboles/
 │   ├── MANUAL_DE_USUARIO.md              # Manual de usuario (Web + móvil)
 │   ├── MANUAL_DE_INSTALACION_ANDROID.md  # Manual instalación Android
 │   ├── MANUAL_DE_USUARIO_ANDROID.md      # Manual de usuario Android
-│   ├── Componentes para ESP32/           # Especificaciones hardware
-│   ├── install-timescaledb.sh            # Script instalación TimescaleDB
+│   └── install-timescaledb.sh            # Script instalación TimescaleDB
 ├── backend/                              # API REST (Spring Boot)
 │   ├── src/
 │   │   └── main/
@@ -107,14 +108,18 @@ proyecto-arboles/
 │   │           └── README_CONFIG.md                # Guía de configuración
 │   ├── create_database.sql               # Script creación de BD
 │   ├── drop_tables.sql                   # Script eliminación de tablas
+│   ├── Dockerfile                        # Imagen Docker del backend
+│   ├── mvnw / mvnw.cmd                   # Maven wrapper
 │   ├── pom.xml
 │   └── README.md
-├── frontend/                              # Web App (React)
+├── frontend/                             # Web App (React)
 │   └── README.md
-├── android/                               # Mobile App (Android)
+├── android/                              # Mobile App (Android)
 │   └── README.md
-├── esp32/                                 # Firmware ESP32
+├── esp32/                                # Firmware ESP32
+│   ├── sketch_feb11a/                    # Firmware principal del dispositivo
 │   └── README.md
+├── vercel.json                           # Configuración despliegue Vercel (raíz)
 ├── .gitignore
 └── README.md
 ```
@@ -180,16 +185,16 @@ Cada componente tiene documentación técnica detallada:
 - [x] Testing frontend con Vitest — 21 tests en 7 archivos, cobertura ~60%
 - [x] CRUD completo para todas las entidades de la BD (Fase 14): DispositivoEsp32Controller, AlertaController, NotificacionController
 - [x] Android refactorizado a single-activity + fragments con `NavigationRailView` en landscape (Fase 10, PR #275)
-- [x] Gráfica histórica MPAndroidChart en ArbolDetallesFragment — selector DÍA/SEMANA/MES (Fase 10)
+- [x] Gráfica histórica MPAndroidChart en HistoricoDispositivoFragment — selector DÍA/SEMANA/MES/SEMESTRE/AÑO (Fase 10)
 - [x] ESLint sin errores — 0 errores en `npm run lint` (Fase 12.3, PR #276)
 - [x] Análisis Lighthouse completado y entregado en PDF (Fase 13)
+- [x] JWT + BCrypt (Fase 15)
 - [ ] Historias de usuario / ERS formales documentadas (Fase 12.1)
 - [ ] Mockups de pantallas principales (Fase 12.2)
-- [ ] JWT + BCrypt (Fase 15)
 
 ## Estado del Proyecto
 
-**Fase actual**: Fases 1–11, 13, 14 completadas + Fase 10 Android + Fase 12.3 Linting | Pendientes: Fase 12.1 (historias usuario), Fase 12.2 (mockups), Fase 15 (JWT+BCrypt)
+**Fase actual**: Fases 1–15 completadas (excepto 12.1 y 12.2) | Pendientes: Fase 12.1 (historias usuario), Fase 12.2 (mockups)
 
 ### Completado (Fase 0 - Configuración Inicial)
 - [x] Configuración de entornos de desarrollo
@@ -255,7 +260,7 @@ Cada componente tiene documentación técnica detallada:
 - [x] **Roles**: `PermissionManager` centralizado — ADMIN, COORDINADOR, público (lectura sin cuenta)
 - [x] **CRUD árbol**: crear, editar (validación de fecha), eliminar con confirmación
 - [x] **Datos en tiempo real**: polling de sensores cada 30 s con `Handler.postDelayed`
-- [x] **Histórico**: gráfica MPAndroidChart en `ArbolDetallesFragment`, selector DÍA/SEMANA/MES
+- [x] **Histórico**: gráfica MPAndroidChart en `HistoricoDispositivoFragment`, selector DÍA/SEMANA/MES/SEMESTRE/AÑO
 - [x] **Retrofit**: conectado a backend en Render con timeouts de 60 s
 
 ### Completado (Despliegue)
@@ -278,8 +283,8 @@ Cada componente tiene documentación técnica detallada:
 - [x] **Sistema de roles**: ADMIN y COORDINADOR — eliminados mocks de AuthContext
 - [x] **DTOs de autenticación**: LoginRequest, RegisterRequest, AuthResponse
 
-### Completado (Lecturas IoT + ESP32)
-- [x] **LecturaController**: GET (paginado, última lectura, stride sampling por período), POST `/api/lecturas/dispositivo/{id}`
+### Completado (Fase 8 - Lecturas IoT + ESP32)
+- [x] **LecturaController**: GET (paginado, rango, stride sampling por período), POST, DELETE `/api/lecturas`
 - [x] **TimescaleDB hypertable**: tabla `lectura` configurada para series temporales
 - [x] **HistoricoDispositivo.jsx**: dos gráficas independientes (sensores 0-100% y CO2 en ppm) con stride sampling + tabla paginada + polling automático sincronizado con `frecuencia_lectura_seg` del ESP32
 - [x] **ESP32 firmware**: SHT40 (temperatura/humedad ambiente) + sensor capacitivo (humedad suelo) + MH-Z19D (CO2) + LDR x2 (luz1/luz2) + envío HTTP REST
@@ -291,8 +296,25 @@ Cada componente tiene documentación técnica detallada:
 - [x] **Cobertura**: ~60% statements — funcionalidades críticas cubiertas
 - [x] **[TESTING_VITEST.md](./docs/TESTING_VITEST.md)**: documentación completa con guía AAA, mocks y troubleshooting
 
+### Completado (Fase 10 - Android Landscape + Histórico)
+- [x] **Landscape**: `layout-land/activity_main.xml` con `NavigationRailView` — aplica a todas las pantallas (arquitectura single-activity)
+- [x] **Histórico MPAndroidChart**: gráfica de temperatura, humedad ambiente y humedad suelo integrada en `HistoricoDispositivoFragment`
+- [x] **Selector de período**: DÍA / SEMANA / MES / SEMESTRE / AÑO — llama a `GET /api/lecturas/dispositivo/{id}/grafica?periodo=X`
+
 ### Completado (Fase 11 - PUT N:M)
 - [x] **`PUT /api/usuario-centro/{id}`**: actualización de asignación usuario-centro con validaciones (usuario es COORDINADOR, sin duplicados)
+
+### Fase 12 - Calidad del Software
+- [ ] **12.1 Historias de usuario / ERS** [AED]: documento con historias por rol (ADMIN, COORDINADOR) en formato "Como [rol], quiero [acción] para [objetivo]"
+- [ ] **12.2 Mockups** [AED]: bocetos de las 6+ pantallas principales (Figma, draw.io, excalidraw...)
+- [x] **12.3 ESLint sin errores**: `npm run lint` → 0 errores (PR #276)
+- [x] Globales de Vitest (`jest` env) declarados para archivos de test
+- [x] `coverage/` excluida del linting
+- [x] `CodeBlock` movido fuera del render en `ComponentLibrary.jsx`
+
+### Completado (Fase 13 - Lighthouse SOJ)
+- [x] **Análisis Lighthouse** ejecutado en producción (https://vocational-training-final-project.vercel.app/)
+- [x] **PDF entregado**: `SOJ_Lighthouse_RicardoOrtiz_EnriquePerez.pdf`
 
 ### Completado (Fase 14 - CRUD Entidades Pendientes)
 - [x] **Entidades JPA nuevas**: Alerta (con TipoAlerta, EstadoAlerta) y Notificacion — con Javadoc completo
@@ -302,28 +324,10 @@ Cada componente tiene documentación técnica detallada:
 - [x] **NotificacionController**: GET, POST, PUT, DELETE `/api/notificaciones` (+ filtros por usuario y no leídas)
 - [x] **Javadoc**: añadido a todos los modelos y controladores sin documentar (UsuarioCentro, Lectura, ArbolController, AuthController, LecturaController, UsuarioCentroController, UsuarioController)
 
-### Completado (Fase 10 - Android Landscape + Histórico)
-- [x] **Landscape**: `layout-land/activity_main.xml` con `NavigationRailView` — aplica a todas las pantallas (arquitectura single-activity)
-- [x] **Histórico MPAndroidChart**: gráfica de temperatura, humedad ambiente y humedad suelo integrada en `ArbolDetallesFragment`
-- [x] **Selector de período**: DÍA / SEMANA / MES — llama a `GET /api/lecturas/arbol/{id}/grafica?periodo=X`
-
-### Completado (Fase 12.3 - Linting)
-- [x] **ESLint sin errores**: `npm run lint` → 0 errores (PR #276)
-- [x] Globales de Vitest (`jest` env) declarados para archivos de test
-- [x] `coverage/` excluida del linting
-- [x] `CodeBlock` movido fuera del render en `ComponentLibrary.jsx`
-
-### Completado (Fase 13 - Lighthouse SOJ)
-- [x] **Análisis Lighthouse** ejecutado en producción (https://vocational-training-final-project.vercel.app/)
-- [x] **PDF entregado**: `SOJ_Lighthouse_RicardoOrtiz_EnriquePerez.pdf`
-
-### Pendiente (Fase 12 - Calidad del Software)
-- [ ] **12.1 Historias de usuario / ERS** [AED]: documento con historias por rol (ADMIN, COORDINADOR) en formato "Como [rol], quiero [acción] para [objetivo]"
-- [ ] **12.2 Mockups** [AED]: bocetos de las 6+ pantallas principales (Figma, draw.io, excalidraw...)
-
-### Pendiente (Fase 15 - JWT + BCrypt)
-- [ ] **BCrypt**: hashear contraseñas en register, verificar en login (`spring-security-crypto`)
-- [ ] **JWT**: generar token en login, filtro de validación en requests protegidos, actualizar frontend y Android
+### Completado (Fase 15 - JWT + BCrypt)
+- [x] **BCrypt**: contraseñas hasheadas en register, verificadas en login (`spring-security-crypto`)
+- [x] **JWT**: token generado en login, filtro de validación en requests protegidos
+- [x] **Frontend y Android**: actualizados para trabajar con autenticación JWT
 
 ### Completado (Refactor Dispositivo-Centro)
 - [x] **Modelo dispositivo-centro**: cada `DispositivoEsp32` pertenece directamente a un `CentroEducativo` (relación N:1); migración SQL idempotente aplicada en local y producción
@@ -425,7 +429,6 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 - [`backend/drop_tables.sql`](./backend/drop_tables.sql) - Script SQL para eliminar todas las tablas (útil para resetear BD)
 - [`backend/src/main/resources/README_CONFIG.md`](./backend/src/main/resources/README_CONFIG.md) - Guía de configuración segura de Spring Boot
 - [`docs/install-timescaledb.sh`](./docs/install-timescaledb.sh) - Script para instalar TimescaleDB en Linux
-- [`docs/Componentes para ESP32/Componentes.png`](./docs/Componentes%20para%20ESP32/Componentes.png) - Lista de componentes hardware y precios
 
 
 
@@ -441,7 +444,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-05-04
+**Última actualización**: 2026-05-05
 
 ### Colaboradores
 
