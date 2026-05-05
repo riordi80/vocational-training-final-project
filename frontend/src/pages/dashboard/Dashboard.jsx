@@ -41,40 +41,32 @@ const Dashboard = () => {
       </div>
 
       {/* Métricas */}
-      <div className="bg-brand-primary rounded-lg shadow-md px-8 py-5 mb-6 flex divide-x divide-white/20">
-        <div className="flex items-center gap-3 pr-8">
+      <div className="bg-brand-primary rounded-lg shadow-md p-5 mb-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="flex items-center gap-3">
           <School className="w-7 h-7 text-brand-bg-green shrink-0" />
           <div>
-            <p className="text-2xl font-bold text-white leading-none">
-              {numCentros ?? '…'}
-            </p>
+            <p className="text-2xl font-bold text-white leading-none">{numCentros ?? '…'}</p>
             <p className="text-xs text-white/60 mt-1">Centros educativos</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 px-8">
+        <div className="flex items-center gap-3">
           <TreePine className="w-7 h-7 text-brand-bg-green shrink-0" />
           <div>
-            <p className="text-2xl font-bold text-white leading-none">
-              {numArboles ?? '…'}
-            </p>
+            <p className="text-2xl font-bold text-white leading-none">{numArboles ?? '…'}</p>
             <p className="text-xs text-white/60 mt-1">Árboles plantados</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 px-8">
+        <div className="flex items-center gap-3">
           <Cpu className="w-7 h-7 text-brand-bg-green shrink-0" />
           <div>
-            <p className="text-2xl font-bold text-white leading-none">
-              {dispositivosActivos ?? '…'}
-            </p>
+            <p className="text-2xl font-bold text-white leading-none">{dispositivosActivos ?? '…'}</p>
             <p className="text-xs text-white/60 mt-1">Dispositivos activos</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 pl-8">
+        <div className="flex items-center gap-3">
           <Leaf className="w-7 h-7 text-brand-bg-green shrink-0" />
           <div>
-            <p className="text-2xl font-bold text-white leading-none">
-              {co2Total ?? '…'}
-            </p>
+            <p className="text-2xl font-bold text-white leading-none">{co2Total ?? '…'}</p>
             <p className="text-xs text-white/60 mt-1">kg CO₂ absorbidos/año</p>
           </div>
         </div>
@@ -99,14 +91,14 @@ const Dashboard = () => {
         </Link>
 
         {/* Tarjetas externas */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <a
             href="https://proyectoarboles.org/#contacto"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition grid row-span-2 [grid-template-rows:subgrid]"
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition"
           >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 mb-3">
               <Users className="w-10 h-10 text-brand-secondary shrink-0" />
               <h2 className="text-xl font-bold text-brand-primary">
                 Súmate al proyecto
@@ -121,9 +113,9 @@ const Dashboard = () => {
             href="https://proyectoarboles.org/#contacto"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition grid row-span-2 [grid-template-rows:subgrid]"
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition"
           >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 mb-3">
               <Heart className="w-10 h-10 text-brand-secondary shrink-0" />
               <h2 className="text-xl font-bold text-brand-primary">
                 Apadrina un árbol
@@ -137,7 +129,7 @@ const Dashboard = () => {
       </div>
 
       {/* Descripción del proyecto */}
-      <div className="bg-white rounded-lg shadow-md p-6 mt-6 space-y-3 text-brand-text leading-relaxed font-light">
+      <div className="bg-white rounded-lg shadow-md p-6 mt-6 space-y-3 text-brand-text leading-relaxed font-light text-justify">
         <p>
           El <span className="font-medium text-brand-primary">Proyecto Árboles</span> es una iniciativa impulsada por la <span className="font-medium">Fundación Sergio Alonso</span>, la <span className="font-medium">Fundación Acuorum</span> y la <span className="font-medium">Fundación Foresta</span> que promueve la educación ambiental y la acción climática a través de la plantación de árboles en centros educativos de Canarias.
         </p>
