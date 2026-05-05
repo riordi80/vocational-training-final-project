@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { School, TreePine, Leaf, Cpu } from "lucide-react";
+import { School, TreePine, Leaf, Cpu, Users, Heart } from "lucide-react";
 import { getCentros } from "../../services/centrosService";
 import { getArboles } from "../../services/arbolesService";
 import { getDispositivos } from "../../services/dispositivosService";
@@ -108,6 +108,43 @@ const Dashboard = () => {
             Administra los centros educativos y consulta los árboles asociados a cada uno.
           </p>
         </Link>
+
+        {/* Tarjetas externas */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <a
+            href="https://proyectoarboles.org/#contacto"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition grid row-span-2 [grid-template-rows:subgrid]"
+          >
+            <div className="flex items-start gap-4">
+              <Users className="w-10 h-10 text-brand-secondary shrink-0" />
+              <h2 className="text-xl font-bold text-brand-primary">
+                Súmate al proyecto
+              </h2>
+            </div>
+            <p className="text-brand-text font-light">
+              Si eres directivo o responsable de un centro, solicita la plantación de árboles y transforma tu colegio en un entorno más verde, saludable y sostenible.
+            </p>
+          </a>
+
+          <a
+            href="https://proyectoarboles.org/#contacto"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition grid row-span-2 [grid-template-rows:subgrid]"
+          >
+            <div className="flex items-start gap-4">
+              <Heart className="w-10 h-10 text-brand-secondary shrink-0" />
+              <h2 className="text-xl font-bold text-brand-primary">
+                Apadrina un árbol
+              </h2>
+            </div>
+            <p className="text-brand-text font-light">
+              Personas, empresas y entidades pueden sumarse apadrinando un árbol: un legado vivo que genera sombra, oxígeno e impacto real frente al cambio climático.
+            </p>
+          </a>
+        </div>
       </div>
 
       {/* Info del usuario */}
