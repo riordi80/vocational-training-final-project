@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Button from "../components/common/Button";
+import { HelpCircle } from "lucide-react";
 
 const Header = () => {
     const { user, logout } = useAuth();
@@ -56,6 +57,20 @@ const Header = () => {
                                 Usuarios
                             </NavLink>
                         )}
+
+                        {/* Ayuda — siempre visible */}
+                        <NavLink
+                            to="/ayuda"
+                            className={({ isActive }) =>
+                                isActive
+                                    ? "p-1.5 rounded-md bg-white/10 text-brand-bg-green transition"
+                                    : "p-1.5 rounded-md hover:bg-white/10 text-brand-accent transition"
+                            }
+                            aria-label="Ayuda"
+                            title="Ayuda"
+                        >
+                            <HelpCircle className="w-5 h-5" />
+                        </NavLink>
 
                         {user ? (
                             <>
@@ -146,6 +161,13 @@ const Header = () => {
                                     Usuarios
                                 </NavLink>
                             )}
+                            <NavLink
+                                to="/ayuda"
+                                onClick={closeMobileMenu}
+                                className={({ isActive }) => `${navLinkClass({ isActive })} py-2`}
+                            >
+                                Ayuda
+                            </NavLink>
 
                             {user ? (
                                 <Button
