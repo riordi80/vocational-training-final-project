@@ -2,12 +2,32 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getDispositivoById, createDispositivo, updateDispositivo } from '../../services/dispositivosService';
 import { getCentros } from '../../services/centrosService';
+import { useForm } from '../../hooks/useForm';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
 import Alert from '../../components/common/Alert';
 import { usePermissions } from '../../hooks/usePermissions';
 import { useAuth } from '../../context/AuthContext';
+
+const macRegex = /^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$/;
+
+const validarDispositivo = (values) => {
+  const errors = {};
+  if (!values.macAddress.trim()) {
+    errors.macAddress = 'La dirección MAC es obligatoria';
+  } else if (!macRegex.test(values.macAddress.trim())) {
+    errors.macAddress = 'Formato incorrecto. Usa XX:XX:XX:XX:XX:XX';
+  }
+  if (!values.centroEducativo?.id) {
+    errors.centroEducativo = 'Debes seleccionar un centro educativo';
+  }
+  const freq = parseInt(values.frecuenciaLecturaSeg);
+  if (isNaN(freq) || freq < 5 || freq > 3600) {
+    errors.frecuenciaLecturaSeg = 'La frecuencia debe estar entre 5 y 3600 segundos';
+  }
+  return errors;
+};
 
 function FormularioDispositivo() {
   const { id } = useParams();
@@ -16,7 +36,7 @@ function FormularioDispositivo() {
   const isEditMode = Boolean(id);
 
   const centroIdDesdeState = location.state?.centroId;
-  const [formData, setFormData] = useState({
+  const initialValues = {
     macAddress: '',
     centroEducativo: { id: centroIdDesdeState || '' },
     activo: true,
@@ -27,13 +47,26 @@ function FormularioDispositivo() {
     umbralHumedadAmbienteMax: '',
     umbralHumedadSueloMin: '',
     umbralCO2Max: '',
-  });
+  };
+
+  const {
+    values: formData,
+    setValues: setFormData,
+    errors,
+    setErrors,
+    handleChange,
+    handleBlur,
+    validateAll,
+  } = useForm(
+    initialValues,
+    validarDispositivo,
+    { centroEducativo: (v) => ({ id: v }) }
+  );
 
   const [centros, setCentros] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(isEditMode);
   const [error, setError] = useState('');
-  const [errors, setErrors] = useState({});
   const { isAdmin } = usePermissions();
   const { user } = useAuth();
 
@@ -74,52 +107,10 @@ function FormularioDispositivo() {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    if (name === 'centroEducativo') {
-      setFormData(prev => ({ ...prev, centroEducativo: { id: value } }));
-    } else if (type === 'checkbox') {
-      setFormData(prev => ({ ...prev, [name]: checked }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const validarFormulario = () => {
-    const nuevosErrores = {};
-
-    if (!formData.macAddress.trim()) {
-      nuevosErrores.macAddress = 'La dirección MAC es obligatoria';
-    } else {
-      // Formato MAC: XX:XX:XX:XX:XX:XX
-      const macRegex = /^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$/;
-      if (!macRegex.test(formData.macAddress.trim())) {
-        nuevosErrores.macAddress = 'Formato incorrecto. Usa XX:XX:XX:XX:XX:XX';
-      }
-    }
-
-    if (!formData.centroEducativo.id) {
-      nuevosErrores.centroEducativo = 'Debes seleccionar un centro educativo';
-    }
-
-    const freq = parseInt(formData.frecuenciaLecturaSeg);
-    if (isNaN(freq) || freq < 5 || freq > 3600) {
-      nuevosErrores.frecuenciaLecturaSeg = 'La frecuencia debe estar entre 5 y 3600 segundos';
-    }
-
-    setErrors(nuevosErrores);
-    return Object.keys(nuevosErrores).length === 0;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validarFormulario()) {
+    if (!validateAll()) {
       setError('Por favor, corrige los errores en el formulario');
       return;
     }
@@ -147,7 +138,7 @@ function FormularioDispositivo() {
       } else {
         const nuevo = await createDispositivo(dataToSend);
         navigate(`/centros/${nuevo.centroEducativo.id}`, {
-          state: { mensaje: 'Dispositivo registrado correctamente' }
+          state: { mensaje: 'Dispositivo registrado correctamente' },
         });
       }
     } catch (err) {
@@ -164,9 +155,7 @@ function FormularioDispositivo() {
     }
   };
 
-  const handleCancel = () => {
-    navigate(-1);
-  };
+  const handleCancel = () => navigate(-1);
 
   if (loadingData) {
     return (
@@ -201,90 +190,105 @@ function FormularioDispositivo() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6">
-          <div className="space-y-5">
-            {/* Dirección MAC */}
-            <Input
-              id="macAddress"
-              name="macAddress"
-              label="Dirección MAC"
-              type="text"
-              value={formData.macAddress}
-              onChange={handleChange}
-              error={errors.macAddress}
-              required
-              placeholder="Ej: AA:BB:CC:DD:EE:FF"
-            />
-            <p className="text-xs text-gray-500 -mt-3">
-              Dirección MAC del chip ESP32 (visible en el monitor serie)
-            </p>
+        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 space-y-6">
 
-            {/* Centro Educativo */}
-            <div>
-              <label htmlFor="centroEducativo" className="block text-sm font-medium text-gray-700 mb-1">
-                Centro Educativo <span className="text-red-500">*</span>
-              </label>
-              <select
-                id="centroEducativo"
-                name="centroEducativo"
-                value={formData.centroEducativo.id}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary ${
-                  errors.centroEducativo ? 'border-red-500' : 'border-gray-300'
-                }`}
-                required
-              >
-                <option value="">Selecciona un centro</option>
-                {centrosFiltrados.map(centro => (
-                  <option key={centro.id} value={centro.id}>
-                    {centro.nombre}
-                  </option>
-                ))}
-              </select>
-              {errors.centroEducativo && (
-                <p className="mt-1 text-sm text-red-500">{errors.centroEducativo}</p>
-              )}
-            </div>
+          {/* Datos básicos */}
+          <fieldset className="border border-gray-200 rounded-lg p-5">
+            <legend className="px-2 text-base font-semibold text-gray-700">
+              Datos básicos
+            </legend>
 
-            {/* Frecuencia de lectura */}
-            <div>
-              <Input
-                id="frecuenciaLecturaSeg"
-                name="frecuenciaLecturaSeg"
-                label="Frecuencia de lectura (segundos)"
-                type="number"
-                min="5"
-                max="3600"
-                value={formData.frecuenciaLecturaSeg}
-                onChange={handleChange}
-                error={errors.frecuenciaLecturaSeg}
-                required
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Intervalo entre lecturas. Mínimo 5 s, máximo 3600 s (1 hora).
-              </p>
-            </div>
+            <div className="space-y-5 mt-2">
+              {/* Dirección MAC */}
+              <div>
+                <Input
+                  id="macAddress"
+                  name="macAddress"
+                  label="Dirección MAC"
+                  type="text"
+                  value={formData.macAddress}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={errors.macAddress}
+                  required
+                  placeholder="Ej: AA:BB:CC:DD:EE:FF"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Dirección MAC del chip ESP32 (visible en el monitor serie)
+                </p>
+              </div>
 
-            {/* Estado activo */}
-            <div className="flex items-center gap-3">
-              <input
-                id="activo"
-                name="activo"
-                type="checkbox"
-                checked={formData.activo}
-                onChange={handleChange}
-                className="h-4 w-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary"
-              />
-              <label htmlFor="activo" className="text-sm font-medium text-gray-700">
-                Dispositivo activo
-              </label>
+              {/* Centro Educativo */}
+              <div>
+                <label htmlFor="centroEducativo" className="block text-sm font-medium text-gray-700 mb-1">
+                  Centro Educativo <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="centroEducativo"
+                  name="centroEducativo"
+                  value={formData.centroEducativo.id}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-brand-primary ${
+                    errors.centroEducativo ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  required
+                >
+                  <option value="">Selecciona un centro</option>
+                  {centrosFiltrados.map(centro => (
+                    <option key={centro.id} value={centro.id}>
+                      {centro.nombre}
+                    </option>
+                  ))}
+                </select>
+                {errors.centroEducativo && (
+                  <p className="mt-1 text-sm text-red-500">{errors.centroEducativo}</p>
+                )}
+              </div>
+
+              {/* Frecuencia de lectura */}
+              <div>
+                <Input
+                  id="frecuenciaLecturaSeg"
+                  name="frecuenciaLecturaSeg"
+                  label="Frecuencia de lectura (segundos)"
+                  type="number"
+                  min="5"
+                  max="3600"
+                  value={formData.frecuenciaLecturaSeg}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={errors.frecuenciaLecturaSeg}
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Intervalo entre lecturas. Mínimo 5 s, máximo 3600 s (1 hora).
+                </p>
+              </div>
+
+              {/* Estado activo */}
+              <div className="flex items-center gap-3">
+                <input
+                  id="activo"
+                  name="activo"
+                  type="checkbox"
+                  checked={formData.activo}
+                  onChange={handleChange}
+                  className="h-4 w-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary"
+                />
+                <label htmlFor="activo" className="text-sm font-medium text-gray-700">
+                  Dispositivo activo
+                </label>
+              </div>
             </div>
-          </div>
+          </fieldset>
 
           {/* Umbrales de Monitorización */}
-          <div className="pt-6 mt-6 border-t border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-800 mb-1">Umbrales de Monitorización</h2>
-            <p className="text-sm text-gray-500 mb-4">
+          <fieldset className="border border-gray-200 rounded-lg p-5">
+            <legend className="px-2 text-base font-semibold text-gray-700">
+              Umbrales de Monitorización
+            </legend>
+            <p className="text-sm text-gray-500 mt-2 mb-4">
               El sistema generará alertas cuando los valores del sensor superen estos rangos.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -296,6 +300,7 @@ function FormularioDispositivo() {
                 step="0.1"
                 value={formData.umbralTempMin}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Ej: 5"
               />
               <Input
@@ -306,6 +311,7 @@ function FormularioDispositivo() {
                 step="0.1"
                 value={formData.umbralTempMax}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Ej: 40"
               />
               <Input
@@ -316,6 +322,7 @@ function FormularioDispositivo() {
                 step="0.1"
                 value={formData.umbralHumedadAmbienteMin}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Ej: 30"
               />
               <Input
@@ -326,6 +333,7 @@ function FormularioDispositivo() {
                 step="0.1"
                 value={formData.umbralHumedadAmbienteMax}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Ej: 90"
               />
               <Input
@@ -336,6 +344,7 @@ function FormularioDispositivo() {
                 step="0.1"
                 value={formData.umbralHumedadSueloMin}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Ej: 30"
               />
               <Input
@@ -346,13 +355,14 @@ function FormularioDispositivo() {
                 step="1"
                 value={formData.umbralCO2Max}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Ej: 1000"
               />
             </div>
-          </div>
+          </fieldset>
 
           {/* Botones de acción */}
-          <div className="flex gap-3 justify-end pt-6 mt-6 border-t border-gray-200">
+          <div className="flex gap-3 justify-end pt-2">
             <Button
               type="button"
               variant="outline"

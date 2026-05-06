@@ -280,6 +280,195 @@ Todos los formularios incluyen validación client-side:
 - Confirmación de contraseña
 - Rangos numéricos (umbrales) — en FormularioDispositivo
 
+## Decisiones Técnicas
+
+### Context API vs Redux
+Se optó por **Context API** para la gestión de estado porque la aplicación solo requiere compartir el estado de autenticación (`AuthContext`) a nivel global. Redux introduce complejidad innecesaria (actions, reducers, store) para un único store de usuario. Si el proyecto creciera con múltiples fuentes de estado global (carrito, notificaciones en tiempo real, etc.), se replantearía Zustand o Redux Toolkit.
+
+### Polling vs WebSocket
+El histórico de lecturas IoT usa **polling** (`setInterval` según `frecuenciaLecturaSeg` del dispositivo) en lugar de WebSocket porque:
+- El ESP32 envía datos por HTTP REST (push unidireccional): no existe conexión persistente en el servidor.
+- La frecuencia de actualización es configurable por dispositivo (5–3600 s) y no requiere tiempo real estricto.
+- Simplifica el backend (sin servidor WebSocket) y reduce costes en Render (free tier).
+
+### Recharts vs Chart.js
+Se eligió **Recharts** 3.x porque está construido sobre composición de componentes React (más idiomático), tiene soporte nativo de TypeScript y se integra mejor con el ciclo de vida de React que Chart.js (basado en canvas imperativo). Chart.js requiere más código imperativo (`useRef` + `chart.destroy()`) para gestionar correctamente el ciclo de vida.
+
+### Leaflet (React Leaflet)
+Para los mapas en `DetalleCentro` se usa **Leaflet + React Leaflet** en lugar de Google Maps porque es gratuito sin cuotas de API, usa tiles de OpenStreetMap sin dependencia de terceros, y su bundle size es razonable para el tipo de mapa requerido.
+
+### Axios vs Fetch nativo
+Axios centraliza la configuración base (`baseURL`, interceptores de error) en `api.js`. El Fetch nativo requeriría más boilerplate para manejar errores HTTP y serialización JSON. El interceptor de Axios redirige automáticamente al login cuando el servidor devuelve 401.
+
+### Custom hooks: `useFetch` y `useForm`
+Para eliminar la duplicación de lógica `loading/error` en los tres listados se creó `useFetch`. Para reutilizar la gestión de estado de formulario (values, errors, touched, validación en tiempo real tras primer blur) se creó `useForm`. Siguiendo el principio de separación de responsabilidades: las páginas describen la UI, los hooks encapsulan el comportamiento.
+
+---
+
+## Arquitectura de Componentes
+
+### Capas de la aplicación
+
+```
+src/
+├── pages/          → Vistas: orquestan hooks, servicios y componentes comunes
+├── components/
+│   └── common/     → UI reutilizable sin lógica de negocio (Button, Input, Alert, Spinner)
+├── hooks/          → Lógica reutilizable: useFetch, useForm, usePermissions
+├── services/       → Llamadas HTTP con Axios (una función = un endpoint)
+├── context/        → Estado global compartido (solo AuthContext)
+├── utils/          → Funciones puras de negocio (permissions.js)
+└── constants/      → Datos estáticos (islas.js, roles.js)
+```
+
+### Diagrama de dependencias
+
+```mermaid
+graph TD
+    subgraph Pages
+        LA[ListadoArboles] --> UF[useFetch]
+        LC[ListadoCentros] --> UF
+        LU[ListadoUsuarios] --> UF
+        FA[FormularioArbol] --> UFM[useForm]
+        FD[FormularioDispositivo] --> UFM
+    end
+
+    subgraph Hooks
+        UF --> SRV[services/]
+        UFM --> INP[Input.jsx]
+        UP[usePermissions] --> AC[AuthContext]
+    end
+
+    subgraph Common
+        BTN[Button]
+        INP[Input]
+        ALR[Alert]
+        SPR[Spinner]
+    end
+
+    LA --> BTN & ALR & SPR & UP
+    LC --> BTN & ALR & SPR & UP
+    FA --> INP & BTN & ALR & SPR & UP
+    FD --> INP & BTN & ALR & SPR
+```
+
+### Flujo de datos de un listado
+
+```
+Page mount
+  └─ useFetch(serviceFn)
+       ├─ loading = true
+       ├─ await serviceFn()   ← Axios → REST API
+       ├─ data = result
+       └─ loading = false
+            └─ Page renders table/cards with data
+```
+
+### Flujo de validación en tiempo real (formularios)
+
+```
+User types in Input
+  └─ onChange → useForm.handleChange
+       ├─ if field is touched: validate(values) → set field error
+       └─ else: clear field error
+
+User leaves Input (blur)
+  └─ Input.handleBlur → setTouched(true) → useForm.handleBlur
+       └─ validate(values) → set field error (if any)
+
+User submits form
+  └─ useForm.validateAll() → validate all fields → show all errors
+```
+
+---
+
+## Guía de Desarrollo: Añadir una nueva página CRUD
+
+Ejemplo completo: añadir gestión de **Parcelas**.
+
+### Paso 1 — Servicio (`src/services/parcelasService.js`)
+
+```javascript
+import api from './api';
+
+export const getParcelas    = ()       => api.get('/parcelas').then(r => r.data);
+export const getParcelaById = (id)     => api.get(`/parcelas/${id}`).then(r => r.data);
+export const createParcela  = (data)   => api.post('/parcelas', data).then(r => r.data);
+export const updateParcela  = (id, d)  => api.put(`/parcelas/${id}`, d).then(r => r.data);
+export const deleteParcela  = (id)     => api.delete(`/parcelas/${id}`);
+```
+
+### Paso 2 — Listado (`src/pages/parcelas/ListadoParcelas.jsx`)
+
+```javascript
+import { useFetch } from '../../hooks/useFetch';
+import { getParcelas } from '../../services/parcelasService';
+
+function ListadoParcelas() {
+  const { data, loading, error, setError } = useFetch(getParcelas);
+  const parcelas = data ?? [];
+  // ...render table + spinner + alert
+}
+```
+
+### Paso 3 — Formulario (`src/pages/parcelas/FormularioParcela.jsx`)
+
+```javascript
+import { useForm } from '../../hooks/useForm';
+
+const validate = (values) => {
+  const errors = {};
+  if (!values.nombre.trim()) errors.nombre = 'El nombre es obligatorio';
+  return errors;
+};
+
+function FormularioParcela() {
+  const { values, errors, handleChange, handleBlur, validateAll } =
+    useForm({ nombre: '', superficie: '' }, validate);
+
+  // Usar <Input onBlur={handleBlur} /> para validación en tiempo real
+}
+```
+
+### Paso 4 — Rutas (`src/App.jsx`)
+
+```javascript
+<Route path="/parcelas"             element={<ListadoParcelas />} />
+<Route path="/parcelas/nuevo"       element={<FormularioParcela />} />
+<Route path="/parcelas/:id/editar"  element={<FormularioParcela />} />
+```
+
+### Paso 5 — Menú (`src/layout/Header.jsx`)
+
+Añadir un nuevo `<NavLink to="/parcelas">` en el array de ítems de navegación del Header.
+
+---
+
+## Tests
+
+El proyecto incluye una suite de tests automatizados en `src/tests/` con **Vitest** y **React Testing Library**:
+
+| Archivo | Qué cubre |
+|---|---|
+| `arbolesService.test.js` | CRUD de árboles mockeando Axios |
+| `lecturasService.test.js` | Servicio de lecturas IoT |
+| `AuthContext.test.jsx` | Login, logout, persistencia en localStorage |
+| `FormularioArbol.test.jsx` | Validaciones del formulario de árbol |
+| `Login.test.jsx` | Renderizado y submit del formulario de login |
+| `permissions.test.js` | Lógica de permisos por rol |
+| `ProtectedRoute.test.jsx` | Redirección de rutas protegidas |
+
+Para ejecutar los tests:
+
+```bash
+npm run test            # Ejecuta todos los tests en modo watch
+npm run test -- --run   # Ejecución única (CI)
+```
+
+Los tests usan **mocks de Axios** para aislar la capa de servicios del backend real. Los tests de componentes simulan interacciones reales del usuario con `@testing-library/user-event`.
+
+---
+
 ## Estilos y Componentes
 
 - **Tailwind CSS**: Para estilos utilitarios

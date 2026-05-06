@@ -1,43 +1,19 @@
-import { useState, useEffect } from 'react';
 import { Plus, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getUsuarios } from '../../services/usuariosService';
+import { useFetch } from '../../hooks/useFetch';
 import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
 import Alert from '../../components/common/Alert';
 
 function ListadoUsuarios() {
-  const [usuarios, setUsuarios] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { data, loading, error, setError } = useFetch(getUsuarios);
+  const usuarios = data ?? [];
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    cargarUsuarios();
-  }, []);
-
-  const cargarUsuarios = async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const data = await getUsuarios();
-      setUsuarios(data);
-    } catch (err) {
-      console.error('Error cargando usuarios:', err);
-      setError('No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerDetalle = (id) => {
-    navigate(`/usuarios/${id}`);
-  };
-
-  const handleNuevoUsuario = () => {
-    navigate('/usuarios/nuevo');
-  };
+  const handleVerDetalle = (id) => navigate(`/usuarios/${id}`);
+  const handleNuevoUsuario = () => navigate('/usuarios/nuevo');
 
   return (
     <div className="container mx-auto px-4 py-8">

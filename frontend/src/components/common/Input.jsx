@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 const Input = ({
   id,
   name,
@@ -6,12 +8,23 @@ const Input = ({
   placeholder,
   value,
   onChange,
+  onBlur: externalOnBlur,
   error,
   required = false,
   disabled = false,
   className = "",
   ...rest
 }) => {
+  const [touched, setTouched] = useState(false);
+
+  const handleBlur = (e) => {
+    setTouched(true);
+    externalOnBlur?.(e);
+  };
+
+  // Borde verde tras primer blur si el campo tiene valor y no hay error
+  const isValid = touched && !error && Boolean(value);
+
   return (
     <div className="w-full">
       {label && (
@@ -30,16 +43,21 @@ const Input = ({
         type={type}
         value={value}
         onChange={onChange}
+        onBlur={handleBlur}
         placeholder={placeholder}
         disabled={disabled}
         required={required}
         className={`
-            w-full px-3 py-2 border rounded-md
-            focus:outline-none focus:ring-2 focus:ring-brand-primary
-            disabled:bg-gray-100 disabled:cursor-not-allowed
-            ${error ? 'border-red-500' : 'border-gray-300'}
-            ${className}
-          `}
+          w-full px-3 py-2 border rounded-md transition-colors
+          focus:outline-none focus:ring-2
+          disabled:bg-gray-100 disabled:cursor-not-allowed
+          ${error
+            ? 'border-red-500 focus:ring-red-400'
+            : isValid
+            ? 'border-green-500 focus:ring-green-400'
+            : 'border-gray-300 focus:ring-brand-primary'}
+          ${className}
+        `}
         {...rest}
       />
 
