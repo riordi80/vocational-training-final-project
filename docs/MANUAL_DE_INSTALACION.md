@@ -1,6 +1,6 @@
-# Manual de Instalación - Proyecto Árboles (Proyecto Árboles)
+# Manual de Instalación - Proyecto Árboles
 
-**Última actualización**: 2025-12-07
+**Última actualización**: 2026-05-06
 
 ---
 
@@ -371,8 +371,8 @@ La aplicación estará disponible en: `http://localhost:5173`
 
 1. Abre el navegador en `http://localhost:5173`
 2. Deberías ver la pantalla de Login
-3. Intenta registrarte y hacer login (cualquier email/password funciona - auth mock)
-4. Navega a "Árboles" (debería mostrar lista vacía o con datos)
+3. Regístrate con un email válido o usa un usuario existente en la BD
+4. Navega a "Centros" (debería mostrar la lista de centros)
 
 **Para más detalles técnicos**: Ver [frontend/README.md](../frontend/README.md)
 
@@ -417,28 +417,34 @@ La aplicación Android es opcional y requiere Android Studio.
 ### 7.1 Verificar Integración Backend ↔ Base de Datos
 
 ```bash
-# Crear un centro educativo desde el backend
+# Primero obtener un token JWT haciendo login
+TOKEN=$(curl -s -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@test.com","password":"password"}' | python3 -c "import sys,json; print(json.load(sys.stdin)['token'])")
+
+# Crear un centro educativo (requiere token JWT)
 curl -X POST http://localhost:8080/api/centros \
   -H "Content-Type: application/json" \
-  -d '{"nombre":"IES Test","direccion":"Calle Test 123","ciudad":"Madrid"}'
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"nombre":"IES Test","direccion":"Calle Test 123","responsable":"Director Test","isla":"Gran Canaria","poblacion":"Las Palmas","provincia":"Las Palmas","codigoPostal":"35001","telefono":"928000000"}'
 
-# Verificar que se creó
+# Verificar que se creó (endpoint público)
 curl http://localhost:8080/api/centros
 ```
 
 ### 7.2 Verificar Integración Frontend ↔ Backend
 
 1. Abrir navegador en `http://localhost:5173`
-2. Login/Register (cualquier email/password funciona)
-3. Ir a sección "Árboles"
-4. Intentar crear un nuevo árbol
-5. Verificar que aparece en la lista
+2. Registrarse con email y contraseña, o hacer login con un usuario existente en la BD
+3. Ir a sección "Centros"
+4. Entrar en un centro y crear un nuevo árbol
+5. Verificar que aparece en la tabla de árboles del centro
 
 ### 7.3 Verificar Integración Android ↔ Backend (si aplica)
 
 1. Ejecutar app Android
-2. Login (cualquier email/password funciona)
-3. Ver lista de árboles (deberían aparecer los mismos que en web)
+2. Login con un usuario registrado en la BD (mismas credenciales que en web)
+3. Ver lista de centros y árboles (deberían coincidir con los datos de la web)
 4. Intentar editar o eliminar un árbol
 5. Verificar cambios en la web
 
@@ -473,7 +479,7 @@ curl http://localhost:8080/api/centros
 1. Verificar que backend está corriendo en `http://localhost:8080`
 2. Verificar variable `VITE_API_BASE_URL` en `.env`
 3. Reiniciar servidor de desarrollo: `npm run dev`
-4. Verificar CORS en backend (ver `backend/src/main/java/com/example/gardenmonitor/config/CorsConfig.java`)
+4. Verificar configuración CORS/seguridad en backend (ver `backend/src/main/java/com/example/proyectoarboles/config/SecurityConfig.java`)
 
 ---
 
@@ -676,7 +682,7 @@ Para problemas o preguntas:
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2025-12-08
+**Última actualización**: 2026-05-06
 
 ### Colaboradores
 
