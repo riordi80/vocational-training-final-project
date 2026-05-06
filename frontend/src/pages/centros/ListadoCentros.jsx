@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
 import { School, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getCentros } from '../../services/centrosService';
+import { useFetch } from '../../hooks/useFetch';
 import Button from '../../components/common/Button';
 import Spinner from '../../components/common/Spinner';
 import Alert from '../../components/common/Alert';
@@ -9,46 +9,15 @@ import { usePermissions } from '../../hooks/usePermissions';
 import { ISLAS } from '../../constants/islas';
 
 function ListadoCentros() {
-  // Estados
-  const [centros, setCentros] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { data, loading, error, setError } = useFetch(getCentros);
+  const centros = data ?? [];
 
   const navigate = useNavigate();
   const { isAdmin } = usePermissions();
 
-  // Cargar centros al montar el componente
-  useEffect(() => {
-    cargarCentros();
-  }, []);
+  const handleVerDetalle = (id) => navigate(`/centros/${id}`);
+  const handleNuevoCentro = () => navigate('/centros/nuevo');
 
-  // Cargar datos
-  const cargarCentros = async () => {
-    try {
-      setLoading(true);
-      setError('');
-
-      const centrosData = await getCentros();
-      setCentros(centrosData);
-    } catch (err) {
-      console.error('Error cargando centros:', err);
-      setError('No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Navegar al detalle de un centro
-  const handleVerDetalle = (id) => {
-    navigate(`/centros/${id}`);
-  };
-
-  // Navegar al formulario de crear centro
-  const handleNuevoCentro = () => {
-    navigate('/centros/nuevo');
-  };
-
-  // Formatear fecha para mostrar
   const formatearFecha = (fecha) => {
     if (!fecha) return '-';
     return new Date(fecha).toLocaleDateString('es-ES');
