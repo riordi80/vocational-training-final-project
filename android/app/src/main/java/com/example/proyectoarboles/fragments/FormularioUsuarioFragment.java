@@ -115,8 +115,9 @@ public class FormularioUsuarioFragment extends Fragment {
 
             editNombre.setText(getArguments() != null ? getArguments().getString(ARG_NOMBRE, "") : "");
             editEmail.setText(getArguments() != null ? getArguments().getString(ARG_EMAIL, "") : "");
-            editPassword.setVisibility(View.GONE);
-            labelPassword.setVisibility(View.GONE);
+            editPassword.setHint("Nueva contraseña (dejar vacío para no cambiar)");
+            editPassword.setVisibility(View.VISIBLE);
+            labelPassword.setVisibility(View.VISIBLE);
 
             if (switchActivo != null) {
                 switchActivo.setChecked(getArguments() != null && getArguments().getBoolean(ARG_ACTIVO, true));
@@ -161,7 +162,8 @@ public class FormularioUsuarioFragment extends Fragment {
         btnGuardar.setEnabled(false);
 
         if (esEdicion) {
-            actualizarUsuario(usuarioId, nombre, email, rol, activo);
+            String password = editPassword.getText().toString().trim();
+            actualizarUsuario(usuarioId, nombre, email, password, rol, activo);
         } else {
             String password = editPassword.getText().toString().trim();
             if (password.isEmpty()) {
@@ -205,10 +207,13 @@ public class FormularioUsuarioFragment extends Fragment {
         });
     }
 
-    private void actualizarUsuario(Long id, String nombre, String email, String rol, boolean activo) {
+    private void actualizarUsuario(Long id, String nombre, String email, String password, String rol, boolean activo) {
         Usuario usuarioActualizado = new Usuario(nombre, email, rol);
         usuarioActualizado.setId(id);
         usuarioActualizado.setActivo(activo);
+        if (!password.isEmpty()) {
+            usuarioActualizado.setPasswordHash(password);
+        }
 
         Call<Usuario> call = usuarioApi.actualizar(id, usuarioActualizado);
         call.enqueue(new Callback<Usuario>() {
