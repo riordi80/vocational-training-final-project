@@ -55,7 +55,7 @@ function DetalleUsuario() {
   };
 
   const handleVolver = () => {
-    navigate(-1);
+    navigate('/usuarios');
   };
 
   const handleEditar = () => {
