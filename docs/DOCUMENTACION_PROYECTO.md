@@ -49,7 +49,32 @@ Ciclo Formativo de Grado Superior — Desarrollo de Aplicaciones Multiplataforma
    - [7.1 Manual de instalación para desarrolladores](#71-manual-de-instalación-para-desarrolladores)
    - [7.2 Manual de instalación para técnicos](#72-manual-de-instalación-para-técnicos)
    - [7.3 Manual de usuario — Aplicación Web](#73-manual-de-usuario--aplicación-web)
+     - [Antes de empezar](#antes-de-empezar)
+     - [Inicio de sesión y registro](#inicio-de-sesión-y-registro)
+     - [Navegación principal](#navegación-principal)
+     - [Dashboard (Inicio)](#dashboard-inicio)
+     - [Gestión de árboles](#gestión-de-árboles)
+     - [Gestión de centros educativos](#gestión-de-centros-educativos)
+     - [Gestión de dispositivos IoT](#gestión-de-dispositivos-iot)
+     - [Histórico de lecturas](#histórico-de-lecturas)
+     - [Gestión de usuarios (solo ADMIN)](#gestión-de-usuarios-solo-admin)
+     - [Permisos por rol](#permisos-por-rol)
+     - [Validaciones y mensajes frecuentes](#validaciones-y-mensajes-frecuentes)
+     - [Resolución de problemas](#resolución-de-problemas)
    - [7.4 Manual de usuario — Aplicación Android](#74-manual-de-usuario--aplicación-android)
+     - [Antes de empezar](#antes-de-empezar-1)
+     - [Inicio de sesión y registro](#inicio-de-sesión-y-registro-1)
+     - [Navegación principal](#navegación-principal-1)
+     - [Pantalla Inicio (Dashboard)](#pantalla-inicio-dashboard)
+     - [Centros educativos](#centros-educativos)
+     - [Detalle de centro](#detalle-de-centro)
+     - [Gestión de árboles](#gestión-de-árboles-1)
+     - [Gestión de dispositivos ESP32](#gestión-de-dispositivos-esp32)
+     - [Histórico de lecturas](#histórico-de-lecturas-1)
+     - [Administración de usuarios (solo ADMIN)](#administración-de-usuarios-solo-admin)
+     - [Permisos por rol](#permisos-por-rol-1)
+     - [Validaciones y mensajes frecuentes](#validaciones-y-mensajes-frecuentes-1)
+     - [Resolución de problemas](#resolución-de-problemas-1)
    - [7.5 Ayuda al usuario dentro de la App](#75-ayuda-al-usuario-dentro-de-la-app)
 8. [Tests de Prueba — Backend](#8-tests-de-prueba--backend)
    - [8.1 Catálogo de endpoints verificados](#81-catálogo-de-endpoints-verificados)
@@ -66,7 +91,18 @@ Ciclo Formativo de Grado Superior — Desarrollo de Aplicaciones Multiplataforma
     - [11.4 Android nativo vs alternativas multiplataforma](#114-android-nativo-vs-alternativas-multiplataforma)
 12. [Repositorios](#12-repositorios)
 13. [Planificación](#13-planificación)
+    - [13.1 Metodología y herramientas de gestión](#131-metodología-y-herramientas-de-gestión)
+    - [13.2 División del trabajo](#132-división-del-trabajo)
+    - [13.3 Coordinación con la Fundación Sergio Alonso](#133-coordinación-con-la-fundación-sergio-alonso)
+    - [13.4 Línea de tiempo por fases](#134-línea-de-tiempo-por-fases)
+    - [13.5 Cambios de requisitos y decisiones de diseño clave](#135-cambios-de-requisitos-y-decisiones-de-diseño-clave)
 14. [Conclusiones](#14-conclusiones)
+    - [Lo que no esperábamos aprender](#lo-que-no-esperábamos-aprender)
+    - [Lo más difícil](#lo-más-difícil)
+    - [Lo que cambiaríamos](#lo-que-cambiaríamos)
+    - [Satisfacción con el resultado](#satisfacción-con-el-resultado)
+    - [Trabajar con una organización real](#trabajar-con-una-organización-real)
+    - [Qué tiene pendiente el sistema](#qué-tiene-pendiente-el-sistema)
 15. [Enlaces y Referencias](#15-enlaces-y-referencias)
     - [Documentación oficial de tecnologías](#documentación-oficial-de-tecnologías)
     - [Despliegue](#despliegue)
@@ -945,17 +981,27 @@ Los siguientes principios de usabilidad fueron aplicados durante el desarrollo:
 **1. Consistencia visual**
 Todos los componentes de la interfaz web (botones, inputs, alertas, spinners) son componentes React reutilizables con variantes estandarizadas (`primary`, `danger`, `secondary`). Esto garantiza que el mismo tipo de acción siempre tenga la misma apariencia.
 
-> ⚠️ **PENDIENTE**: añadir captura comparativa de botones en diferentes pantallas.
+![Captura: Listado de centros mostrando botones de acción con estilo coherente](img/frontend/captura-centros-lista.png)
 
 **2. Feedback inmediato al usuario**
 Cada acción que implica comunicación con el servidor muestra un spinner de carga y, al completarse, un mensaje de éxito o error mediante el componente `Alert`. Las acciones destructivas (eliminar) requieren confirmación mediante modal.
 
-> ⚠️ **PENDIENTE**: añadir captura del modal de confirmación de borrado.
+![Captura: Modal de confirmación antes de eliminar un centro educativo](img/frontend/captura-centro-eliminar.png)
 
 **3. Diseño responsive**
 La aplicación web adapta su layout a cualquier tamaño de pantalla. En móvil, las tablas se transforman en cards apiladas y el menú se convierte en un menú hamburguesa. La aplicación Android implementa layouts específicos para portrait y landscape, con `NavigationRailView` lateral en horizontal.
 
-> ⚠️ **PENDIENTE**: añadir captura web en móvil vs escritorio / Android portrait vs landscape.
+**Web — escritorio vs móvil:**
+
+![Captura: Barra de navegación superior en escritorio](img/frontend/captura-menu-desktop.png)
+
+![Captura: Menú hamburguesa desplegado en versión móvil](img/frontend/captura-menu-mobile.png)
+
+**Android — portrait vs landscape:**
+
+![Captura: Navegación inferior (BottomNavigationView) en portrait](img/android/captura-nav-menu.jpg)
+
+![Captura: Navegación lateral (NavigationRailView) en landscape](img/android/captura-nav-menu-landscape.jpg)
 
 **4. Navegación clara y jerarquía**
 La estructura de navegación sigue una jerarquía lógica: Centro → Dispositivos → Histórico de lecturas. El usuario siempre puede volver al nivel anterior mediante el botón "Volver" o la navegación inferior/lateral.
@@ -2207,29 +2253,122 @@ vocational-training-final-project/
 
 ## 13. Planificación
 
-> ⚠️ **PENDIENTE — completar con vuestras propias palabras:**
->
-> Explicad cómo os organizasteis durante el desarrollo. Algunos puntos guía:
-> - ¿Dividisteis el trabajo por módulos (Ricardo → backend/frontend, Enrique → Android/ESP32)?
-> - ¿Usasteis alguna metodología (Kanban, sprints, fases)?
-> - ¿Hubo reuniones de coordinación con la Fundación?
-> - ¿Cómo gestionasteis los cambios de requisitos (por ejemplo el refactor Dispositivo-Centro)?
-> - ¿Qué herramientas de gestión usasteis (GitHub Issues, Notion, papel...)?
-> - Aproximación temporal: ¿cuántas semanas duró cada fase principal?
+### 13.1 Metodología y herramientas de gestión
+
+El proyecto se organizó siguiendo una metodología basada en **fases iterativas con control Kanban** sobre GitHub. Cada fase tiene objetivos concretos y criterios de aceptación definidos en el documento `docs/02. HOJA_DE_RUTA.md`, que actuó como referencia de planificación durante todo el desarrollo.
+
+Las herramientas de gestión utilizadas fueron:
+
+- **GitHub Issues**: cada tarea, bug o mejora se registra como issue con etiquetas por módulo (`PGV` backend, `DAD` frontend, `PGL` Android, `AED` acceso a datos, `SOJ` sostenibilidad). Más de 80 issues fueron creados y cerrados a lo largo del proyecto.
+- **GitHub Projects (Kanban)**: tablero con columnas *Backlog / In Progress / Done* para visualizar el estado de cada issue en tiempo real.
+- **Feature branches + Pull Requests**: todo el trabajo se desarrolla en ramas `feature/` independientes y se integra en `develop` mediante PR con revisión antes de llegar a `main`. Más de 300 commits y 299 PRs gestionados.
+- **Conventional Commits**: mensajes de commit con prefijos semánticos (`feat`, `fix`, `refactor`, `docs`, `chore`, `test`) con el ámbito del módulo (`backend`, `frontend`, `android`, `esp32`) para facilitar el seguimiento del historial.
+
+### 13.2 División del trabajo
+
+El equipo estuvo formado por **Ricardo Ortiz** y **Enrique Pérez**, con la siguiente distribución principal:
+
+| Área | Responsable principal |
+|------|----------------------|
+| Backend — API REST (Spring Boot) | Ricardo |
+| Frontend — Aplicación Web (React) | Ricardo |
+| Modelo de datos y SQL | Ricardo |
+| Despliegue (Vercel + Render) | Ricardo |
+| Documentación técnica | Ricardo |
+| Aplicación Android | Enrique |
+| Firmware ESP32 | Enrique |
+
+En las fases de mayor integración (roles, JWT, refactor Dispositivo-Centro) ambos colaboraron para alinear los tres clientes (web, Android, ESP32) con la misma API.
+
+### 13.3 Coordinación con la Fundación Sergio Alonso
+
+El proyecto se desarrolló en colaboración con la **Fundación Sergio Alonso**, entidad promotora de la iniciativa Proyecto Árboles. A lo largo del desarrollo se mantuvieron contactos con la fundación para trasladar el avance del sistema y recabar retroalimentación sobre los requisitos funcionales.
+
+En particular, en abril de 2026 se elaboró un documento de infraestructura de producción (`docs/06. INFRAESTRUCTURA_PRODUCCION.md`) orientado a la fundación, con un análisis comparativo de proveedores de hosting (Render, Railway, SiteGround) y una proyección de costes mensuales adaptada a sus necesidades como organización sin ánimo de lucro. Este documento sirvió de base para la toma de decisiones sobre la plataforma de despliegue definitiva.
+
+### 13.4 Línea de tiempo por fases
+
+El proyecto se inició el **5 de noviembre de 2025** con el primer commit y llegó a su estado actual en **mayo de 2026**, con un período de pausa por vacaciones de Navidad entre diciembre de 2025 y enero de 2026.
+
+| Fase | Descripción | Período | Duración aprox. |
+|------|-------------|---------|----------------|
+| **Fase 0** | Configuración inicial: repositorio, base de datos, estructura monorepo | Nov 5–15, 2025 | 1 semana |
+| **Fase 1** | Backend — Modelo de datos: entidades JPA (Usuario, CentroEducativo, Arbol, DispositivoEsp32), repositorios | Nov 13–30, 2025 | 2,5 semanas |
+| **Fase 2** | Backend — Endpoints 1:N: CRUD completo Arbol y CentroEducativo, validaciones, testing Postman | Nov 24 – Dic 8, 2025 | 2 semanas |
+| **Fase 3** | Frontend — Estructura: React + Vite, Tailwind, Router, AuthContext, Layout responsive, Login/Register | Dic 3–8, 2025 | 1 semana |
+| **Fase 4** | Frontend — CRUD Árboles y Centros: componentes reutilizables, páginas completas, Vercel | Dic 3–12, 2025 | 1,5 semanas |
+| **Fase 5** | Android — CRUD Árboles: Retrofit, modelos, ListarArboles, ArbolDetalles, Login mock | Nov 24 – Dic 12, 2025 | 3 semanas |
+| **Despliegue** | Backend en Render (Dockerfile + PostgreSQL), Frontend en Vercel, integración verificada | Dic 7, 2025 | 1 día |
+| **Fase 6** | Documentación: manuales de instalación y usuario para web y Android | Dic 5–8, 2025 | 1 semana |
+| *(Pausa vacaciones de Navidad)* | | Dic 8, 2025 – Ene 21, 2026 | 6 semanas |
+| **Fase 7** | Roles + Auth real: ADMIN/COORDINADOR, UsuarioCentro N:M, AuthController, login/register con BD | Feb 13–22, 2026 | 1,5 semanas |
+| **Fase 8** | IoT + ESP32: LecturaController, hypertable TimescaleDB, firmware ESP32 (SHT40, MH-Z19D, suelo, LDR) | Feb 12–22, 2026 | 1,5 semanas |
+| **Fase 9** | Testing Frontend: Vitest, 21 tests (permisos, AuthContext, servicios, componentes, rutas protegidas) | Ene 21 – Feb 22, 2026 | 5 semanas |
+| **Fase 10** | Android — Histórico + Landscape: MPAndroidChart, selector período, NavigationRailView | Feb 19 – May 4, 2026 | 11 semanas |
+| **Fase 11** | Backend — PUT N:M: endpoint de actualización en usuario-centro | Feb 21, 2026 | 2 días |
+| **Fase 12** | Calidad: ESLint 0 errores (completado); ERS y mockups pendientes | Feb–May, 2026 | En curso |
+| **Fase 13** | SOJ — Análisis Lighthouse en producción | Mar 1, 2026 | 1 día |
+| **Fase 14** | Backend — CRUD entidades pendientes: DispositivoEsp32, Alerta, Notificacion controllers | Feb 22, 2026 | 2 días |
+| **Refactor Dispositivo-Centro** | Rediseño del modelo: umbrales pasan de Arbol a DispositivoEsp32; CRUD dispositivos en frontend | Abr 11, 2026 | 2 días |
+| **Fase 15** | Seguridad — JWT + BCrypt: Spring Security, token en frontend y Android | May 4, 2026 | 2 días |
+| **Android Single-Activity** | Refactor completo de Activities a Fragments con navegación unificada | Feb 25 – May 3, 2026 | 10 semanas |
+| **Mejoras finales** | Dashboard rediseño, campos adicionales (cantidad, luz1/luz2), corrección de bugs | May 5–6, 2026 | 2 días |
+
+### 13.5 Cambios de requisitos y decisiones de diseño clave
+
+Durante el desarrollo surgieron varios cambios de requisitos que obligaron a reajustar la planificación:
+
+**Simplificación del sistema de roles (febrero 2026):** El modelo inicial contemplaba tres roles (ADMIN, COORDINADOR, y acceso público). Tras revisar los requisitos reales de la fundación, se simplificó a dos roles (ADMIN y COORDINADOR) con lectura pública sin autenticación. Este cambio afectó al backend (refactor del enum `Rol` y constraint SQL), al frontend (limpieza de la lógica de permisos) y a Android (adaptación de actividades).
+
+**Refactor Dispositivo-Centro (abril 2026):** En el diseño original, los umbrales de alerta (temperatura, humedad, CO₂) estaban ligados a cada árbol. Al entender que en la práctica un dispositivo ESP32 monitoriza toda una zona del centro (no un árbol individual), se rediseñó el modelo para que los umbrales pertenezcan al `DispositivoEsp32`. Este refactor implicó migración SQL (`migration_dispositivo_centro.sql`), nuevos endpoints backend, rediseño del frontend (DetalleCentro, FormularioDispositivo, HistoricoDispositivo) y actualización del firmware del ESP32.
+
+**Integración de sensores reales (abril 2026):** La primera versión del firmware del ESP32 utilizaba un sensor DHT22 para temperatura y humedad. Tras adquirir los sensores definitivos, se integró el **SHT40** (temperatura/humedad de mayor precisión), el **MH-Z19D** (CO₂ por infrarrojos), el sensor capacitivo de humedad de suelo y dos **LDR** para medir la luz. Cada incorporación requirió añadir campos al modelo de datos, actualizar los endpoints y reflejar los nuevos datos en las interfaces web y Android.
 
 ---
 
 ## 14. Conclusiones
 
-> ⚠️ **PENDIENTE — completar con vuestras propias palabras (auténticas):**
->
-> La plantilla dice explícitamente "auténticas y no lo hagan por rellenar". Algunos puntos guía:
-> - ¿Qué aprendisteis que no esperabais aprender?
-> - ¿Qué cambiaríais si empezaseis de nuevo?
-> - ¿Qué parte fue más difícil y por qué?
-> - ¿Estáis satisfechos con el resultado final?
-> - ¿Cómo ha sido trabajar con una empresa real (Fundación Sergio Alonso)?
-> - ¿Qué tiene pendiente el sistema y qué haríais después si pudierais continuar?
+### Lo que no esperábamos aprender
+
+Cuando empezamos el proyecto teníamos claro que íbamos a trabajar con Spring Boot, React y Android. Lo que no esperábamos era la cantidad de problemas de integración que surgen cuando cuatro componentes distintos (backend, frontend, Android y ESP32) tienen que compartir exactamente el mismo modelo de datos.
+
+El caso más claro fue TimescaleDB: cuando quisimos convertir la tabla `lectura` en una hypertable, descubrimos que TimescaleDB exige que la columna de particionado temporal forme parte de la clave primaria. Eso obligó a usar una PK compuesta `(id, timestamp)`, pero JPA/Hibernate no soporta `@GeneratedValue` en PKs compuestas. La solución —declarar solo `id` como `@Id` en Java mientras el script SQL mantiene la PK compuesta— nos hizo entender que ORM y base de datos no siempre hablan el mismo idioma, y que a veces hay que trabajar por debajo de la abstracción.
+
+Otro aprendizaje que no anticipamos fue la importancia de nombrar bien las cosas desde el principio. Renombrar `frecuencia_lectura_min` a `frecuencia_lectura_seg` (porque el campo almacena segundos, no minutos) requirió cambios coordinados en cinco capas: esquema SQL, migración en producción, entidad JPA, controlador REST y documentación. Un error de naming en el diseño inicial se convirtió en trabajo de un día completo meses después.
+
+También aprendimos algo sobre series temporales que cambia la perspectiva: al principio pensamos en usar promedios (`time_bucket` de TimescaleDB) para reducir el volumen de datos en las gráficas. Pero los promedios suavizan los picos y valles, que son precisamente los datos más útiles para monitorización ambiental. Implementar stride sampling (seleccionar lecturas reales separadas uniformemente en el tiempo) fue una decisión técnica que mejora la utilidad real del sistema.
+
+### Lo más difícil
+
+La parte más difícil fue la migración de Android de múltiples Activities a una arquitectura Single-Activity con Fragments. El primer prototipo de Android usaba una Activity por pantalla, que es el enfoque más sencillo. Cuando el número de pantallas creció, la gestión del back-stack, el paso de datos entre pantallas y la navegación se volvió compleja y frágil. La refactorización hacia Single-Activity + Fragments llevó aproximadamente diez semanas trabajando en paralelo con otras fases, porque había que migrar una pantalla, verificar que el resto seguía funcionando, y continuar. No fue posible hacerlo de golpe.
+
+La segunda dificultad fue el refactor Dispositivo-Centro en abril de 2026. En el diseño original, los umbrales de alerta estaban ligados a cada árbol. Al trabajar con los datos reales del proyecto nos dimos cuenta de que un ESP32 monitoriza una zona del centro, no un árbol concreto. Mover los umbrales del árbol al dispositivo implicó una migración SQL aplicada en local y en producción, cambios en el modelo JPA, nuevos endpoints, rediseño de tres páginas del frontend y actualización del firmware. Ese día entendimos lo que significa que una decisión de modelo de datos tiene consecuencias en todas las capas del sistema.
+
+### Lo que cambiaríamos
+
+Si empezásemos de nuevo, comenzaríamos Android directamente con la arquitectura Single-Activity + Fragments en lugar de empezar con Activities individuales y refactorizar después. El coste de hacerlo bien desde el principio es mucho menor que el de corregirlo cuando ya hay diez pantallas implementadas.
+
+También definiríamos mejor los campos del modelo de datos antes de escribir la primera línea de código. No solo los nombres (como el caso de `frecuencia_lectura`), sino también las relaciones: el modelo Dispositivo-Centro fue un cambio tardío que, si lo hubiésemos anticipado desde el diseño, habría evitado una semana de refactorización intensa.
+
+Por último, habríamos contratado el plan de pago de la base de datos en Render desde el primer día de despliegue. El plan gratuito expira a los 90 días sin aviso previo visible, y el backend cayó en producción sin que nos diéramos cuenta hasta que revisamos los logs. En un proyecto real con usuarios reales eso habría sido un incidente grave.
+
+### Satisfacción con el resultado
+
+Estamos satisfechos con lo que hemos construido. El sistema está desplegado en producción y es funcional: los dispositivos ESP32 envían lecturas reales desde el centro donde están instalados, los coordinadores pueden consultar el histórico de sensores desde el navegador y desde Android, y los administradores gestionan centros, árboles y usuarios con una interfaz completa.
+
+A lo largo del proyecto se gestionaron más de 300 commits y 299 Pull Requests, se implementaron 21 tests automáticos en el frontend, se integró autenticación real con JWT y BCrypt, y se desplegó un sistema completo con cuatro componentes funcionando de forma coordinada. Partimos de cero con tecnologías nuevas para nosotros (TimescaleDB, Spring Security, MPAndroidChart, Leaflet) y llegamos a un resultado que funciona en producción con hardware real.
+
+### Trabajar con una organización real
+
+Trabajar con la Fundación Sergio Alonso cambió la naturaleza del proyecto respecto a un trabajo académico estándar. Los requisitos no estaban completamente definidos desde el principio: fueron apareciendo a medida que la fundación entendía qué podía pedir al sistema y nosotros entendíamos cómo funcionaba realmente el proyecto de plantación de árboles. Eso hizo que algunos cambios de requisitos llegaran tarde en el desarrollo, como el refactor del modelo Dispositivo-Centro.
+
+También tuvimos que pensar en el público no técnico. El documento de infraestructura de producción que preparamos para la fundación tenía que ser comprensible para personas que no saben qué es un contenedor Docker ni qué significa "plan free de Render". Escribir documentación técnica para una audiencia no técnica es una habilidad diferente a escribir código, y este proyecto nos obligó a practicarla.
+
+### Qué tiene pendiente el sistema
+
+El sistema tiene varias mejoras pendientes que no llegamos a completar en el plazo del proyecto:
+
+- **Migración a hosting de pago**: el sistema actual usa el plan gratuito de Render, que tiene limitaciones de tiempo de respuesta y de retención de base de datos. La recomendación para la fundación es migrar a Railway antes de la puesta en producción definitiva.
 
 ---
 
