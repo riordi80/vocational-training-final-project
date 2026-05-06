@@ -45,7 +45,7 @@ Si la página no carga, espera unos segundos y recarga (F5).
 
 ### 2.1 Pantalla de Login
 
-![Captura: Formulario de login con email y contraseña](img/frontend/captura-login.jpg)
+![Captura: Formulario de login con email y contraseña](img/frontend/captura-login.png)
 
 En la pantalla de **Login**:
 
@@ -67,7 +67,7 @@ Si las credenciales son correctas, accederás al Dashboard.
 
 ### 2.2 Pantalla de Registro
 
-![Captura: Formulario de registro con nombre, email y contraseña](img/frontend/captura-registro.jpg)
+![Captura: Formulario de registro con nombre, email y contraseña](img/frontend/captura-registro.png)
 
 Para crear una **nueva cuenta**:
 
@@ -102,13 +102,12 @@ Para crear una **nueva cuenta**:
 
 ### 3.1 Menú en Desktop
 
-![Captura: Barra de navegación superior con links a Dashboard, Árboles, Centros, Usuarios](img/frontend/captura-menu-desktop.jpg)
+![Captura: Barra de navegación superior con links a Dashboard, Centros, Usuarios](img/frontend/captura-menu-desktop.png)
 
 En desktop se ve una **barra de navegación horizontal** en la parte superior con:
 
 - **Logo** (click va a Dashboard)
 - **Dashboard** → Panel de inicio
-- **Árboles** → Gestión de árboles
 - **Centros** → Gestión de centros educativos
 - **Usuarios** → (solo visible si eres ADMIN)
 - **Perfil del usuario** (esquina superior derecha)
@@ -117,7 +116,7 @@ En desktop se ve una **barra de navegación horizontal** en la parte superior co
 
 ### 3.2 Menú en Móvil/Tablet
 
-![Captura: Menú hamburguesa desplegado en versión móvil](img/frontend/captura-menu-mobile.jpg)
+![Captura: Menú hamburguesa desplegado en versión móvil](img/frontend/captura-menu-mobile.png)
 
 En móvil/tablet se usa un **menú hamburguesa (≡)** que:
 
@@ -132,7 +131,7 @@ En móvil/tablet se usa un **menú hamburguesa (≡)** que:
 
 ### 4.1 ¿Qué ves en el Dashboard?
 
-![Captura: Dashboard con métricas (centros, árboles, dispositivos, CO2) y acceso rápido](img/frontend/captura-dashboard.jpg)
+![Captura: Dashboard con métricas (centros, árboles, dispositivos, CO2) y acceso rápido](img/frontend/captura-dashboard.png)
 
 El Dashboard es tu **pantalla de inicio** y muestra:
 
@@ -161,11 +160,11 @@ El Dashboard es tu **pantalla de inicio** y muestra:
 
 ## 5. Gestión de árboles
 
-Los árboles **NO tienen una sección independiente** en el menú. Se gestionan **desde dentro de cada centro educativo**. Esto significa que los árboles pertenecen a un centro específico.
+Los árboles **no tienen una sección independiente** en el menú. Se gestionan **desde dentro de cada centro educativo**. Esto significa que los árboles pertenecen a un centro específico.
 
 ### 5.1 Acceso a los árboles de un centro
 
-![Captura: Tabla de árboles dentro del detalle del centro](img/frontend/captura-centro-arboles-tabla.jpg)
+![Captura: Tabla de árboles dentro del detalle del centro](img/frontend/captura-centro-arboles-tabla.png)
 
 Para **ver y gestionar los árboles**:
 
@@ -176,20 +175,17 @@ Para **ver y gestionar los árboles**:
 **Información mostrada**:
 - **Nombre**: Identificador del árbol
 - **Especie**: Nombre científico (ej: Quercus robur)
-- **Fecha de plantación**: Cuándo se plantó
 - **Cantidad**: Número de árboles de esa especie
-- **Absorción CO₂**: Estimación anual en kg
 - **Acciones**: Botones para ver detalle, editar o eliminar
 
 **Acciones disponibles**:
+
 - **Ver Detalle**: Haz clic en la fila o en el botón para ver toda la información
-- **✏ Editar**: Modifica los datos del árbol (si tienes permisos)
-- **🗑 Eliminar**: Elimina el árbol (si tienes permisos)
-- **+ Añadir Árbol**: Botón para crear un nuevo árbol en este centro
+- **Añadir Árbol**: Botón para crear un nuevo árbol en este centro
 
 ### 5.2 Detalle de un árbol
 
-![Captura: Página de detalle de árbol con toda la información](img/frontend/captura-arbol-detalle.jpg)
+![Captura: Página de detalle de árbol con toda la información](img/frontend/captura-arbol-detalle.png)
 
 Al hacer clic en "Ver Detalle" ves:
 
@@ -202,20 +198,14 @@ Al hacer clic en "Ver Detalle" ves:
 - Cantidad de árboles
 - Absorción CO₂ anual
 
-**Umbrales de monitorización** (si están configurados):
-- Temperatura mínima/máxima (°C)
-- Humedad del suelo mín/máx (%)
-- Humedad ambiental mín/máx (%)
-- Nivel CO₂ máximo (ppm)
-
 **Botones de acción**:
-- **← Volver**: Regresa al detalle del centro
-- **✏ Editar**: Abre el formulario de edición (si tienes permisos)
-- **🗑 Eliminar**: Elimina el árbol con confirmación (si tienes permisos)
+- **Volver**: Regresa al detalle del centro
+- **Editar**: Abre el formulario de edición (si tienes permisos)
+- **Eliminar**: Elimina el árbol con confirmación (si tienes permisos)
 
 ### 5.3 Crear un nuevo árbol
 
-![Captura: Formulario de creación de árbol en el centro](img/frontend/captura-arbol-crear.jpg)
+![Captura: Formulario de creación de árbol en el centro](img/frontend/captura-arbol-crear.png)
 
 Para **crear un árbol en un centro**:
 
@@ -233,15 +223,6 @@ Para **crear un árbol en un centro**:
 - **Ubicación específica**: Descripción (ej: "Patio norte, junto a fuente")
 - **Absorción CO₂ anual**: Si se conoce, en kg/año
 
-**Umbrales de monitorización** (opcionales):
-- Temperatura mín/máx (°C)
-- Humedad suelo mín/máx (%)
-- Humedad ambiental mín/máx (%)
-- CO₂ máximo (ppm)
-
-3. Rellena los campos obligatorios
-4. Pulsa **"Guardar"**
-
 **Validaciones**:
 - Fecha de plantación no puede ser futura
 - Cantidad debe ser número positivo (≥ 1)
@@ -253,17 +234,14 @@ Para **crear un árbol en un centro**:
 
 ### 5.4 Editar un árbol
 
-![Captura: Formulario de edición de árbol con datos ya rellenos](img/frontend/captura-arbol-editar.jpg)
+![Captura: Formulario de edición de árbol con datos ya rellenos](img/frontend/captura-arbol-editar.png)
 
 Para **editar un árbol**:
 
-**Opción 1: Desde la tabla del centro**
-1. En el detalle del centro, en la tabla de Árboles
-2. Haz clic en el botón **"Editar"** (o en el icono ✏)
+**Desde el detalle del árbol**
 
-**Opción 2: Desde el detalle del árbol**
 1. Abre el detalle del árbol
-2. Pulsa **"✏ Editar"**
+2. Pulsa **"Editar"**
 
 3. Se abre el formulario con los datos actuales
 4. Modifica los campos que necesites:
@@ -279,16 +257,12 @@ Para **editar un árbol**:
 
 ### 5.5 Eliminar un árbol
 
-![Captura: Modal de confirmación antes de eliminar árbol](img/frontend/captura-arbol-eliminar.jpg)
+![Captura: Modal de confirmación antes de eliminar árbol](img/frontend/captura-arbol-eliminar.png)
 
 Para **eliminar un árbol**:
 
-**Desde la tabla del centro**:
-1. En la tabla de Árboles, pulsa el botón **"Eliminar"** (🗑)
-2. Aparece un modal pidiendo confirmación
-
 **Desde el detalle del árbol**:
-1. En la página de detalle, pulsa **"🗑 Eliminar"** (botón rojo)
+1. En la página de detalle, pulsa **"Eliminar"** (botón rojo)
 2. Aparece un modal pidiendo confirmación
 
 **En el modal de confirmación**:
@@ -301,7 +275,7 @@ Para **eliminar un árbol**:
 4. El árbol se elimina permanentemente
 5. Se actualiza la tabla del centro
 
-**⚠️ IMPORTANTE**: La eliminación es **permanente** y **NO se puede deshacer**. El árbol desaparecerá de la tabla inmediatamente.
+**⚠️ IMPORTANTE**: La eliminación es **permanente** y **no se puede deshacer**. El árbol desaparecerá de la tabla inmediatamente.
 
 ---
 
@@ -311,76 +285,83 @@ Para **eliminar un árbol**:
 
 ### 6.1 Listado de centros
 
-![Captura: Lista de centros con nombre, ubicación e información](img/frontend/captura-centros-lista.jpg)
+![Captura: Lista de centros con nombre, ubicación e información](img/frontend/captura-centros-lista.png)
 
 En **Centros** ves una tabla/listado de todos los centros:
 
 **Información mostrada**:
 - Nombre del centro
-- Ubicación (isla, municipio)
-- Tipo de centro
-- Número de árboles
-- Número de dispositivos
+- Isla
+- Dirección
+- Responsable
+- Fecha de creación
 
 **Acciones**:
 - **Ver detalles**: Haz clic en un centro para ver información completa
-- **+ Añadir Centro**: Botón para crear nuevo centro (solo si eres ADMIN)
+- **Añadir Centro**: Botón para crear nuevo centro (solo si eres ADMIN)
 
 ### 6.2 Detalle de un centro
 
-![Captura: Detalle de centro con información, árboles y dispositivos en pestañas](img/frontend/captura-centro-detalle.jpg)
+![Captura: Detalle de centro con información, árboles y dispositivos en pestañas](img/frontend/captura-centro-detalle.png)
 
 Al hacer clic en un centro ves:
 
+**Botones de acción** (según permisos):
+
+- **Volver**: Regresa al listado de centros
+- **Editar**: Modifica datos del centro
+- **Eliminar**: Elimina el centro
+- **Árbol**: Crear nuevo árbol en este centro
+- **Dispositivo**: Registrar nuevo dispositivo ESP32
+
 **Información del centro**:
 - Nombre completo
-- Ubicación (isla, municipio, dirección)
-- Tipo de centro
-- Responsable/coordinador
-- Número de plantas
+- Responsable
+- Teléfono
+- Correo electrónico
+- Fecha de creación
+- Dirección
+- Población
+- Código postal
+- Provincia
 
-**Tabla de Árboles del Centro**:
-- Lista de todos los árboles plantados aquí
-- Columnas: Nombre, Especie, Fecha, Cantidad, CO₂
-- Botón para ver detalles de cada árbol
-- Opción **"+ Añadir Árbol"** en este centro
+**Mapa**:
+- Visualización en mapa de la ubicación del centro
 
 **Tabla de Dispositivos IoT**:
 - Lista de sensores ESP32 conectados
-- Columnas: MAC, Estado, Frecuencia, Última sincronización
+- Columnas: MAC, Estado, Frecuencia, Última conexión
 - Botón para ver histórico de lecturas
 - Opción **"+ Añadir Dispositivo"** en este centro
 
-**Mapa** (si hay coordenadas):
-- Visualización en mapa de la ubicación del centro
+**Tabla de Árboles del Centro**:
 
-**Botones de acción** (según permisos):
-- **← Volver**: Regresa al listado de centros
-- **✏ Editar**: Modifica datos del centro (solo ADMIN)
-- **🗑 Eliminar**: Elimina el centro (solo ADMIN)
-- **+ Árbol**: Crear nuevo árbol en este centro
-- **+ Dispositivo**: Registrar nuevo sensor
+- Lista de todos los árboles plantados
+- Columnas: Nombre, Especie, Ubicación y Cantidad
+- Botón para ver detalles de cada árbol
+- Opción **"+ Añadir Árbol"** en este centro
 
 ### 6.3 Crear un nuevo centro
 
-![Captura: Formulario de creación de centro](img/frontend/captura-centro-crear.jpg)
+![Captura: Formulario de creación de centro](img/frontend/captura-centro-crear.png)
 
 Para **crear un centro** (solo ADMIN):
 
 1. En el listado de centros, haz clic en **"+ Añadir Centro"**
 2. Completa el formulario:
 
-**Campos obligatorios**:
+**Campos**:
 - **Nombre**: Nombre oficial del centro educativo
-- **Isla**: Selecciona de lista desplegable
-- **Municipio**: Ciudad/municipio
-
-**Campos opcionales**:
-- **Tipo de centro**: Primaria, Secundaria, etc.
-- **Responsable**: Nombre del coordinador
 - **Dirección**: Dirección completa
+- **Responsable**: Nombre del coordinador
+
+- **Isla**: Primaria, Secundaria, etc.
+- **Población**
+- **Provincia**
+- **Código Postal**
 - **Teléfono**: Contacto
 - **Email**: Correo de contacto
+- **Latitud/Longitud**: Ubicación del centro en Google Maps
 
 3. Pulsa **"Guardar"**
 
@@ -388,23 +369,23 @@ Para **crear un centro** (solo ADMIN):
 
 ### 6.4 Editar centro
 
-![Captura: Formulario de edición de centro con datos rellenos](img/frontend/captura-centro-editar.jpg)
+![Captura: Formulario de edición de centro con datos rellenos](img/frontend/captura-centro-editar.png)
 
-Para **editar un centro** (solo ADMIN):
+Para **editar un centro** (solo ADMIN y COORDINADOR del centro):
 
-1. En el detalle, pulsa **"✏ Editar"**
+1. En el detalle, pulsa **"Editar"**
 2. Modifica los campos necesarios
-3. Pulsa **"Guardar"**
+3. Pulsa **"Actualizar Centro"**
 
 **Mensaje de éxito**: `"Centro actualizado correctamente"`
 
 ### 6.5 Eliminar centro
 
-![Captura: Modal de confirmación antes de eliminar centro](img/frontend/captura-centro-eliminar.jpg)
+![Captura: Modal de confirmación antes de eliminar centro](img/frontend/captura-centro-eliminar.png)
 
 Para **eliminar un centro** (solo ADMIN):
 
-1. En el detalle, pulsa **"🗑 Eliminar"** (botón rojo)
+1. En el detalle, pulsa **"Eliminar"** (botón rojo)
 2. Confirma en el modal que aparece
 3. El centro se elimina permanentemente
 
@@ -418,7 +399,7 @@ Para **eliminar un centro** (solo ADMIN):
 
 Los dispositivos IoT ESP32 se gestionan desde el **detalle del centro**.
 
-![Captura: Tabla de dispositivos en el detalle del centro](img/frontend/captura-dispositivos-tabla.jpg)
+![Captura: Tabla de dispositivos en el detalle del centro](img/frontend/captura-dispositivos-tabla.png)
 
 En la tabla de dispositivos ves:
 
@@ -429,35 +410,35 @@ En la tabla de dispositivos ves:
 - **Última sincronización**: Fecha y hora
 
 **Acciones**:
-- **Ver histórico**: Abre la gráfica de lecturas
+- **Histórico**: Abre la gráfica de lecturas
 - **Editar**: Modifica configuración del dispositivo
 - **Eliminar**: Elimina el dispositivo del sistema
 
 ### 7.2 Crear nuevo dispositivo
 
-![Captura: Formulario de creación de dispositivo con campos MAC, frecuencia y umbrales](img/frontend/captura-dispositivo-crear.jpg)
+![Captura: Formulario de creación de dispositivo con campos MAC, frecuencia y umbrales](img/frontend/captura-dispositivo-crear.png)
 
 Para **añadir un dispositivo** en el centro:
 
 1. En el detalle del centro, pulsa **"+ Añadir Dispositivo"**
 2. Completa el formulario:
 
-**Campos obligatorios**:
+**Campos**:
+
 - **Dirección MAC**: Identificador único del ESP32
   - Formato: `XX:XX:XX:XX:XX:XX` (ejemplo: `AA:BB:CC:DD:EE:FF`)
 - **Centro**: Se preselecciona el actual
 - **Frecuencia de lectura**: Segundos entre lecturas
   - Recomendado: 30-60 segundos
-
-**Campos opcionales**:
-- **Umbrales de alerta**:
-  - Temperatura mín/máx (°C)
-  - Humedad suelo mín/máx (%)
-  - Humedad ambiental mín/máx (%)
-  - CO₂ máximo (ppm)
 - **Estado**: Activo/Inactivo (checkbox)
 
-3. Pulsa **"Guardar"**
+- **Umbrales de monitorización**:
+  - Temperatura mín/máx (°C)
+  - Humedad suelo min (%)
+  - Humedad ambiental mín/máx (%)
+  - CO₂ máximo (ppm)
+
+3. Pulsa **"Registrar Dispositivo"**
 
 **Validaciones**:
 - MAC con formato válido `XX:XX:XX:XX:XX:XX`
@@ -468,15 +449,17 @@ Para **añadir un dispositivo** en el centro:
 
 ### 7.3 Editar dispositivo
 
-![Captura: Formulario de edición de dispositivo](img/frontend/captura-dispositivo-editar.jpg)
+![Captura: Formulario de edición de dispositivo](img/frontend/captura-dispositivo-editar.png)
 
 Para **editar un dispositivo**:
 
 1. En la tabla, pulsa el botón **"Editar"**
-2. Modifica los parámetros (MAC, frecuencia, umbrales, estado)
-3. Pulsa **"Guardar"**
+2. Modifica los parámetros
+3. Pulsa **"Actualizar Dispositivo"**
 
 ### 7.4 Eliminar dispositivo
+
+![Captura: Página de histórico con gráficos de temperatura, humedad, CO2](img/frontend/captura-eliminar-dispositivo.png)
 
 Para **eliminar un dispositivo**:
 
@@ -490,17 +473,30 @@ Para **eliminar un dispositivo**:
 
 ### 8.1 Ver gráficas de sensores
 
-![Captura: Página de histórico con gráficos de temperatura, humedad, CO2](img/frontend/captura-historico-graficos.jpg)
+![Captura: Página de histórico con gráficos de temperatura, humedad, CO2](img/frontend/captura-historico-graficos.png)
 
 Para **ver el histórico de un dispositivo**:
 
 1. En el detalle del centro, en la tabla de dispositivos, pulsa **"Ver histórico"**
 2. Se abre la página de **"Histórico de Lecturas"** mostrando gráficas:
 
-**Gráficas disponibles**:
+**Gráficas superior**:
+
 - **Temperatura ambiente** (°C)
 - **Humedad ambiental** (%)
 - **Humedad del suelo** (%)
+- **Nivel de luz (2 sensores)**
+
+**Gráficas inferior**:
+
+- **Nivel de CO₂** (ppm)
+
+**Tabla de datos**:
+
+- **Temperatura ambiente** (°C)
+- **Humedad ambiental** (%)
+- **Humedad del suelo** (%)
+- **Nivel de luz (2 sensores)**
 - **Nivel de CO₂** (ppm)
 
 **Funcionalidades**:
@@ -511,17 +507,12 @@ Para **ver el histórico de un dispositivo**:
 
 ### 8.2 Filtros y controles
 
-![Captura: Filtros de fecha y opciones de descarga](img/frontend/captura-historico-filtros.jpg)
+![Captura: Filtros de fecha y opciones de descarga](img/frontend/captura-historico-filtros.png)
 
-En la página de histórico puedes:
-
-- **Ver estadísticas**:
-  - Valor mínimo
-  - Valor máximo
-  - Valor promedio
+Con los filtros del histórico puedes ajustar el rango de fechas para mostrar en las gráficas y en la tabla de datos
 
 
-- **← Volver**: Regresa al detalle del centro
+- **Volver**: Regresa al detalle del centro
 
 ---
 
@@ -531,7 +522,7 @@ Solo los administradores pueden gestionar usuarios del sistema.
 
 ### 9.1 Listado de usuarios
 
-![Captura: Lista de usuarios con nombre, email, rol y centros asignados](img/frontend/captura-usuarios-lista.jpg)
+![Captura: Lista de usuarios con nombre, email, rol y centros asignados](img/frontend/captura-usuarios-lista.png)
 
 En **Usuarios** (solo visible para ADMIN) ves una tabla con:
 
@@ -539,7 +530,6 @@ En **Usuarios** (solo visible para ADMIN) ves una tabla con:
 - Nombre del usuario
 - Email
 - Rol (ADMIN, COORDINADOR)
-- Centros asignados
 - Estado (Activo/Inactivo)
 
 **Acciones**:
@@ -548,7 +538,7 @@ En **Usuarios** (solo visible para ADMIN) ves una tabla con:
 
 ### 9.2 Detalle de un usuario
 
-![Captura: Pantalla de detalle de usuario con información y centros asignados](img/frontend/captura-usuario-detalle.jpg)
+![Captura: Pantalla de detalle de usuario con información y centros asignados](img/frontend/captura-usuario-detalle.png)
 
 Al hacer clic en un usuario ves:
 
@@ -556,29 +546,36 @@ Al hacer clic en un usuario ves:
 - Nombre completo
 - Email
 - Rol actual (ADMIN / COORDINADOR)
+- Fecha de creación
 - Estado (Activo / Inactivo)
 
 **Centros asignados** (si es COORDINADOR):
+
+Si estás editando un coordinador se muestra un listado con los centros para asignar
+
+![Captura: Pantalla de detalle de usuario con información y centros asignados](img/frontend/captura-coordinador-detalle.png)
+
 - Tabla con los centros donde puede gestionar
 - Botón **"Desasignar"** para cada centro
-- Opción **"+ Asignar Centro"** para añadir nuevos
+- Desplegable Asignar para añadir nuevos centros asociados al usuario
 
 **Botones de acción**:
-- **← Volver**: Regresa al listado
-- **✏ Editar**: Abre formulario de edición
+- **Volver**: Regresa al listado
+- **Editar**: Abre formulario de edición
+- **Eliminar**: Elimina el usuario del sistema
 - **Activar/Desactivar**: Habilita/deshabilita la cuenta
-- **🗑 Eliminar**: Elimina el usuario del sistema
 
 ### 9.3 Crear nuevo usuario
 
-![Captura: Formulario de creación de usuario](img/frontend/captura-usuario-crear.jpg)
+![Captura: Formulario de creación de usuario](img/frontend/captura-usuario-crear.png)
 
 Para **crear un usuario** (solo ADMIN):
 
-1. En el listado, pulsa **"+ Añadir Usuario"**
+1. En el listado de usuarios, pulsa **"+ Añadir Usuario"**
 2. Completa el formulario:
 
-**Campos obligatorios**:
+**Campos**:
+
 - **Nombre completo**: Nombre y apellidos
 - **Email**: Correo único (no puede estar registrado)
 - **Contraseña**: Contraseña inicial segura
@@ -587,9 +584,8 @@ Para **crear un usuario** (solo ADMIN):
 **Si es COORDINADOR**:
 - **Centros asignados**: Selecciona los centros que gestionará
   - Puede ser más de uno
-  - Usa checkboxes o multi-select
 
-3. Pulsa **"Guardar"**
+3. Pulsa **"Crear Usuario"**
 
 **Validaciones**:
 - Email formato válido y no duplicado
@@ -600,17 +596,18 @@ Para **crear un usuario** (solo ADMIN):
 
 ### 9.4 Editar usuario
 
-![Captura: Formulario de edición de usuario](img/frontend/captura-usuario-editar.jpg)
+![Captura: Formulario de edición de usuario](img/frontend/captura-usuario-editar.png)
 
 Para **editar un usuario**:
 
-1. En el detalle, pulsa **"✏ Editar"**
+1. En el detalle, pulsa **"Editar"**
 2. Modifica:
    - Nombre
    - Email
    - Rol
-   - Centros asignados
-
+   - Contraseña
+   - Centros asignados (para el rol COORDINADOR)
+   
 3. Pulsa **"Guardar"**
 
 **Cambiar rol**:
@@ -622,32 +619,31 @@ Para **editar un usuario**:
 Para **asignar un centro** a un COORDINADOR:
 
 1. En el detalle del usuario, en la sección "Centros asignados"
-2. Pulsa **"+ Asignar Centro"**
-3. Selecciona el centro de la lista
-4. Pulsa **"Guardar"**
+2. En el desplegable selecciona el centro
+3. Pulsa **"Asignar"**
+4. Pulsa **"Actualizar Usuario"**
 
 Para **desasignar un centro**:
 
 1. En la tabla de centros asignados
-2. Pulsa **"Desasignar"** junto al centro
-3. Confirma la acción
-4. El coordinador pierde acceso a ese centro
+2. Pulsa **"Desaignar"** en el centro deseado
+3. Pulsa **"Actualizar Usuario"**
 
 ### 9.6 Desactivar usuario
 
 Para **desactivar una cuenta** (reversible):
 
-1. En el detalle del usuario, pulsa **"Desactivar"**
+1. En el detalle del usuario, pulsa el toggle **"Activo"** para cambiar el estado
 2. La cuenta permanecerá pero no podrá iniciar sesión
-3. Para reactivar, pulsa **"Activar"**
+3. Para reactivar, pulsa el toggle **"Activo"** para cambiar el estado
 
 ### 9.7 Eliminar usuario
 
-![Captura: Modal de confirmación antes de eliminar usuario](img/frontend/captura-usuario-eliminar.jpg)
+![Captura: Modal de confirmación antes de eliminar usuario](img/frontend/captura-usuario-eliminar.png)
 
 Para **eliminar un usuario** (permanente):
 
-1. En el detalle, pulsa **"🗑 Eliminar"** (botón rojo)
+1. En el detalle, pulsa **"Eliminar"** (botón rojo)
 2. Confirma en el modal
 3. El usuario se elimina permanentemente del sistema
 
@@ -668,9 +664,9 @@ Para **eliminar un usuario** (permanente):
 - Ver dispositivos IoT de sus centros
 - Crear/Editar/Eliminar dispositivos en sus centros
 - Ver histórico de lecturas
-- NO puede gestionar usuarios
-- NO puede crear/editar centros nuevos
-- NO puede ver la sección "Usuarios"
+- No puede gestionar usuarios
+- No puede crear/editar centros nuevos
+- No puede ver la sección "Usuarios"
 
 **Restricciones**:
 - Solo puede gestionar centros asignados por el admin
@@ -680,7 +676,7 @@ Para **eliminar un usuario** (permanente):
 ### 10.2 Rol ADMIN
 
 **Permisos**:
-- Acceso **total** a todas las funciones
+- Acceso total a todas las funciones
 - Ver Dashboard (datos de todo el sistema)
 - Crear/Editar/Eliminar árboles en cualquier centro
 - Crear/Editar/Eliminar centros
@@ -858,5 +854,4 @@ Si tienes problemas:
 
 
 **¿Más ayuda?** Contacta con el administrador o consulta el [Manual de Instalación](./MANUAL_DE_INSTALACION.md).
-
 
