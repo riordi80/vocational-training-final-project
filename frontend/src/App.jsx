@@ -16,6 +16,7 @@ import FormularioUsuario from './pages/usuarios/FormularioUsuario';
 import AccessDenied from './pages/access-denied/AccessDenied';
 import HistoricoDispositivo from './pages/dispositivos/HistoricoDispositivo';
 import FormularioDispositivo from './pages/dispositivos/FormularioDispositivo';
+import Ayuda from './pages/ayuda/Ayuda';
 import './App.css';
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           <Route path="/centros" element={<ListadoCentros />} />
           <Route path="/centros/:id" element={<DetalleCentro />} />
           <Route path="/access-denied" element={<AccessDenied />} />
+          <Route path="/ayuda" element={<Ayuda />} />
 
           {/* Rutas protegidas de escritura */}
           <Route path="/arboles/nuevo" element={

@@ -17,6 +17,11 @@
         android:visible="false" />
 
     <item
+        android:id="@+id/menu_ayuda"
+        android:icon="@drawable/ic_nav_help"
+        android:title="Ayuda" />
+
+    <item
         android:id="@+id/menu_login"
         android:icon="@drawable/ic_nav_login"
         android:title="Login" />
