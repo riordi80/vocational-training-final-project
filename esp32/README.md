@@ -25,7 +25,7 @@ Este componente implementa la parte IoT del sistema Proyecto Árboles. Realiza l
 | Sensor capacitivo analógico | GPIO 4 | Humedad del suelo (0-4095 → 0-100%) |
 | MH-Z19D (UART) | RX=GPIO 16, TX=GPIO 17 | CO2 en ppm |
 | LDR 1 | GPIO 5 | Nivel de luz 1 (0-4095 → 0-100%) |
-| LDR 2 | GPIO 35 | Nivel de luz 2 (0-4095 → 0-100%) — pin pendiente de confirmar |
+| LDR 2 | GPIO 7 | Nivel de luz 2 (0-4095 → 0-100%) |
 
 ## Funcionalidades Implementadas
 
@@ -71,7 +71,6 @@ Se han evaluado los siguientes componentes para el sistema de monitoreo:
 
 ## Funcionalidades Pendientes
 
-- Confirmar pin definitivo del LDR 2 (actualmente GPIO 35)
 - Calibrar sensores con valores de referencia reales
 - Modo de bajo consumo (Deep Sleep) para autonomía energética
 - Almacenamiento temporal local en caso de pérdida de conexión
@@ -150,8 +149,7 @@ Para referencia de componentes considerados, ver:
 
 El firmware básico está implementado y enviando lecturas al backend.
 
-- **Sensores operativos**: temperatura (SHT40), humedad ambiente (SHT40), humedad de suelo (capacitivo analógico), CO2 (MH-Z19D), luz 1 (LDR GPIO 5), luz 2 (LDR GPIO 35)
-- **Pendiente**: confirmar pin LDR 2 con el hardware físico
+- **Sensores operativos**: temperatura (SHT40), humedad ambiente (SHT40), humedad de suelo (capacitivo analógico), CO2 (MH-Z19D), luz 1 (LDR GPIO 5), luz 2 (LDR GPIO 7)
 
 ## Documentación Relacionada
 

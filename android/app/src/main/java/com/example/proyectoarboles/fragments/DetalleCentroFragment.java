@@ -260,7 +260,9 @@ public class DetalleCentroFragment extends Fragment {
                 if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     List<Arbol> arboles = response.body();
-                    tvTituloArboles.setText("Árboles del Centro (" + arboles.size() + ")");
+                    int totalArboles = 0;
+                    for (Arbol a : arboles) totalArboles += a.getCantidad();
+                    tvTituloArboles.setText("Árboles del Centro (" + totalArboles + ")");
                     layoutArboles.removeAllViews();
                     if (arboles.isEmpty()) {
                         tvNoArboles.setVisibility(View.VISIBLE);

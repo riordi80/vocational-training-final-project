@@ -1,5 +1,6 @@
 package com.example.proyectoarboles.fragments;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +21,7 @@ import com.example.proyectoarboles.model.Arbol;
 import com.example.proyectoarboles.model.CentroEducativo;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -39,6 +39,7 @@ public class CrearArbolFragment extends Fragment {
     private TextInputEditText inputFechaPlantacion;
     private TextInputEditText inputUbicacion;
     private TextInputEditText inputCantidad;
+    private TextInputEditText inputAbsorcionCo2;
     private Button btnCrear;
     private Button btnCancelar;
     private ImageButton btnVolver;
@@ -46,6 +47,7 @@ public class CrearArbolFragment extends Fragment {
 
     private long centroId = -1;
     private String centroNombre = "";
+    private String fechaParaApi = "";
 
     public static CrearArbolFragment newInstance(long centroId, String centroNombre) {
         CrearArbolFragment fragment = new CrearArbolFragment();
@@ -75,6 +77,7 @@ public class CrearArbolFragment extends Fragment {
         inputFechaPlantacion = view.findViewById(R.id.inputFechaPlantacion);
         inputUbicacion = view.findViewById(R.id.inputUbicacion);
         inputCantidad = view.findViewById(R.id.inputCantidad);
+        inputAbsorcionCo2 = view.findViewById(R.id.inputAbsorcionCo2);
         btnCrear = view.findViewById(R.id.btnCrearArbol);
         btnCancelar = view.findViewById(R.id.btnCancelarCrearArbol);
         btnVolver = view.findViewById(R.id.buttonVolverCrearArbol);
@@ -86,6 +89,10 @@ public class CrearArbolFragment extends Fragment {
             return;
         }
 
+        inputFechaPlantacion.setFocusable(false);
+        inputFechaPlantacion.setFocusableInTouchMode(false);
+        inputFechaPlantacion.setOnClickListener(v -> mostrarDatePicker());
+
         btnCrear.setOnClickListener(v -> validarYCrearArbol());
         btnCancelar.setOnClickListener(v ->
                 requireActivity().getSupportFragmentManager().popBackStack());
@@ -93,12 +100,29 @@ public class CrearArbolFragment extends Fragment {
                 requireActivity().getSupportFragmentManager().popBackStack());
     }
 
+    private void mostrarDatePicker() {
+        Calendar hoy = Calendar.getInstance();
+        DatePickerDialog picker = new DatePickerDialog(
+                requireContext(),
+                (view, year, month, day) -> {
+                    fechaParaApi = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, day);
+                    inputFechaPlantacion.setText(String.format(Locale.getDefault(), "%02d/%02d/%04d", day, month + 1, year));
+                    inputFechaPlantacion.setError(null);
+                },
+                hoy.get(Calendar.YEAR),
+                hoy.get(Calendar.MONTH),
+                hoy.get(Calendar.DAY_OF_MONTH)
+        );
+        picker.getDatePicker().setMaxDate(hoy.getTimeInMillis());
+        picker.show();
+    }
+
     private void validarYCrearArbol() {
         String nombre = inputNombre.getText() != null ? inputNombre.getText().toString().trim() : "";
         String especie = inputEspecie.getText() != null ? inputEspecie.getText().toString().trim() : "";
-        String fechaStr = inputFechaPlantacion.getText() != null ? inputFechaPlantacion.getText().toString().trim() : "";
         String ubicacion = inputUbicacion.getText() != null ? inputUbicacion.getText().toString().trim() : "";
         String cantidadStr = inputCantidad.getText() != null ? inputCantidad.getText().toString().trim() : "1";
+        String co2Str = inputAbsorcionCo2.getText() != null ? inputAbsorcionCo2.getText().toString().trim() : "";
 
         if (nombre.isEmpty()) {
             inputNombre.setError("El nombre es requerido");
@@ -112,15 +136,8 @@ public class CrearArbolFragment extends Fragment {
             return;
         }
 
-        if (fechaStr.isEmpty()) {
+        if (fechaParaApi.isEmpty()) {
             inputFechaPlantacion.setError("La fecha de plantación es requerida");
-            inputFechaPlantacion.requestFocus();
-            return;
-        }
-
-        if (!validarFecha(fechaStr)) {
-            inputFechaPlantacion.setError("Fecha inválida. Usa formato YYYY-MM-DD y debe ser en el pasado");
-            inputFechaPlantacion.requestFocus();
             return;
         }
 
@@ -134,22 +151,21 @@ public class CrearArbolFragment extends Fragment {
             return;
         }
 
-        crearArbol(nombre, especie, fechaStr, ubicacion, cantidad);
-    }
-
-    private boolean validarFecha(String fechaStr) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            sdf.setLenient(false);
-            Date fecha = sdf.parse(fechaStr);
-            return !fecha.after(new Date());
-        } catch (Exception e) {
-            Log.e(TAG, "Error al validar fecha: " + e.getMessage());
-            return false;
+        Double co2 = null;
+        if (!co2Str.isEmpty()) {
+            try {
+                co2 = Double.parseDouble(co2Str.replace(",", "."));
+            } catch (NumberFormatException e) {
+                inputAbsorcionCo2.setError("Valor inválido");
+                inputAbsorcionCo2.requestFocus();
+                return;
+            }
         }
+
+        crearArbol(nombre, especie, fechaParaApi, ubicacion, cantidad, co2);
     }
 
-    private void crearArbol(String nombre, String especie, String fechaPlantacion, String ubicacion, int cantidad) {
+    private void crearArbol(String nombre, String especie, String fechaPlantacion, String ubicacion, int cantidad, Double absorcionCo2) {
         progressBar.setVisibility(View.VISIBLE);
         btnCrear.setEnabled(false);
 
@@ -164,6 +180,7 @@ public class CrearArbolFragment extends Fragment {
         nuevoArbol.setUbicacion(ubicacion);
         nuevoArbol.setCentroEducativo(centro);
         nuevoArbol.setCantidad(cantidad);
+        nuevoArbol.setAbsorcionCo2Anual(absorcionCo2);
 
         Call<Arbol> call = RetrofitClient.getArbolApi().crearArbol(nuevoArbol);
         call.enqueue(new Callback<Arbol>() {

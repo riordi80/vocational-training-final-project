@@ -102,7 +102,7 @@ function DetalleCentro() {
   };
 
   const handleVolver = () => {
-    navigate(-1);
+    navigate('/centros');
   };
 
   const handleEditar = () => {

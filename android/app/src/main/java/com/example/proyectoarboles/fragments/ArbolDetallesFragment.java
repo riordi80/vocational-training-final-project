@@ -1,6 +1,7 @@
 package com.example.proyectoarboles.fragments;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,7 @@ import com.example.proyectoarboles.util.PermissionManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -48,8 +50,8 @@ public class ArbolDetallesFragment extends Fragment {
     private static final String ARG_ARBOL_ID = "arbol_id";
 
     private TextView tvNombre, tvEspecie, tvFecha, tvUbicacion, tvCentroEducativo, tvAbsorcionCo2, tvCantidad;
-    private TextInputEditText etNombre, etEspecie, etFecha, etUbicacion, etCantidad;
-    private TextInputLayout tilNombre, tilEspecie, tilFecha, tilUbicacion, tilCantidad;
+    private TextInputEditText etNombre, etEspecie, etFecha, etUbicacion, etCantidad, etAbsorcionCo2;
+    private TextInputLayout tilNombre, tilEspecie, tilFecha, tilUbicacion, tilCantidad, tilAbsorcionCo2;
     private Spinner spinnerCentroEducativo;
     private LinearLayout llNombreView, llEspecieView, llFechaView, llCentroView, llUbicacionView, llCantidadView;
     private ImageButton btnEditar, btnEliminar, btnVolver;
@@ -57,6 +59,7 @@ public class ArbolDetallesFragment extends Fragment {
 
     private Arbol arbolActual;
     private long arbolId = -1;
+    private String fechaParaApi = "";
 
     private SharedPreferences sharedPreferences;
     private PermissionManager permissionManager;
@@ -122,11 +125,13 @@ public class ArbolDetallesFragment extends Fragment {
         etFecha = view.findViewById(R.id.editTextFechaDetalle);
         etUbicacion = view.findViewById(R.id.editTextUbicacion);
         etCantidad = view.findViewById(R.id.editTextCantidad);
+        etAbsorcionCo2 = view.findViewById(R.id.editTextAbsorcionCo2);
         tilNombre = view.findViewById(R.id.tilNombreDetalle);
         tilEspecie = view.findViewById(R.id.tilEspecieDetalle);
         tilFecha = view.findViewById(R.id.tilFechaDetalle);
         tilUbicacion = view.findViewById(R.id.tilUbicacion);
         tilCantidad = view.findViewById(R.id.tilCantidad);
+        tilAbsorcionCo2 = view.findViewById(R.id.tilAbsorcionCo2);
 
         spinnerCentroEducativo = view.findViewById(R.id.spinnerCentroEducativo);
         centrosAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, listaCentros);
@@ -208,20 +213,39 @@ public class ArbolDetallesFragment extends Fragment {
         mostrarEditTexts();
     }
 
+    private void mostrarDatePicker() {
+        Calendar cal = Calendar.getInstance();
+        if (!fechaParaApi.isEmpty()) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                Date d = sdf.parse(fechaParaApi);
+                if (d != null) cal.setTime(d);
+            } catch (ParseException ignored) {}
+        }
+        DatePickerDialog picker = new DatePickerDialog(
+                requireContext(),
+                (view, year, month, day) -> {
+                    fechaParaApi = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, day);
+                    etFecha.setText(String.format(Locale.getDefault(), "%02d/%02d/%04d", day, month + 1, year));
+                    etFecha.setError(null);
+                },
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+        );
+        picker.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
+        picker.show();
+    }
+
     private void guardarCambios() {
         String nombre = etNombre.getText().toString().trim();
         String especie = etEspecie.getText().toString().trim();
-        String fecha = etFecha.getText().toString().trim();
         String ubicacion = etUbicacion.getText().toString().trim();
         String cantidadStr = etCantidad.getText() != null ? etCantidad.getText().toString().trim() : "1";
 
         if (nombre.isEmpty()) { etNombre.setError("El nombre es requerido"); return; }
         if (especie.isEmpty()) { etEspecie.setError("La especie es requerida"); return; }
-        if (fecha.isEmpty()) { etFecha.setError("La fecha es requerida"); return; }
-        if (!validarFecha(fecha)) {
-            etFecha.setError("Fecha inválida. Usa formato YYYY-MM-DD y debe ser en el pasado");
-            return;
-        }
+        if (fechaParaApi.isEmpty()) { etFecha.setError("La fecha es requerida"); return; }
 
         int cantidad;
         try {
@@ -231,6 +255,18 @@ public class ArbolDetallesFragment extends Fragment {
             etCantidad.setError("La cantidad debe ser al menos 1");
             etCantidad.requestFocus();
             return;
+        }
+
+        String co2Str = etAbsorcionCo2.getText() != null ? etAbsorcionCo2.getText().toString().trim() : "";
+        Double absorcionCo2 = null;
+        if (!co2Str.isEmpty()) {
+            try {
+                absorcionCo2 = Double.parseDouble(co2Str.replace(",", "."));
+            } catch (NumberFormatException e) {
+                etAbsorcionCo2.setError("Valor inválido");
+                etAbsorcionCo2.requestFocus();
+                return;
+            }
         }
 
         CentroEducativo centroSeleccionado = (CentroEducativo) spinnerCentroEducativo.getSelectedItem();
@@ -243,10 +279,11 @@ public class ArbolDetallesFragment extends Fragment {
         arbolActualizado.setId(arbolActual.getId());
         arbolActualizado.setNombre(nombre);
         arbolActualizado.setEspecie(especie);
-        arbolActualizado.setFechaPlantacion(fecha);
+        arbolActualizado.setFechaPlantacion(fechaParaApi);
         arbolActualizado.setUbicacion(ubicacion);
         arbolActualizado.setCentroEducativo(centroSeleccionado);
         arbolActualizado.setCantidad(cantidad);
+        arbolActualizado.setAbsorcionCo2Anual(absorcionCo2);
 
         actualizarArbolEnAPI(arbolActual.getId(), arbolActualizado);
     }
@@ -254,17 +291,6 @@ public class ArbolDetallesFragment extends Fragment {
     private void cancelarEdicion() {
         mostrarTextViews();
         verificarPermisosYActualizarUI();
-    }
-
-    private boolean validarFecha(String fechaStr) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            sdf.setLenient(false);
-            Date fecha = sdf.parse(fechaStr);
-            return !fecha.after(new Date());
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     private void mostrarTextViews() {
@@ -280,6 +306,7 @@ public class ArbolDetallesFragment extends Fragment {
         spinnerCentroEducativo.setVisibility(View.GONE);
         llCantidadView.setVisibility(View.VISIBLE);
         tilCantidad.setVisibility(View.GONE);
+        tilAbsorcionCo2.setVisibility(View.GONE);
         btnGuardar.setVisibility(View.GONE);
         btnCancelar.setVisibility(View.GONE);
         verificarPermisosYActualizarUI();
@@ -294,7 +321,13 @@ public class ArbolDetallesFragment extends Fragment {
         etEspecie.setText(tvEspecie.getText());
         llFechaView.setVisibility(View.GONE);
         tilFecha.setVisibility(View.VISIBLE);
-        if (arbolActual != null) etFecha.setText(arbolActual.getFechaPlantacion());
+        etFecha.setFocusable(false);
+        etFecha.setFocusableInTouchMode(false);
+        etFecha.setOnClickListener(v -> mostrarDatePicker());
+        if (arbolActual != null && arbolActual.getFechaPlantacion() != null) {
+            fechaParaApi = arbolActual.getFechaPlantacion();
+            etFecha.setText(formatearFechaEspanol(fechaParaApi));
+        }
         llUbicacionView.setVisibility(View.GONE);
         tilUbicacion.setVisibility(View.VISIBLE);
         etUbicacion.setText(tvUbicacion.getText());
@@ -303,6 +336,12 @@ public class ArbolDetallesFragment extends Fragment {
         llCantidadView.setVisibility(View.GONE);
         tilCantidad.setVisibility(View.VISIBLE);
         if (arbolActual != null) etCantidad.setText(String.valueOf(arbolActual.getCantidad()));
+        tilAbsorcionCo2.setVisibility(View.VISIBLE);
+        if (arbolActual != null && arbolActual.getAbsorcionCo2Anual() != null) {
+            etAbsorcionCo2.setText(String.valueOf(arbolActual.getAbsorcionCo2Anual()));
+        } else {
+            etAbsorcionCo2.setText("");
+        }
         btnEditar.setVisibility(View.GONE);
         btnEliminar.setVisibility(View.GONE);
         btnGuardar.setVisibility(View.VISIBLE);

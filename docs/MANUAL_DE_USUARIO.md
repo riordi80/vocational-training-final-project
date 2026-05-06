@@ -1,547 +1,857 @@
-# Manual de Usuario - Proyecto Árboles (Proyecto Árboles)
-
-**Última actualización**: 2025-12-07
-
----
+# Manual de Usuario - Proyecto Árboles (Frontend Web)
 
 ## Introducción
 
-Bienvenido a **Proyecto Árboles** (Proyecto Árboles), un sistema de gestión y monitorización de árboles plantados en centros educativos.
+Este manual está actualizado al estado actual de la app web y pensado para usuarios nuevos.
 
-### ¿Qué es Proyecto Árboles?
-
-Proyecto Árboles es una plataforma que permite:
-- **Gestionar centros educativos** y sus árboles plantados
-- **Registrar información** de cada árbol (especie, fecha de plantación, ubicación)
-- **Monitorizar datos ambientales** mediante sensores IoT (temperatura, humedad, CO2)
-- **Consultar información** desde aplicaciones web y móvil
-- **Hacer seguimiento educativo** del crecimiento de los árboles
-
-### ¿Para quién es este sistema?
-
-- **Profesores**: Gestionar y monitorizar árboles de su centro educativo
-- **Estudiantes**: Consultar información de los árboles plantados
-- **Administradores**: Gestión completa del sistema
-- **Invitados**: Consulta de información pública
+- **Versión del manual**: 2026-05-05  
+- **Plataforma**: Web responsive (desktop, tablet, móvil)
+- **Navegadores**: Chrome, Firefox, Safari, Edge (últimas versiones)
+- **Referencia técnica**: [Manual de Instalación](./MANUAL_DE_INSTALACION.md)
 
 ---
 
 ## Índice
 
-1. [Acceso al Sistema](#1-acceso-al-sistema)
-2. [Aplicación Web](#2-aplicación-web)
-3. [Aplicación Android](#3-aplicación-android)
-4. [Preguntas Frecuentes](#4-preguntas-frecuentes)
+1. [Antes de empezar](#1-antes-de-empezar)
+2. [Inicio de sesión y registro](#2-inicio-de-sesión-y-registro)
+3. [Navegación principal](#3-navegación-principal)
+4. [Dashboard (Inicio)](#4-dashboard-inicio)
+5. [Gestión de árboles](#5-gestión-de-árboles)
+6. [Gestión de centros educativos](#6-gestión-de-centros-educativos)
+7. [Gestión de dispositivos IoT](#7-gestión-de-dispositivos-iot)
+8. [Histórico de lecturas](#8-histórico-de-lecturas)
+9. [Gestión de usuarios (solo ADMIN)](#9-gestión-de-usuarios-solo-admin)
+10. [Permisos por rol](#10-permisos-por-rol)
+11. [Validaciones y mensajes frecuentes](#11-validaciones-y-mensajes-frecuentes)
+12. [Resolución de problemas](#12-resolución-de-problemas)
+13. [Soporte](#13-soporte)
 
 ---
 
-## 1. Acceso al Sistema
+## 1. Antes de empezar
 
-Proyecto Árboles está disponible en dos plataformas:
+Para usar la app web:
 
-### Aplicación Web
+1. Accede a **https://vocational-training-final-project.vercel.app/**
+2. Necesitas conexión a Internet
+3. El backend puede tardar 30-60 seg en cold start (la primera vez o tras inactividad)
 
-- **URL**: https://vocational-training-final-project.vercel.app/
-- **Dispositivos**: Ordenadores, tablets y móviles (responsive)
-- **Navegadores**: Chrome, Firefox, Safari, Edge (últimas versiones)
-
-### Aplicación Android
-
-- **Plataforma**: Android 7.0 (API 24) o superior
-- **Instalación**: APK o Google Play (según disponibilidad)
-- **Detalles**: Ver [Manual de Usuario Android](./MANUAL_DE_USUARIO_ANDROID.md)
+Si la página no carga, espera unos segundos y recarga (F5).
 
 ---
 
-## 2. Aplicación Web
+## 2. Inicio de sesión y registro
 
-La aplicación web es responsive y se adapta automáticamente a ordenadores, tablets y móviles.
+### 2.1 Pantalla de Login
 
-### 2.1 Registro e Inicio de Sesión
+![Captura: Formulario de login con email y contraseña](img/frontend/captura-login.png)
 
-#### Registro de Nueva Cuenta
+En la pantalla de **Login**:
 
-1. Accede a https://vocational-training-final-project.vercel.app/
-2. Haz clic en **"Registrarse"**
-3. Completa el formulario:
+- Introduce tu **email** registrado
+- Introduce tu **contraseña**
+- Pulsa **"Iniciar Sesión"**
+
+Si las credenciales son correctas, accederás al Dashboard.
+
+**Mensajes de error comunes**:
+
+- `"Usuario o contraseña incorrecta"` → Verifica tus datos
+- `"Usuario no activo"` → Contacta al administrador
+- `"No se pudo conectar con el servidor..."` → El backend está en cold start, espera e intenta de nuevo
+
+**Enlaces útiles**:
+
+- **¿No tienes cuenta?** → Haz clic en **"Registrarse"**
+
+### 2.2 Pantalla de Registro
+
+![Captura: Formulario de registro con nombre, email y contraseña](img/frontend/captura-registro.png)
+
+Para crear una **nueva cuenta**:
+
+1. Haz clic en **"Registrarse"** desde la pantalla de login
+2. Completa el formulario:
    - **Nombre completo**: Tu nombre y apellidos
-   - **Email**: Dirección de correo válida
-   - **Contraseña**: Mínimo 6 caracteres
+   - **Email**: Correo válido y único (no puede estar registrado)
+   - **Contraseña**: Contraseña segura
    - **Confirmar contraseña**: Debe coincidir con la anterior
-4. Haz clic en **"Registrarse"**
-5. Serás redirigido automáticamente al inicio de sesión
+
+3. Pulsa **"Registrarse"**
+4. Si el registro es correcto, la app inicia sesión automáticamente
 
 **Validaciones**:
-- El email debe tener formato válido (ejemplo@dominio.com)
-- Las contraseñas deben coincidir
-- Todos los campos son obligatorios
 
-**IMPORTANTE - Sistema de Autenticación Mock**:
-- La autenticación actual es un **sistema mock** (simulado) para desarrollo
-- **Puedes usar CUALQUIER email y contraseña** para acceder
-- No hay validación real contra base de datos de usuarios
-- Los datos se guardan solo en localStorage del navegador
-- Este sistema se reemplazará con autenticación real en futuras versiones
+- Email con formato válido (ejemplo@dominio.com)
+- Contraseñas deben coincidir
+- Email no debe estar registrado previamente
+- Todos los campos obligatorios
 
-#### Iniciar Sesión
+**Mensajes típicos**:
 
-1. En la pantalla de login, ingresa:
-   - **Email**: Cualquier email con formato válido
-   - **Contraseña**: Cualquier contraseña (no se valida)
-2. Haz clic en **"Iniciar Sesión"**
-3. Serás redirigido al Dashboard
+- `"El email ya está registrado"` → Usa otro email o intenta login
+- `"Las contraseñas no coinciden"` → Verifica que sean iguales
+- `"Por favor completa todos los campos"` → Rellena campos vacíos
 
-**Nota**: La sesión se mantiene activa incluso si cierras el navegador (localStorage).
-
-#### Cerrar Sesión
-
-1. Haz clic en tu nombre de usuario (esquina superior derecha)
-2. Selecciona **"Cerrar Sesión"**
+**Rol asignado**: Los nuevos usuarios se registran como **COORDINADOR** por defecto.
 
 ---
 
-### 2.2 Dashboard (Pantalla Principal)
+## 3. Navegación principal
 
-Al iniciar sesión, verás el Dashboard con:
+### 3.1 Menú en Desktop
 
-- **Mensaje de bienvenida** personalizado con tu nombre
-- **Tarjetas de acceso rápido**:
-  - Gestión de Árboles
-  - Gestión de Centros Educativos (si tienes permisos)
-- **Menú de navegación** (barra superior o menú hamburguesa en móvil)
+![Captura: Barra de navegación superior con links a Dashboard, Centros, Usuarios](img/frontend/captura-menu-desktop.png)
 
-#### Navegación
+En desktop se ve una **barra de navegación horizontal** en la parte superior con:
 
-**En ordenador**: Menú en la barra superior
-- Inicio
-- Árboles
-- Centros (si tienes permisos)
-- Perfil / Cerrar Sesión
+- **Logo** (click va a Dashboard)
+- **Dashboard** → Panel de inicio
+- **Centros** → Gestión de centros educativos
+- **Usuarios** → (solo visible si eres ADMIN)
+- **Perfil del usuario** (esquina superior derecha)
+  - Muestra tu nombre y rol
+  - Opción **"Cerrar Sesión"**
 
-**En móvil**: Menú hamburguesa (≡) en la esquina superior izquierda
+### 3.2 Menú en Móvil/Tablet
+
+![Captura: Menú hamburguesa desplegado en versión móvil](img/frontend/captura-menu-mobile.png)
+
+En móvil/tablet se usa un **menú hamburguesa (≡)** que:
+
+- Está en la esquina superior izquierda
+- Al pulsar se expande mostrando las opciones
+- Las opciones son las mismas que en desktop
+- Pulsa de nuevo para cerrar
 
 ---
 
-### 2.3 Gestión de Árboles
+## 4. Dashboard (Inicio)
 
-La sección de árboles te permite visualizar, crear, editar y eliminar información de árboles.
+### 4.1 ¿Qué ves en el Dashboard?
 
-#### Ver Lista de Árboles
+![Captura: Dashboard con métricas (centros, árboles, dispositivos, CO2) y acceso rápido](img/frontend/captura-dashboard.png)
 
-1. Desde el Dashboard, haz clic en **"Árboles"** o en la tarjeta "Gestión de Árboles"
-2. Verás una lista/tabla con todos los árboles registrados
+El Dashboard es tu **pantalla de inicio** y muestra:
+
+**Zona de bienvenida**:
+- Saludo personalizado con tu nombre
+- Mensaje de estado según tu rol
+
+**Métricas del sistema** (4 tarjetas de resumen):
+
+| Métrica | Descripción |
+|---------|-------------|
+| **Centros Educativos** | Total de centros registrados en el sistema |
+| **Árboles Plantados** | Cantidad acumulada de todos los árboles |
+| **Dispositivos Activos** | Número de sensores IoT conectados y activos |
+| **CO₂ Absorbidos/año** | Kilos estimados de CO₂ absorbidos anualmente |
+
+**Acceso rápido**:
+- Enlace/tarjeta a **"Centros Educativos"** para navegar directamente
+
+### 4.2 Información según tu rol
+
+- **COORDINADOR**: Ve datos de sus centros asignados
+- **ADMIN**: Ve datos de todo el sistema
+
+---
+
+## 5. Gestión de árboles
+
+Los árboles **no tienen una sección independiente** en el menú. Se gestionan **desde dentro de cada centro educativo**. Esto significa que los árboles pertenecen a un centro específico.
+
+### 5.1 Acceso a los árboles de un centro
+
+![Captura: Tabla de árboles dentro del detalle del centro](img/frontend/captura-centro-arboles-tabla.png)
+
+Para **ver y gestionar los árboles**:
+
+1. En el menú principal, haz clic en **"Centros"**
+2. Selecciona un centro de la lista
+3. En el detalle del centro, verás una **tabla de Árboles del Centro** con:
 
 **Información mostrada**:
-- Nombre del árbol
+- **Nombre**: Identificador del árbol
+- **Especie**: Nombre científico (ej: Quercus robur)
+- **Cantidad**: Número de árboles de esa especie
+- **Acciones**: Botones para ver detalle, editar o eliminar
+
+**Acciones disponibles**:
+
+- **Ver Detalle**: Haz clic en la fila o en el botón para ver toda la información
+- **Añadir Árbol**: Botón para crear un nuevo árbol en este centro
+
+### 5.2 Detalle de un árbol
+
+![Captura: Página de detalle de árbol con toda la información](img/frontend/captura-arbol-detalle.png)
+
+Al hacer clic en "Ver Detalle" ves:
+
+**Información general**:
+- Nombre completo del árbol
 - Especie (nombre científico)
 - Fecha de plantación
 - Centro educativo al que pertenece
-- Ubicación
+- Ubicación específica (si está registrada)
+- Cantidad de árboles
+- Absorción CO₂ anual
 
-**Funcionalidades**:
-- **Filtrar por centro**: Usa el desplegable en la parte superior para filtrar árboles de un centro específico
-- **Ver detalles**: Haz clic en cualquier fila/tarjeta para ver información completa
-- **Añadir árbol**: Botón verde "Añadir Árbol" en la esquina superior derecha
+**Botones de acción**:
+- **Volver**: Regresa al detalle del centro
+- **Editar**: Abre el formulario de edición (si tienes permisos)
+- **Eliminar**: Elimina el árbol con confirmación (si tienes permisos)
 
-**Vista responsive**:
-- **Ordenador**: Tabla con columnas
-- **Móvil/Tablet**: Tarjetas apiladas verticalmente
+### 5.3 Crear un nuevo árbol
 
-#### Ver Detalles de un Árbol
+![Captura: Formulario de creación de árbol en el centro](img/frontend/captura-arbol-crear.png)
 
-1. En la lista de árboles, haz clic en el árbol que deseas ver
-2. Verás dos secciones:
+Para **crear un árbol en un centro**:
 
-**Información General**:
-- Nombre
-- Especie
-- Fecha de plantación
-- Ubicación
-- Centro educativo
-
-**Umbrales de Monitorización** (si están configurados):
-- Temperatura (min/max)
-- Humedad del suelo (min/max)
-- Humedad ambiental (min/max)
-- Nivel de CO2 (máximo)
-
-**Acciones disponibles**:
-- **Volver**: Regresa a la lista
-- **Editar**: Modifica la información (botón verde)
-- **Eliminar**: Elimina el árbol (botón rojo, requiere confirmación)
-
-#### Añadir un Nuevo Árbol
-
-1. En la lista de árboles, haz clic en **"Añadir Árbol"**
-2. Completa el formulario:
+1. En el detalle del centro, en la tabla de Árboles, pulsa **"+ Añadir Árbol"**
+2. Se abre un formulario con campos:
 
 **Campos obligatorios** (marcados con *):
-- **Nombre**: Nombre común del árbol
-- **Especie**: Nombre científico (ej: Quercus robur)
-- **Fecha de plantación**: No puede ser futura
-- **Centro educativo**: Selecciona de la lista desplegable
+- **Nombre**: Identificador del árbol (ej: "Roble 1", "Pino del patio")
+- **Especie**: Nombre científico (ej: "Quercus robur", "Pinus pinea")
+- **Fecha de plantación**: Fecha pasada (selector de calendario)
+- **Cantidad**: Número de árboles de esa especie
+- **Centro educativo**: Preseleccionado con el centro actual
 
 **Campos opcionales**:
-- **Ubicación**: Descripción de dónde está plantado
-
-**Umbrales de monitorización** (opcionales):
-- Temperatura mínima/máxima (°C)
-- Humedad del suelo mínima/máxima (%)
-- Humedad ambiental mínima/máxima (%)
-- Nivel máximo de CO2 (ppm)
-
-3. Haz clic en **"Guardar"**
-4. Verás un mensaje de éxito y serás redirigido a la lista
+- **Ubicación específica**: Descripción (ej: "Patio norte, junto a fuente")
+- **Absorción CO₂ anual**: Si se conoce, en kg/año
 
 **Validaciones**:
-- La fecha de plantación no puede ser futura
-- Todos los campos obligatorios deben completarse
-- Los umbrales deben ser valores numéricos válidos
-- La temperatura mínima debe ser menor que la máxima
-- La humedad debe estar entre 0 y 100%
+- Fecha de plantación no puede ser futura
+- Cantidad debe ser número positivo (≥ 1)
+- Campos obligatorios no pueden estar vacíos
 
-#### Editar un Árbol
+**Mensaje de éxito**: `"Árbol creado correctamente"`
 
-1. En los detalles del árbol, haz clic en **"Editar"**
-2. Modifica los campos que desees cambiar
-3. Haz clic en **"Guardar"**
-4. Verás un mensaje de confirmación
+**Luego**: Serás redirigido al detalle del centro y verás el árbol en la tabla
 
-**Nota**: Puedes modificar cualquier campo excepto el ID del árbol.
+### 5.4 Editar un árbol
 
-#### Eliminar un Árbol
+![Captura: Formulario de edición de árbol con datos ya rellenos](img/frontend/captura-arbol-editar.png)
 
-1. En los detalles del árbol, haz clic en **"Eliminar"** (botón rojo)
-2. Aparecerá un modal de confirmación:
-   - **Título**: "Confirmar eliminación"
-   - **Mensaje**: "¿Estás seguro de que deseas eliminar este árbol? Esta acción no se puede deshacer."
-3. Confirma haciendo clic en **"Eliminar"**
-4. El árbol se eliminará permanentemente
-5. Serás redirigido a la lista de árboles
+Para **editar un árbol**:
 
-**IMPORTANTE**: La eliminación es permanente y no se puede deshacer.
+**Desde el detalle del árbol**
 
----
+1. Abre el detalle del árbol
+2. Pulsa **"Editar"**
 
-### 2.4 Gestión de Centros Educativos
+3. Se abre el formulario con los datos actuales
+4. Modifica los campos que necesites:
+   - Nombre, especie, fecha, cantidad, ubicación
+   - Umbrales de monitorización
+5. Pulsa **"Guardar"**
 
-*(Esta sección estará disponible según tus permisos de usuario)*
+**Campos editables**: Todos excepto el ID del árbol
 
-La gestión de centros permite administrar los centros educativos registrados en el sistema.
+**Mensaje de éxito**: `"Árbol actualizado correctamente"`
 
-**Funcionalidades** (similares a la gestión de árboles):
-- Ver lista de centros
-- Ver detalles de un centro
-- Crear nuevo centro
-- Editar centro existente
-- Eliminar centro
-- Ver árboles asociados a cada centro
+**Luego**: Vuelves a la vista anterior (tabla o detalle)
 
-**Nota**: Solo usuarios con rol de Administrador o Profesor pueden gestionar centros.
+### 5.5 Eliminar un árbol
 
----
+![Captura: Modal de confirmación antes de eliminar árbol](img/frontend/captura-arbol-eliminar.png)
 
-### 2.5 Mensajes del Sistema
+Para **eliminar un árbol**:
 
-El sistema proporciona feedback visual constante:
+**Desde el detalle del árbol**:
+1. En la página de detalle, pulsa **"Eliminar"** (botón rojo)
+2. Aparece un modal pidiendo confirmación
 
-#### Mensajes de Éxito (Verde)
-- "Árbol creado correctamente"
-- "Árbol actualizado correctamente"
-- "Árbol eliminado correctamente"
-- "Inicio de sesión exitoso"
+**En el modal de confirmación**:
+- Se muestra el nombre del árbol
+- Advierte que la acción es **irreversible**
+- Botón **"Cancelar"** → No elimina nada
+- Botón **"Eliminar"** → Confirma la eliminación
 
-#### Mensajes de Error (Rojo)
-- "No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos."
-- "Por favor completa todos los campos obligatorios"
-- "La fecha de plantación no puede ser futura"
-- "Error de conexión con el servidor"
+3. Pulsa **"Eliminar"** para confirmar
+4. El árbol se elimina permanentemente
+5. Se actualiza la tabla del centro
 
-#### Estados de Carga
-- **Spinner de carga**: Mientras se obtienen datos del servidor
-- **Mensaje "Cargando..."**: Durante operaciones en proceso
+**⚠️ IMPORTANTE**: La eliminación es **permanente** y **no se puede deshacer**. El árbol desaparecerá de la tabla inmediatamente.
 
 ---
 
-### 2.6 Responsive Design
+---
 
-La aplicación web se adapta automáticamente al dispositivo:
+## 6. Gestión de centros educativos
 
-#### Vista Ordenador (Desktop)
-- Menú horizontal en la barra superior
-- Tablas con múltiples columnas
-- Formularios en formato de grid
-- Botones con texto completo
+### 6.1 Listado de centros
 
-#### Vista Tablet
-- Menú adaptado
-- Tablas compactas o tarjetas
-- Formularios ajustados
+![Captura: Lista de centros con nombre, ubicación e información](img/frontend/captura-centros-lista.png)
 
-#### Vista Móvil
-- **Menú hamburguesa** (≡) plegable
-- **Tarjetas verticales** en lugar de tablas
-- **Formularios apilados** verticalmente
-- **Botones grandes** fáciles de tocar
+En **Centros** ves una tabla/listado de todos los centros:
+
+**Información mostrada**:
+- Nombre del centro
+- Isla
+- Dirección
+- Responsable
+- Fecha de creación
+
+**Acciones**:
+- **Ver detalles**: Haz clic en un centro para ver información completa
+- **Añadir Centro**: Botón para crear nuevo centro (solo si eres ADMIN)
+
+### 6.2 Detalle de un centro
+
+![Captura: Detalle de centro con información, árboles y dispositivos en pestañas](img/frontend/captura-centro-detalle.png)
+
+Al hacer clic en un centro ves:
+
+**Botones de acción** (según permisos):
+
+- **Volver**: Regresa al listado de centros
+- **Editar**: Modifica datos del centro
+- **Eliminar**: Elimina el centro
+- **Árbol**: Crear nuevo árbol en este centro
+- **Dispositivo**: Registrar nuevo dispositivo ESP32
+
+**Información del centro**:
+- Nombre completo
+- Responsable
+- Teléfono
+- Correo electrónico
+- Fecha de creación
+- Dirección
+- Población
+- Código postal
+- Provincia
+
+**Mapa**:
+- Visualización en mapa de la ubicación del centro
+
+**Tabla de Dispositivos IoT**:
+- Lista de sensores ESP32 conectados
+- Columnas: MAC, Estado, Frecuencia, Última conexión
+- Botón para ver histórico de lecturas
+- Opción **"+ Añadir Dispositivo"** en este centro
+
+**Tabla de Árboles del Centro**:
+
+- Lista de todos los árboles plantados
+- Columnas: Nombre, Especie, Ubicación y Cantidad
+- Botón para ver detalles de cada árbol
+- Opción **"+ Añadir Árbol"** en este centro
+
+### 6.3 Crear un nuevo centro
+
+![Captura: Formulario de creación de centro](img/frontend/captura-centro-crear.png)
+
+Para **crear un centro** (solo ADMIN):
+
+1. En el listado de centros, haz clic en **"+ Añadir Centro"**
+2. Completa el formulario:
+
+**Campos**:
+- **Nombre**: Nombre oficial del centro educativo
+- **Dirección**: Dirección completa
+- **Responsable**: Nombre del coordinador
+
+- **Isla**: Primaria, Secundaria, etc.
+- **Población**
+- **Provincia**
+- **Código Postal**
+- **Teléfono**: Contacto
+- **Email**: Correo de contacto
+- **Latitud/Longitud**: Ubicación del centro en Google Maps
+
+3. Pulsa **"Guardar"**
+
+**Mensaje de éxito**: `"Centro creado correctamente"`
+
+### 6.4 Editar centro
+
+![Captura: Formulario de edición de centro con datos rellenos](img/frontend/captura-centro-editar.png)
+
+Para **editar un centro** (solo ADMIN y COORDINADOR del centro):
+
+1. En el detalle, pulsa **"Editar"**
+2. Modifica los campos necesarios
+3. Pulsa **"Actualizar Centro"**
+
+**Mensaje de éxito**: `"Centro actualizado correctamente"`
+
+### 6.5 Eliminar centro
+
+![Captura: Modal de confirmación antes de eliminar centro](img/frontend/captura-centro-eliminar.png)
+
+Para **eliminar un centro** (solo ADMIN):
+
+1. En el detalle, pulsa **"Eliminar"** (botón rojo)
+2. Confirma en el modal que aparece
+3. El centro se elimina permanentemente
+
+**⚠️ IMPORTANTE**: Se eliminarán también todos los árboles y dispositivos del centro.
 
 ---
 
-## 3. Aplicación Android
+## 7. Gestión de dispositivos IoT
 
-La aplicación móvil Android ofrece funcionalidades similares a la web, optimizadas para dispositivos móviles.
+### 7.1 Acceso a dispositivos
 
-### Características Principales
+Los dispositivos IoT ESP32 se gestionan desde el **detalle del centro**.
 
-- Login y registro de usuarios
-- Lista de árboles del sistema
-- Detalles completos de cada árbol
-- Edición de información
-- Eliminación de árboles
-- Datos de sensores en tiempo real (simulados)
+![Captura: Tabla de dispositivos en el detalle del centro](img/frontend/captura-dispositivos-tabla.png)
 
-### Manual Completo
+En la tabla de dispositivos ves:
 
-Para instrucciones detalladas de uso de la aplicación Android, consulta:
-- **[Manual de Usuario Android](./MANUAL_DE_USUARIO_ANDROID.md)**
+**Columnas**:
+- **MAC**: Dirección única del dispositivo (XX:XX:XX:XX:XX:XX)
+- **Estado**: Activo / Inactivo
+- **Frecuencia**: Segundos entre lecturas
+- **Última sincronización**: Fecha y hora
 
-### Funcionalidades Específicas de Android
+**Acciones**:
+- **Histórico**: Abre la gráfica de lecturas
+- **Editar**: Modifica configuración del dispositivo
+- **Eliminar**: Elimina el dispositivo del sistema
 
-#### Datos de Sensores
-La app Android muestra datos simulados de sensores:
-- Temperatura ambiente (°C)
-- Humedad ambiental (%)
-- Humedad del suelo (%)
-- Nivel de CO2 (ppm)
+### 7.2 Crear nuevo dispositivo
 
-#### Modo Edición
-- Botón "Editar" para activar edición
-- Campos se convierten en editables
-- Botones "Guardar" y "Cancelar"
+![Captura: Formulario de creación de dispositivo con campos MAC, frecuencia y umbrales](img/frontend/captura-dispositivo-crear.png)
 
-#### Sistema de Fallback
-Si no hay conexión al servidor:
-- La app carga datos de ejemplo desde archivos XML locales
-- Los datos de sensores se generan aleatoriamente
-- Puedes seguir usando la app sin conexión
+Para **añadir un dispositivo** en el centro:
+
+1. En el detalle del centro, pulsa **"+ Añadir Dispositivo"**
+2. Completa el formulario:
+
+**Campos**:
+
+- **Dirección MAC**: Identificador único del ESP32
+  - Formato: `XX:XX:XX:XX:XX:XX` (ejemplo: `AA:BB:CC:DD:EE:FF`)
+- **Centro**: Se preselecciona el actual
+- **Frecuencia de lectura**: Segundos entre lecturas
+  - Recomendado: 30-60 segundos
+- **Estado**: Activo/Inactivo (checkbox)
+
+- **Umbrales de monitorización**:
+  - Temperatura mín/máx (°C)
+  - Humedad suelo min (%)
+  - Humedad ambiental mín/máx (%)
+  - CO₂ máximo (ppm)
+
+3. Pulsa **"Registrar Dispositivo"**
+
+**Validaciones**:
+- MAC con formato válido `XX:XX:XX:XX:XX:XX`
+- Frecuencia número positivo
+- Umbrales valores numéricos coherentes
+
+**Mensaje de éxito**: `"Dispositivo registrado correctamente"`
+
+### 7.3 Editar dispositivo
+
+![Captura: Formulario de edición de dispositivo](img/frontend/captura-dispositivo-editar.png)
+
+Para **editar un dispositivo**:
+
+1. En la tabla, pulsa el botón **"Editar"**
+2. Modifica los parámetros
+3. Pulsa **"Actualizar Dispositivo"**
+
+### 7.4 Eliminar dispositivo
+
+![Captura: Página de histórico con gráficos de temperatura, humedad, CO2](img/frontend/captura-eliminar-dispositivo.png)
+
+Para **eliminar un dispositivo**:
+
+1. En la tabla, pulsa el botón **"Eliminar"**
+2. Confirma en el modal que aparece
+3. El dispositivo se elimina y deja de enviar lecturas
 
 ---
 
-## 4. Preguntas Frecuentes (FAQ)
+## 8. Histórico de lecturas
 
-### ¿Puedo usar el sistema sin registrarme?
+### 8.1 Ver gráficas de sensores
 
-No, necesitas "iniciar sesión" para acceder al sistema. Sin embargo, dado que la autenticación es mock, puedes usar cualquier email y contraseña (solo necesitan tener formato válido).
+![Captura: Página de histórico con gráficos de temperatura, humedad, CO2](img/frontend/captura-historico-graficos.png)
 
-### ¿Qué pasa si olvido mi contraseña?
+Para **ver el histórico de un dispositivo**:
 
-Como la autenticación actual es mock (simulada), no hay contraseñas reales guardadas. Puedes iniciar sesión con cualquier email y cualquier contraseña. El sistema actual no valida credenciales contra una base de datos.
+1. En el detalle del centro, en la tabla de dispositivos, pulsa **"Ver histórico"**
+2. Se abre la página de **"Histórico de Lecturas"** mostrando gráficas:
 
-### ¿Por qué la autenticación es "mock"?
+**Gráficas superior**:
 
-La autenticación mock es temporal para permitir el desarrollo y prueba de las funcionalidades principales del sistema sin necesidad de implementar un sistema completo de gestión de usuarios. En versiones futuras se implementará autenticación real con el backend.
+- **Temperatura ambiente** (°C)
+- **Humedad ambiental** (%)
+- **Humedad del suelo** (%)
+- **Nivel de luz (2 sensores)**
 
-### ¿Puedo acceder desde cualquier dispositivo?
+**Gráficas inferior**:
 
-Sí, la aplicación web funciona en cualquier dispositivo con navegador moderno (ordenador, tablet, móvil). La aplicación Android requiere Android 7.0 o superior.
+- **Nivel de CO₂** (ppm)
 
-### ¿Los cambios que hago en la web se reflejan en Android?
+**Tabla de datos**:
 
-Sí, ambas aplicaciones comparten la misma base de datos. Los cambios se sincronizan en tiempo real.
+- **Temperatura ambiente** (°C)
+- **Humedad ambiental** (%)
+- **Humedad del suelo** (%)
+- **Nivel de luz (2 sensores)**
+- **Nivel de CO₂** (ppm)
 
-### ¿Puedo eliminar un árbol por accidente?
+**Funcionalidades**:
+- Cada gráfica muestra datos en tiempo real
+- Eje X: Fecha y hora
+- Eje Y: Valor del sensor
+- Líneas de color para cada métrica
 
-No fácilmente. El sistema siempre pide confirmación antes de eliminar cualquier elemento. Lee el mensaje de confirmación cuidadosamente.
+### 8.2 Filtros y controles
 
-### ¿Puedo recuperar un árbol eliminado?
+![Captura: Filtros de fecha y opciones de descarga](img/frontend/captura-historico-filtros.png)
 
-No, la eliminación es permanente. No hay papelera de reciclaje. Por eso el sistema siempre pide confirmación.
+Con los filtros del histórico puedes ajustar el rango de fechas para mostrar en las gráficas y en la tabla de datos
 
-### ¿Los datos de sensores son reales?
 
-En la versión actual, los datos de sensores son simulados para demostración. En futuras versiones se integrarán sensores reales ESP32.
+- **Volver**: Regresa al detalle del centro
 
-### ¿Qué navegadores son compatibles?
+---
 
-La aplicación web funciona en:
-- Google Chrome (recomendado)
-- Mozilla Firefox
-- Safari
-- Microsoft Edge
-- Cualquier navegador moderno con JavaScript habilitado
+## 9. Gestión de usuarios (solo ADMIN)
 
-### ¿Necesito internet para usar la aplicación?
+Solo los administradores pueden gestionar usuarios del sistema.
 
-**Aplicación Web**: Sí, requiere conexión a internet constante.
+### 9.1 Listado de usuarios
 
-**Aplicación Android**: Funciona con datos de fallback sin conexión, pero necesitas internet para sincronizar cambios.
+![Captura: Lista de usuarios con nombre, email, rol y centros asignados](img/frontend/captura-usuarios-lista.png)
 
-### ¿Puedo ver árboles de otros centros educativos?
+En **Usuarios** (solo visible para ADMIN) ves una tabla con:
 
-Sí, todos los usuarios pueden ver todos los árboles del sistema. Las restricciones por centro se implementarán en futuras versiones.
+**Columnas**:
+- Nombre del usuario
+- Email
+- Rol (ADMIN, COORDINADOR)
+- Estado (Activo/Inactivo)
 
-### ¿Cómo sé si un árbol está fuera de los umbrales normales?
+**Acciones**:
+- **Ver detalles**: Haz clic para abrir información completa
+- **+ Añadir Usuario**: Botón para crear nuevo usuario
 
-Los umbrales de monitorización se establecen al crear/editar el árbol. En futuras versiones, el sistema generará alertas automáticas cuando los sensores detecten valores fuera de rango.
+### 9.2 Detalle de un usuario
 
-### ¿Puedo exportar los datos?
+![Captura: Pantalla de detalle de usuario con información y centros asignados](img/frontend/captura-usuario-detalle.png)
 
-Esta funcionalidad no está disponible en la versión actual. Está planificada para futuras versiones.
+Al hacer clic en un usuario ves:
 
-### ¿Por qué aparece el mensaje de que el servidor está iniciándose?
+**Información personal**:
+- Nombre completo
+- Email
+- Rol actual (ADMIN / COORDINADOR)
+- Fecha de creación
+- Estado (Activo / Inactivo)
 
-**Mensaje completo**: "No se pudo conectar con el servidor. Si es la primera carga, puede estar iniciándose (30-60 seg). Recarga la página en unos momentos."
+**Centros asignados** (si es COORDINADOR):
 
-**Causa**: El backend está desplegado en Render (versión gratuita), que entra en suspensión tras 15 minutos de inactividad (cold start).
+Si estás editando un coordinador se muestra un listado con los centros para asignar
+
+![Captura: Pantalla de detalle de usuario con información y centros asignados](img/frontend/captura-coordinador-detalle.png)
+
+- Tabla con los centros donde puede gestionar
+- Botón **"Desasignar"** para cada centro
+- Desplegable Asignar para añadir nuevos centros asociados al usuario
+
+**Botones de acción**:
+- **Volver**: Regresa al listado
+- **Editar**: Abre formulario de edición
+- **Eliminar**: Elimina el usuario del sistema
+- **Activar/Desactivar**: Habilita/deshabilita la cuenta
+
+### 9.3 Crear nuevo usuario
+
+![Captura: Formulario de creación de usuario](img/frontend/captura-usuario-crear.png)
+
+Para **crear un usuario** (solo ADMIN):
+
+1. En el listado de usuarios, pulsa **"+ Añadir Usuario"**
+2. Completa el formulario:
+
+**Campos**:
+
+- **Nombre completo**: Nombre y apellidos
+- **Email**: Correo único (no puede estar registrado)
+- **Contraseña**: Contraseña inicial segura
+- **Rol**: Selecciona ADMIN o COORDINADOR
+
+**Si es COORDINADOR**:
+- **Centros asignados**: Selecciona los centros que gestionará
+  - Puede ser más de uno
+
+3. Pulsa **"Crear Usuario"**
+
+**Validaciones**:
+- Email formato válido y no duplicado
+- Todos los campos obligatorios rellenos
+- Si es COORDINADOR, debe tener al menos un centro
+
+**Mensaje de éxito**: `"Usuario creado correctamente"`
+
+### 9.4 Editar usuario
+
+![Captura: Formulario de edición de usuario](img/frontend/captura-usuario-editar.png)
+
+Para **editar un usuario**:
+
+1. En el detalle, pulsa **"Editar"**
+2. Modifica:
+   - Nombre
+   - Email
+   - Rol
+   - Contraseña
+   - Centros asignados (para el rol COORDINADOR)
+   
+3. Pulsa **"Guardar"**
+
+**Cambiar rol**:
+- Si cambias COORDINADOR → ADMIN: obtiene permisos totales
+- Si cambias ADMIN → COORDINADOR: debes asignar centros específicos
+
+### 9.5 Asignar/Desasignar centros
+
+Para **asignar un centro** a un COORDINADOR:
+
+1. En el detalle del usuario, en la sección "Centros asignados"
+2. En el desplegable selecciona el centro
+3. Pulsa **"Asignar"**
+4. Pulsa **"Actualizar Usuario"**
+
+Para **desasignar un centro**:
+
+1. En la tabla de centros asignados
+2. Pulsa **"Desaignar"** en el centro deseado
+3. Pulsa **"Actualizar Usuario"**
+
+### 9.6 Desactivar usuario
+
+Para **desactivar una cuenta** (reversible):
+
+1. En el detalle del usuario, pulsa el toggle **"Activo"** para cambiar el estado
+2. La cuenta permanecerá pero no podrá iniciar sesión
+3. Para reactivar, pulsa el toggle **"Activo"** para cambiar el estado
+
+### 9.7 Eliminar usuario
+
+![Captura: Modal de confirmación antes de eliminar usuario](img/frontend/captura-usuario-eliminar.png)
+
+Para **eliminar un usuario** (permanente):
+
+1. En el detalle, pulsa **"Eliminar"** (botón rojo)
+2. Confirma en el modal
+3. El usuario se elimina permanentemente del sistema
+
+**⚠️ IMPORTANTE**: La eliminación es permanente y no se puede deshacer.
+
+---
+
+## 10. Permisos por rol
+
+### 10.1 Rol COORDINADOR
+
+**Permisos**:
+- Ver Dashboard (con datos de sus centros)
+- Ver todos los árboles
+- Crear/Editar/Eliminar árboles en sus centros asignados
+- Ver todos los centros
+- Editar centros asignados
+- Ver dispositivos IoT de sus centros
+- Crear/Editar/Eliminar dispositivos en sus centros
+- Ver histórico de lecturas
+- No puede gestionar usuarios
+- No puede crear/editar centros nuevos
+- No puede ver la sección "Usuarios"
+
+**Restricciones**:
+- Solo puede gestionar centros asignados por el admin
+- No puede cambiar su propio rol
+- No puede crear nuevos centros
+
+### 10.2 Rol ADMIN
+
+**Permisos**:
+- Acceso total a todas las funciones
+- Ver Dashboard (datos de todo el sistema)
+- Crear/Editar/Eliminar árboles en cualquier centro
+- Crear/Editar/Eliminar centros
+- Crear/Editar/Eliminar dispositivos en cualquier centro
+- Gestionar usuarios:
+  - Crear usuarios
+  - Editar usuarios
+  - Cambiar roles
+  - Asignar/desasignar centros a coordinadores
+  - Activar/desactivar cuentas
+  - Eliminar usuarios
+
+**Responsabilidades**:
+- Mantener la integridad de datos
+- Gestionar accesos de otros usuarios
+- Administrar dispositivos IoT
+
+---
+
+## 11. Validaciones y mensajes frecuentes
+
+### 11.1 Mensajes de éxito (Verde)
+
+```
+✓ "Árbol creado correctamente"
+✓ "Árbol actualizado correctamente"
+✓ "Árbol eliminado correctamente"
+✓ "Centro creado correctamente"
+✓ "Centro actualizado correctamente"
+✓ "Dispositivo registrado correctamente"
+✓ "Usuario creado correctamente"
+✓ "Operación completada"
+```
+
+### 11.2 Mensajes de error (Rojo)
+
+```
+✗ "Por favor completa todos los campos obligatorios"
+✗ "La fecha de plantación no puede ser futura"
+✗ "El email ya está registrado"
+✗ "Email o contraseña incorrecta"
+✗ "Usuario no activo"
+✗ "No se pudo conectar con el servidor..."
+✗ "Error de conexión. Intenta de nuevo"
+```
+
+### 11.3 Validaciones comunes
+
+**Campos de fecha**:
+- No pueden ser fechas futuras
+- Formato: DD/MM/YYYY
+
+**Email**:
+- Debe tener formato válido (ejemplo@dominio.com)
+- No puede estar registrado previamente
+
+**Dirección MAC**:
+- Formato exacto: `XX:XX:XX:XX:XX:XX`
+- Donde X son dígitos hexadecimales (0-9, A-F)
+
+**Números positivos** (cantidad, frecuencia, etc.):
+- Deben ser mayor que 0
+- No se aceptan negativos
+
+**Contraseña**:
+- Las dos contraseñas deben coincidir en registro
+
+---
+
+## 12. Resolución de problemas
+
+### 12.1 "No se pudo conectar con el servidor"
+
+**Causas posibles**:
+1. No tienes conexión a Internet
+2. El backend está en cold start (inactividad prolongada)
+3. El servidor está en mantenimiento
 
 **Solución**:
-1. Espera 30-60 segundos para que el backend se reactive
-2. Recarga la página (F5 o Ctrl+R)
-3. El sistema funcionará normalmente una vez activo
+1. Verifica tu conexión a Internet
+2. Espera 30-60 segundos
+3. Recarga la página (F5 o Ctrl+R)
+4. Intenta de nuevo
 
-**Esto es normal y esperado en el free tier de Render**. No significa que haya un error.
+### 12.2 Página en blanco o no carga
 
-### ¿Por qué la primera carga es tan lenta?
+**Causas posibles**:
+1. Caché del navegador corrupto
+2. JavaScript deshabilitado
 
-Si es la primera vez que accedes o han pasado más de 15 minutos desde el último acceso, el backend de Render necesita "despertar" desde suspensión. Este proceso tarda 30-60 segundos. Las siguientes cargas serán inmediatas mientras el backend permanezca activo.
+**Solución**:
+1. Limpia la caché (Ctrl+Shift+Supr)
+2. Verifica que JavaScript esté habilitado
+3. Prueba otro navegador
+4. Recarga la página (Ctrl+F5)
 
-### La lista de árboles no carga, ¿qué hago?
+### 12.3 Cambios no aparecen
 
-1. Verifica tu conexión a internet
-2. Recarga la página (F5 o Ctrl+R)
-3. Cierra sesión y vuelve a entrar
-4. Limpia la caché del navegador
-5. Si el problema persiste, contacta al administrador
+**Causas posibles**:
+1. La página no se ha recargado después de guardar
+2. Caché de navegador
 
-### ¿Puedo añadir fotos a los árboles?
+**Solución**:
+1. Recarga la página (F5)
+2. Limpia caché (Ctrl+Shift+Supr)
+3. Intenta de nuevo
 
-No en la versión actual. La funcionalidad de subida de imágenes está planificada para el futuro.
+### 12.4 Sesión cerrada inesperadamente
 
-### ¿Hay límite de árboles que puedo registrar?
+**Causas posibles**:
+1. Inactividad prolongada
+2. Token de sesión expirado
+3. Cambios en contraseña
 
-No hay límite establecido en el sistema.
+**Solución**:
+1. Inicia sesión de nuevo
+2. Verifica tu contraseña
+3. Intenta después de unos minutos
 
-### ¿Puedo cambiar mi email o contraseña?
+### 12.5 No puedo crear/editar/eliminar
 
-Esta funcionalidad no está implementada porque la autenticación actual es mock. Puedes simplemente cerrar sesión e iniciar sesión con cualquier otro email si lo deseas.
+**Causas posibles**:
+1. No tienes permisos suficientes
+2. El elemento está asociado a otro
 
----
-
-## Consejos de Uso
-
-### Para obtener la mejor experiencia:
-
-1. **Usa un navegador moderno** actualizado a la última versión
-2. **Mantén activa la sesión** - el sistema recuerda tu login
-3. **Lee los mensajes de error** - proporcionan información útil
-4. **Confirma antes de eliminar** - la eliminación es permanente
-5. **Completa los campos opcionales** - mejora la información del sistema
-6. **Configura umbrales realistas** - para futuras alertas automáticas
-7. **Verifica los datos** antes de guardar cambios
-
-### Seguridad:
-
-**NOTA**: El sistema actual usa autenticación mock (simulada). Las siguientes recomendaciones aplicarán cuando se implemente autenticación real:
-
-1. **No compartas tu contraseña** con otros usuarios
-2. **Cierra sesión** en ordenadores compartidos
-3. **Usa contraseñas seguras** (mínimo 8 caracteres, combina letras y números)
-
-**Actualmente**: Como la autenticación es mock, cualquier usuario puede acceder con cualquier email/contraseña. No hay validación real de credenciales.
+**Solución**:
+1. Verifica tu rol (Dashboard → Perfil)
+2. Contacta al administrador si necesitas más permisos
+3. Comprueba si no hay dependencias
 
 ---
 
-## Flujos de Trabajo Comunes
+## 13. Responsive Design
 
-### Flujo 1: Registrar un Nuevo Árbol Plantado
+### 13.1 Desktop
 
-1. Login en el sistema
-2. Ir a "Árboles"
-3. Clic en "Añadir Árbol"
-4. Completar información básica (nombre, especie, fecha, centro)
-5. Añadir ubicación específica
-6. Configurar umbrales de monitorización (opcional)
-7. Guardar
-8. Verificar que aparece en la lista
+- Menú horizontal en barra superior
+- Tablas con todas las columnas
+- Formularios en grid (múltiples columnas)
+- Textos completos en botones
 
-### Flujo 2: Consultar Estado de un Árbol
+### 13.2 Tablet
 
-1. Login en el sistema
-2. Ir a "Árboles"
-3. Filtrar por centro (si aplica)
-4. Clic en el árbol deseado
-5. Revisar información general
-6. Revisar umbrales configurados
-7. *(En Android: Ver datos actuales de sensores)*
+- Menú adaptado
+- Tablas compactas
+- Formularios ajustados
 
-### Flujo 3: Actualizar Información de un Árbol
+### 13.3 Móvil
 
-1. Login en el sistema
-2. Ir a "Árboles"
-3. Localizar el árbol (usar filtros si necesario)
-4. Clic en el árbol
-5. Clic en "Editar"
-6. Modificar los campos necesarios
-7. Guardar cambios
-8. Confirmar mensaje de éxito
+- Menú hamburguesa (≡) plegable
+- Tarjetas verticales en lugar de tablas
+- Formularios apilados verticalmente
+- Botones grandes
+- Espaciado optimizado para dedos
+
+**Prueba en tu dispositivo**: La app se adapta automáticamente al tamaño de pantalla.
 
 ---
 
-## Glosario
+## 14. Soporte
 
-- **Centro Educativo**: Institución donde se plantan y monitorizan árboles (IES, colegio, universidad)
-- **Árbol**: Registro individual de un árbol plantado
-- **Especie**: Nombre científico del árbol (ej: Quercus robur para el roble)
-- **Umbrales**: Valores mínimos y máximos aceptables para parámetros ambientales
-- **Sensor**: Dispositivo IoT (ESP32) que mide parámetros ambientales
-- **Dashboard**: Pantalla principal después del login
-- **CRUD**: Crear, Leer, Actualizar, Eliminar (operaciones básicas)
+Si tienes problemas:
 
----
-
-## Soporte y Contacto
-
-Para soporte técnico o preguntas:
-
-1. Consulta este manual y las FAQ
-2. Revisa la sección de Troubleshooting del [Manual de Instalación](./MANUAL_DE_INSTALACION.md)
-3. Contacta al administrador del sistema
-4. Reporta bugs o solicita funcionalidades al equipo de desarrollo
+1. **Verifica tu conexión a Internet**
+2. **Limpia caché**: Ctrl+Shift+Supr
+3. **Recarga la página**: F5 o Ctrl+F5
+4. **Prueba otro navegador**
+5. **Contacta al administrador** con detalles del error:
+   - Navegador y versión
+   - Dispositivo (desktop/móvil)
+   - Qué intentabas hacer
+   - Mensaje de error exacto
 
 ---
 
-## Actualizaciones y Mejoras Futuras
 
-El sistema está en desarrollo activo. Próximas funcionalidades planificadas:
+**¿Más ayuda?** Contacta con el administrador o consulta el [Manual de Instalación](./MANUAL_DE_INSTALACION.md).
 
-- Integración real con sensores ESP32
-- Alertas automáticas cuando los valores superen umbrales
-- Gráficas históricas de datos ambientales
-- Sistema de notificaciones por email
-- Gestión de perfiles de usuario
-- Exportación de datos a CSV/Excel
-- Subida de fotografías de árboles
-- Mapa interactivo con ubicación de árboles
-- Sistema de comentarios y observaciones
-- Gestión de roles y permisos avanzados
-
----
-
-## Información del Proyecto
-
-**Nombre**: Proyecto Árboles - Sistema de Monitorización de Árboles
-
-**Institución**: IES El Rincón
-
-**Curso**: Desarrollo de Aplicaciones Multiplataforma (DAM) 2025-2026
-
-**Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
-
-**Última actualización**: 2025-12-08
-
-### Colaboradores
-
-[![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
-
----
-
-**Proyecto Final DAM 2025-2026** | Desarrollado con Spring Boot, React, Android y ESP32

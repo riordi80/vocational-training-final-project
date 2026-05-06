@@ -2,13 +2,17 @@ package com.example.gardenmonitor.controller;
 
 import com.example.gardenmonitor.model.Rol;
 import com.example.gardenmonitor.model.Usuario;
+import com.example.gardenmonitor.repository.UsuarioCentroRepository;
 import com.example.gardenmonitor.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controlador REST para gestionar usuarios del sistema.
@@ -28,6 +32,12 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UsuarioCentroRepository usuarioCentroRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Obtiene todos los usuarios registrados en el sistema.
@@ -109,11 +119,21 @@ public class UsuarioController {
      * @throws ResponseStatusException si el email ya está registrado (409)
      */
     @PostMapping
-    public Usuario crearUsuario(@RequestBody Usuario usuario) {
-        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Usuario crearUsuario(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        if (usuarioRepository.existsByEmail(email)) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT, "El email ya está registrado");
         }
+        Rol rol = body.containsKey("rol") ? Rol.valueOf(body.get("rol")) : Rol.COORDINADOR;
+        String rawPassword = body.containsKey("password") ? body.get("password") : body.get("passwordHash");
+        Usuario usuario = new Usuario(
+                body.get("nombre"),
+                email,
+                passwordEncoder.encode(rawPassword),
+                rol
+        );
         return usuarioRepository.save(usuario);
     }
 
@@ -130,17 +150,22 @@ public class UsuarioController {
      * @throws ResponseStatusException si no se encuentra el usuario (404) o el email ya existe (409)
      */
     @PutMapping("/{id}")
+    @Transactional
     public Usuario actualizarUsuario(@PathVariable("id") Long id,
                                       @RequestBody Usuario detallesUsuario) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 
-        // Verificar si el nuevo email ya existe (y no es del mismo usuario)
         if (!usuario.getEmail().equals(detallesUsuario.getEmail())
                 && usuarioRepository.existsByEmail(detallesUsuario.getEmail())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT, "El email ya está registrado");
+        }
+
+        // Si el rol cambia de COORDINADOR a ADMIN, limpiar asignaciones de centros
+        if (detallesUsuario.getRol() == Rol.ADMIN && usuario.getRol() != Rol.ADMIN) {
+            usuarioCentroRepository.deleteByUsuarioId(id);
         }
 
         usuario.setNombre(detallesUsuario.getNombre());
@@ -148,10 +173,9 @@ public class UsuarioController {
         usuario.setRol(detallesUsuario.getRol());
         usuario.setActivo(detallesUsuario.getActivo());
 
-        // Solo actualizar password si se proporciona uno nuevo
         if (detallesUsuario.getPasswordHash() != null
                 && !detallesUsuario.getPasswordHash().isEmpty()) {
-            usuario.setPasswordHash(detallesUsuario.getPasswordHash());
+            usuario.setPasswordHash(passwordEncoder.encode(detallesUsuario.getPasswordHash()));
         }
 
         return usuarioRepository.save(usuario);
@@ -165,10 +189,12 @@ public class UsuarioController {
      * @throws ResponseStatusException si no se encuentra el usuario (404)
      */
     @DeleteMapping("/{id}")
+    @Transactional
     public Usuario eliminarUsuario(@PathVariable("id") Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+        usuarioCentroRepository.deleteByUsuarioId(id);
         usuarioRepository.deleteById(id);
         return usuario;
     }

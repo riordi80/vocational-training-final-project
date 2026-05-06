@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     permissionManager.clearSession();
                     actualizarMenuSegunPermisos();
                     Toast.makeText(this, "Sesion cerrada", Toast.LENGTH_SHORT).show();
+                    navigateToDashboard();
                 } else {
                     showFragment(new LoginFragment());
                 }
