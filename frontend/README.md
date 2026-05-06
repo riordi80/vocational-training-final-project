@@ -13,66 +13,110 @@ Aplicación web desarrollada con React para el sistema de monitorización de ár
 - **Framework**: React 19.2.0
 - **Lenguaje**: JavaScript
 - **Build Tool**: Vite
-- **Routing**: React Router DOM
-- **Estilización**: Tailwind CSS
+- **Routing**: React Router DOM 7.x
+- **Estilización**: Tailwind CSS 3.x
 - **HTTP Client**: Axios
 - **State Management**: Context API
 - **Gráficas**: Recharts 3.x — Series temporales de lecturas IoT
 - **Mapas**: Leaflet 1.9.x + React Leaflet — Mapas interactivos
+- **Iconos**: Lucide React
 
 ## Estructura del Proyecto
 
 ```
 frontend/
-├── public/
-│   └── assets/              # Recursos estáticos
+├── public/                              # Recursos estáticos
+│   ├── Logotipo-Proy-arboles_color_v2.png
+│   ├── pa-acuorum-blanco.png
+│   ├── pa-foresta-blanco.png
+│   ├── pa-fsa-blanco.png
+│   ├── pa-logotipo-footer.png
+│   ├── proyecto-arboles-icon.png
+│   └── vite.svg
 ├── src/
-│   ├── components/          # Componentes reutilizables
-│   │   ├── common/          # Button, Input, Alert, Spinner, ProtectedRoute
-│   │   ├── layout/          # Header, MainLayout
-│   │   └── ...
-│   ├── pages/               # Páginas/Vistas principales
+│   ├── assets/
+│   │   └── react.svg
+│   ├── components/
+│   │   ├── auth/
+│   │   │   └── RoleGate.jsx
+│   │   └── common/              # Button, Input, Alert, Spinner
+│   │       ├── Alert.jsx
+│   │       ├── Button.jsx
+│   │       ├── Input.jsx
+│   │       └── Spinner.jsx
+│   ├── constants/
+│   │   ├── islas.js
+│   │   └── roles.js
+│   ├── context/
+│   │   └── AuthContext.jsx
+│   ├── hooks/
+│   │   ├── useFetch.js
+│   │   ├── useForm.js
+│   │   └── usePermissions.js
+│   ├── layout/
+│   │   ├── Footer.jsx
+│   │   ├── Header.jsx
+│   │   └── MainLayout.jsx
+│   ├── pages/
+│   │   ├── access-denied/
+│   │   │   └── AccessDenied.jsx
+│   │   ├── arboles/
+│   │   │   ├── DetalleArbol.jsx       # Info general y absorción CO2; sin sección IoT
+│   │   │   └── FormularioArbol.jsx
+│   │   ├── ayuda/
+│   │   │   └── Ayuda.jsx
+│   │   ├── centros/
+│   │   │   ├── DetalleCentro.jsx
+│   │   │   ├── FormularioCentro.jsx
+│   │   │   └── ListadoCentros.jsx
+│   │   ├── component-library/
+│   │   │   └── ComponentLibrary.jsx
+│   │   ├── dashboard/
+│   │   │   └── Dashboard.jsx
+│   │   ├── dispositivos/
+│   │   │   ├── FormularioDispositivo.jsx  # Crear/editar dispositivo (MAC, centro, frecuencia, umbrales)
+│   │   │   └── HistoricoDispositivo.jsx   # Gráfica Recharts + tabla paginada por dispositivoId
 │   │   ├── login/
 │   │   │   └── Login.jsx
 │   │   ├── register/
 │   │   │   └── Register.jsx
-│   │   ├── dashboard/
-│   │   │   └── Dashboard.jsx
-│   │   ├── component-library/
-│   │   │   └── ComponentLibrary.jsx
-│   │   ├── arboles/
-│   │   │   ├── ListadoArboles.jsx
-│   │   │   ├── DetalleArbol.jsx      # Info general y absorción CO2; sin sección IoT
-│   │   │   ├── FormularioArbol.jsx
-│   │   │   └── HistoricoArbol.jsx    # (legacy) Historial por árbol
-│   │   ├── dispositivos/
-│   │   │   ├── FormularioDispositivo.jsx  # Crear/editar dispositivo (MAC, centro, frecuencia, umbrales)
-│   │   │   └── HistoricoDispositivo.jsx   # Gráfica Recharts + tabla paginada por dispositivoId
-│   │   ├── centros/
-│   │   ├── usuarios/        # Gestión de usuarios (solo ADMIN)
-│   │   └── ...
-│   ├── services/            # Llamadas a API
-│   │   ├── api.js           # Configuración axios
+│   │   └── usuarios/                  # Gestión de usuarios (solo ADMIN)
+│   │       ├── DetalleUsuario.jsx
+│   │       ├── FormularioUsuario.jsx
+│   │       └── ListadoUsuarios.jsx
+│   ├── routes/
+│   │   └── ProtectedRoute.jsx
+│   ├── services/                      # Llamadas a API
+│   │   ├── api.js                     # Configuración axios
 │   │   ├── arbolesService.js
 │   │   ├── centrosService.js
-│   │   ├── usuariosService.js
+│   │   ├── dispositivosService.js     # CRUD dispositivos ESP32
+│   │   ├── lecturasService.js         # Lecturas IoT (endpoints /dispositivo/)
 │   │   ├── usuarioCentroService.js
-│   │   ├── dispositivosService.js  # CRUD dispositivos ESP32
-│   │   ├── lecturasService.js      # Lecturas IoT (endpoints /dispositivo/)
-│   │   └── ...
-│   ├── context/             # Context API para estado global
-│   │   ├── AuthContext.jsx
-│   │   └── ...
-│   ├── hooks/               # Custom hooks
-│   ├── utils/               # Utilidades
+│   │   └── usuariosService.js
+│   ├── tests/
+│   │   ├── arbolesService.test.js
+│   │   ├── AuthContext.test.jsx
+│   │   ├── FormularioArbol.test.jsx
+│   │   ├── lecturasService.test.js
+│   │   ├── Login.test.jsx
+│   │   ├── permissions.test.js
+│   │   └── ProtectedRoute.test.jsx
+│   ├── utils/
+│   │   └── permissions.js
+│   ├── App.css
 │   ├── App.jsx
-│   └── main.jsx
+│   ├── index.css
+│   ├── main.jsx
+│   └── setupTests.js
+├── eslint.config.js
 ├── index.html
+├── jsconfig.json
 ├── package.json
-├── vite.config.js
+├── postcss.config.js
 ├── tailwind.config.js
-├── .gitignore
-└── README.md
+├── vercel.json
+└── vite.config.js
 ```
 
 ## Requisitos Previos
@@ -130,6 +174,12 @@ npm run preview          # Preview del build de producción
 
 # Linting
 npm run lint             # Ejecuta ESLint para verificar código
+
+# Tests
+npm run test             # Vitest en modo watch
+npm run test:coverage    # Tests + informe de cobertura en coverage/
+npm run test:ui          # Interfaz gráfica interactiva de Vitest
+npm run test:watch       # Re-ejecuta al guardar
 ```
 
 ## Páginas/Vistas (Requisito DAD)
@@ -137,7 +187,7 @@ npm run lint             # Ejecuta ESLint para verificar código
 ### 1. Login (`/login`)
 - Formulario con email y contraseña
 - Autenticación real contra BD via `POST /api/auth/login`
-- Sesión guardada en localStorage
+- Sesión y JWT guardados en localStorage
 - Validación básica
 
 ### 2. Register (`/register`)
@@ -146,30 +196,36 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Validación (email válido, contraseñas coinciden)
 
 ### 3. Dashboard (`/dashboard`)
-- Mensaje de bienvenida
-- Links a gestión de árboles
-- Navegación (menú/cabecera)
+- Métricas globales: total de centros, árboles, dispositivos y CO2 absorbido
+- Acceso rápido a las secciones principales
+- Navegación dinámica según rol
 
-### 4. Listado de Árboles (`/arboles`)
-- Tabla responsive con árboles (desktop: tabla, mobile: cards)
-- Botón "Añadir Árbol" que navega a `/arboles/nuevo`
-- Click en fila para ir al detalle
-- Filtro por centro educativo (dropdown funcional)
-- Estados de loading (Spinner) y errores (Alert)
-- Integración con arbolesService y centrosService
+### 4. Listado de Centros (`/centros`)
+- Tabla responsive con todos los centros educativos
+- Acceso al detalle de cada centro
+- Botón "Nuevo Centro" (solo ADMIN)
 
-### 5. Detalle de Árbol (`/arboles/:id`)
+### 5. Detalle Centro (`/centros/:id`)
+- Información general + mapa Leaflet con ubicación
+- Tabla de árboles del centro con acciones (detalle, editar, eliminar)
+- Tabla de dispositivos ESP32: MAC, estado, frecuencia, última conexión
+- Acciones por dispositivo: Ver Histórico, Editar, Eliminar (con modal de confirmación)
+
+### 6. Formulario Centro (`/centros/nuevo` y `/centros/:id/editar`)
+- Campos: nombre, dirección, isla, coordinador asignado
+- Accesible solo para ADMIN (crear) y ADMIN/COORDINADOR (editar)
+
+### 7. Detalle de Árbol (`/arboles/:id`)
 - Vista con información general y absorción CO2 anual
 - Botones: Volver, Editar, Eliminar
 - Modal de confirmación antes de eliminar
 - Sin sección IoT (lecturas e histórico se acceden desde el dispositivo)
 
-### 6. Formulario Árbol (`/arboles/nuevo` y `/arboles/:id/editar`)
+### 8. Formulario Árbol (`/arboles/nuevo` y `/arboles/:id/editar`)
 - Campos: nombre, especie, fecha plantación, centro educativo, ubicación, absorción CO2
 - Validaciones client-side (campos requeridos, fecha no futura)
-- Sin umbrales de monitorización (se configuran en el dispositivo)
 
-### 7. Histórico de Lecturas por Dispositivo (`/dispositivos/:id/lecturas`)
+### 9. Histórico de Lecturas por Dispositivo (`/dispositivos/:id/lecturas`)
 - Selector de período: Hoy / 7 días / 30 días / 6 meses / 1 año
 - Gráfica 1: temperatura, humedad ambiente, humedad suelo, luz1, luz2 (Recharts)
 - Gráfica 2: CO2 en ppm (escala separada)
@@ -177,18 +233,24 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Polling automático según frecuenciaLecturaSeg del dispositivo
 - Muestra MAC address y centro del dispositivo en la cabecera
 
-### 8. Formulario Dispositivo (`/dispositivos/nuevo` y `/dispositivos/:id/editar`)
+### 10. Formulario Dispositivo (`/dispositivos/nuevo` y `/dispositivos/:id/editar`)
 - Campos obligatorios: MAC address (formato XX:XX:XX:XX:XX:XX), centro educativo
 - Campos: frecuencia de lectura (seg), activo
 - Sección de umbrales de monitorización: temp min/max, humedad amb min/max, humedad suelo min, CO2 max
 - Validación de formato MAC
-- Accesible desde DetalleCentro (botón "Añadir Dispositivo" / "Editar")
+- Accesible desde DetalleCentro
 
-### 9. Detalle Centro (`/centros/:id`)
-- Información general + mapa Leaflet
-- Tabla de árboles del centro
-- **Nueva sección**: Tabla de dispositivos ESP32 con MAC, estado (activo/inactivo), frecuencia, última conexión
-- Acciones por dispositivo: Ver Histórico, Editar, Eliminar (con modal confirmación)
+### 11. Gestión de Usuarios (`/usuarios`) — solo ADMIN
+- Listado de usuarios con roles
+- Detalle (`/usuarios/:id`): info del usuario y centros asignados
+- Formulario (`/usuarios/nuevo` y `/usuarios/:id/editar`): crear y editar usuarios
+
+### 12. Ayuda (`/ayuda`)
+- Preguntas frecuentes organizadas por sección
+- Accesible desde el menú de navegación
+
+### 13. Acceso Denegado (`/access-denied`)
+- Pantalla mostrada cuando un usuario intenta acceder a una ruta sin permisos suficientes
 
 ## Requisitos Funcionales Adicionales
 
@@ -210,15 +272,14 @@ npm run lint             # Ejecuta ESLint para verificar código
 - Gestión de usuarios solo para ADMIN
 
 ### Feedback al Usuario
-- Mensajes de éxito (toast/alert verde)
-- Mensajes de error (toast/alert rojo)
+- Mensajes de éxito (Alert verde)
+- Mensajes de error (Alert rojo)
 - Loading spinners durante peticiones
-- Confirmaciones antes de acciones destructivas
+- Confirmaciones antes de acciones destructivas (modales)
 
 ### Navegación Dinámica
-- Menú cambia según rol
-- Breadcrumbs para ubicación
-- Transiciones suaves entre páginas
+- Menú cambia según rol (ADMIN ve Usuarios, COORDINADOR no)
+- Enlace activo resaltado en el menú según la ruta actual
 
 ### Despliegue
 - Configurado para Vercel
@@ -233,9 +294,19 @@ Login y registro reales contra la API del backend:
 // AuthContext.jsx
 const response = await api.post('/auth/login', { email, password });
 localStorage.setItem('user', JSON.stringify(response.data));
+localStorage.setItem('token', response.data.token);
 ```
 
-El backend devuelve un objeto `AuthResponse` con `{ id, nombre, email, rol, centros }`. Los centros del usuario se cargan de la tabla `usuario_centro` al hacer login.
+El backend devuelve un objeto `AuthResponse` con `{ id, nombre, email, rol, token, centros }`. El token JWT se persiste en localStorage y se inyecta automáticamente en cada petición mediante un interceptor de Axios:
+
+```javascript
+// api.js — interceptor de request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+```
 
 ## Consumo de API REST
 
@@ -313,10 +384,12 @@ Para eliminar la duplicación de lógica `loading/error` en los tres listados se
 src/
 ├── pages/          → Vistas: orquestan hooks, servicios y componentes comunes
 ├── components/
-│   └── common/     → UI reutilizable sin lógica de negocio (Button, Input, Alert, Spinner)
+│   ├── common/     → UI reutilizable sin lógica de negocio (Button, Input, Alert, Spinner)
+│   └── auth/       → Control de acceso por rol (RoleGate)
 ├── hooks/          → Lógica reutilizable: useFetch, useForm, usePermissions
+├── routes/         → Protección de rutas (ProtectedRoute)
 ├── services/       → Llamadas HTTP con Axios (una función = un endpoint)
-├── context/        → Estado global compartido (solo AuthContext)
+├── context/        → Estado global compartido (AuthContext)
 ├── utils/          → Funciones puras de negocio (permissions.js)
 └── constants/      → Datos estáticos (islas.js, roles.js)
 ```
@@ -326,9 +399,9 @@ src/
 ```mermaid
 graph TD
     subgraph Pages
-        LA[ListadoArboles] --> UF[useFetch]
-        LC[ListadoCentros] --> UF
+        LC[ListadoCentros] --> UF[useFetch]
         LU[ListadoUsuarios] --> UF
+        DC[DetalleCentro] --> UF
         FA[FormularioArbol] --> UFM[useForm]
         FD[FormularioDispositivo] --> UFM
     end
@@ -346,8 +419,9 @@ graph TD
         SPR[Spinner]
     end
 
-    LA --> BTN & ALR & SPR & UP
     LC --> BTN & ALR & SPR & UP
+    DC --> BTN & ALR & SPR & UP
+    LU --> BTN & ALR & SPR & UP
     FA --> INP & BTN & ALR & SPR & UP
     FD --> INP & BTN & ALR & SPR
 ```
@@ -450,7 +524,7 @@ El proyecto incluye una suite de tests automatizados en `src/tests/` con **Vites
 
 | Archivo | Qué cubre |
 |---|---|
-| `arbolesService.test.js` | CRUD de árboles mockeando Axios |
+| `arbolesService.test.js` | `getArboles` y `deleteArbol` (mock de axios) |
 | `lecturasService.test.js` | Servicio de lecturas IoT |
 | `AuthContext.test.jsx` | Login, logout, persistencia en localStorage |
 | `FormularioArbol.test.jsx` | Validaciones del formulario de árbol |
@@ -583,7 +657,7 @@ curl https://vocational-training-final-project.vercel.app/
 
 **Error: CORS al llamar backend**
 - Verificar que backend tiene configurado CORS para la URL de Vercel
-- Ver `backend/src/main/java/com/example/gardenmonitor/config/CorsConfig.java`
+- Ver `backend/src/main/java/com/example/gardenmonitor/config/SecurityConfig.java`
 
 **Build falla**
 - Verificar que `vercel.json` raíz apunta correctamente a `frontend/`
@@ -597,7 +671,7 @@ curl https://vocational-training-final-project.vercel.app/
   - [x] Componentes organizados y reutilizables
   - [x] React Router DOM
   - [x] Login + Register (refactorizados con componentes comunes)
-  - [x] Mínimo 4 ventanas (Dashboard, ListadoArboles, DetalleArbol, FormularioArbol)
+  - [x] Mínimo 4 ventanas (Dashboard, ListadoCentros, DetalleCentro, DetalleArbol, FormularioArbol…)
 
   **Consumo API:**
   - [x] Servicios API implementados (arbolesService.js y centrosService.js)
@@ -633,7 +707,6 @@ Este proyecto usa:
 - [x] Autenticación real contra BD via AuthContext (login/register con API)
 - [x] Sistema de roles y permisos (ADMIN, COORDINADOR, acceso público)
 - [x] CRUD completo de árboles:
-  - ListadoArboles (listar, filtrar, buscar)
   - DetalleArbol (info general y CO2; sin sección IoT)
   - FormularioArbol (crear y editar)
 - [x] CRUD completo de dispositivos ESP32:
