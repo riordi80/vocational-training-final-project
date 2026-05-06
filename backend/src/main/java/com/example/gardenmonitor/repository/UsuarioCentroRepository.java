@@ -17,4 +17,6 @@ public interface UsuarioCentroRepository extends JpaRepository<UsuarioCentro, Lo
     Optional<UsuarioCentro> findByUsuarioIdAndCentroEducativoId(Long usuarioId, Long centroId);
 
     boolean existsByUsuarioIdAndCentroEducativoId(Long usuarioId, Long centroId);
+
+    void deleteByUsuarioId(Long usuarioId);
 }
