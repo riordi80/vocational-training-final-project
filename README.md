@@ -2,6 +2,8 @@
 
 Sistema de monitorización y gestión de árboles plantados en centros educativos mediante sensores IoT.
 
+> **Documento de entrega Proyecto Intermodular**: [Proyecto Árboles - Entrega Proyecto Intermodular](./docs/ENTREGA_PROYECTO_INTERMODULAR.md)
+
 ## Tecnologías
 
 ![Java](https://img.shields.io/badge/Java_21-ED8B00?style=flat&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot_3-6DB33F?style=flat&logo=spring-boot&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL_16-316192?style=flat&logo=postgresql&logoColor=white) ![TimescaleDB](https://img.shields.io/badge/TimescaleDB-FDB515?style=flat&logo=timescale&logoColor=black) ![React](https://img.shields.io/badge/React_19-20232A?style=flat&logo=react&logoColor=61DAFB) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white) ![Render](https://img.shields.io/badge/Render-46E3B7?style=flat&logo=render&logoColor=white)
@@ -62,9 +64,11 @@ Firmware **ESP32 (C/C++)**
 
 ### `/docs`
 Documentación completa del proyecto
+- Documento de entrega del proyecto intermodular
 - Especificación técnica
 - Diagramas (E/R, UML, Relacional)
 - Manuales de instalación y usuario
+- Capturas de pantalla del sistema (`img/`)
 
 ## Tecnologías Utilizadas
 
@@ -84,6 +88,7 @@ Documentación completa del proyecto
 ```
 proyecto-arboles/
 ├── docs/                                 # Documentación
+│   ├── ENTREGA_PROYECTO_INTERMODULAR.md  # Documento de entrega del proyecto final
 │   ├── 00. INDICE.md                     # Índice de toda la documentación
 │   ├── 01. GIT_WORKFLOW.md               # Flujo de trabajo Git (feature branches)
 │   ├── 02. HOJA_DE_RUTA.md               # Planificación por fases
@@ -99,6 +104,7 @@ proyecto-arboles/
 │   ├── MANUAL_DE_USUARIO.md              # Manual de usuario (Web + móvil)
 │   ├── MANUAL_DE_INSTALACION_ANDROID.md  # Manual instalación Android
 │   ├── MANUAL_DE_USUARIO_ANDROID.md      # Manual de usuario Android
+│   ├── img/                              # Capturas de pantalla (android/, frontend/, ssg/)
 │   └── install-timescaledb.sh            # Script instalación TimescaleDB
 ├── backend/                              # API REST (Spring Boot)
 │   ├── src/
@@ -148,53 +154,9 @@ Cada componente tiene documentación técnica detallada:
 - [Frontend README](./frontend/README.md) - Configuración y desarrollo de la app web
 - [Android README](./android/README.md) - Configuración y desarrollo de la app móvil
 
-## Estado Actual
-
-- [x] Modelo de datos (E/R, UML, Relacional)
-- [x] PostgreSQL 16 + TimescaleDB 2.23.1
-- [x] 8 entidades JPA con validaciones completas; cada dispositivo ESP32 asociado a un centro educativo
-- [x] Repositorios JPA con queries derivadas
-- [x] ArbolController (GET, POST, PUT, DELETE con @Valid)
-- [x] CentroEducativoController (GET, POST, PUT, DELETE con @Valid)
-- [x] Relación 1:N implementada (GET /api/centros/{id}/arboles)
-- [x] API REST con relaciones 1:N (Fase 2 - 100% completada)
-- [x] Testing Postman completo (CRUD + validaciones)
-- [x] Frontend React - Estructura completa (Fase 3 - 100% completada)
-- [x] AuthContext + Login/Register con localStorage
-- [x] Header responsive con menú hamburguesa, MainLayout, ProtectedRoute
-- [x] Dashboard con navegación
-- [x] Componentes comunes reutilizables (Button, Input, Alert, Spinner)
-- [x] Biblioteca de componentes con documentación
-- [x] Frontend React - CRUD Árboles (Fase 4 - 100% completada)
-  - [x] Servicios API (arbolesService, centrosService)
-  - [x] ListadoArboles (tabla responsive, filtros, cards móvil)
-  - [x] DetalleArbol (vista completa, información general del árbol, eliminar con confirmación)
-  - [x] FormularioArbol (crear/editar, validaciones completas)
-  - [x] Rutas configuradas y funcionando
-  - [x] Refactorización Login/Register con componentes comunes
-  - [x] Configuración Vercel (vercel.json, documentación)
-- [x] Sistema de roles real (ADMIN / COORDINADOR, autenticación contra BD)
-- [x] App Android (Fase 5 - 100% completada)
-- [x] Despliegue (Vercel + Render + PostgreSQL)
-- [x] Documentación (Fase 6 - 100% completada)
-  - [x] Manual de Instalación completo
-  - [x] Manual de Usuario (Web + móvil)
-  - [x] Manuales específicos de Android
-- [x] ESP32 Firmware (lectura sensores + envío al backend)
-- [x] Lecturas IoT en frontend (HistoricoDispositivo con gráfica Recharts + mapa Leaflet)
-- [x] Testing frontend con Vitest — 21 tests en 7 archivos, cobertura ~60%
-- [x] CRUD completo para todas las entidades de la BD (Fase 14): DispositivoEsp32Controller, AlertaController, NotificacionController
-- [x] Android refactorizado a single-activity + fragments con `NavigationRailView` en landscape (Fase 10, PR #275)
-- [x] Gráfica histórica MPAndroidChart en HistoricoDispositivoFragment — selector DÍA/SEMANA/MES/SEMESTRE/AÑO (Fase 10)
-- [x] ESLint sin errores — 0 errores en `npm run lint` (Fase 12.3, PR #276)
-- [x] Análisis Lighthouse completado y entregado en PDF (Fase 13)
-- [x] JWT + BCrypt (Fase 15)
-- [ ] Historias de usuario / ERS formales documentadas (Fase 12.1)
-- [ ] Mockups de pantallas principales (Fase 12.2)
-
 ## Estado del Proyecto
 
-**Fase actual**: Fases 1–15 completadas (excepto 12.1 y 12.2) | Pendientes: Fase 12.1 (historias usuario), Fase 12.2 (mockups)
+**Fase actual**: Fases 1–15 completadas
 
 ### Completado (Fase 0 - Configuración Inicial)
 - [x] Configuración de entornos de desarrollo
@@ -304,9 +266,7 @@ Cada componente tiene documentación técnica detallada:
 ### Completado (Fase 11 - PUT N:M)
 - [x] **`PUT /api/usuario-centro/{id}`**: actualización de asignación usuario-centro con validaciones (usuario es COORDINADOR, sin duplicados)
 
-### Fase 12 - Calidad del Software
-- [ ] **12.1 Historias de usuario / ERS** [AED]: documento con historias por rol (ADMIN, COORDINADOR) en formato "Como [rol], quiero [acción] para [objetivo]"
-- [ ] **12.2 Mockups** [AED]: bocetos de las 6+ pantallas principales (Figma, draw.io, excalidraw...)
+### Completado (Fase 12 - Calidad del Software)
 - [x] **12.3 ESLint sin errores**: `npm run lint` → 0 errores (PR #276)
 - [x] Globales de Vitest (`jest` env) declarados para archivos de test
 - [x] `coverage/` excluida del linting
@@ -352,9 +312,7 @@ Para más detalles, consulta la [Especificación Técnica](./docs/03.%20ESPECIFI
 
 ## Contribución
 
-Este proyecto ha sido desarrollado como parte del proyecto final de DAM del IES El Rincón:
-
-[![riordi80](https://img.shields.io/badge/riordi80-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/riordi80) [![Enrique36247](https://img.shields.io/badge/Enrique36247-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Enrique36247)
+Este proyecto ha sido desarrollado como parte del proyecto final de DAM del IES El Rincón.
 
 ### Flujo de Trabajo Git
 
@@ -401,6 +359,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 
 ### Documentos Principales
 
+- [Entrega Proyecto Intermodular](./docs/ENTREGA_PROYECTO_INTERMODULAR.md) - Documento completo de entrega del proyecto final (Richard Ortiz y Enrique Pérez)
 - [Índice de Documentación](./docs/00.%20INDICE.md) - Índice completo de toda la documentación del proyecto
 - [Git Workflow](./docs/01.%20GIT_WORKFLOW.md) - Guía completa de flujo de trabajo con feature branches
 - [Hoja de Ruta](./docs/02.%20HOJA_DE_RUTA.md) - Planificación completa del proyecto por fases
@@ -430,8 +389,6 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 - [`backend/src/main/resources/README_CONFIG.md`](./backend/src/main/resources/README_CONFIG.md) - Guía de configuración segura de Spring Boot
 - [`docs/install-timescaledb.sh`](./docs/install-timescaledb.sh) - Script para instalar TimescaleDB en Linux
 
-
-
 ---
 
 ## Información del Proyecto
@@ -444,7 +401,7 @@ Esto es comportamiento normal del free tier de Render. Más información en el [
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-05-05
+**Última actualización**: 06-05-2026
 
 ### Colaboradores
 
