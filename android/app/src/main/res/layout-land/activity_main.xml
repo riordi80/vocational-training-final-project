@@ -14,7 +14,10 @@
         android:background="@color/green_primary"
         app:menu="@menu/bottom_navigation_menu"
         app:itemIconTint="@color/navigation_tint"
-        app:itemTextColor="@color/navigation_text_color" />
+        app:itemTextColor="@color/navigation_text_color"
+        app:labelVisibilityMode="unlabeled"
+        app:itemPaddingTop="0dp"
+        app:itemPaddingBottom="0dp" />
 
     <View
         android:layout_width="1dp"

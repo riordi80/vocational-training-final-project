@@ -19,6 +19,7 @@ import com.example.proyectoarboles.fragments.HistoricoDispositivoFragment;
 import com.example.proyectoarboles.fragments.DetalleUsuarioFragment;
 import com.example.proyectoarboles.fragments.FormularioUsuarioFragment;
 import com.example.proyectoarboles.fragments.ListarCentrosFragment;
+import com.example.proyectoarboles.fragments.AyudaFragment;
 import com.example.proyectoarboles.fragments.LoginFragment;
 import com.example.proyectoarboles.fragments.RegistrerFragment;
 import com.example.proyectoarboles.model.Usuario;
@@ -54,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             } else if (itemId == R.id.menu_usuarios) {
                 showFragment(new AdminUsuariosFragment());
+                return true;
+            } else if (itemId == R.id.menu_ayuda) {
+                showFragment(new AyudaFragment());
                 return true;
             } else if (itemId == R.id.menu_login) {
                 if (permissionManager.isLoggedIn()) {
@@ -135,6 +139,11 @@ public class MainActivity extends AppCompatActivity {
     public void navigateToDetalleCentro(long centroId) {
         showFragment(DetalleCentroFragment.newInstance(centroId));
         setNavSelected(R.id.menu_centros);
+    }
+
+    public void navigateToAyuda() {
+        showFragment(new AyudaFragment());
+        setNavSelected(R.id.menu_ayuda);
     }
 
     public void navigateToLogin() {
