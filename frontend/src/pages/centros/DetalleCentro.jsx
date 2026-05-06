@@ -286,7 +286,7 @@ function DetalleCentro() {
             )}
           </div>
           {centro.latitud && centro.longitud && (
-            <div className="rounded overflow-hidden border border-gray-200" style={{ height: '200px' }}>
+            <div className="rounded overflow-hidden border border-gray-200" style={{ height: '200px', isolation: 'isolate' }}>
               <MapContainer
                 center={[parseFloat(centro.latitud), parseFloat(centro.longitud)]}
                 zoom={15}
