@@ -42,7 +42,7 @@ Si la app no carga datos, revisa primero la sección de Build Variants del manua
 
 ## 2. Inicio de sesión y registro
 
-![captura de login](img/captura-login.jpg)
+![captura de login](img/android/captura-login.jpg)
 
 Desde **Login**:
 
@@ -56,7 +56,7 @@ Mensajes típicos:
 - `Credenciales incorrectas`
 - `Error de conexión. Inténtalo de nuevo.`
 
-![captura registrarse](img/captura-registro.png)
+![captura registrarse](img/android/captura-registrar.jpg)
 
 Desde **Registrarse**:
 
@@ -73,7 +73,7 @@ Mensajes típicos:
 
 ## 3. Navegación principal
 
-![captura nav menu](img/captura-nav-menu.png)
+![captura nav menu](img/android/captura-nav-menu.jpg)
 
 En vertical (portrait) se usa **Bottom Navigation**:
 
@@ -82,7 +82,7 @@ En vertical (portrait) se usa **Bottom Navigation**:
 - **Login** (o **Logout** cuando hay sesión)
 - **Usuarios** (solo visible para ADMIN)
 
-![captura nav menu landscape](img/captura-nav-menu-landscape.png)
+![captura nav menu landscape](img/android/captura-nav-menu-landscape.jpg)
 
 En horizontal (landscape) la navegación pasa a **Navigation Rail** lateral con las mismas opciones.
 
@@ -90,7 +90,7 @@ En horizontal (landscape) la navegación pasa a **Navigation Rail** lateral con 
 
 ## 4. Pantalla Inicio (Dashboard)
 
-![captura de login](img/captura-dashboard.jpg)
+![captura de login](img/android/captura-dashboard.jpg)
 
 La pantalla Inicio muestra:
 
@@ -109,7 +109,7 @@ Además:
 
 ## 5. Centros educativos
 
- ![captura lista centros](img/captura-lista-centros.jpg)
+![captura lista centros](img/android/captura-lista-centros.jpg)
 
 En **Centros** se muestra el listado con:
 
@@ -126,7 +126,7 @@ Acciones:
 
 ## 6. Detalle de centro
 
-![captura de login](img/captura-detalles-centro.jpg)
+![captura de login](img/android/captura-detalles-centro.jpg)
 
 Incluye:
 
@@ -145,11 +145,11 @@ En la misma pantalla aparecen:
 - Lista de dispositivos ESP32 del centro.
 - Lista de árboles del centro.
 
-![captura dialogo eliminar centro](img/captura-eliminar-centro.jpg)
+![captura dialogo eliminar centro](img/android/captura-eliminar-centro.jpg)
 
 Al eliminar centro se solicita confirmación (acción irreversible).
 
-![captura crear centro](img/captura-crear-centro.jpg)
+![captura crear centro](img/android/captura-crear-centro.jpg)
 
 Formulario de centro (crear/editar):
 
@@ -165,7 +165,7 @@ La app gestiona árboles dentro de cada centro.
 
 ### 7.1 Crear árbol
 
-![captura crear arbol](img/captura-crear-arbol.jpg)
+![captura crear arbol](img/android/captura-crear-arbol.jpg)
 
 Campos del formulario:
 
@@ -178,7 +178,7 @@ Campos del formulario:
 
 ### 7.2 Ver detalle del árbol
 
-![captura arbol detalles](img/captura-detalles-arbol.jpg)
+![captura arbol detalles](img/android/captura-detalles-arbol.jpg)
 
 Se muestra:
 
@@ -190,7 +190,7 @@ Se muestra:
 
 ### 7.3 Editar árbol
 
-![captura editar arbol](img/captura-editar-arbol.jpg)
+![captura editar arbol](img/android/captura-editar-arbol.jpg)
 
 En modo edición:
 
@@ -199,7 +199,7 @@ En modo edición:
 
 ### 7.4 Eliminar árbol
 
-![captura dialog eliminar arbol](img/captura-dialog-eliminar-arbol.jpg)
+![captura dialog eliminar arbol](img/android/captura-eliminar-arbol.jpg)
 
 La app solicita confirmación antes de borrar.
 
@@ -209,7 +209,7 @@ La app solicita confirmación antes de borrar.
 
 Los dispositivos se crean/editan desde el detalle del centro.
 
-![captura editar esp32](img/captura-editar-ESP32.png)
+![captura editar esp32](img/android/captura-editar-esp32.jpg)
 
 Campos:
 
@@ -219,7 +219,7 @@ Campos:
 - Activo (sí/no)
 - Umbrales: temperatura, humedad ambiente/suelo y CO₂
 
- ![captura dialog eliminar esp32](img/captura-eliminar-esp32.jpg)
+![captura dialog eliminar esp32](img/android/captura-eliminar-esp32.jpg)
 
 Al eliminar dispositivo se confirma y se avisa que se eliminan lecturas/alertas asociadas.
 
@@ -229,7 +229,7 @@ Al eliminar dispositivo se confirma y se avisa que se eliminan lecturas/alertas 
 
 Se accede desde el botón **Histórico** de cada dispositivo.
 
-![captura historico](img/captura-historico.jpg)
+![captura historico](img/android/captura-historico.jpg)
 
 Incluye:
 
@@ -237,7 +237,7 @@ Incluye:
 - Gráfica 1: temperatura, humedad ambiente, humedad suelo y luz.
 - Gráfica 2: CO₂.
 
-![captura historico tabla](img/captura-historico-tabla.jpg)
+![captura historico tabla](img/android/captura-historico-tabla.jpg)
 
 Tabla de lecturas:
 
@@ -252,7 +252,7 @@ El menú **Usuarios** solo aparece para usuarios ADMIN.
 
 ### 10.1 Lista de usuarios
 
-![captura lista usuarios](img/captura-lista-usuarios.jpg)
+![captura lista usuarios](img/android/captura-lista-usuarios.jpg)
 
 Muestra en cada tarjeta:
 
@@ -263,7 +263,7 @@ Muestra en cada tarjeta:
 
 ### 10.2 Detalle de usuario
 
-![captura detalles usuario](img/captura-detalles-usuario.jpg)
+![captura detalles usuario](img/android/captura-detalles-usuario.jpg)
 
 Permite:
 
@@ -274,7 +274,7 @@ Permite:
 
 ### 10.3 Editar usuario
 
-![captura editar usuario](img/captura-editar-usuario.jpg)
+![captura editar usuario](img/android/captura-editar-usuario.jpg)
 
 En edición:
 
