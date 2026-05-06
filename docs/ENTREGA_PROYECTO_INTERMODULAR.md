@@ -2,12 +2,12 @@
 
 ---
 
-**Nombres participantes:** Richard Ortiz Diaz y Enrique Pérez
-**Centro:** IES El Rincón
-**Ciclo Formativo de Grado Superior:** Desarrollo de Aplicaciones Multiplataforma
-**Curso:** 2º DAM - 2025/2026
-**Módulo:** Proyecto Final Intermodular
-**Título:** Proyecto Árboles - Sistema de Monitorización de Árboles en Centros Educativos
+**Nombres participantes:** Richard Ortiz Diaz y Enrique Pérez<br>
+**Centro:** IES El Rincón<br>
+**Ciclo Formativo de Grado Superior:** Desarrollo de Aplicaciones Multiplataforma<br>
+**Curso:** 2º DAM - 2025/2026<br>
+**Módulo:** Proyecto Final Intermodular<br>
+**Título:** Proyecto Árboles - Sistema de Monitorización de Árboles en Centros Educativos<br>
 **Repositorio GitHub**: https://github.com/riordi80/vocational-training-final-project
 
 ---
@@ -173,7 +173,7 @@ Esta sección documenta el modelo de datos del sistema Proyecto Árboles. Se pre
 
 #### 2.2.3 Diagrama E/R
 
-![](/home/riordi80/Documentos/Estudios/DAM/25-26/02. Proyecto Final/docs/private/plantuml.svg)
+![Diagrama E/R](img/plantuml.svg)
 
 ---
 
