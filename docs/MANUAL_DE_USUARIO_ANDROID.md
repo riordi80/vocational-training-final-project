@@ -1,275 +1,370 @@
-# Manual de Usuario - Proyecto Árboles
+# Manual de Usuario - Proyecto Árboles (Android)
 
 ## Introducción
 
-Bienvenido al sistema de gestión de árboles. Esta aplicación te permite registrar, visualizar y gestionar información sobre árboles, incluyendo datos de sensores ambientales en tiempo real.
+Este manual está actualizado al estado actual de la app Android (single-activity + fragments) y pensado para usuarios nuevos.
+
+- **Versión del manual**: 2026-05-05  
+- **Plataforma**: Android 7.0+ (API 24 o superior)  
+- **Referencia técnica**: [Manual de Instalación Android](./MANUAL_DE_INSTALACION_ANDROID.md)
+
 
 ## Índice
 
-1. [Inicio de Sesión y Registro](#1-inicio-de-sesión-y-registro)
-2. [Lista de Árboles](#2-lista-de-árboles)
-3. [Detalles del Árbol](#3-detalles-del-árbol)
-4. [Editar Información del Árbol](#4-editar-información-del-árbol)
-5. [Eliminar un Árbol](#5-eliminar-un-árbol)
+1. [Antes de empezar](#1-antes-de-empezar)
+2. [Inicio de sesión y registro](#2-inicio-de-sesión-y-registro)
+3. [Navegación principal](#3-navegación-principal)
+4. [Pantalla Inicio (Dashboard)](#4-pantalla-inicio-dashboard)
+5. [Centros educativos](#5-centros-educativos)
+6. [Detalle de centro](#6-detalle-de-centro)
+7. [Gestión de árboles](#7-gestión-de-árboles)
+8. [Gestión de dispositivos ESP32](#8-gestión-de-dispositivos-esp32)
+9. [Histórico de lecturas](#9-histórico-de-lecturas)
+10. [Administración de usuarios (solo ADMIN)](#10-administración-de-usuarios-solo-admin)
+11. [Permisos por rol](#11-permisos-por-rol)
+12. [Validaciones y mensajes frecuentes](#12-validaciones-y-mensajes-frecuentes)
+13. [Resolución de problemas](#13-resolución-de-problemas)
+14. [Soporte](#14-soporte)
 
 ---
 
-## 1. Inicio de Sesión y Registro
+## 1. Antes de empezar
 
-### Pantalla de Login
+Para que la app funcione correctamente:
 
-Al abrir la aplicación por primera vez, verás la pantalla de inicio de sesión:
+1. Debe estar instalada y compilada con un **Build Variant** válido.
+2. El backend debe estar accesible (local o producción).
+3. Debes tener conexión a Internet.
 
-![Pantalla de Login](./img/imagen1.png)
-
-#### Componentes de la pantalla:
-
-- **Campo Usuario**: Ingresa tu nombre de usuario
-- **Campo Contraseña**: Ingresa tu contraseña
-- **Botón "Iniciar Sesión"**: Accede a la aplicación con tus credenciales
-- **Botón "Registrarse"**: Si no tienes cuenta, regístrate aquí
-
-#### Cómo iniciar sesión:
-
-1. Ingresa cualquier **nombre de usuario** en el primer campo
-2. Ingresa cualquier **contraseña** en el segundo campo
-3. Presiona el botón **"Iniciar Sesión"**
-
-> **IMPORTANTE - Autenticación Mock**: La aplicación Android usa un sistema de autenticación simulado (mock). Puedes usar **cualquier usuario y contraseña** para acceder. Solo se valida que los campos no estén vacíos. No hay validación real de credenciales contra el backend.
-
-> **Nota**: Si dejas algún campo en blanco, aparecerá un mensaje de error indicando que el campo no puede estar vacío.
-
-#### Cómo registrarse:
-
-1. Presiona el botón **"Registrarse"**
-2. Se abrirá la pantalla de registro
-3. Completa los campos de usuario y contraseña (pueden ser cualquier valor)
-4. Presiona **"Registrarse"** para crear tu cuenta
-5. Serás redirigido automáticamente a la lista de árboles
-
-> **Nota**: El registro también es mock. No se guardan credenciales ni se validan contra el backend. Solo se requiere que los campos no estén vacíos.
+Si la app no carga datos, revisa primero la sección de Build Variants del manual de instalación.
 
 ---
 
-## 2. Lista de Árboles
+## 2. Inicio de sesión y registro
 
-Una vez iniciada la sesión, verás la pantalla principal con el listado de todos los árboles registrados:
+![captura de login](img/android/captura-login.jpg)
 
-![Lista de Árboles](./img/imagen2.png)
+Desde **Login**:
 
-### Información Mostrada
+- Introduce **email** y **contraseña**.
+- Pulsa **Iniciar Sesión**.
+- Si las credenciales son correctas, accedes a Inicio (Dashboard).
 
-Cada elemento de la lista muestra:
-- **Nombre del árbol** (ej: "Roble", "Pino", "Abedul")
-- **Especie y fecha de plantación** (ej: "Quercus robur - 12/03/2024")
-- **Botón "Eliminar"**: Para eliminar el árbol de la base de datos
+Mensajes típicos:
 
-### Ejemplos de Árboles en la Lista
+- `Email y contraseña son requeridos`
+- `Credenciales incorrectas`
+- `Error de conexión. Inténtalo de nuevo.`
 
-La imagen muestra varios árboles registrados:
-- **Roble** - Quercus robur - 12/03/2024
-- **Pino** - Pinus - 05/07/2023
-- **Abedul** - Betula pendula - 20/04/2025
-- **Abeto** - Abies bracteata - 11/09/2024
-- **Cerezo** - Prunus avium - 10/10/2024
+![captura registrarse](img/android/captura-registrar.jpg)
 
-### Acciones Disponibles
+Desde **Registrarse**:
 
-#### Ver Detalles de un Árbol
-1. **Toca sobre cualquier árbol** de la lista
-2. Se abrirá la pantalla de detalles con toda la información
+1. Completa nombre, email y contraseña.
+2. Pulsa **Registrarse**.
+3. Si el registro es correcto, la app inicia sesión automáticamente.
 
-#### Eliminar un Árbol
-1. Presiona el botón **"Eliminar"** (morado) junto al árbol que deseas eliminar
-2. Aparecerá un cuadro de confirmación
-3. Confirma la eliminación
-4. El árbol se eliminará de la lista y de la base de datos
+Mensajes típicos:
+
+- `El email ya está registrado` (409)
+- `Datos inválidos. Verifica los campos.` (400)
 
 ---
 
-## 3. Detalles del Árbol
+## 3. Navegación principal
 
-Al tocar sobre un árbol en la lista, accederás a su pantalla de detalles:
+![captura nav menu](img/android/captura-nav-menu.jpg)
 
-![Detalles del Árbol](./img/imagen3.png)
+En vertical (portrait) se usa **Bottom Navigation**:
 
-### Información General del Árbol
+- **Inicio**
+- **Centros**
+- **Login** (o **Logout** cuando hay sesión)
+- **Usuarios** (solo visible para ADMIN)
 
-La pantalla muestra dos secciones principales:
+![captura nav menu landscape](img/android/captura-nav-menu-landscape.jpg)
 
-#### Sección 1: Información Básica
-- **Nombre**: Nombre común del árbol
-- **Especie**: Nombre científico
-- **Fecha de Plantación**: Cuándo fue plantado el árbol
-- **Ubicación**: Ubicación específica donde se encuentra
-
-#### Sección 2: Datos de Sensores
-
-Esta sección muestra información en tiempo real de los sensores instalados en el árbol:
-
-- **Temperatura**: Temperatura ambiente en grados Celsius (°C)
-- **Humedad Ambiental**: Porcentaje de humedad en el aire (%)
-- **Humedad del Suelo**: Porcentaje de humedad en el suelo (%)
-- **Nivel de CO2**: Concentración de CO2 en partes por millón (ppm)
-
-> **Nota**: Si el servidor no proporciona datos de sensores, la aplicación generará valores aleatorios para demostración.
-
-### Botones Disponibles
-
-- **Botón "Editar"** (morado): Permite modificar la información del árbol
-- **Botón "Volver"** (gris): Regresa a la lista de árboles
+En horizontal (landscape) la navegación pasa a **Navigation Rail** lateral con las mismas opciones.
 
 ---
 
-## 4. Editar Información del Árbol
+## 4. Pantalla Inicio (Dashboard)
 
-Para modificar los datos de un árbol, sigue estos pasos:
+![captura de login](img/android/captura-dashboard.jpg)
 
-### Paso 1: Activar Modo Edición
+La pantalla Inicio muestra:
 
-1. En la pantalla de detalles, presiona el botón **"Editar"**
-2. Los campos de texto se convertirán en editables
+- Número de **centros**.
+- Total de **árboles plantados** (suma de cantidad).
+- Número de **dispositivos activos**.
+- **CO₂ total anual** estimado.
 
-![Modo Edición](./img/imagen4.png)
+Además:
 
-### Paso 2: Modificar los Datos
-
-Ahora puedes editar cualquiera de los siguientes campos:
-
-#### Información General:
-- **Nombre del árbol**: Cambia el nombre común
-- **Especie**: Modifica el nombre científico
-- **Fecha de Plantación**: Actualiza la fecha (formato: DD/MM/YYYY)
-- **Ubicación**: Cambia la ubicación específica
-
-#### Datos de Sensores:
-- **Temperatura**: Actualiza el valor de temperatura
-- **Humedad ambiental**: Modifica el porcentaje de humedad
-- **Humedad del suelo**: Cambia el nivel de humedad del suelo
-- **Nivel de CO2**: Actualiza la concentración de CO2
-
-### Paso 3: Guardar o Cancelar
-
-Una vez realizados los cambios, tienes dos opciones:
-
-#### Guardar Cambios
-1. Presiona el botón **"Guardar"** (morado)
-2. Los datos se actualizarán en el servidor
-3. Verás un mensaje de confirmación: "Cambios guardados"
-4. La pantalla volverá al modo de visualización
-
-#### Cancelar Edición
-1. Presiona el botón **"Cancelar"** (morado)
-2. Todos los cambios se descartarán
-3. Los datos volverán a su estado original
-4. Verás un mensaje: "Edición cancelada"
-
-> **Importante**: Los cambios solo se guardan si presionas "Guardar". Si presionas "Cancelar" o "Volver", los cambios se perderán.
+- Si hay sesión activa, se ve **usuario y rol**.
+- Botón/tarjeta **Centros Educativos** para ir al listado.
+- Tarjetas **Súmate** y **Apadrina** que abren enlace externo en navegador.
 
 ---
 
-## 5. Eliminar un Árbol
+## 5. Centros educativos
 
-Existen dos formas de eliminar un árbol del sistema:
+![captura lista centros](img/android/captura-lista-centros.jpg)
 
-### Método 1: Desde la Lista de Árboles
+En **Centros** se muestra el listado con:
 
-1. En la pantalla principal, localiza el árbol que deseas eliminar
-2. Presiona el botón **"Eliminar"** junto al árbol
-3. Aparecerá un cuadro de diálogo de confirmación:
-   - **Título**: "Eliminar árbol"
-   - **Mensaje**: "¿Seguro que quieres eliminar este árbol?"
-4. Presiona **"Eliminar"** para confirmar
-5. El árbol se eliminará permanentemente de la base de datos
-6. La lista se actualizará automáticamente
+- Nombre del centro
+- Población
+- Isla
 
-### Método 2: Desde los Detalles
+Acciones:
 
-> **Nota**: Actualmente la eliminación solo está disponible desde la lista principal.
+- Tocar una tarjeta para abrir el detalle del centro.
+- **+ Añadir** (FAB o botón de cabecera según orientación) solo si tienes permisos.
 
 ---
 
-## Funcionalidades Adicionales
+## 6. Detalle de centro
 
-### Sistema de Fallback (Respaldo)
+![captura de login](img/android/captura-detalles-centro.jpg)
 
-La aplicación cuenta con un sistema de respaldo que se activa automáticamente:
+Incluye:
 
-- **Si no hay conexión al servidor**: La app cargará datos de ejemplo desde archivos XML locales
-- **Si faltan datos de sensores**: Se generarán valores aleatorios para demostración
-- **Si la ubicación no está disponible**: Se mostrará "Ubicación no disponible"
+- Información general (responsable, teléfono, email, alta).
+- Ubicación (dirección, población, isla).
 
-Esto garantiza que siempre puedas usar la aplicación, incluso sin conexión.
+Botones según rol:
 
-### Validaciones
+- **Editar centro**
+- **Eliminar centro**
+- **Añadir dispositivo**
+- **Añadir árbol**
 
-La aplicación incluye validaciones para garantizar la integridad de los datos:
+En la misma pantalla aparecen:
 
-#### En Login y Registro:
-- Los campos de usuario y contraseña **no pueden estar vacíos**
-- Si dejas un campo en blanco, aparecerá un mensaje de error en rojo
-- **IMPORTANTE**: Aparte de validar que no estén vacíos, NO hay validación de credenciales. Cualquier usuario/contraseña es aceptado (sistema mock)
+- Lista de dispositivos ESP32 del centro.
+- Lista de árboles del centro.
 
-#### En Edición:
-- Aunque no hay restricciones estrictas, se recomienda:
-  - Usar fechas en formato DD/MM/YYYY
-  - Ingresar valores numéricos para los sensores
-  - No dejar campos importantes en blanco
+![captura dialogo eliminar centro](img/android/captura-eliminar-centro.jpg)
 
----
+Al eliminar centro se solicita confirmación (acción irreversible).
 
-## Preguntas Frecuentes (FAQ)
+![captura crear centro](img/android/captura-crear-centro.jpg)
 
-### ¿Qué pasa si pierdo conexión mientras edito?
+Formulario de centro (crear/editar):
 
-Si pierdes la conexión mientras editas un árbol, los cambios se guardarán localmente pero no se sincronizarán con el servidor hasta que recuperes la conexión.
-
-### ¿Puedo recuperar un árbol eliminado?
-
-No, la eliminación es permanente. Siempre aparecerá un cuadro de confirmación antes de eliminar.
-
-### ¿Por qué los datos de sensores cambian?
-
-Si el servidor no proporciona datos reales, la aplicación genera valores aleatorios cada vez que entras en los detalles.
-
-### ¿Cómo sé si estoy conectado al servidor?
-
-- **Conexión exitosa**: Verás un mensaje "Árboles cargados: X" al abrir la lista
-- **Sin conexión**: Verás "Error de conexión" y se cargarán datos de ejemplo
+- Requeridos: nombre, dirección, responsable, latitud, longitud.
+- Opcionales: población, código postal, teléfono, email, isla.
+- Validaciones: latitud `-90..90`, longitud `-180..180`.
 
 ---
 
-## Consejos de Uso
+## 7. Gestión de árboles
 
-1. **Verifica la conexión**: Asegúrate de tener conexión a Internet antes de realizar cambios importantes
-2. **Doble confirmación**: Siempre confirma los datos antes de guardar cambios
-3. **No elimines por accidente**: Lee cuidadosamente el mensaje de confirmación antes de eliminar un árbol
-4. **Mantén actualizada la información**: Actualiza regularmente los datos de los sensores para un mejor seguimiento
+La app gestiona árboles dentro de cada centro.
+
+### 7.1 Crear árbol
+
+![captura crear arbol](img/android/captura-crear-arbol.jpg)
+
+Campos del formulario:
+
+- Nombre (requerido)
+- Especie (requerido)
+- Fecha de plantación (requerido, con selector de fecha)
+- Ubicación (opcional)
+- Cantidad (mínimo 1)
+- Absorción CO₂ anual (opcional)
+
+### 7.2 Ver detalle del árbol
+
+![captura arbol detalles](img/android/captura-detalles-arbol.jpg)
+
+Se muestra:
+
+- Nombre, especie y fecha
+- Centro educativo
+- Ubicación
+- Cantidad
+- Absorción CO₂
+
+### 7.3 Editar árbol
+
+![captura editar arbol](img/android/captura-editar-arbol.jpg)
+
+En modo edición:
+
+- Se habilitan campos y selector de centro.
+- Se guarda con **Guardar** o se descarta con **Cancelar**.
+
+### 7.4 Eliminar árbol
+
+![captura dialog eliminar arbol](img/android/captura-eliminar-arbol.jpg)
+
+La app solicita confirmación antes de borrar.
 
 ---
 
-## Soporte
+## 8. Gestión de dispositivos ESP32
 
-Si experimentas problemas con la aplicación:
+Los dispositivos se crean/editan desde el detalle del centro.
 
-1. Verifica tu conexión a Internet
-2. Asegúrate de que el servidor esté funcionando
-3. Cierra y vuelve a abrir la aplicación
-4. Contacta al administrador del sistema si el problema persiste
+![captura editar esp32](img/android/captura-editar-esp32.jpg)
+
+Campos:
+
+- MAC Address (obligatoria, formato `XX:XX:XX:XX:XX:XX`)
+- Centro educativo
+- Frecuencia de lectura (5 a 3600 segundos)
+- Activo (sí/no)
+- Umbrales: temperatura, humedad ambiente/suelo y CO₂
+
+![captura dialog eliminar esp32](img/android/captura-eliminar-esp32.jpg)
+
+Al eliminar dispositivo se confirma y se avisa que se eliminan lecturas/alertas asociadas.
+
+---
+
+## 9. Histórico de lecturas
+
+Se accede desde el botón **Histórico** de cada dispositivo.
+
+![captura historico](img/android/captura-historico.jpg)
+
+Incluye:
+
+- Selector de periodo: **Hoy**, **7 días**, **30 días**, **6 meses**, **1 año**.
+- Gráfica 1: temperatura, humedad ambiente, humedad suelo y luz.
+- Gráfica 2: CO₂.
+
+![captura historico tabla](img/android/captura-historico-tabla.jpg)
+
+Tabla de lecturas:
+
+- Columnas: fecha/hora, temp., hum. ambiente, hum. suelo, CO₂, luz1, luz2.
+- Paginación con botones **Anterior** y **Siguiente**.
+
+---
+
+## 10. Administración de usuarios (solo ADMIN)
+
+El menú **Usuarios** solo aparece para usuarios ADMIN.
+
+### 10.1 Lista de usuarios
+
+![captura lista usuarios](img/android/captura-lista-usuarios.jpg)
+
+Muestra en cada tarjeta:
+
+- Nombre
+- Email
+- Rol (ADMIN o COORDINADOR)
+- Indicador de activo/inactivo
+
+### 10.2 Detalle de usuario
+
+![captura detalles usuario](img/android/captura-detalles-usuario.jpg)
+
+Permite:
+
+- Ver datos completos
+- Editar usuario
+- Eliminar usuario (con confirmación)
+
+
+### 10.3 Editar usuario
+
+![captura editar usuario](img/android/captura-editar-usuario.jpg)
+
+En edición:
+
+- Se modifican nombre, email, rol y activo.
+- La contraseña no se edita en este formulario.
+
+---
+
+## 11. Permisos por rol
+
+### Público (sin iniciar sesión)
+- Puede ver Inicio y Centros.
+- Puede consultar detalles y lecturas históricas.
+- No puede crear/editar/eliminar.
+
+### COORDINADOR
+- Puede operar en sus centros asignados:
+  - Editar centro asignado
+  - Crear/editar/eliminar árboles en sus centros
+  - Crear/editar dispositivos de sus centros
+- No puede eliminar centros.
+- No tiene acceso a menú Usuarios.
+
+### ADMIN
+- Acceso completo:
+  - Gestión total de centros, árboles y dispositivos
+  - Gestión de usuarios (crear, editar, eliminar)
+
+---
+
+## 12. Validaciones y mensajes frecuentes
+
+### Login / Registro
+- `Email y contraseña son requeridos`
+- `Credenciales incorrectas`
+- `El email ya está registrado`
+
+### Centro
+- `El nombre es obligatorio`
+- `La direccion es obligatoria`
+- `La latitud debe estar entre -90 y 90`
+- `La longitud debe estar entre -180 y 180`
+
+### Árbol
+- `El nombre es requerido`
+- `La especie es requerida`
+- `La fecha de plantación es requerida`
+- `La cantidad debe ser al menos 1`
+
+### Dispositivo
+- `La direccion MAC es obligatoria`
+- `Formato incorrecto. Usa XX:XX:XX:XX:XX:XX`
+- `La frecuencia debe estar entre 5 y 3600`
+
+---
+
+## 13. Resolución de problemas
+
+1. **No carga datos**  
+   Verifica conexión y backend activo. Si estás en local, revisa el flavor (`localEmulator` o `localDevice`) y la IP.
+
+2. **Tarda en responder en producción**  
+   El backend en Render puede tardar por cold start. Espera y reintenta.
+
+3. **No aparece el menú Usuarios**  
+   Solo se muestra a rol ADMIN.
+
+4. **No puedes editar un centro/árbol**  
+   Revisa si tu rol tiene permisos sobre ese centro.
+
+---
+
+## 14. Soporte
+
+Si necesitas ayuda:
+
+1. Adjunta captura de pantalla del error.
+2. Indica rol de usuario (Público, COORDINADOR, ADMIN).
+3. Indica si usas backend local o producción.
+4. Comparte pasos exactos para reproducir el problema.
 
 ---
 
 ## Información del Proyecto
 
-**Nombre**: Proyecto Árboles - Sistema de Monitorización de Árboles
-
-**Institución**: IES El Rincón
-
-**Curso**: Desarrollo de Aplicaciones Multiplataforma (DAM) 2025-2026
-
-**Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
-
-**Última actualización**: 2025-12-08
+**Nombre**: Proyecto Árboles - Sistema de Monitorización de Árboles  
+**Institución**: IES El Rincón  
+**Curso**: DAM 2025-2026  
+**Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)  
+**Última actualización**: 2026-05-05
 
 ### Colaboradores
 
