@@ -24,21 +24,18 @@ api.interceptors.request.use(
 );
 
   // Interceptor para responses (manejo de errores global)
+  let redirectingToLogin = false;
+
   api.interceptors.response.use(
     (response) => {
       return response;
     },
     (error) => {
-      // Manejo de errores global
-      if (error.response) {
-        // El servidor respondió con un código de error
-        console.error('Error response:', error.response.status);
-      } else if (error.request) {
-        // La petición fue hecha pero no hubo respuesta
-        console.error('Error request:', error.request);
-      } else {
-        // Algo pasó al configurar la petición
-        console.error('Error:', error.message);
+      if (error.response?.status === 401 && !redirectingToLogin) {
+        redirectingToLogin = true;
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
       }
       return Promise.reject(error);
     }
