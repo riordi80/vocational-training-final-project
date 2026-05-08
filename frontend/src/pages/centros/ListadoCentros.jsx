@@ -1,4 +1,4 @@
-import { School, Plus } from 'lucide-react';
+import { School, Plus, Cpu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getCentros } from '../../services/centrosService';
 import { useFetch } from '../../hooks/useFetch';
@@ -96,6 +96,9 @@ function ListadoCentros() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Responsable
                       </th>
+                      <th className="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
+                        Dispositivos
+                      </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Fecha Creación
                       </th>
@@ -122,6 +125,12 @@ function ListadoCentros() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-500">{centro.responsable}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <span className="inline-flex items-center gap-1 text-sm text-gray-700">
+                            <Cpu className="w-4 h-4 text-brand-secondary" />
+                            {centro.numDispositivos ?? 0}
+                          </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-500">
@@ -167,6 +176,11 @@ function ListadoCentros() {
                     </p>
                     <p className="text-sm text-gray-600 mb-1">
                       <span className="font-medium">Responsable:</span> {centro.responsable}
+                    </p>
+                    <p className="text-sm text-gray-600 mb-1 flex items-center gap-1">
+                      <span className="font-medium">Dispositivos:</span>
+                      <Cpu className="w-4 h-4 text-brand-secondary" />
+                      {centro.numDispositivos ?? 0}
                     </p>
                     <p className="text-sm text-gray-600 mb-3">
                       <span className="font-medium">Creación:</span>{' '}
