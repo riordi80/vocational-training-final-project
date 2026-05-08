@@ -1798,7 +1798,7 @@ Las pruebas del backend se realizaron con **Postman** sobre la API desplegada en
 | POST `/api/centros` sin JWT | Sin cabecera `Authorization` | 403 Forbidden | ✓ 403 |
 | `GET /api/usuarios` con rol COORDINADOR | JWT con `rol: COORDINADOR` | 403 Forbidden | ✓ 403 |
 | `POST /api/usuarios` con rol COORDINADOR | JWT con `rol: COORDINADOR` | 403 Forbidden | ✓ 403 |
-| JWT expirado o manipulado | Token con firma inválida | 403 Forbidden | ✓ 403 |
+| JWT expirado o manipulado | Token con firma inválida | 401 Unauthorized | ✓ 401 |
 
 ---
 
