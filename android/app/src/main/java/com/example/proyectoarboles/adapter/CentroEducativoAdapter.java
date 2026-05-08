@@ -49,12 +49,14 @@ public class CentroEducativoAdapter extends RecyclerView.Adapter<CentroEducativo
         private TextView textViewNombre;
         private TextView textViewPoblacion;
         private TextView textViewIsla;
+        private TextView textViewNumDispositivos;
 
         public CentroEducativoViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewNombre = itemView.findViewById(R.id.textViewNombreCentro);
             textViewPoblacion = itemView.findViewById(R.id.textViewPoblacion);
             textViewIsla = itemView.findViewById(R.id.textViewIsla);
+            textViewNumDispositivos = itemView.findViewById(R.id.textViewNumDispositivos);
         }
 
         public void bind(CentroEducativo centro, OnItemClickListener listener) {
@@ -63,6 +65,7 @@ public class CentroEducativoAdapter extends RecyclerView.Adapter<CentroEducativo
             String isla = IslaUtils.formatear(centro.getIsla());
             textViewPoblacion.setText(poblacion);
             textViewIsla.setText(isla.equals("-") ? "" : isla);
+            textViewNumDispositivos.setText(String.valueOf(centro.getNumDispositivos()));
             itemView.setOnClickListener(v -> listener.onVerDetalleClick(centro));
         }
     }

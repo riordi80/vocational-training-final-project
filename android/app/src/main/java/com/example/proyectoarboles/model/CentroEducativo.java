@@ -44,6 +44,9 @@ public class CentroEducativo {
     @SerializedName("fechaCreacion")
     private String fechaCreacion;
 
+    @SerializedName("numDispositivos")
+    private Integer numDispositivos;
+
     // Getters
     public Long getId() { return id; }
     public String getNombre() { return nombre; }
@@ -58,6 +61,7 @@ public class CentroEducativo {
     public String getTelefono() { return telefono; }
     public String getEmail() { return email; }
     public String getFechaCreacion() { return fechaCreacion; }
+    public int getNumDispositivos() { return numDispositivos != null ? numDispositivos : 0; }
 
     // Setters
     public void setId(Long id) { this.id = id; }
