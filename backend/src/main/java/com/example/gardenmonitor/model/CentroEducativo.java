@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.Formula;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -106,6 +107,9 @@ public class CentroEducativo {
     @OneToMany(mappedBy = "centroEducativo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Arbol> arboles = new ArrayList<>();
 
+    @Formula("(SELECT COUNT(*) FROM dispositivo_esp32 d WHERE d.centro_id = id)")
+    private Integer numDispositivos;
+
     /**
      * Constructor vacío requerido por JPA.
      */
@@ -182,6 +186,10 @@ public class CentroEducativo {
 
     public LocalDateTime getFechaCreacion() { return fechaCreacion; }
     public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+
+    public Integer getNumDispositivos() {
+        return numDispositivos != null ? numDispositivos : 0;
+    }
 
     public List<Arbol> getArboles() {
         return arboles;
