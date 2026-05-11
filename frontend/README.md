@@ -109,9 +109,12 @@ frontend/
 │   ├── index.css
 │   ├── main.jsx
 │   └── setupTests.js
+├── .env.example                         # Plantilla de variables de entorno
 ├── eslint.config.js
 ├── index.html
 ├── jsconfig.json
+├── lighthouse-inicial_v1.html           # Informe Lighthouse (Fase 13)
+├── lighthouse-inicial_v2.html           # Informe Lighthouse (Fase 13)
 ├── package.json
 ├── postcss.config.js
 ├── tailwind.config.js
@@ -141,7 +144,13 @@ npm install
 
 ### 3. Configurar variables de entorno
 
-Crear archivo `.env` en la raíz de `frontend/`:
+Copiar la plantilla incluida y editar los valores:
+
+```bash
+cp .env.example .env
+```
+
+O crear el archivo `.env` manualmente en la raíz de `frontend/`:
 
 ```env
 VITE_API_BASE_URL=http://localhost:8080/api
@@ -202,6 +211,7 @@ npm run test:watch       # Re-ejecuta al guardar
 
 ### 4. Listado de Centros (`/centros`)
 - Tabla responsive con todos los centros educativos
+- Columna "Dispositivos" con recuento `numDispositivos` de ESP32 por centro (icono Cpu)
 - Acceso al detalle de cada centro
 - Botón "Nuevo Centro" (solo ADMIN)
 
@@ -702,7 +712,7 @@ Este proyecto usa:
 
 **Aplicación completada y desplegada en producción**
 
-- [x] Servicios API implementados (arbolesService, centrosService, usuariosService, usuarioCentroService)
+- [x] Servicios API implementados (arbolesService, centrosService, dispositivosService, lecturasService, usuariosService, usuarioCentroService)
 - [x] Componentes comunes reutilizables (Button, Input, Alert, Spinner)
 - [x] Autenticación real contra BD via AuthContext (login/register con API)
 - [x] Sistema de roles y permisos (ADMIN, COORDINADOR, acceso público)
@@ -747,7 +757,7 @@ Este proyecto usa:
 
 **Repositorio**: [github.com/riordi80/vocational-training-final-project](https://github.com/riordi80/vocational-training-final-project)
 
-**Última actualización**: 2026-04-11
+**Última actualización**: 11-05-2026
 
 ### Colaboradores
 
